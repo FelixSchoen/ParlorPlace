@@ -1,7 +1,7 @@
 package com.fschoen.parlorplace.backend.controller;
 
 import com.fschoen.parlorplace.backend.utility.Messages;
-import com.fschoen.parlorplace.backend.entity.persistent.User;
+import com.fschoen.parlorplace.backend.entity.persistance.User;
 import com.fschoen.parlorplace.backend.exceptions.DataConflictException;
 import com.fschoen.parlorplace.backend.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;

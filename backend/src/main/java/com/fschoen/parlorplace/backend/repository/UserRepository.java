@@ -1,6 +1,6 @@
 package com.fschoen.parlorplace.backend.repository;
 
-import com.fschoen.parlorplace.backend.entity.persistent.User;
+import com.fschoen.parlorplace.backend.entity.persistance.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

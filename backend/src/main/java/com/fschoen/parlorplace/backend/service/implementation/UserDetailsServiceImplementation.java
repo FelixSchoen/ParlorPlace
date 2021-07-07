@@ -1,6 +1,7 @@
 package com.fschoen.parlorplace.backend.service.implementation;
 
-import com.fschoen.parlorplace.backend.entity.persistent.User;
+import com.fschoen.parlorplace.backend.entity.persistance.User;
+import com.fschoen.parlorplace.backend.entity.transience.UserDetailsImplementation;
 import com.fschoen.parlorplace.backend.repository.UserRepository;
 import com.fschoen.parlorplace.backend.utility.Messages;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,11 +30,7 @@ public class UserDetailsServiceImplementation implements UserDetailsService {
             throw new UsernameNotFoundException(Messages.getExceptionExplanationMessage("user.name.exists.not"));
         }
 
-        User user = potentialUser.get();
-        // TODO Return roles
-        return withUsername(user.getUsername())
-                .password(user.getPassword())
-                .build();
+        return UserDetailsImplementation.fromUser(potentialUser.get());
     }
 
 }
