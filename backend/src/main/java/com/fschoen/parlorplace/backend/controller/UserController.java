@@ -15,10 +15,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
@@ -26,12 +23,13 @@ import javax.validation.Valid;
 @RestController
 public class UserController {
 
-    private final AuthenticationManager authenticationManager;
-    private final UserRepository userRepository;
     private final UserService userService;
+    private final UserRepository userRepository;
     private final RoleRepository roleRepository;
 
     private final UserMapper userMapper;
+
+    private final AuthenticationManager authenticationManager;
 
     private final JwtUtils jwtUtils;
 
@@ -53,4 +51,10 @@ public class UserController {
 
         return ResponseEntity.status(HttpStatus.CREATED).body(userDTO);
     }
+
+    @GetMapping("/test")
+    public ResponseEntity<String> testMethod() {
+        return ResponseEntity.status(HttpStatus.OK).body("Das ist ein Test");
+    }
+
 }

@@ -8,6 +8,10 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
@@ -17,12 +21,26 @@ import java.util.stream.Collectors;
 @Data
 public class UserDetailsImplementation implements UserDetails {
 
+    @NotNull
     private Long id;
+
+    @NotBlank
+    @Size(min = 3, max = 15)
     private String username;
-    private String nickname;
-    private String email;
+
     @JsonIgnore
     private String password;
+
+    @NotBlank
+    @Size(min = 3, max = 15)
+    private String nickname;
+
+    @NotBlank
+    @Size(min = 3, max = 255)
+    @Email
+    private String email;
+
+    @NotNull
     private Collection<? extends GrantedAuthority> authorities;
 
     public static UserDetailsImplementation fromUser(User user) {

@@ -42,14 +42,13 @@ public class UserServiceImplementation implements UserService {
         }
 
         String hashedPassword = passwordEncoder.encode(user.getPassword());
-        Set<Role> roles = new HashSet<>();
-        roles.add(Role.builder().role(UserRole.USER).build());
+        Set<Role> roles = new HashSet<>() {{
+            add(Role.builder().role(UserRole.USER).build());
+        }};
 
-        User userToPersist = user.toBuilder().nickname(user.getUsername()).password(hashedPassword).roles(roles).build();
-        userToPersist.getRoles().forEach(role -> role.setUser(userToPersist));
+        User persistUser = user.toBuilder().nickname(user.getNickname()).password(hashedPassword).roles(roles).build();
+        persistUser.getRoles().forEach(role -> role.setUser(persistUser));
 
-        User createdUser = userRepository.save(userToPersist);
-
-        return createdUser;
+        return userRepository.save(persistUser);
     }
 }

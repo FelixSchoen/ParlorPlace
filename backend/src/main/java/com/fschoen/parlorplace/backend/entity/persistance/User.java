@@ -14,8 +14,8 @@ import java.util.Set;
 @AllArgsConstructor
 @ToString
 @Builder(toBuilder = true)
-@Entity
 @Data
+@Entity
 public class User {
 
     @Id
@@ -23,27 +23,23 @@ public class User {
     private Long id;
 
     @Column(unique = true)
-    @NotNull
-    @Size(min = 3, max = 15)
     @NotBlank
+    @Size(min = 3, max = 15)
     private String username;
 
     @Column
-    @NotNull
-    @Size(min = 8, max = 255)
     @NotBlank
+    @Size(min = 8, max = 255)
     private String password;
 
     @Column
-    @NotNull
-    @Size(min = 3, max = 15)
     @NotBlank
+    @Size(min = 3, max = 15)
     private String nickname;
 
     @Column(unique = true)
-    @NotNull
-    @Size(min = 3, max = 255)
     @NotBlank
+    @Size(min = 3, max = 255)
     @Email
     private String email;
 
