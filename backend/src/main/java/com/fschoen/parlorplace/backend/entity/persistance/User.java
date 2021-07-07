@@ -1,6 +1,7 @@
 package com.fschoen.parlorplace.backend.entity.persistance;
 
-import lombok.Data;
+import lombok.*;
+import org.hibernate.annotations.Cascade;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
@@ -9,6 +10,10 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.Set;
 
+@NoArgsConstructor
+@AllArgsConstructor
+@ToString
+@Builder(toBuilder = true)
 @Entity
 @Data
 public class User {
@@ -23,7 +28,7 @@ public class User {
     @NotBlank
     private String username;
 
-    @Column(nullable = false)
+    @Column
     @NotNull
     @Size(min = 8, max = 255)
     @NotBlank
@@ -43,6 +48,8 @@ public class User {
     private String email;
 
     @OneToMany(mappedBy = "user")
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     @NotNull
     private Set<Role> roles;
 

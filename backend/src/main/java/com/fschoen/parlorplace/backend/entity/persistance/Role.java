@@ -2,6 +2,7 @@ package com.fschoen.parlorplace.backend.entity.persistance;
 
 import com.fschoen.parlorplace.backend.enums.UserRole;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -10,6 +11,7 @@ import javax.validation.constraints.NotNull;
 
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 @Entity
 @Data
 public class Role {
