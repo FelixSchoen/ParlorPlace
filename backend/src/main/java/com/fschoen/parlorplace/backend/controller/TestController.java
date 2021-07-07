@@ -1,4 +1,4 @@
-package com.fschoen.parlorplace.backend;
+package com.fschoen.parlorplace.backend.controller;
 
 import com.fschoen.parlorplace.backend.utility.Messages;
 import com.fschoen.parlorplace.backend.entity.persistent.User;
