@@ -1,6 +1,6 @@
 package com.fschoen.parlorplace.backend.integration;
 
-import com.fschoen.parlorplace.backend.base.TestData;
+import com.fschoen.parlorplace.backend.integration.base.BaseIntegrationTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -17,10 +17,8 @@ import org.springframework.web.context.WebApplicationContext;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 
-@ExtendWith(SpringExtension.class)
-@SpringBootTest
 // @AutoConfigureMockMvc
-public class UserControllerTest implements TestData {
+public class UserControllerTest extends BaseIntegrationTest {
 
     @Autowired
     private WebApplicationContext webApplicationContext;

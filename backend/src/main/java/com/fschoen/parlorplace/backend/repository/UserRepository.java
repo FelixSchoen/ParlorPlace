@@ -9,6 +9,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     /**
      * Finds a user by its id.
+     *
      * @param id Id of the user
      * @return The found user
      */
@@ -16,6 +17,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     /**
      * Finds a user by its username.
+     *
      * @param username Username of the user
      * @return The found user
      */
@@ -23,6 +25,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     /**
      * Finds a user by its email.
+     *
      * @param email Email of the user
      * @return The found user
      */
