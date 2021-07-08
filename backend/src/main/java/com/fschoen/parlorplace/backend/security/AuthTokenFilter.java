@@ -1,5 +1,6 @@
 package com.fschoen.parlorplace.backend.security;
 
+import com.fschoen.parlorplace.backend.service.implementation.UserDetailsServiceImplementation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,8 +22,7 @@ import java.io.IOException;
 public class AuthTokenFilter extends OncePerRequestFilter {
 
     @Autowired
-    @Qualifier("UserDetailsServiceImplementation")
-    private UserDetailsService userDetailsService;
+    private UserDetailsServiceImplementation userDetailsService;
     @Autowired
     private JwtUtils jwtUtils;
 

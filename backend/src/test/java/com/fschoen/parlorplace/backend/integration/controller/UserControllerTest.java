@@ -1,5 +1,7 @@
-package com.fschoen.parlorplace.backend.integration;
+package com.fschoen.parlorplace.backend.integration.controller;
 
+import com.fschoen.parlorplace.backend.controller.dto.user.UserDTO;
+import com.fschoen.parlorplace.backend.controller.dto.user.UserSignupRequestDTO;
 import com.fschoen.parlorplace.backend.integration.base.BaseIntegrationTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -15,6 +17,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 
 // @AutoConfigureMockMvc
@@ -32,7 +35,9 @@ public class UserControllerTest extends BaseIntegrationTest {
 
     @Test
     public void asdf() throws Exception {
-        MvcResult mvcResult = this.mockMvc.perform(get(USER_BASE_URI+"/test")).andDo(print()).andReturn();
+        UserSignupRequestDTO userSignupRequestDTO = UserSignupRequestDTO.builder().username("ne_user").nickname("ne_user").password("password").email("ne_user@mail.com").build();
+
+        MvcResult mvcResult = this.mockMvc.perform(post(USER_BASE_URI + "/signup")).andDo(print()).andReturn();
     }
 
 }

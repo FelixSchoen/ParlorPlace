@@ -43,7 +43,8 @@ public class User {
     @Email
     private String email;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
+    @Cascade({org.hibernate.annotations.CascadeType.ALL})
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
     @NotNull

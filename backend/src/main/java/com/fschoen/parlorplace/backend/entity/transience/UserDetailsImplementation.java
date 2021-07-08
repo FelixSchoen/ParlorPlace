@@ -3,7 +3,9 @@ package com.fschoen.parlorplace.backend.entity.transience;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fschoen.parlorplace.backend.entity.persistance.User;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -17,7 +19,9 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+@NoArgsConstructor
 @AllArgsConstructor
+@Builder
 @Data
 public class UserDetailsImplementation implements UserDetails {
 
@@ -48,13 +52,14 @@ public class UserDetailsImplementation implements UserDetails {
                 .map(role -> new SimpleGrantedAuthority(role.getRole().name()))
                 .collect(Collectors.toList());
 
-        return new UserDetailsImplementation(
-                user.getId(),
-                user.getUsername(),
-                user.getNickname(),
-                user.getEmail(),
-                user.getPassword(),
-                authorities);
+        return UserDetailsImplementation.builder()
+                .id(user.getId())
+                .username(user.getUsername())
+                .password(user.getPassword())
+                .nickname(user.getNickname())
+                .email(user.getEmail())
+                .authorities(authorities)
+                .build();
     }
 
     @Override
@@ -94,14 +99,16 @@ public class UserDetailsImplementation implements UserDetails {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        UserDetailsImplementation that = (UserDetailsImplementation) o;
-        return Objects.equals(id, that.id) && Objects.equals(username, that.username) && Objects.equals(nickname, that.nickname) && Objects.equals(email, that.email) && Objects.equals(password, that.password) && Objects.equals(authorities, that.authorities);
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
+        UserDetailsImplementation user = (UserDetailsImplementation) o;
+        return Objects.equals(id, user.id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, username, nickname, email, password, authorities);
+        return Objects.hash(id);
     }
 }

@@ -1,5 +1,6 @@
 package com.fschoen.parlorplace.backend.service;
 
+import com.fschoen.parlorplace.backend.controller.dto.user.UserSigninResponseDTO;
 import com.fschoen.parlorplace.backend.entity.persistance.User;
 import com.fschoen.parlorplace.backend.exceptions.DataConflictException;
 
@@ -15,5 +16,14 @@ public interface UserService {
      * @throws DataConflictException If the user cannot be added due to a data conflict
      */
     User signup(User user) throws DataConflictException;
+
+    /**
+     * Signs in an already existing user based on the given username and password combination.
+     *
+     * @param user The user to be signed in
+     *
+     * @return A response to the sign in request, containing a valid jwt token
+     */
+    UserSigninResponseDTO signin(User user);
 
 }

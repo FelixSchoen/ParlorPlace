@@ -12,7 +12,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 @ControllerAdvice
 public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionHandler {
 
-    @ExceptionHandler(value = {RuntimeException.class})
+    @ExceptionHandler(value = {DataConflictException.class})
     protected ResponseEntity<Object> handleInvalidDataException(DataConflictException exception, WebRequest webRequest) {
         return errorMessage(exception, HttpStatus.CONFLICT, webRequest);
     }
