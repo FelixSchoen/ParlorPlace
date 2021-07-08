@@ -16,7 +16,7 @@ import java.util.Map;
 import java.util.Set;
 
 @Component
-@Profile("test")
+@Profile({"test", "setup"})
 public class DatabasePopulator {
 
     private final UserRepository userRepository;
@@ -55,7 +55,7 @@ public class DatabasePopulator {
         User user1 = User.builder()
                 .username("User1")
                 .nickname("User1")
-                .password("password") //
+                .password("$2a$10$G7E1tKKajd3S8/ORM17isOTCH0To0VkAnTjY7R4gkcgNpyLG/.tJC") // password
                 .email("user1@mail.com")
                 .roles(roles1)
                 .build();

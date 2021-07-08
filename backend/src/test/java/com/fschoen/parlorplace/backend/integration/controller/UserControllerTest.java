@@ -1,5 +1,7 @@
 package com.fschoen.parlorplace.backend.integration.controller;
 
+import com.fschoen.parlorplace.backend.controller.dto.user.UserSigninRequestDTO;
+import com.fschoen.parlorplace.backend.controller.dto.user.UserSigninResponseDTO;
 import com.fschoen.parlorplace.backend.controller.dto.user.UserSignupRequestDTO;
 import com.fschoen.parlorplace.backend.entity.persistance.User;
 import com.fschoen.parlorplace.backend.integration.base.BaseIntegrationTest;
@@ -47,6 +49,52 @@ public class UserControllerTest extends BaseIntegrationTest {
 
         Response response = post(userSignupRequestDTO, USER_BASE_URI + "/signup");
         assertThat(response.statusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
+    }
+
+    @Test
+    public void signinNonExistingUser_resultsInUnauthorizedError() {
+        UserSigninRequestDTO userSigninRequestDTO = UserSigninRequestDTO.builder()
+                .username("ne_user")
+                .password("password")
+                .build();
+
+        Response response = post(userSigninRequestDTO, USER_BASE_URI + "/signin");
+        assertThat(response.statusCode()).isEqualTo(HttpStatus.UNAUTHORIZED.value());
+    }
+
+    @Test
+    public void signinExistingUser_resultsInTokenReturned() {
+        User existingUser = this.generatedData.getUserCollection().getUser1();
+        UserSigninRequestDTO userSigninRequestDTO = UserSigninRequestDTO.builder()
+                .username(existingUser.getUsername())
+                .password(generatedData.getPasswordCollection().get(existingUser))
+                .build();
+
+        Response response = post(userSigninRequestDTO, USER_BASE_URI + "/signin");
+        assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
+
+        UserSigninResponseDTO userSigninResponseDTO = response.getBody().as(UserSigninResponseDTO.class);
+        assertThat(userSigninResponseDTO.getToken()).isNotNull();
+    }
+
+    @Test
+    public void signinExistingUser_withWrongPassword_resultsInUnauthorizedError() {
+        User existingUser = this.generatedData.getUserCollection().getUser1();
+        UserSigninRequestDTO userSigninRequestDTO = UserSigninRequestDTO.builder()
+                .username(existingUser.getUsername())
+                .password("not" + generatedData.getPasswordCollection().get(existingUser))
+                .build();
+
+        Response response = post(userSigninRequestDTO, USER_BASE_URI + "/signin");
+        assertThat(response.statusCode()).isEqualTo(HttpStatus.UNAUTHORIZED.value());
+    }
+
+    @Test
+    public void obtainTokenWithValidUser_resultsInTokenReturned() {
+        User existingUser = this.generatedData.getUserCollection().getUser1();
+
+        String token = this.getToken(existingUser);
+        System.out.println(token);
     }
 
 }

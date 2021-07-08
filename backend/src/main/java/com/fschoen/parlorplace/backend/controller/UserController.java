@@ -46,7 +46,7 @@ public class UserController {
     }
 
     @PostMapping("/signin")
-    public ResponseEntity<UserSigninResponseDTO> signinUser(@Valid @RequestBody UserSigninRequestDTO userSigninRequestDTO) {
+    public ResponseEntity<UserSigninResponseDTO> signinUser(@RequestBody UserSigninRequestDTO userSigninRequestDTO) {
         UserSigninResponseDTO userSigninResponseDTO = userService.signin(userMapper.toUser(userSigninRequestDTO));
 
         return ResponseEntity.status(HttpStatus.OK).body(userSigninResponseDTO);
