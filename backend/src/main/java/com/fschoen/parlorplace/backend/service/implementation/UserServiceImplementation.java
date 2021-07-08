@@ -17,7 +17,6 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -57,7 +56,7 @@ public class UserServiceImplementation implements UserService {
 
         String hashedPassword = passwordEncoder.encode(user.getPassword());
         Set<Role> roles = new HashSet<>() {{
-            add(Role.builder().role(UserRole.USER).build());
+            add(Role.builder().role(UserRole.ROLE_USER).build());
         }};
 
         User persistUser = user.toBuilder().nickname(user.getNickname()).password(hashedPassword).roles(roles).build();
@@ -73,8 +72,6 @@ public class UserServiceImplementation implements UserService {
 
         UserDetailsImplementation userDetails = (UserDetailsImplementation) authentication.getPrincipal();
         List<String> roles = userDetails.getAuthorities().stream().map(item -> item.getAuthority()).collect(Collectors.toList());
-
-        System.out.println(roles);
 
         return UserSigninResponseDTO.builder().id(userDetails.getId()).username(userDetails.getUsername()).roles(roles).token(token).build();
     }

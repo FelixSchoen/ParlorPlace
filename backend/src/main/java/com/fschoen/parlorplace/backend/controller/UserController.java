@@ -5,20 +5,18 @@ import com.fschoen.parlorplace.backend.controller.dto.user.UserSigninRequestDTO;
 import com.fschoen.parlorplace.backend.controller.dto.user.UserSigninResponseDTO;
 import com.fschoen.parlorplace.backend.controller.dto.user.UserSignupRequestDTO;
 import com.fschoen.parlorplace.backend.controller.mapper.user.UserMapper;
-import com.fschoen.parlorplace.backend.entity.POJO;
 import com.fschoen.parlorplace.backend.entity.persistance.User;
 import com.fschoen.parlorplace.backend.service.UserService;
+import com.fschoen.parlorplace.backend.validation.BaseValidator;
+import com.fschoen.parlorplace.backend.validation.implementation.UserValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
 import javax.validation.Valid;
-import javax.validation.Validator;
 
 @RequestMapping("/user")
 @RestController
@@ -28,6 +26,8 @@ public class UserController {
 
     private final UserMapper userMapper;
 
+    private final UserValidator validator = new UserValidator();;
+
     @Autowired
     public UserController(UserService userService, UserMapper userMapper) {
         this.userService = userService;
@@ -36,11 +36,8 @@ public class UserController {
 
 
     @PostMapping("/signup")
-    public ResponseEntity<UserDTO> signupUser(@RequestBody @Valid UserSignupRequestDTO userSignupRequestDTO, BindingResult bindingResult) {
-        System.out.println(userSignupRequestDTO);
-        if (bindingResult.hasErrors()) {
-            System.out.println("Error");
-        }
+    public ResponseEntity<UserDTO> signupUser(@RequestBody UserSignupRequestDTO userSignupRequestDTO) {
+        validator.validate(userSignupRequestDTO).throwIfInvalid();
         User proposedUser = userMapper.toUser(userSignupRequestDTO);
         User createdUser = userService.signup(proposedUser);
         UserDTO userDTO = userMapper.toDTO(createdUser);
@@ -55,4 +52,9 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK).body(userSigninResponseDTO);
     }
 
+    @GetMapping("/test")
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
+    public String userAccess() {
+        return "User Content";
+    }
 }

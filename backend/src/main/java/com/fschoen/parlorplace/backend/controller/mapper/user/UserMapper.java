@@ -11,7 +11,6 @@ import org.mapstruct.Mappings;
 @Mapper(componentModel = "spring")
 public interface UserMapper {
 
-    @Mapping(target = "nickname", ignore = true)
     User toUser(UserSignupRequestDTO userSignupRequestDTO);
 
     @Mappings({
