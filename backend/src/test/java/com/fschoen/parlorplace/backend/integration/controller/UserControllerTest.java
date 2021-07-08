@@ -1,43 +1,52 @@
 package com.fschoen.parlorplace.backend.integration.controller;
 
-import com.fschoen.parlorplace.backend.controller.dto.user.UserDTO;
 import com.fschoen.parlorplace.backend.controller.dto.user.UserSignupRequestDTO;
+import com.fschoen.parlorplace.backend.entity.persistance.User;
 import com.fschoen.parlorplace.backend.integration.base.BaseIntegrationTest;
-import org.junit.jupiter.api.BeforeEach;
+import io.restassured.response.Response;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.web.context.WebApplicationContext;
+import org.springframework.http.HttpStatus;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.assertj.core.api.Assertions.assertThat;
 
-// @AutoConfigureMockMvc
 public class UserControllerTest extends BaseIntegrationTest {
 
-    @Autowired
-    private WebApplicationContext webApplicationContext;
+    @Test
+    public void signupNonExistingUser_resultsInNewUserCreated() {
+        UserSignupRequestDTO userSignupRequestDTO = UserSignupRequestDTO.builder()
+                .username("ne_user")
+                .nickname("ne_user")
+                .password("password")
+                .email("ne_user@mail.com")
+                .build();
 
-    private MockMvc mockMvc;
-
-    @BeforeEach
-    public void setup() throws Exception {
-        this.mockMvc = MockMvcBuilders.webAppContextSetup(this.webApplicationContext).build();
+        Response response = post(userSignupRequestDTO, USER_BASE_URI + "/signup");
+        assertThat(response.statusCode()).isEqualTo(HttpStatus.CREATED.value());
     }
 
     @Test
-    public void asdf() throws Exception {
-        UserSignupRequestDTO userSignupRequestDTO = UserSignupRequestDTO.builder().username("ne_user").nickname("ne_user").password("password").email("ne_user@mail.com").build();
+    public void signupExistingUser_resultsInDataConflictException() {
+        User existingUser = this.generatedData.getUserCollection().getUser1();
+        UserSignupRequestDTO userSignupRequestDTO = UserSignupRequestDTO.builder()
+                .username(existingUser.getUsername())
+                .nickname(existingUser.getUsername())
+                .password(generatedData.getPasswordCollection().get(existingUser))
+                .email(existingUser.getEmail())
+                .build();
 
-        MvcResult mvcResult = this.mockMvc.perform(post(USER_BASE_URI + "/signup")).andDo(print()).andReturn();
+        Response response = post(userSignupRequestDTO, USER_BASE_URI + "/signup");
+        assertThat(response.statusCode()).isEqualTo(HttpStatus.CONFLICT.value());
+    }
+
+    @Test
+    public void signupUser_withInvalidData_resultsInValidationException() {
+        UserSignupRequestDTO userSignupRequestDTO = UserSignupRequestDTO.builder()
+                .username("ne_user")
+                .password("password")
+                .build();
+
+        Response response = post(userSignupRequestDTO, USER_BASE_URI + "/signup");
+        assertThat(response.statusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
     }
 
 }

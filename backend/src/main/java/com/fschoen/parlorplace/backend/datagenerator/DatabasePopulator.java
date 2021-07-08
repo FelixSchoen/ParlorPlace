@@ -1,6 +1,8 @@
 package com.fschoen.parlorplace.backend.datagenerator;
 
+import com.fschoen.parlorplace.backend.entity.persistance.Role;
 import com.fschoen.parlorplace.backend.entity.persistance.User;
+import com.fschoen.parlorplace.backend.enums.UserRole;
 import com.fschoen.parlorplace.backend.repository.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -9,7 +11,9 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 @Component
 @Profile("test")
@@ -45,14 +49,20 @@ public class DatabasePopulator {
         GeneratedData.UserCollection userCollection = new GeneratedData.UserCollection();
 
         //user1
+        Set<Role> roles1 = new HashSet<>() {{
+            add(Role.builder().role(UserRole.ROLE_USER).build());
+        }};
         User user1 = User.builder()
                 .username("User1")
                 .nickname("User1")
-                .password("todo") //
+                .password("password") //
                 .email("user1@mail.com")
+                .roles(roles1)
                 .build();
-        user1 = userRepository.save(user1);
-        userCollection.setUser1(user1);
+        user1.getRoles().forEach(role -> role.setUser(user1));
+
+        userCollection.setUser1(userRepository.save(user1));
+        userRepository.flush();
         passwordCollection.put(user1, "password");
 
         return userCollection;
