@@ -4,6 +4,7 @@ import com.fschoen.parlorplace.backend.ParlorPlaceApplication;
 import com.fschoen.parlorplace.backend.datagenerator.DatabasePopulator;
 import com.fschoen.parlorplace.backend.datagenerator.GeneratedData;
 import com.fschoen.parlorplace.backend.entity.persistance.User;
+import com.fschoen.parlorplace.backend.entity.transience.UserDetailsImplementation;
 import com.fschoen.parlorplace.backend.integration.utility.TestIsolationService;
 import com.fschoen.parlorplace.backend.security.JwtUtils;
 import io.restassured.RestAssured;
@@ -22,6 +23,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
@@ -63,8 +65,10 @@ public abstract class BaseIntegrationTest {
 
     protected String getToken(String username, String password) {
         Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
-        String token = jwtUtils.generateJwtToken(authentication);
-        return Strings.join("Bearer ", token).with("");
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        UserDetailsImplementation userDetails = (UserDetailsImplementation) authentication.getPrincipal();
+        String accessToken = jwtUtils.generateJwtToken(userDetails);
+        return Strings.join("Bearer ", accessToken).with("");
     }
 
     protected Response post(Object o, String URI) {

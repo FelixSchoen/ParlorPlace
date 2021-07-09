@@ -1,15 +1,15 @@
 package com.fschoen.parlorplace.backend.unit.mapper;
 
 import com.fschoen.parlorplace.backend.controller.dto.user.UserUpdateRequestDTO;
-import com.fschoen.parlorplace.backend.controller.mapper.user.RoleMapperImpl;
-import com.fschoen.parlorplace.backend.controller.mapper.user.UserMapper;
-import com.fschoen.parlorplace.backend.controller.mapper.user.UserMapperImpl;
+import com.fschoen.parlorplace.backend.controller.mapper.RoleMapperImpl;
+import com.fschoen.parlorplace.backend.controller.mapper.UserMapper;
+import com.fschoen.parlorplace.backend.controller.mapper.UserMapperImpl;
 import com.fschoen.parlorplace.backend.entity.persistance.User;
+import com.fschoen.parlorplace.backend.enums.UserRole;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.HashSet;
@@ -32,7 +32,7 @@ public class UserMapperTest {
                 .password("password")
                 .email("email")
                 .roles(new HashSet<>() {{
-                    add("ROLE_USER");
+                    add(UserRole.ROLE_USER);
                 }})
                 .build();
         User user = sut.toUser(userUpdateRequestDTO);

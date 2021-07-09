@@ -63,7 +63,6 @@ public class DatabasePopulator {
         admin1.getRoles().forEach(role -> role.setUser(admin1));
 
         userCollection.setAdmin1(userRepository.save(admin1));
-        userRepository.flush();
         passwordCollection.put(admin1, "password");
 
         //user1
@@ -80,9 +79,9 @@ public class DatabasePopulator {
         user1.getRoles().forEach(role -> role.setUser(user1));
 
         userCollection.setUser1(userRepository.save(user1));
-        userRepository.flush();
         passwordCollection.put(user1, "password");
 
+        userRepository.flush();
         return userCollection;
     }
 

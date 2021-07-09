@@ -19,9 +19,8 @@ public class SetupApplication implements CommandLineRunner {
     }
 
     public static void main(String[] args) {
-        SpringApplication.run(ParlorPlaceApplication.class, args);
+        SpringApplication.run(SetupApplication.class, args);
     }
-
 
     @Override
     public void run(String... args) throws Exception {

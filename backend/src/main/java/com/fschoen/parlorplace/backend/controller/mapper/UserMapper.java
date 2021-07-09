@@ -1,9 +1,10 @@
-package com.fschoen.parlorplace.backend.controller.mapper.user;
+package com.fschoen.parlorplace.backend.controller.mapper;
 
 import com.fschoen.parlorplace.backend.controller.dto.user.UserDTO;
 import com.fschoen.parlorplace.backend.controller.dto.user.UserSigninRequestDTO;
 import com.fschoen.parlorplace.backend.controller.dto.user.UserSignupRequestDTO;
 import com.fschoen.parlorplace.backend.controller.dto.user.UserUpdateRequestDTO;
+import com.fschoen.parlorplace.backend.controller.mapper.RoleMapper;
 import com.fschoen.parlorplace.backend.entity.persistance.User;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

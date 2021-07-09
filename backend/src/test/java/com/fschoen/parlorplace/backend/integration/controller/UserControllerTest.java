@@ -1,7 +1,10 @@
 package com.fschoen.parlorplace.backend.integration.controller;
 
+import com.fschoen.parlorplace.backend.controller.dto.authentication.TokenRefreshRequestDTO;
+import com.fschoen.parlorplace.backend.controller.dto.authentication.TokenRefreshResponseDTO;
 import com.fschoen.parlorplace.backend.controller.dto.user.*;
 import com.fschoen.parlorplace.backend.entity.persistance.User;
+import com.fschoen.parlorplace.backend.enums.UserRole;
 import com.fschoen.parlorplace.backend.integration.base.BaseIntegrationTest;
 import io.restassured.response.Response;
 import org.junit.jupiter.api.Test;
@@ -75,7 +78,7 @@ public class UserControllerTest extends BaseIntegrationTest {
         assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
 
         UserSigninResponseDTO userSigninResponseDTO = response.getBody().as(UserSigninResponseDTO.class);
-        assertThat(userSigninResponseDTO.getToken()).isNotNull();
+        assertThat(userSigninResponseDTO.getAccessToken()).isNotNull();
     }
 
     @Test
@@ -88,6 +91,26 @@ public class UserControllerTest extends BaseIntegrationTest {
 
         Response response = post(userSigninRequestDTO, USER_BASE_URI + "/signin");
         assertThat(response.statusCode()).isEqualTo(HttpStatus.UNAUTHORIZED.value());
+    }
+
+    @Test
+    public void refreshAccessToken_withValidRefreshToken_resultsInNewAccessToken() {
+        User existingUser = this.generatedData.getUserCollection().getUser1();
+        UserSigninRequestDTO userSigninRequestDTO = UserSigninRequestDTO.builder()
+                .username(existingUser.getUsername())
+                .password(generatedData.getPasswordCollection().get(existingUser))
+                .build();
+
+        Response responseSignin = post(userSigninRequestDTO, USER_BASE_URI + "/signin");
+        UserSigninResponseDTO userSigninResponseDTO = responseSignin.getBody().as(UserSigninResponseDTO.class);
+
+        TokenRefreshRequestDTO tokenRefreshRequestDTO = TokenRefreshRequestDTO.builder().refreshToken(userSigninResponseDTO.getRefreshToken()).build();
+
+        Response responseRefresh = post(tokenRefreshRequestDTO, USER_BASE_URI + "/refresh");
+        assertThat(responseRefresh.statusCode()).isEqualTo(HttpStatus.OK.value());
+
+        TokenRefreshResponseDTO tokenRefreshResponseDTO = responseRefresh.getBody().as(TokenRefreshResponseDTO.class);
+        assertThat(tokenRefreshResponseDTO.getAccessToken()).isNotNull();
     }
 
     @Test
@@ -111,11 +134,12 @@ public class UserControllerTest extends BaseIntegrationTest {
         User existingUser = this.generatedData.getUserCollection().getUser1();
         UserUpdateRequestDTO userUpdateRequestDTO = UserUpdateRequestDTO.builder()
                 .id(existingUser.getId())
+                .username(existingUser.getUsername())
                 .nickname("new" + existingUser.getNickname())
                 .password("new" + generatedData.getPasswordCollection().get(existingUser))
                 .email("new" + existingUser.getEmail())
                 .roles(new HashSet<>() {{
-                    add("ROLE_USER");
+                    add(UserRole.ROLE_USER);
                 }})
                 .build();
 
@@ -124,6 +148,30 @@ public class UserControllerTest extends BaseIntegrationTest {
 
         UserDTO returnedUser = response.getBody().as(UserDTO.class);
         assertEquals("new" + existingUser.getNickname(), returnedUser.getNickname());
+        assertThat(returnedUser.getRoles().size()).isEqualTo(1);
+    }
+
+    @Test
+    public void updateOtherUser_withEnoughAuthority_resultsInUpdatedUser() {
+        User existingAdmin = this.generatedData.getUserCollection().getAdmin1();
+        User existingUser = this.generatedData.getUserCollection().getUser1();
+        UserUpdateRequestDTO userUpdateRequestDTO = UserUpdateRequestDTO.builder()
+                .id(existingUser.getId())
+                .username(existingUser.getUsername())
+                .nickname("new" + existingUser.getNickname())
+                .password("new" + generatedData.getPasswordCollection().get(existingUser))
+                .email("new" + existingUser.getEmail())
+                .roles(new HashSet<>() {{
+                    add(UserRole.ROLE_USER);
+                }})
+                .build();
+
+        Response response = put(userUpdateRequestDTO, USER_BASE_URI + "/update", getToken(existingAdmin));
+        assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
+
+        UserDTO returnedUser = response.getBody().as(UserDTO.class);
+        assertEquals("new" + existingUser.getNickname(), returnedUser.getNickname());
+        assertThat(returnedUser.getRoles().size()).isEqualTo(1);
     }
 
 }

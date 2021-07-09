@@ -1,6 +1,8 @@
 package com.fschoen.parlorplace.backend.service.implementation;
 
+import com.fschoen.parlorplace.backend.controller.dto.authentication.TokenRefreshResponseDTO;
 import com.fschoen.parlorplace.backend.controller.dto.user.UserSigninResponseDTO;
+import com.fschoen.parlorplace.backend.entity.persistance.RefreshToken;
 import com.fschoen.parlorplace.backend.entity.persistance.Role;
 import com.fschoen.parlorplace.backend.entity.persistance.User;
 import com.fschoen.parlorplace.backend.entity.transience.UserDetailsImplementation;
@@ -10,6 +12,7 @@ import com.fschoen.parlorplace.backend.exceptions.DataConflictException;
 import com.fschoen.parlorplace.backend.repository.UserRepository;
 import com.fschoen.parlorplace.backend.security.JwtUtils;
 import com.fschoen.parlorplace.backend.service.AbstractService;
+import com.fschoen.parlorplace.backend.service.RefreshTokenService;
 import com.fschoen.parlorplace.backend.service.UserService;
 import com.fschoen.parlorplace.backend.utility.Messages;
 import org.slf4j.Logger;
@@ -23,13 +26,13 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
 public class UserServiceImplementation extends AbstractService implements UserService {
 
+    private final RefreshTokenService refreshTokenService;
     private final UserRepository userRepository;
 
     private final AuthenticationManager authenticationManager;
@@ -39,8 +42,9 @@ public class UserServiceImplementation extends AbstractService implements UserSe
     private static final Logger LOGGER = LoggerFactory.getLogger(UserServiceImplementation.class);
 
     @Autowired
-    public UserServiceImplementation(UserRepository userRepository, AuthenticationManager authenticationManager, PasswordEncoder passwordEncoder, JwtUtils jwtUtils) {
+    public UserServiceImplementation(RefreshTokenService refreshTokenService, UserRepository userRepository, AuthenticationManager authenticationManager, PasswordEncoder passwordEncoder, JwtUtils jwtUtils) {
         super(userRepository);
+        this.refreshTokenService = refreshTokenService;
         this.userRepository = userRepository;
         this.authenticationManager = authenticationManager;
         this.passwordEncoder = passwordEncoder;
@@ -73,12 +77,29 @@ public class UserServiceImplementation extends AbstractService implements UserSe
 
         Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword()));
         SecurityContextHolder.getContext().setAuthentication(authentication);
-        String token = jwtUtils.generateJwtToken(authentication);
-
         UserDetailsImplementation userDetails = (UserDetailsImplementation) authentication.getPrincipal();
-        Set<String> roles = userDetails.getAuthorities().stream().map(item -> item.getAuthority()).collect(Collectors.toSet());
+        String accessToken = jwtUtils.generateJwtToken(userDetails);
 
-        return UserSigninResponseDTO.builder().id(userDetails.getId()).username(userDetails.getUsername()).roles(roles).token(token).build();
+        Set<UserRole> roles = userDetails.getAuthorities().stream().map(item -> UserRole.valueOf(item.getAuthority())).collect(Collectors.toSet());
+
+        RefreshToken refreshToken = refreshTokenService.createRefreshToken(userDetails.getId());
+
+        return UserSigninResponseDTO.builder().id(userDetails.getId()).username(userDetails.getUsername()).roles(roles).accessToken(accessToken).refreshToken(refreshToken.getRefreshToken()).build();
+    }
+
+    @Override
+    public TokenRefreshResponseDTO refresh(String refreshToken) throws AuthorizationException {
+        LOGGER.info("Refreshing Token");
+
+        return refreshTokenService.findByRefreshToken(refreshToken)
+                .map(refreshTokenService::verifyExpiration)
+                .map(RefreshToken::getUser)
+                .map(user -> {
+                    String accessToken = jwtUtils.generateTokenFromUsername(user.getUsername());
+                    RefreshToken newRefreshToken = refreshTokenService.createRefreshToken(user.getId());
+                    return TokenRefreshResponseDTO.builder().accessToken(accessToken).refreshToken(newRefreshToken.getRefreshToken()).build();
+                })
+                .orElseThrow(() -> new AuthorizationException(Messages.getExceptionExplanationMessage("authorization.token.refresh.exists.not")));
     }
 
     @Override
@@ -87,7 +108,7 @@ public class UserServiceImplementation extends AbstractService implements UserSe
 
         User principal = getPrincipal();
 
-        if ((!principal.getId().equals(user.getId()) || user.getRoles().stream().anyMatch(x -> x.getRole().equals(UserRole.ROLE_ADMIN)))
+        if ((!principal.getId().equals(user.getId()) || (user.getRoles() != null && user.getRoles().stream().anyMatch(x -> x.getRole().equals(UserRole.ROLE_ADMIN))))
                 && !hasAuthority(principal, UserRole.ROLE_ADMIN))
             throw new AuthorizationException(Messages.getExceptionExplanationMessage("authorization.unauthorized"));
 
