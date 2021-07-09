@@ -9,7 +9,7 @@ import java.util.Optional;
 public interface RefreshTokenService {
 
     /**
-     * Finds a refresh token by the token itself.
+     * Finds a refresh token entity by the token itself.
      *
      * @param refreshToken Token to look for
      *

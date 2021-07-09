@@ -96,7 +96,8 @@ public class UserServiceImplementation extends AbstractService implements UserSe
                 .map(RefreshToken::getUser)
                 .map(user -> {
                     String accessToken = jwtUtils.generateTokenFromUsername(user.getUsername());
-                    return TokenRefreshResponseDTO.builder().accessToken(accessToken).refreshToken(refreshToken).build();
+                    RefreshToken newRefreshToken = refreshTokenService.createRefreshToken(user.getId());
+                    return TokenRefreshResponseDTO.builder().accessToken(accessToken).refreshToken(newRefreshToken.getRefreshToken()).build();
                 })
                 .orElseThrow(() -> new AuthorizationException(Messages.getExceptionExplanationMessage("authorization.token.refresh.exists.not")));
     }

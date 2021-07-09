@@ -38,10 +38,13 @@ public class RefreshTokenServiceImplementation implements RefreshTokenService {
     }
 
     @Override
+    @Transactional
     public RefreshToken createRefreshToken(Long userId) {
         RefreshToken refreshToken = new RefreshToken();
 
         User user = userRepository.findById(userId).orElseThrow(() -> new DataConflictException(Messages.getExceptionExplanationMessage("user.id.exists.not")));
+
+        refreshTokenRepository.removeByUser(user);
 
         refreshToken.setUser(user);
         refreshToken.setExpiryDate(Instant.now().plusMillis(refreshTokenDurationMs));
@@ -55,7 +58,7 @@ public class RefreshTokenServiceImplementation implements RefreshTokenService {
     public RefreshToken verifyExpiration(RefreshToken token) throws TokenExpiredException {
         if (token.getExpiryDate().compareTo(Instant.now()) < 0) {
             refreshTokenRepository.delete(token);
-            throw new TokenExpiredException(token.getRefreshToken(), "Refresh token was expired. Please make a new signin request");
+            throw new TokenExpiredException(token.getRefreshToken(), Messages.getExceptionExplanationMessage("authorization.token.refresh.expired"));
         }
 
         return token;
