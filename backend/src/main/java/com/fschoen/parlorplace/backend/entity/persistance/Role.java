@@ -14,7 +14,8 @@ import javax.validation.constraints.NotNull;
 public class Role {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.AUTO, generator = "seq_role_id")
+    @SequenceGenerator(name = "seq_role_id", sequenceName = "seq_role_id")
     private Long id;
 
     @ManyToOne

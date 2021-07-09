@@ -19,7 +19,8 @@ import java.util.Set;
 public class User {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.AUTO, generator = "seq_user_id")
+    @SequenceGenerator(name = "seq_user_id", sequenceName = "seq_user_id")
     private Long id;
 
     @Column(nullable = false, unique = true)
