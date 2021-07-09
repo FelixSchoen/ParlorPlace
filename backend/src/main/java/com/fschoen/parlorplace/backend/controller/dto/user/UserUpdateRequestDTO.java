@@ -1,5 +1,6 @@
 package com.fschoen.parlorplace.backend.controller.dto.user;
 
+import com.fschoen.parlorplace.backend.enums.UserRole;
 import lombok.*;
 
 import javax.validation.constraints.Email;
@@ -36,6 +37,6 @@ public class UserUpdateRequestDTO {
     @Email
     private String email;
 
-    private Set<String> roles;
+    private Set<UserRole> roles;
 
 }

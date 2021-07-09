@@ -1,31 +1,30 @@
 package com.fschoen.parlorplace.backend.entity.persistance;
 
-import com.fschoen.parlorplace.backend.enums.UserRole;
 import lombok.*;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
+import java.time.Instant;
 
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
+@ToString
+@Builder(toBuilder = true)
 @Data
 @Entity
-public class Role {
+public class RefreshToken {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    @ToString.Exclude
-    @NotNull
+    @OneToOne
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;
 
+    @Column(nullable = false, unique = true)
+    private String refreshToken;
+
     @Column(nullable = false)
-    @NotNull
-    @Enumerated(EnumType.STRING)
-    private UserRole role;
+    private Instant expiryDate;
 
 }

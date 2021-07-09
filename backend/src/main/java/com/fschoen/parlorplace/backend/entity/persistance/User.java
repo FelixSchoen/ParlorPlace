@@ -22,22 +22,22 @@ public class User {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Column(unique = true)
+    @Column(nullable = false, unique = true)
     @NotBlank
     @Size(min = 3, max = 15)
     private String username;
 
-    @Column
+    @Column(nullable = false)
     @NotBlank
     @Size(min = 8, max = 255)
     private String password;
 
-    @Column
+    @Column(nullable = false)
     @NotBlank
     @Size(min = 3, max = 15)
     private String nickname;
 
-    @Column(unique = true)
+    @Column(nullable = false, unique = true)
     @NotBlank
     @Size(min = 3, max = 255)
     @Email
@@ -45,7 +45,6 @@ public class User {
 
     @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
     @Cascade({org.hibernate.annotations.CascadeType.ALL})
-    @ToString.Exclude
     @EqualsAndHashCode.Exclude
     @NotNull
     private Set<Role> roles;

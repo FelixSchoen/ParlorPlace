@@ -2,6 +2,7 @@ package com.fschoen.parlorplace.backend.integration.controller;
 
 import com.fschoen.parlorplace.backend.controller.dto.user.*;
 import com.fschoen.parlorplace.backend.entity.persistance.User;
+import com.fschoen.parlorplace.backend.enums.UserRole;
 import com.fschoen.parlorplace.backend.integration.base.BaseIntegrationTest;
 import io.restassured.response.Response;
 import org.junit.jupiter.api.Test;
@@ -75,7 +76,7 @@ public class UserControllerTest extends BaseIntegrationTest {
         assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
 
         UserSigninResponseDTO userSigninResponseDTO = response.getBody().as(UserSigninResponseDTO.class);
-        assertThat(userSigninResponseDTO.getToken()).isNotNull();
+        assertThat(userSigninResponseDTO.getAccessToken()).isNotNull();
     }
 
     @Test
@@ -111,11 +112,12 @@ public class UserControllerTest extends BaseIntegrationTest {
         User existingUser = this.generatedData.getUserCollection().getUser1();
         UserUpdateRequestDTO userUpdateRequestDTO = UserUpdateRequestDTO.builder()
                 .id(existingUser.getId())
+                .username(existingUser.getUsername())
                 .nickname("new" + existingUser.getNickname())
                 .password("new" + generatedData.getPasswordCollection().get(existingUser))
                 .email("new" + existingUser.getEmail())
                 .roles(new HashSet<>() {{
-                    add("ROLE_USER");
+                    add(UserRole.ROLE_USER);
                 }})
                 .build();
 
@@ -124,6 +126,7 @@ public class UserControllerTest extends BaseIntegrationTest {
 
         UserDTO returnedUser = response.getBody().as(UserDTO.class);
         assertEquals("new" + existingUser.getNickname(), returnedUser.getNickname());
+        assertThat(returnedUser.getRoles().size()).isEqualTo(1);
     }
 
 }

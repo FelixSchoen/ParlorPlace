@@ -1,6 +1,7 @@
-package com.fschoen.parlorplace.backend.controller.mapper.user;
+package com.fschoen.parlorplace.backend.controller.mapper;
 
 import com.fschoen.parlorplace.backend.entity.persistance.Role;
+import com.fschoen.parlorplace.backend.enums.UserRole;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;
@@ -18,5 +19,11 @@ public interface RoleMapper {
     Role toRole(String role);
 
     Set<Role> toRole(Set<String> role);
+
+    default UserRole toUserRole(Role role) {
+        return role.getRole();
+    };
+
+    Set<UserRole> toUserRole(Set<Role> roles);
 
 }

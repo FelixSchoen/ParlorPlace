@@ -1,5 +1,6 @@
 package com.fschoen.parlorplace.backend.controller.dto.user;
 
+import com.fschoen.parlorplace.backend.enums.UserRole;
 import lombok.*;
 
 import javax.validation.constraints.NotBlank;
@@ -23,9 +24,12 @@ public class UserSigninResponseDTO {
     private String username;
 
     @NotNull
-    private Set<String> roles;
+    private Set<UserRole> roles;
 
     @NotBlank
-    private String token;
+    private String accessToken;
+
+    @NotBlank
+    private String refreshToken;
 
 }

@@ -1,14 +1,13 @@
 package com.fschoen.parlorplace.backend.unit.mapper;
 
-import com.fschoen.parlorplace.backend.controller.mapper.user.RoleMapper;
-import com.fschoen.parlorplace.backend.controller.mapper.user.RoleMapperImpl;
+import com.fschoen.parlorplace.backend.controller.mapper.RoleMapper;
+import com.fschoen.parlorplace.backend.controller.mapper.RoleMapperImpl;
 import com.fschoen.parlorplace.backend.entity.persistance.Role;
 import com.fschoen.parlorplace.backend.enums.UserRole;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.HashSet;
@@ -46,6 +45,14 @@ public class RoleMapperTest {
         }};
 
         assertEquals(expectedSet, actualSet);
+    }
+
+    @Test
+    public void mapRole_toUserRole() {
+        Role actualRole = Role.builder().id(1L).role(UserRole.ROLE_USER).build();
+        UserRole actualUserRole = sut.toUserRole(actualRole);
+
+        assertEquals(UserRole.ROLE_USER, actualUserRole);
     }
 
 }

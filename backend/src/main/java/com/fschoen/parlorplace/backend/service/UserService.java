@@ -1,5 +1,6 @@
 package com.fschoen.parlorplace.backend.service;
 
+import com.fschoen.parlorplace.backend.controller.dto.authentication.TokenRefreshResponseDTO;
 import com.fschoen.parlorplace.backend.controller.dto.user.UserSigninResponseDTO;
 import com.fschoen.parlorplace.backend.entity.persistance.User;
 import com.fschoen.parlorplace.backend.exceptions.AuthorizationException;
@@ -26,6 +27,8 @@ public interface UserService {
      * @return A response to the sign in request, containing a valid jwt token
      */
     UserSigninResponseDTO signin(User user);
+
+    TokenRefreshResponseDTO refresh(String refreshToken);
 
     /**
      * Updates the user given by its id using the supplied argument.

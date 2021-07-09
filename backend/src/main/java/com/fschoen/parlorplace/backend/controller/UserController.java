@@ -1,7 +1,9 @@
 package com.fschoen.parlorplace.backend.controller;
 
+import com.fschoen.parlorplace.backend.controller.dto.authentication.TokenRefreshRequestDTO;
+import com.fschoen.parlorplace.backend.controller.dto.authentication.TokenRefreshResponseDTO;
 import com.fschoen.parlorplace.backend.controller.dto.user.*;
-import com.fschoen.parlorplace.backend.controller.mapper.user.UserMapper;
+import com.fschoen.parlorplace.backend.controller.mapper.UserMapper;
 import com.fschoen.parlorplace.backend.entity.persistance.User;
 import com.fschoen.parlorplace.backend.service.UserService;
 import com.fschoen.parlorplace.backend.validation.implementation.UserValidator;
@@ -46,6 +48,15 @@ public class UserController {
         UserSigninResponseDTO userSigninResponseDTO = userService.signin(userMapper.toUser(userSigninRequestDTO));
 
         return ResponseEntity.status(HttpStatus.OK).body(userSigninResponseDTO);
+    }
+
+    @PostMapping("/refresh")
+    public ResponseEntity<TokenRefreshResponseDTO> refreshUser(@RequestBody TokenRefreshRequestDTO tokenRefreshRequestDTO) {
+        validator.validate(tokenRefreshRequestDTO).throwIfInvalid();
+
+        TokenRefreshResponseDTO tokenRefreshResponseDTO = userService.refresh(tokenRefreshRequestDTO.getRefreshToken());
+
+        return ResponseEntity.status(HttpStatus.OK).body(tokenRefreshResponseDTO);
     }
 
     @PutMapping("/update")
