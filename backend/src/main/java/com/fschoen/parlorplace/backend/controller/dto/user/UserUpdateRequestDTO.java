@@ -6,6 +6,8 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.util.List;
+import java.util.Set;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -33,5 +35,7 @@ public class UserUpdateRequestDTO {
     @Size(min = 3, max = 255)
     @Email
     private String email;
+
+    private Set<String> roles;
 
 }

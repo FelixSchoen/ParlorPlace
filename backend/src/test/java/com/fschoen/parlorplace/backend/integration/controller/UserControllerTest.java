@@ -1,15 +1,16 @@
 package com.fschoen.parlorplace.backend.integration.controller;
 
-import com.fschoen.parlorplace.backend.controller.dto.user.UserSigninRequestDTO;
-import com.fschoen.parlorplace.backend.controller.dto.user.UserSigninResponseDTO;
-import com.fschoen.parlorplace.backend.controller.dto.user.UserSignupRequestDTO;
+import com.fschoen.parlorplace.backend.controller.dto.user.*;
 import com.fschoen.parlorplace.backend.entity.persistance.User;
 import com.fschoen.parlorplace.backend.integration.base.BaseIntegrationTest;
 import io.restassured.response.Response;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 
+import java.util.HashSet;
+
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class UserControllerTest extends BaseIntegrationTest {
 
@@ -93,28 +94,36 @@ public class UserControllerTest extends BaseIntegrationTest {
     public void updateExistingUser_withNotEnoughAuthority_resultsInAuthorizationException() {
         User existingUser = this.generatedData.getUserCollection().getUser1();
         User otherUser = this.generatedData.getUserCollection().getAdmin1();
-        UserSignupRequestDTO userSignupRequestDTO = UserSignupRequestDTO.builder()
+        UserUpdateRequestDTO userUpdateRequestDTO = UserUpdateRequestDTO.builder()
+                .id(otherUser.getId())
                 .username(otherUser.getUsername())
-                .nickname("new"+otherUser.getNickname())
+                .nickname("new" + otherUser.getNickname())
                 .password("new" + generatedData.getPasswordCollection().get(otherUser))
                 .email("new" + otherUser.getEmail())
                 .build();
 
-        Response response = put(userSignupRequestDTO, USER_BASE_URI + "/update", getToken(existingUser));
+        Response response = put(userUpdateRequestDTO, USER_BASE_URI + "/update", getToken(existingUser));
         assertThat(response.statusCode()).isEqualTo(HttpStatus.UNAUTHORIZED.value());
     }
 
     @Test
     public void updateOwnUser_resultsInUpdatedUser() {
         User existingUser = this.generatedData.getUserCollection().getUser1();
-        UserSignupRequestDTO userSignupRequestDTO = UserSignupRequestDTO.builder()
-                .nickname("new"+existingUser.getNickname())
+        UserUpdateRequestDTO userUpdateRequestDTO = UserUpdateRequestDTO.builder()
+                .id(existingUser.getId())
+                .nickname("new" + existingUser.getNickname())
                 .password("new" + generatedData.getPasswordCollection().get(existingUser))
                 .email("new" + existingUser.getEmail())
+                .roles(new HashSet<>() {{
+                    add("ROLE_USER");
+                }})
                 .build();
 
-        Response response = put(userSignupRequestDTO, USER_BASE_URI + "/update", getToken(existingUser));
-        assertThat(response.statusCode()).isEqualTo(HttpStatus.UNAUTHORIZED.value());
+        Response response = put(userUpdateRequestDTO, USER_BASE_URI + "/update", getToken(existingUser));
+        assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
+
+        UserDTO returnedUser = response.getBody().as(UserDTO.class);
+        assertEquals("new" + existingUser.getNickname(), returnedUser.getNickname());
     }
 
 }

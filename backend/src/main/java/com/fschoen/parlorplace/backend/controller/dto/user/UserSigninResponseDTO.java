@@ -6,6 +6,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.List;
+import java.util.Set;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -22,7 +23,7 @@ public class UserSigninResponseDTO {
     private String username;
 
     @NotNull
-    private List<String> roles;
+    private Set<String> roles;
 
     @NotBlank
     private String token;

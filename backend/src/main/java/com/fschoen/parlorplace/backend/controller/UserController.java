@@ -50,13 +50,14 @@ public class UserController {
 
     @PutMapping("/update")
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
-    public ResponseEntity updateUser(@RequestBody UserUpdateRequestDTO userUpdateRequestDTO) {
+    public ResponseEntity<UserDTO> updateUser(@RequestBody UserUpdateRequestDTO userUpdateRequestDTO) {
         validator.validate(userUpdateRequestDTO).throwIfInvalid();
 
         User proposedUser = userMapper.toUser(userUpdateRequestDTO);
-        userService.update(proposedUser);
+        User updatedUser = userService.update(proposedUser);
+        UserDTO userDTO = userMapper.toDTO(updatedUser);
 
-        return ResponseEntity.status(HttpStatus.OK).build();
+        return ResponseEntity.status(HttpStatus.OK).body(userDTO);
     }
 
 }

@@ -76,7 +76,7 @@ public class UserServiceImplementation extends AbstractService implements UserSe
         String token = jwtUtils.generateJwtToken(authentication);
 
         UserDetailsImplementation userDetails = (UserDetailsImplementation) authentication.getPrincipal();
-        List<String> roles = userDetails.getAuthorities().stream().map(item -> item.getAuthority()).collect(Collectors.toList());
+        Set<String> roles = userDetails.getAuthorities().stream().map(item -> item.getAuthority()).collect(Collectors.toSet());
 
         return UserSigninResponseDTO.builder().id(userDetails.getId()).username(userDetails.getUsername()).roles(roles).token(token).build();
     }

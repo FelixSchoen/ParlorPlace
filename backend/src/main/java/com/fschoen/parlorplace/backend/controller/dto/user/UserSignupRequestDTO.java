@@ -31,6 +31,4 @@ public class UserSignupRequestDTO {
     @Email
     private String email;
 
-    //TODO Roles
-
 }

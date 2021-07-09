@@ -9,7 +9,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", uses = {RoleMapper.class})
 public interface UserMapper {
 
     User toUser(UserSignupRequestDTO userSignupRequestDTO);
@@ -20,6 +20,7 @@ public interface UserMapper {
     })
     User toUser(UserSigninRequestDTO userSigninRequestDTO);
 
+    @Mapping(target = "roles", source = "roles")
     User toUser(UserUpdateRequestDTO userUpdateRequestDTO);
 
     UserDTO toDTO(User user);
