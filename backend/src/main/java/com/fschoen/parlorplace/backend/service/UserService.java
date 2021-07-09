@@ -2,6 +2,7 @@ package com.fschoen.parlorplace.backend.service;
 
 import com.fschoen.parlorplace.backend.controller.dto.user.UserSigninResponseDTO;
 import com.fschoen.parlorplace.backend.entity.persistance.User;
+import com.fschoen.parlorplace.backend.exceptions.AuthorizationException;
 import com.fschoen.parlorplace.backend.exceptions.DataConflictException;
 
 public interface UserService {
@@ -25,5 +26,16 @@ public interface UserService {
      * @return A response to the sign in request, containing a valid jwt token
      */
     UserSigninResponseDTO signin(User user);
+
+    /**
+     * Updates the user given by its id using the supplied argument.
+     *
+     * @param user The user object containing the id of the user to be updated and the update information
+     *
+     * @return The updated user
+     *
+     * @throws AuthorizationException If the principal does not have the necessary authority to edit the specified user
+     */
+    User update(User user) throws AuthorizationException;
 
 }

@@ -3,6 +3,7 @@ package com.fschoen.parlorplace.backend.controller.mapper.user;
 import com.fschoen.parlorplace.backend.controller.dto.user.UserDTO;
 import com.fschoen.parlorplace.backend.controller.dto.user.UserSigninRequestDTO;
 import com.fschoen.parlorplace.backend.controller.dto.user.UserSignupRequestDTO;
+import com.fschoen.parlorplace.backend.controller.dto.user.UserUpdateRequestDTO;
 import com.fschoen.parlorplace.backend.entity.persistance.User;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -19,7 +20,8 @@ public interface UserMapper {
     })
     User toUser(UserSigninRequestDTO userSigninRequestDTO);
 
-    //@Mapping(target = "username", source = "username")
+    User toUser(UserUpdateRequestDTO userUpdateRequestDTO);
+
     UserDTO toDTO(User user);
 
 }

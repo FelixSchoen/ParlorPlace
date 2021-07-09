@@ -15,4 +15,11 @@ public interface RoleRepository extends JpaRepository<Role, Long> {
      */
     Optional<Role> findOneById(Long id);
 
+    /**
+     * Deletes all roles that belong to the user of the given id.
+     *
+     * @param userId Id of the user to delete roles for
+     */
+    void removeByUserId(Long userId);
+
 }

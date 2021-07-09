@@ -18,6 +18,7 @@ public class GeneratedData {
 
     @Data
     public static class UserCollection {
+        private User admin1;
         private User user1;
     }
 

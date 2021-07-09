@@ -22,7 +22,6 @@ public class UserSignupRequestDTO {
     @Size(min = 8, max = 255)
     private String password;
 
-    @NotNull
     @NotBlank
     @Size(min = 3, max = 15)
     private String nickname;
@@ -31,5 +30,7 @@ public class UserSignupRequestDTO {
     @Size(min = 3, max = 255)
     @Email
     private String email;
+
+    //TODO Roles
 
 }

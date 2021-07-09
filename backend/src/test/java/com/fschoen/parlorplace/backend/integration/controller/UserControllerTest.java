@@ -90,11 +90,31 @@ public class UserControllerTest extends BaseIntegrationTest {
     }
 
     @Test
-    public void obtainTokenWithValidUser_resultsInTokenReturned() {
+    public void updateExistingUser_withNotEnoughAuthority_resultsInAuthorizationException() {
         User existingUser = this.generatedData.getUserCollection().getUser1();
+        User otherUser = this.generatedData.getUserCollection().getAdmin1();
+        UserSignupRequestDTO userSignupRequestDTO = UserSignupRequestDTO.builder()
+                .username(otherUser.getUsername())
+                .nickname("new"+otherUser.getNickname())
+                .password("new" + generatedData.getPasswordCollection().get(otherUser))
+                .email("new" + otherUser.getEmail())
+                .build();
 
-        String token = this.getToken(existingUser);
-        System.out.println(token);
+        Response response = put(userSignupRequestDTO, USER_BASE_URI + "/update", getToken(existingUser));
+        assertThat(response.statusCode()).isEqualTo(HttpStatus.UNAUTHORIZED.value());
+    }
+
+    @Test
+    public void updateOwnUser_resultsInUpdatedUser() {
+        User existingUser = this.generatedData.getUserCollection().getUser1();
+        UserSignupRequestDTO userSignupRequestDTO = UserSignupRequestDTO.builder()
+                .nickname("new"+existingUser.getNickname())
+                .password("new" + generatedData.getPasswordCollection().get(existingUser))
+                .email("new" + existingUser.getEmail())
+                .build();
+
+        Response response = put(userSignupRequestDTO, USER_BASE_URI + "/update", getToken(existingUser));
+        assertThat(response.statusCode()).isEqualTo(HttpStatus.UNAUTHORIZED.value());
     }
 
 }

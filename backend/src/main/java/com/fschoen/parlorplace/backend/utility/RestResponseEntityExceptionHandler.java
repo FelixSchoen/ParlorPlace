@@ -1,5 +1,6 @@
 package com.fschoen.parlorplace.backend.utility;
 
+import com.fschoen.parlorplace.backend.exceptions.AuthorizationException;
 import com.fschoen.parlorplace.backend.exceptions.DataConflictException;
 import com.fschoen.parlorplace.backend.exceptions.ValidationException;
 import org.springframework.http.HttpHeaders;
@@ -12,6 +13,11 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 
 @ControllerAdvice
 public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionHandler {
+
+    @ExceptionHandler(value = {AuthorizationException.class})
+    protected ResponseEntity<Object> handleAuthorizationException(AuthorizationException exception, WebRequest webRequest) {
+        return errorMessage(exception, HttpStatus.UNAUTHORIZED, webRequest);
+    }
 
     @ExceptionHandler(value = {DataConflictException.class})
     protected ResponseEntity<Object> handleInvalidDataException(DataConflictException exception, WebRequest webRequest) {

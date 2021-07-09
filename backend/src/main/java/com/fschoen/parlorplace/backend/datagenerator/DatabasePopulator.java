@@ -48,16 +48,34 @@ public class DatabasePopulator {
     private GeneratedData.UserCollection setupUserCollection(Map<User, String> passwordCollection) {
         GeneratedData.UserCollection userCollection = new GeneratedData.UserCollection();
 
+        //admin1
+        Set<Role> rolesAdmin1 = new HashSet<>() {{
+            add(Role.builder().role(UserRole.ROLE_USER).build());
+            add(Role.builder().role(UserRole.ROLE_ADMIN).build());
+        }};
+        User admin1 = User.builder()
+                .username("Admin1")
+                .nickname("Admin1")
+                .password("$2a$10$G7E1tKKajd3S8/ORM17isOTCH0To0VkAnTjY7R4gkcgNpyLG/.tJC")
+                .email("admin1@mail.com")
+                .roles(rolesAdmin1)
+                .build();
+        admin1.getRoles().forEach(role -> role.setUser(admin1));
+
+        userCollection.setAdmin1(userRepository.save(admin1));
+        userRepository.flush();
+        passwordCollection.put(admin1, "password");
+
         //user1
-        Set<Role> roles1 = new HashSet<>() {{
+        Set<Role> rolesUser1 = new HashSet<>() {{
             add(Role.builder().role(UserRole.ROLE_USER).build());
         }};
         User user1 = User.builder()
                 .username("User1")
                 .nickname("User1")
-                .password("$2a$10$G7E1tKKajd3S8/ORM17isOTCH0To0VkAnTjY7R4gkcgNpyLG/.tJC") // password
+                .password("$2a$10$G7E1tKKajd3S8/ORM17isOTCH0To0VkAnTjY7R4gkcgNpyLG/.tJC")
                 .email("user1@mail.com")
-                .roles(roles1)
+                .roles(rolesUser1)
                 .build();
         user1.getRoles().forEach(role -> role.setUser(user1));
 

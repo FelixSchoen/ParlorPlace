@@ -5,9 +5,11 @@ import com.fschoen.parlorplace.backend.entity.persistance.Role;
 import com.fschoen.parlorplace.backend.entity.persistance.User;
 import com.fschoen.parlorplace.backend.entity.transience.UserDetailsImplementation;
 import com.fschoen.parlorplace.backend.enums.UserRole;
+import com.fschoen.parlorplace.backend.exceptions.AuthorizationException;
 import com.fschoen.parlorplace.backend.exceptions.DataConflictException;
 import com.fschoen.parlorplace.backend.repository.UserRepository;
 import com.fschoen.parlorplace.backend.security.JwtUtils;
+import com.fschoen.parlorplace.backend.service.AbstractService;
 import com.fschoen.parlorplace.backend.service.UserService;
 import com.fschoen.parlorplace.backend.utility.Messages;
 import org.slf4j.Logger;
@@ -26,7 +28,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
-public class UserServiceImplementation implements UserService {
+public class UserServiceImplementation extends AbstractService implements UserService {
 
     private final UserRepository userRepository;
 
@@ -38,6 +40,7 @@ public class UserServiceImplementation implements UserService {
 
     @Autowired
     public UserServiceImplementation(UserRepository userRepository, AuthenticationManager authenticationManager, PasswordEncoder passwordEncoder, JwtUtils jwtUtils) {
+        super(userRepository);
         this.userRepository = userRepository;
         this.authenticationManager = authenticationManager;
         this.passwordEncoder = passwordEncoder;
@@ -46,7 +49,7 @@ public class UserServiceImplementation implements UserService {
 
     @Override
     public User signup(User user) throws DataConflictException {
-        LOGGER.info("Signing up new User: {}", user.getUsername());
+        LOGGER.info("Signing up User: {}", user.getUsername());
 
         if (userRepository.findOneByUsername(user.getUsername()).isPresent()) {
             throw new DataConflictException(Messages.getExceptionExplanationMessage("user.name.exists"));
@@ -66,6 +69,8 @@ public class UserServiceImplementation implements UserService {
     }
 
     public UserSigninResponseDTO signin(User user) {
+        LOGGER.info("Signing in User: {}", user.getUsername());
+
         Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword()));
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String token = jwtUtils.generateJwtToken(authentication);
@@ -74,5 +79,35 @@ public class UserServiceImplementation implements UserService {
         List<String> roles = userDetails.getAuthorities().stream().map(item -> item.getAuthority()).collect(Collectors.toList());
 
         return UserSigninResponseDTO.builder().id(userDetails.getId()).username(userDetails.getUsername()).roles(roles).token(token).build();
+    }
+
+    @Override
+    public User update(User user) throws AuthorizationException {
+        LOGGER.info("Updating User: {}", user.getUsername());
+
+        User principal = getPrincipal();
+
+        if ((!principal.getId().equals(user.getId()) || user.getRoles().stream().anyMatch(x -> x.getRole().equals(UserRole.ROLE_ADMIN)))
+                && !hasAuthority(principal, UserRole.ROLE_ADMIN))
+            throw new AuthorizationException(Messages.getExceptionExplanationMessage("authorization.unauthorized"));
+
+        User existingUser = userRepository.findOneById(user.getId()).orElseThrow(() -> new DataConflictException(Messages.getExceptionExplanationMessage("user.id.exists.not")));
+        User.UserBuilder persistUserBuilder = existingUser.toBuilder();
+
+        if (user.getPassword() != null) {
+            String hashedPassword = passwordEncoder.encode(user.getPassword());
+            persistUserBuilder.password(hashedPassword);
+        }
+        if (user.getNickname() != null)
+            persistUserBuilder.nickname(user.getNickname());
+        if (user.getEmail() != null)
+            persistUserBuilder.email(user.getEmail());
+        if (user.getRoles() != null)
+            persistUserBuilder.roles(user.getRoles());
+
+        User persistUser = persistUserBuilder.build();
+        persistUser.getRoles().forEach(role -> role.setUser(persistUser));
+
+        return userRepository.save(persistUser);
     }
 }
