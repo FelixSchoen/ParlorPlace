@@ -9,14 +9,17 @@ import {HttpClientModule} from "@angular/common/http";
 import { authInterceptorProviders } from './interceptors/auth.interceptor';
 import { AppRoutingModule } from './app-routing.module';
 import {AppComponent} from "./app.component";
-import { SignupComponent } from './components/signup/signup.component';
+import { SignupComponent } from './components/authentication/signup/signup.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import {ToastrModule} from "ngx-toastr";
+import { ToastComponent } from './components/toast/toast.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     EntryComponent,
-    SignupComponent
+    SignupComponent,
+    ToastComponent
   ],
   imports: [
     BrowserModule,
@@ -25,7 +28,8 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
     ReactiveFormsModule,
     HttpClientModule,
     AppRoutingModule,
-    NgbModule
+    NgbModule,
+    ToastrModule.forRoot({positionClass: 'toast-bottom-left'}),
   ],
   providers: [authInterceptorProviders],
   bootstrap: [AppComponent]
