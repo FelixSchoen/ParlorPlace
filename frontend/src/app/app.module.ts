@@ -13,13 +13,15 @@ import { SignupComponent } from './components/authentication/signup/signup.compo
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import {ToastrModule} from "ngx-toastr";
 import { ToastComponent } from './components/toast/toast.component';
+import { SigninComponent } from './components/authentication/signin/signin.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     EntryComponent,
     SignupComponent,
-    ToastComponent
+    ToastComponent,
+    SigninComponent
   ],
   imports: [
     BrowserModule,
