@@ -14,6 +14,12 @@
       "root": "",
       "sourceRoot": "src",
       "prefix": "app",
+      "i18n": {
+        "sourceLocale": "en-US",
+        "locales": {
+          "de": "src/assets/locale/messages.de.xlf"
+        }
+      },
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
@@ -28,7 +34,6 @@
               "src/assets"
             ],
             "styles": [
-              "src/assets/scss/custom-theme.scss",
               "src/styles.scss"
             ],
             "scripts": []

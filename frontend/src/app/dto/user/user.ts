@@ -1,11 +1,9 @@
 import {UserRole} from "../../enums/userrole";
 
 export class User {
-  constructor(
-    public username: string,
-    public password: string,
-    public nickname: string,
-    public email: string,
-    public roles: UserRole[]
-  ) {}
+  public username: string | undefined;
+  public password: string | undefined;
+  public nickname: string | undefined;
+  public email: string | undefined;
+  public roles: UserRole[] | undefined;
 }
