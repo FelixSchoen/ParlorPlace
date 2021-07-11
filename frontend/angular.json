@@ -7,12 +7,19 @@
       "projectType": "application",
       "schematics": {
         "@schematics/angular:application": {
+          "style": "scss",
           "strict": true
         }
       },
       "root": "",
       "sourceRoot": "src",
       "prefix": "app",
+      "i18n": {
+        "sourceLocale": "en-US",
+        "locales": {
+          "de": "src/assets/locale/messages.de.xlf"
+        }
+      },
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
@@ -27,8 +34,7 @@
               "src/assets"
             ],
             "styles": [
-              "./node_modules/@angular/material/prebuilt-themes/indigo-pink.css",
-              "src/styles.css"
+              "src/styles.scss"
             ],
             "scripts": []
           },
@@ -95,8 +101,8 @@
               "src/assets"
             ],
             "styles": [
-              "./node_modules/@angular/material/prebuilt-themes/indigo-pink.css",
-              "src/styles.css"
+              "./node_modules/@angular/material/prebuilt-themes/indigo-pink.scss",
+              "src/styles.scss"
             ],
             "scripts": []
           }
