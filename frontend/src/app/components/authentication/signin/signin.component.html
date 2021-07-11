@@ -1,0 +1,43 @@
+<ng-template #content let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title" i18n>Sign In</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+
+  <form [formGroup]="form" (ngSubmit)="onSubmit()">
+    <div class="modal-body">
+      <!--/>Form<!-->
+      <div class="signin-form">
+        <div class="form-group">
+          <label i18n>Username</label>
+          <input type="text" formControlName="username" class="form-control" [ngClass]="{'is-invalid': submitted &&
+      f.username.errors}"/>
+          <div *ngIf="submitted && f.username.errors" class="invalid-feedback">
+            <div *ngIf="f.username.errors.required" i18n>Username is required</div>
+            <div *ngIf="f.username.errors.minlength" i18n>Username must be at least 3 characters</div>
+            <div *ngIf="f.username.errors.maxlength" i18n>Username must not exceed 15 characters</div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label i18n>Password</label>
+          <input type="password" formControlName="password" class="form-control" [ngClass]="{'is-invalid': submitted &&
+      f.password.errors}"/>
+          <div *ngIf="submitted && f.password.errors" class="invalid-feedback">
+            <div *ngIf="f.password.errors.required" i18n>Password is required</div>
+            <div *ngIf="f.password.errors.minlength" i18n>Password must be at least 8 characters</div>
+            <div *ngIf="f.password.errors.maxlength" i18n>Username must not exceed 255 characters</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button type="submit" class="btn btn-outline-primary" i18n>Confirm</button>
+    </div>
+  </form>
+</ng-template>
+
+<button class="btn btn-outline-primary w-50" (click)="open(content)" i18n>Sign In</button>
