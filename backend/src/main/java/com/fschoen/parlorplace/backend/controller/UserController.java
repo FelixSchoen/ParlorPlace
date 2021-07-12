@@ -73,8 +73,20 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK).body(userDTO);
     }
 
-//    @GetMapping("/update")
-//    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
-//    public ResponseEntity<Set<UserDTO>>
+    @GetMapping("/individual")
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
+    public ResponseEntity<UserDTO> getCurrentUser() {
+        UserDTO userDTO = userMapper.toDTO(userService.getCurrentUser());
+
+        return ResponseEntity.status(HttpStatus.OK).body(userDTO);
+    }
+
+    @GetMapping("/individual/{id}")
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
+    public ResponseEntity<UserDTO> getUser(@PathVariable("id") Long id) {
+        UserDTO userDTO = userMapper.toDTO(userService.getUser(id));
+
+        return ResponseEntity.status(HttpStatus.OK).body(userDTO);
+    }
 
 }

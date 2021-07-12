@@ -38,4 +38,21 @@ public interface UserService {
      */
     User update(Long id, User user) throws AuthorizationException, DataConflictException;
 
+    /**
+     * Obtains the currently logged-in user based on the authentication.
+     *
+     * @return The currently logged-in user
+     * @throws DataConflictException If no current user could be found
+     */
+    User getCurrentUser() throws DataConflictException;
+
+    /**
+     * Obtains the user with the given id if it exists.
+     *
+     * @param id Id of the user to obtain
+     * @return The found user if it exists
+     * @throws DataConflictException If no such user exists
+     */
+    User getUser(Long id) throws DataConflictException;
+
 }

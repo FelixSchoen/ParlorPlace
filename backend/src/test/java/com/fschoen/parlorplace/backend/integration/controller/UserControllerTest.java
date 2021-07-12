@@ -174,4 +174,15 @@ public class UserControllerTest extends BaseIntegrationTest {
         assertThat(returnedUser.getRoles().size()).isEqualTo(1);
     }
 
+    @Test
+    public void getCurrentUser_withValidAuthorization_resultsInCurrentUser() {
+        User existingUser = this.generatedData.getUserCollection().getUser1();
+
+        Response response = get("", USER_BASE_URI + "individual", getToken(existingUser));
+        assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
+
+        UserDTO returnedUser = response.getBody().as(UserDTO.class);
+        assertEquals(existingUser.getUsername(), returnedUser.getUsername());
+    }
+
 }

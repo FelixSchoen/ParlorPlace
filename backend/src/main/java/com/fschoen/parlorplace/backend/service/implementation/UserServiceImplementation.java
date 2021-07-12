@@ -137,4 +137,25 @@ public class UserServiceImplementation extends AbstractService implements UserSe
 
         return userRepository.save(persistUser);
     }
+
+    @Override
+    public User getCurrentUser() throws DataConflictException {
+        LOGGER.info("Obtaining current user");
+
+        User principal = getPrincipal();
+
+        if (principal == null)
+            throw new DataConflictException(Messages.getExceptionExplanationMessage("user.exists.not"));
+
+        return principal;
+    }
+
+    @Override
+    public User getUser(Long id) throws DataConflictException {
+        LOGGER.info("Obtaining user with id: {}", id);
+
+        User existingUser = userRepository.findOneById(id).orElseThrow(() -> new DataConflictException(Messages.getExceptionExplanationMessage("user.id.exists.not")));
+
+        return existingUser;
+    }
 }
