@@ -12,9 +12,7 @@ public interface UserService {
      * Creates a new user and adds it to the system.
      *
      * @param user A user object containing the information about the user to be added
-     *
      * @return The created user as it is stored in the database
-     *
      * @throws DataConflictException If the user cannot be added due to a data conflict
      */
     User signup(User user) throws DataConflictException;
@@ -23,7 +21,6 @@ public interface UserService {
      * Signs in an already existing user based on the given username and password combination.
      *
      * @param user The user to be signed in
-     *
      * @return A response to the sign in request, containing a valid jwt token
      */
     UserSigninResponseDTO signin(User user);
@@ -33,12 +30,12 @@ public interface UserService {
     /**
      * Updates the user given by its id using the supplied argument.
      *
+     * @param id   Id of the user to be updated
      * @param user The user object containing the id of the user to be updated and the update information
-     *
      * @return The updated user
-     *
      * @throws AuthorizationException If the principal does not have the necessary authority to edit the specified user
+     * @throws DataConflictException  If the given Id and the one of the {@param user} do not match or no user with the given id was found
      */
-    User update(User user) throws AuthorizationException;
+    User update(Long id, User user) throws AuthorizationException, DataConflictException;
 
 }

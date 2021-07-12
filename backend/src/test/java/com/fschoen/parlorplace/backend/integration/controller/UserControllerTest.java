@@ -26,7 +26,7 @@ public class UserControllerTest extends BaseIntegrationTest {
                 .email("ne_user@mail.com")
                 .build();
 
-        Response response = post(userSignupRequestDTO, USER_BASE_URI + "/signup");
+        Response response = post(userSignupRequestDTO, USER_BASE_URI + "signup");
         assertThat(response.statusCode()).isEqualTo(HttpStatus.CREATED.value());
     }
 
@@ -40,7 +40,7 @@ public class UserControllerTest extends BaseIntegrationTest {
                 .email(existingUser.getEmail())
                 .build();
 
-        Response response = post(userSignupRequestDTO, USER_BASE_URI + "/signup");
+        Response response = post(userSignupRequestDTO, USER_BASE_URI + "signup");
         assertThat(response.statusCode()).isEqualTo(HttpStatus.CONFLICT.value());
     }
 
@@ -51,7 +51,7 @@ public class UserControllerTest extends BaseIntegrationTest {
                 .password("password")
                 .build();
 
-        Response response = post(userSignupRequestDTO, USER_BASE_URI + "/signup");
+        Response response = post(userSignupRequestDTO, USER_BASE_URI + "signup");
         assertThat(response.statusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
     }
 
@@ -62,7 +62,7 @@ public class UserControllerTest extends BaseIntegrationTest {
                 .password("password")
                 .build();
 
-        Response response = post(userSigninRequestDTO, USER_BASE_URI + "/signin");
+        Response response = post(userSigninRequestDTO, USER_BASE_URI + "signin");
         assertThat(response.statusCode()).isEqualTo(HttpStatus.UNAUTHORIZED.value());
     }
 
@@ -74,7 +74,7 @@ public class UserControllerTest extends BaseIntegrationTest {
                 .password(generatedData.getPasswordCollection().get(existingUser))
                 .build();
 
-        Response response = post(userSigninRequestDTO, USER_BASE_URI + "/signin");
+        Response response = post(userSigninRequestDTO, USER_BASE_URI + "signin");
         assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
 
         UserSigninResponseDTO userSigninResponseDTO = response.getBody().as(UserSigninResponseDTO.class);
@@ -89,7 +89,7 @@ public class UserControllerTest extends BaseIntegrationTest {
                 .password("not" + generatedData.getPasswordCollection().get(existingUser))
                 .build();
 
-        Response response = post(userSigninRequestDTO, USER_BASE_URI + "/signin");
+        Response response = post(userSigninRequestDTO, USER_BASE_URI + "signin");
         assertThat(response.statusCode()).isEqualTo(HttpStatus.UNAUTHORIZED.value());
     }
 
@@ -101,12 +101,12 @@ public class UserControllerTest extends BaseIntegrationTest {
                 .password(generatedData.getPasswordCollection().get(existingUser))
                 .build();
 
-        Response responseSignin = post(userSigninRequestDTO, USER_BASE_URI + "/signin");
+        Response responseSignin = post(userSigninRequestDTO, USER_BASE_URI + "signin");
         UserSigninResponseDTO userSigninResponseDTO = responseSignin.getBody().as(UserSigninResponseDTO.class);
 
         TokenRefreshRequestDTO tokenRefreshRequestDTO = TokenRefreshRequestDTO.builder().refreshToken(userSigninResponseDTO.getRefreshToken()).build();
 
-        Response responseRefresh = post(tokenRefreshRequestDTO, USER_BASE_URI + "/refresh");
+        Response responseRefresh = post(tokenRefreshRequestDTO, USER_BASE_URI + "refresh");
         assertThat(responseRefresh.statusCode()).isEqualTo(HttpStatus.OK.value());
 
         TokenRefreshResponseDTO tokenRefreshResponseDTO = responseRefresh.getBody().as(TokenRefreshResponseDTO.class);
@@ -125,7 +125,7 @@ public class UserControllerTest extends BaseIntegrationTest {
                 .email("new" + otherUser.getEmail())
                 .build();
 
-        Response response = put(userUpdateRequestDTO, USER_BASE_URI + "/update", getToken(existingUser));
+        Response response = payload(userUpdateRequestDTO, getToken(existingUser)).pathParam("id", otherUser.getId()).put(USER_BASE_URI + "update/{id}").then().extract().response();
         assertThat(response.statusCode()).isEqualTo(HttpStatus.UNAUTHORIZED.value());
     }
 
@@ -143,7 +143,7 @@ public class UserControllerTest extends BaseIntegrationTest {
                 }})
                 .build();
 
-        Response response = put(userUpdateRequestDTO, USER_BASE_URI + "/update", getToken(existingUser));
+        Response response = payload(userUpdateRequestDTO, getToken(existingUser)).pathParam("id", existingUser.getId()).put(USER_BASE_URI + "update/{id}").then().extract().response();
         assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
 
         UserDTO returnedUser = response.getBody().as(UserDTO.class);
@@ -166,7 +166,7 @@ public class UserControllerTest extends BaseIntegrationTest {
                 }})
                 .build();
 
-        Response response = put(userUpdateRequestDTO, USER_BASE_URI + "/update", getToken(existingAdmin));
+        Response response = payload(userUpdateRequestDTO, getToken(existingAdmin)).pathParam("id", existingUser.getId()).put(USER_BASE_URI + "update/{id}").then().extract().response();
         assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
 
         UserDTO returnedUser = response.getBody().as(UserDTO.class);

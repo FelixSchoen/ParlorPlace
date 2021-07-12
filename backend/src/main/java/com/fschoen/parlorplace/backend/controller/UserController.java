@@ -13,6 +13,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Set;
+
 @RequestMapping("/user")
 @RestController
 public class UserController {
@@ -59,16 +61,20 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK).body(tokenRefreshResponseDTO);
     }
 
-    @PutMapping("/update")
+    @PutMapping("/update/{id}")
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
-    public ResponseEntity<UserDTO> updateUser(@RequestBody UserUpdateRequestDTO userUpdateRequestDTO) {
+    public ResponseEntity<UserDTO> updateUser(@PathVariable("id") Long id, @RequestBody UserUpdateRequestDTO userUpdateRequestDTO) {
         validator.validate(userUpdateRequestDTO).throwIfInvalid();
 
         User proposedUser = userMapper.toUser(userUpdateRequestDTO);
-        User updatedUser = userService.update(proposedUser);
+        User updatedUser = userService.update(id, proposedUser);
         UserDTO userDTO = userMapper.toDTO(updatedUser);
 
         return ResponseEntity.status(HttpStatus.OK).body(userDTO);
     }
+
+//    @GetMapping("/update")
+//    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
+//    public ResponseEntity<Set<UserDTO>>
 
 }

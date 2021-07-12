@@ -44,7 +44,7 @@ public abstract class BaseIntegrationTest {
     private JwtUtils jwtUtils;
 
     protected String BASE_URI = "";
-    protected String USER_BASE_URI = "/user";
+    protected String USER_BASE_URI = "/user/";
 
     @LocalServerPort
     protected int port;
@@ -115,7 +115,7 @@ public abstract class BaseIntegrationTest {
                 .response();
     }
 
-    private RequestSpecification payload(Object o, String authorization) {
+    protected RequestSpecification payload(Object o, String authorization) {
         return RestAssured.given()
                 .contentType(ContentType.JSON)
                 .header(HttpHeaders.AUTHORIZATION, authorization)

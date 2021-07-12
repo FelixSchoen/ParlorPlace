@@ -103,18 +103,24 @@ public class UserServiceImplementation extends AbstractService implements UserSe
     }
 
     @Override
-    public User update(User user) throws AuthorizationException {
+    public User update(Long id, User user) throws AuthorizationException, DataConflictException {
         LOGGER.info("Updating User: {}", user.getUsername());
 
         User principal = getPrincipal();
 
-        if ((!principal.getId().equals(user.getId()) || (user.getRoles() != null && user.getRoles().stream().anyMatch(x -> x.getRole().equals(UserRole.ROLE_ADMIN))))
-                && !hasAuthority(principal, UserRole.ROLE_ADMIN))
+        if ((!principal.getId().equals(id) && !hasAuthority(principal, UserRole.ROLE_ADMIN))
+                || (!user.getRoles().equals(principal.getRoles()) && !hasAuthority(principal, UserRole.ROLE_ADMIN))
+                || (user.getUsername() != null && !user.getUsername().equals(principal.getUsername()) && !hasAuthority(principal, UserRole.ROLE_ADMIN)))
             throw new AuthorizationException(Messages.getExceptionExplanationMessage("authorization.unauthorized"));
 
-        User existingUser = userRepository.findOneById(user.getId()).orElseThrow(() -> new DataConflictException(Messages.getExceptionExplanationMessage("user.id.exists.not")));
+        if (user.getId() != null && !user.getId().equals(id))
+            throw new DataConflictException(Messages.getExceptionExplanationMessage("data.mismatched.id"));
+
+        User existingUser = userRepository.findOneById(id).orElseThrow(() -> new DataConflictException(Messages.getExceptionExplanationMessage("user.id.exists.not")));
         User.UserBuilder persistUserBuilder = existingUser.toBuilder();
 
+        if (user.getUsername() != null)
+            persistUserBuilder.username(user.getUsername());
         if (user.getPassword() != null) {
             String hashedPassword = passwordEncoder.encode(user.getPassword());
             persistUserBuilder.password(hashedPassword);
