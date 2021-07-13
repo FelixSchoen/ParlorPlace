@@ -58,6 +58,15 @@ public interface UserService {
     User getUser(Long id) throws DataConflictException;
 
     /**
+     * Obtains the user with the given username if it exists.
+     *
+     * @param username Username of the user to obtain
+     * @return The found user if it exists
+     * @throws DataConflictException If no such user exists
+     */
+    User getUser(String username) throws DataConflictException;
+
+    /**
      * Obtains all users where either their usernames contain the string given by {@param username} or their nicknames
      * contain the string given by {@param nickname}, where both of these parameters must be of length greater than 3 to
      * be queried.

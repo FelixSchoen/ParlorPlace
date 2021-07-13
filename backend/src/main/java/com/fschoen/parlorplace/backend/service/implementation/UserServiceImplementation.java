@@ -119,8 +119,8 @@ public class UserServiceImplementation extends AbstractService implements UserSe
         User existingUser = userRepository.findOneById(id).orElseThrow(() -> new DataConflictException(Messages.getExceptionExplanationMessage("user.id.exists.not")));
         User.UserBuilder persistUserBuilder = existingUser.toBuilder();
 
-        if (user.getUsername() != null)
-            persistUserBuilder.username(user.getUsername());
+//        if (user.getUsername() != null)
+//            persistUserBuilder.username(user.getUsername());
         if (user.getPassword() != null) {
             String hashedPassword = passwordEncoder.encode(user.getPassword());
             persistUserBuilder.password(hashedPassword);
@@ -155,6 +155,15 @@ public class UserServiceImplementation extends AbstractService implements UserSe
         LOGGER.info("Obtaining user with id: {}", id);
 
         User existingUser = userRepository.findOneById(id).orElseThrow(() -> new DataConflictException(Messages.getExceptionExplanationMessage("user.id.exists.not")));
+
+        return existingUser;
+    }
+
+    @Override
+    public User getUser(String username) throws DataConflictException {
+        LOGGER.info("Obtaining user with username: {}", username);
+
+        User existingUser = userRepository.findOneByUsername(username).orElseThrow(() -> new DataConflictException(Messages.getExceptionExplanationMessage("user.id.exists.not")));
 
         return existingUser;
     }

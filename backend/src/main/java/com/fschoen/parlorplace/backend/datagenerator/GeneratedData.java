@@ -20,6 +20,8 @@ public class GeneratedData {
     public static class UserCollection {
         private User admin1;
         private User user1;
+
+        private User neUser1; // non existent user
     }
 
 }

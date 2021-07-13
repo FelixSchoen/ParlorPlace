@@ -91,6 +91,14 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK).body(userDTO.obfuscate());
     }
 
+    @GetMapping("/individual/username/{username}")
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
+    public ResponseEntity<UserDTO> getUser(@PathVariable("username") String username) {
+        UserDTO userDTO = userMapper.toDTO(userService.getUser(username));
+
+        return ResponseEntity.status(HttpStatus.OK).body(userDTO.obfuscate());
+    }
+
     @GetMapping("")
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     public ResponseEntity<Set<UserDTO>> getAllUsersFiltered(@RequestParam(value = "username", required = false) String username,

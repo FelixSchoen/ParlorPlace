@@ -209,6 +209,27 @@ public class UserControllerTest extends BaseIntegrationTest {
     }
 
     @Test
+    public void getUser_withValidUsername_resultsInFoundUser() {
+        User existingUser = this.generatedData.getUserCollection().getUser1();
+        User existingAdmin = this.generatedData.getUserCollection().getAdmin1();
+
+        Response response = payload("", getToken(existingUser)).pathParam("username", existingAdmin.getUsername()).get(USER_BASE_URI + "individual/username/{username}").then().extract().response();
+        assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
+
+        UserDTO returnedUser = response.getBody().as(UserDTO.class);
+        assertEquals(existingAdmin.getUsername(), returnedUser.getUsername());
+    }
+
+    @Test
+    public void getUser_withInvalidUsername_resultsInDataConflictException() {
+        User existingUser = this.generatedData.getUserCollection().getUser1();
+        User neUser = this.generatedData.getUserCollection().getNeUser1();
+
+        Response response = payload("", getToken(existingUser)).pathParam("username", neUser.getUsername()).get(USER_BASE_URI + "individual/username/{username}").then().extract().response();
+        assertThat(response.statusCode()).isEqualTo(HttpStatus.CONFLICT.value());
+    }
+
+    @Test
     public void getAllUsersFiltered_withValidUsernameAndNickname_returnsFoundUsers() {
         User existingUser = this.generatedData.getUserCollection().getUser1();
         User existingAdmin = this.generatedData.getUserCollection().getAdmin1();
@@ -225,9 +246,10 @@ public class UserControllerTest extends BaseIntegrationTest {
     @Test
     public void getAllUsersFiltered_withNonExistentUsernameAndNickname_returnsEmptySet() {
         User existingUser = this.generatedData.getUserCollection().getUser1();
+        User neUser = this.generatedData.getUserCollection().getNeUser1();
 
-        Response response = payload("", getToken(existingUser)).param("username", "nonExistentUsername")
-                .param("nickname", "nonExistentNickname").get(USER_BASE_URI + "").then().extract().response();
+        Response response = payload("", getToken(existingUser)).param("username", neUser.getUsername())
+                .param("nickname", neUser.getNickname()).get(USER_BASE_URI + "").then().extract().response();
         assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
 
         Set<UserDTO> userSet = new HashSet<>(Arrays.asList(response.getBody().as(UserDTO[].class)));
