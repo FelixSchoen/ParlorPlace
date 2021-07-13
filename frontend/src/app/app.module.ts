@@ -1,19 +1,21 @@
-import { NgModule } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
+import {NgModule} from '@angular/core';
+import {BrowserModule} from '@angular/platform-browser';
 
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { EntryComponent } from './components/entry/entry.component';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {EntryComponent} from './components/entry/entry.component';
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {HttpClientModule} from "@angular/common/http";
 
-import { authInterceptorProviders } from './interceptors/auth.interceptor';
-import { AppRoutingModule } from './app-routing.module';
+import {authInterceptorProviders} from './interceptors/auth.interceptor';
+import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from "./app.component";
-import { SignupComponent } from './components/authentication/signup/signup.component';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import {SignupComponent} from './components/authentication/signup/signup.component';
+import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {ToastrModule} from "ngx-toastr";
-import { ToastComponent } from './components/toast/toast.component';
-import { SigninComponent } from './components/authentication/signin/signin.component';
+import {ToastComponent} from './components/toast/toast.component';
+import {SigninComponent} from './components/authentication/signin/signin.component';
+import {ProfileComponent} from './components/profile/profile.component';
+import { LoadingIndicatorComponent } from './components/utility/loading-indicator/loading-indicator.component';
 
 @NgModule({
   declarations: [
@@ -21,7 +23,9 @@ import { SigninComponent } from './components/authentication/signin/signin.compo
     EntryComponent,
     SignupComponent,
     ToastComponent,
-    SigninComponent
+    SigninComponent,
+    ProfileComponent,
+    LoadingIndicatorComponent
   ],
   imports: [
     BrowserModule,
@@ -36,4 +40,5 @@ import { SigninComponent } from './components/authentication/signin/signin.compo
   providers: [authInterceptorProviders],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {
+}
