@@ -5,6 +5,7 @@ import {BehaviorSubject, Observable} from "rxjs";
 import {User} from "../dto/user";
 import {NotificationService} from "./notification.service";
 import {tap} from "rxjs/operators";
+import {UserRole} from "../enums/userrole";
 
 const USER_URI = GlobalValues.BASE_URI + 'user/';
 
@@ -28,14 +29,19 @@ export class UserService {
     return this.httpClient.get<User>(USER_URI + "individual/username/" + username);
   }
 
-  public getAllUsersFiltered(username: string | null, nickname: string | null) {
+  public getAllUsersFiltered(username: string | null, nickname: string | null): Observable<User[]> {
     let params = new HttpParams();
     if (username != null)
       params = params.append('username', username);
     if (nickname != null)
       params = params.append('nickname', nickname);
 
-    return this.httpClient.get<Set<User>>(USER_URI, {params: params});
+    return this.httpClient.get<User[]>(USER_URI, {params: params});
+  }
+
+  public isAdmin(user: User):boolean {
+      if (user.roles == null) return false;
+      return user.roles.includes(UserRole.ADMIN);
   }
 
 }
