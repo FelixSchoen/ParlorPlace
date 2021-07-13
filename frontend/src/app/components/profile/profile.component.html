@@ -1,0 +1,40 @@
+<div class="container justify-content-center">
+  <!-- User Search -->
+  <fieldset class="form-inline justify-content-center w-100 p-3">
+    <div class="form-group justify-content-center w-100">
+      <input id="typeahead-username" type="text" class="form-control w-100"
+             [(ngModel)]="selectUserTypeahead" [ngbTypeahead]="search" [inputFormatter]="formatter" [resultFormatter]="formatter"
+             [editable]="false" (selectItem)="onSelect($event, $event.item)" placeholder="Search for a user...">
+    </div>
+  </fieldset>
+
+  <div *ngIf="!loading">
+    <!-- Profile Card -->
+    <div class="card border-dark mx-3 mb-5">
+      <div class="card-body">
+        <h5 class="card-title text-center">
+          {{user.nickname}}
+        </h5>
+        <h6 class="card-subtitle text-center mb-2 text-muted">
+          {{user.username}}
+        </h6>
+      </div>
+      <div class="card-footer" *ngIf="currentUser.id == user.id || this.userService.isAdmin(currentUser)">
+        <div class="float-left" *ngIf="currentUser.id == user.id">
+          <button class="btn btn-outline-secondary" (click)="signOut()">Sign Out</button>
+        </div>
+        <div class="float-right">
+          <button class="btn btn-outline-secondary">Edit</button>
+        </div>
+        <div class="clearfix"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Loading Indicator -->
+<div class="d-flex justify-content-center align-items-center h-100" *ngIf="loading">
+  <app-loading-indicator [loading]="loading" [errorMessage]="errorMessage"></app-loading-indicator>
+</div>
+
+

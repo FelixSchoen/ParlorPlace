@@ -10,6 +10,8 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;
 
+import java.util.Set;
+
 @Mapper(componentModel = "spring", uses = {RoleMapper.class})
 public interface UserMapper {
 
@@ -25,5 +27,7 @@ public interface UserMapper {
     User toUser(UserUpdateRequestDTO userUpdateRequestDTO);
 
     UserDTO toDTO(User user);
+
+    Set<UserDTO> toDTO(Set<User> users);
 
 }

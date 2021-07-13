@@ -1,6 +1,7 @@
 package com.fschoen.parlorplace.backend.controller.dto.user;
 
 import com.fschoen.parlorplace.backend.enums.UserRole;
+import com.fschoen.parlorplace.backend.utility.Obfuscateable;
 import lombok.*;
 
 import javax.validation.constraints.Email;
@@ -14,7 +15,7 @@ import java.util.Set;
 @ToString
 @Builder(toBuilder = true)
 @Data
-public class UserDTO {
+public class UserDTO implements Obfuscateable<UserDTO> {
 
     @NotNull
     private Long id;
@@ -34,5 +35,10 @@ public class UserDTO {
 
     @NotNull
     private Set<UserRole> roles;
+
+    @Override
+    public UserDTO obfuscate() {
+        return this.toBuilder().email("").build();
+    }
 
 }

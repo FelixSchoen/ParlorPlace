@@ -1,11 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {AbstractControl, FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {AuthService} from "../../../services/auth.service";
 import {NotificationService} from "../../../services/notification.service";
-import Validation from "../../../validators/Validation";
-import {UserSigninRequest, UserSigninResponse, UserSignupRequest} from "../../../dto/user";
-import {AuthRequest, AuthResponse} from "../../../dto/authentication";
+import {UserSigninRequest, UserSigninResponse} from "../../../dto/user";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-signin',
@@ -17,7 +16,7 @@ export class SigninComponent implements OnInit {
   form: FormGroup;
   submitted = false;
 
-  constructor(private formBuilder: FormBuilder, private modalService: NgbModal, private authService: AuthService, private notificationService: NotificationService) {
+  constructor(private formBuilder: FormBuilder, private modalService: NgbModal, private authService: AuthService, private notificationService: NotificationService, private router: Router) {
   }
 
   ngOnInit(): void {
@@ -41,9 +40,10 @@ export class SigninComponent implements OnInit {
         this.f.password.value);
 
       this.authService.signin(userSigninRequest).subscribe(
-        (userSigninResponse: UserSigninResponse) => {
+        () => {
           this.notificationService.showSuccess("Signed in");
           this.modalService.dismissAll();
+          this.router.navigate(["/profile"]).then();
         }, (error) => {
           this.notificationService.showError(error.error);
         }

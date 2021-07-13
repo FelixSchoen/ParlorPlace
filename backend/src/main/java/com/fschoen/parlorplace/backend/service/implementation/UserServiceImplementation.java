@@ -103,18 +103,24 @@ public class UserServiceImplementation extends AbstractService implements UserSe
     }
 
     @Override
-    public User update(User user) throws AuthorizationException {
+    public User update(Long id, User user) throws AuthorizationException, DataConflictException {
         LOGGER.info("Updating User: {}", user.getUsername());
 
         User principal = getPrincipal();
 
-        if ((!principal.getId().equals(user.getId()) || (user.getRoles() != null && user.getRoles().stream().anyMatch(x -> x.getRole().equals(UserRole.ROLE_ADMIN))))
-                && !hasAuthority(principal, UserRole.ROLE_ADMIN))
+        if ((!principal.getId().equals(id) && !hasAuthority(principal, UserRole.ROLE_ADMIN))
+                || (!user.getRoles().equals(principal.getRoles()) && !hasAuthority(principal, UserRole.ROLE_ADMIN))
+                || (user.getUsername() != null && !user.getUsername().equals(principal.getUsername()) && !hasAuthority(principal, UserRole.ROLE_ADMIN)))
             throw new AuthorizationException(Messages.getExceptionExplanationMessage("authorization.unauthorized"));
 
-        User existingUser = userRepository.findOneById(user.getId()).orElseThrow(() -> new DataConflictException(Messages.getExceptionExplanationMessage("user.id.exists.not")));
+        if (user.getId() != null && !user.getId().equals(id))
+            throw new DataConflictException(Messages.getExceptionExplanationMessage("data.mismatched.id"));
+
+        User existingUser = userRepository.findOneById(id).orElseThrow(() -> new DataConflictException(Messages.getExceptionExplanationMessage("user.id.exists.not")));
         User.UserBuilder persistUserBuilder = existingUser.toBuilder();
 
+//        if (user.getUsername() != null)
+//            persistUserBuilder.username(user.getUsername());
         if (user.getPassword() != null) {
             String hashedPassword = passwordEncoder.encode(user.getPassword());
             persistUserBuilder.password(hashedPassword);
@@ -131,4 +137,50 @@ public class UserServiceImplementation extends AbstractService implements UserSe
 
         return userRepository.save(persistUser);
     }
+
+    @Override
+    public User getCurrentUser() throws DataConflictException {
+        LOGGER.info("Obtaining current user");
+
+        User principal = getPrincipal();
+
+        if (principal == null)
+            throw new DataConflictException(Messages.getExceptionExplanationMessage("user.exists.not"));
+
+        return principal;
+    }
+
+    @Override
+    public User getUser(Long id) throws DataConflictException {
+        LOGGER.info("Obtaining user with id: {}", id);
+
+        User existingUser = userRepository.findOneById(id).orElseThrow(() -> new DataConflictException(Messages.getExceptionExplanationMessage("user.id.exists.not")));
+
+        return existingUser;
+    }
+
+    @Override
+    public User getUser(String username) throws DataConflictException {
+        LOGGER.info("Obtaining user with username: {}", username);
+
+        User existingUser = userRepository.findOneByUsername(username).orElseThrow(() -> new DataConflictException(Messages.getExceptionExplanationMessage("user.username.exists.not")));
+
+        return existingUser;
+    }
+
+    @Override
+    public Set<User> getAllUsersFiltered(String username, String nickname) {
+        LOGGER.info("Obtaining all users with username: {}, nickname: {}", username, nickname);
+
+        Set<User> userSet = new HashSet<>();
+
+        if (username != null && username.length() >= 3)
+            userSet.addAll(userRepository.findAllByUsernameContainsIgnoreCase(username));
+
+        if (nickname != null && nickname.length() >= 3)
+            userSet.addAll(userRepository.findAllByNicknameContainsIgnoreCase(nickname));
+
+        return userSet;
+    }
+
 }
