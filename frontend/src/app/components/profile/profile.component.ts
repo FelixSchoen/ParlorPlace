@@ -1,8 +1,10 @@
 import {Component, OnInit} from '@angular/core';
-import {ActivatedRoute} from "@angular/router";
+import {ActivatedRoute, Router} from "@angular/router";
 import {UserService} from "../../services/user.service";
 import {User} from "../../dto/user";
 import {NotificationService} from "../../services/notification.service";
+import {AuthService} from "../../services/auth.service";
+import {TokenService} from "../../services/token.service";
 
 @Component({
   selector: 'app-profile',
@@ -15,7 +17,7 @@ export class ProfileComponent implements OnInit {
   public errorMessage = "";
   public user: User;
 
-  constructor(private userService: UserService, private notificationService: NotificationService, private activatedRoute: ActivatedRoute) {
+  constructor(private userService: UserService, private notificationService: NotificationService, private activatedRoute: ActivatedRoute, private router: Router) {
   }
 
   ngOnInit(): void {
@@ -24,18 +26,24 @@ export class ProfileComponent implements OnInit {
 
     const queryName: string = this.activatedRoute.snapshot.params["username"];
 
-    if (queryName == undefined) console.log("now dasd")
-
-    this.activatedRoute.params.subscribe(
-      params => {
-        this.userService.getUserByUsername(params["username"]).subscribe(
-          (user: User) => {
-            this.user = user
-          },
-          (error) => {
-            this.errorMessage = error.error;
-          }).add(() => this.loading = false)
-      });
+    if (queryName == undefined) {
+      this.userService.getCurrentUser().subscribe(
+        (user) => {
+          this.router.navigate(["profile/" + user.username]).then();
+        }
+      );
+    } else {
+      this.activatedRoute.params.subscribe(
+        params => {
+          this.userService.getUserByUsername(params["username"]).subscribe(
+            (user: User) => {
+              this.user = user
+            },
+            (error) => {
+              this.errorMessage = error.error;
+            }).add(() => this.loading = false)
+        });
+    }
   }
 
 }

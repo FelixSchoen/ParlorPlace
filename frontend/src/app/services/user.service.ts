@@ -1,9 +1,10 @@
-import {Injectable} from '@angular/core';
+import {Injectable, OnInit} from '@angular/core';
 import {GlobalValues} from "../globals/global-values.service";
 import {HttpClient, HttpParams} from "@angular/common/http";
-import {Observable} from "rxjs";
+import {BehaviorSubject, Observable} from "rxjs";
 import {User} from "../dto/user";
 import {NotificationService} from "./notification.service";
+import {tap} from "rxjs/operators";
 
 const USER_URI = GlobalValues.BASE_URI + 'user/';
 
@@ -20,7 +21,7 @@ export class UserService {
   }
 
   public getUserById(id: number): Observable<User> {
-    return this.httpClient.get<User>(USER_URI + "individual/" + id);
+    return this.httpClient.get<User>(USER_URI + "individual/" + id)
   }
 
   public getUserByUsername(username: string): Observable<User> {

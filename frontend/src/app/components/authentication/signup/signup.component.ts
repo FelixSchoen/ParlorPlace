@@ -5,6 +5,7 @@ import {ModalDismissReasons, NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {User, UserSigninRequest, UserSigninResponse, UserSignupRequest} from "../../../dto/user";
 import {NotificationService} from "../../../services/notification.service";
 import {AuthService} from "../../../services/auth.service";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-signup',
@@ -16,7 +17,7 @@ export class SignupComponent implements OnInit {
   form: FormGroup;
   submitted = false;
 
-  constructor(private formBuilder: FormBuilder, private modalService: NgbModal, private authService: AuthService, private notificationService: NotificationService) {
+  constructor(private formBuilder: FormBuilder, private modalService: NgbModal, private authService: AuthService, private notificationService: NotificationService, private router: Router) {
   }
 
   ngOnInit(): void {
@@ -46,11 +47,12 @@ export class SignupComponent implements OnInit {
         this.f.email.value);
 
       this.authService.signup(userSignupRequestDTO).subscribe(
-        (user: User) => {
+        () => {
           this.notificationService.showSuccess("Signed up");
           this.authService.signin(new UserSigninRequest(userSignupRequestDTO.username, userSignupRequestDTO.password)).subscribe(
-            (userSigninResponse: UserSigninResponse) => {
+            () => {
               this.modalService.dismissAll();
+              this.router.navigate(["/profile"]).then();
             }
           );
         }, (error) => {

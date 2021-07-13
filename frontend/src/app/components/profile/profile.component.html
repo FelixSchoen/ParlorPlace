@@ -1,1 +1,3 @@
-<app-loading-indicator [loading]="loading" [errorMessage]="errorMessage"></app-loading-indicator>
+<div class="d-flex justify-content-center align-items-center h-100" *ngIf="loading">
+  <app-loading-indicator [loading]="loading" [errorMessage]="errorMessage"></app-loading-indicator>
+</div>

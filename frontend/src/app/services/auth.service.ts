@@ -33,12 +33,6 @@ export class AuthService {
       .pipe(
         tap((userSigninResponse: UserSigninResponse) => {
           this.tokenService.saveToken(new TokenRefreshResponse(userSigninResponse.accessToken, userSigninResponse.refreshToken));
-          this.userService.getCurrentUser().subscribe(
-            (user: User) => {
-              this.tokenService.saveUser(user);
-            },
-            () => this.notificationService.showError("Could not obtain current user")
-          )
         })
       );
   }
