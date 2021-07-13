@@ -14,6 +14,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @RequestMapping("/user")
 @RestController
@@ -23,7 +24,8 @@ public class UserController {
 
     private final UserMapper userMapper;
 
-    private final UserValidator validator = new UserValidator();;
+    private final UserValidator validator = new UserValidator();
+    ;
 
     @Autowired
     public UserController(UserService userService, UserMapper userMapper) {
@@ -86,7 +88,18 @@ public class UserController {
     public ResponseEntity<UserDTO> getUser(@PathVariable("id") Long id) {
         UserDTO userDTO = userMapper.toDTO(userService.getUser(id));
 
-        return ResponseEntity.status(HttpStatus.OK).body(userDTO);
+        return ResponseEntity.status(HttpStatus.OK).body(userDTO.obfuscate());
+    }
+
+    @GetMapping("")
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
+    public ResponseEntity<Set<UserDTO>> getAllUsersFiltered(@RequestParam(value = "username", required = false) String username,
+                                                            @RequestParam(value = "nickname", required = false) String nickname) {
+        Set<UserDTO> userDTOs = userMapper.toDTO(userService.getAllUsersFiltered(username, nickname));
+
+        userDTOs = userDTOs.stream().map(UserDTO::obfuscate).collect(Collectors.toSet());
+
+        return ResponseEntity.status(HttpStatus.OK).body(userDTOs);
     }
 
 }

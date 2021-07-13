@@ -10,10 +10,13 @@ import io.restassured.response.Response;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 
+import java.util.Arrays;
 import java.util.HashSet;
+import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class UserControllerTest extends BaseIntegrationTest {
 
@@ -183,6 +186,63 @@ public class UserControllerTest extends BaseIntegrationTest {
 
         UserDTO returnedUser = response.getBody().as(UserDTO.class);
         assertEquals(existingUser.getUsername(), returnedUser.getUsername());
+    }
+
+    @Test
+    public void getUser_withValidId_resultsInFoundUser() {
+        User existingUser = this.generatedData.getUserCollection().getUser1();
+        User existingAdmin = this.generatedData.getUserCollection().getAdmin1();
+
+        Response response = payload("", getToken(existingUser)).pathParam("id", existingAdmin.getId()).get(USER_BASE_URI + "individual/{id}").then().extract().response();
+        assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
+
+        UserDTO returnedUser = response.getBody().as(UserDTO.class);
+        assertEquals(existingAdmin.getUsername(), returnedUser.getUsername());
+    }
+
+    @Test
+    public void getUser_withInvalidId_resultsInDataConflictException() {
+        User existingUser = this.generatedData.getUserCollection().getUser1();
+
+        Response response = payload("", getToken(existingUser)).pathParam("id", -1).get(USER_BASE_URI + "individual/{id}").then().extract().response();
+        assertThat(response.statusCode()).isEqualTo(HttpStatus.CONFLICT.value());
+    }
+
+    @Test
+    public void getAllUsersFiltered_withValidUsernameAndNickname_returnsFoundUsers() {
+        User existingUser = this.generatedData.getUserCollection().getUser1();
+        User existingAdmin = this.generatedData.getUserCollection().getAdmin1();
+
+        Response response = payload("", getToken(existingUser)).param("username", existingUser.getUsername())
+                .param("nickname", existingAdmin.getNickname()).get(USER_BASE_URI + "").then().extract().response();
+        assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
+
+        Set<UserDTO> userSet = new HashSet<>(Arrays.asList(response.getBody().as(UserDTO[].class)));
+        assertTrue(userSet.stream().anyMatch(x -> x.getUsername().equals(existingUser.getUsername())));
+        assertTrue(userSet.stream().anyMatch(x -> x.getUsername().equals(existingAdmin.getUsername())));
+    }
+
+    @Test
+    public void getAllUsersFiltered_withNonExistentUsernameAndNickname_returnsEmptySet() {
+        User existingUser = this.generatedData.getUserCollection().getUser1();
+
+        Response response = payload("", getToken(existingUser)).param("username", "nonExistentUsername")
+                .param("nickname", "nonExistentNickname").get(USER_BASE_URI + "").then().extract().response();
+        assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
+
+        Set<UserDTO> userSet = new HashSet<>(Arrays.asList(response.getBody().as(UserDTO[].class)));
+        assertThat(userSet.size()).isEqualTo(0);
+    }
+
+    @Test
+    public void getAllUsersFiltered_withQueryStringTooShort_returnsEmptySet() {
+        User existingUser = this.generatedData.getUserCollection().getUser1();
+
+        Response response = payload("", getToken(existingUser)).param("username", existingUser.getUsername().substring(0,1)).get(USER_BASE_URI + "").then().extract().response();
+        assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
+
+        Set<UserDTO> userSet = new HashSet<>(Arrays.asList(response.getBody().as(UserDTO[].class)));
+        assertThat(userSet.size()).isEqualTo(0);
     }
 
 }

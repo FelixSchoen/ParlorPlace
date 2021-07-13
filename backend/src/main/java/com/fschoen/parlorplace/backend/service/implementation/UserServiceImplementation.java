@@ -158,4 +158,20 @@ public class UserServiceImplementation extends AbstractService implements UserSe
 
         return existingUser;
     }
+
+    @Override
+    public Set<User> getAllUsersFiltered(String username, String nickname) {
+        LOGGER.info("Obtaining all users with username: {}, nickname: {}", username, nickname);
+
+        Set<User> userSet = new HashSet<>();
+
+        if (username != null && username.length() >= 3)
+            userSet.addAll(userRepository.findAllByUsernameContains(username));
+
+        if (nickname != null && nickname.length() >= 3)
+            userSet.addAll(userRepository.findAllByNicknameContains(nickname));
+
+        return userSet;
+    }
+
 }

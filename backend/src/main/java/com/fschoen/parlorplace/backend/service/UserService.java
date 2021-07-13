@@ -6,6 +6,8 @@ import com.fschoen.parlorplace.backend.entity.persistance.User;
 import com.fschoen.parlorplace.backend.exceptions.AuthorizationException;
 import com.fschoen.parlorplace.backend.exceptions.DataConflictException;
 
+import java.util.Set;
+
 public interface UserService {
 
     /**
@@ -54,5 +56,16 @@ public interface UserService {
      * @throws DataConflictException If no such user exists
      */
     User getUser(Long id) throws DataConflictException;
+
+    /**
+     * Obtains all users where either their usernames contain the string given by {@param username} or their nicknames
+     * contain the string given by {@param nickname}, where both of these parameters must be of length greater than 3 to
+     * be queried.
+     *
+     * @param username The string to compare usernames against
+     * @param nickname The string to compare nicknames against
+     * @return All found users
+     */
+    Set<User> getAllUsersFiltered(String username, String nickname);
 
 }
