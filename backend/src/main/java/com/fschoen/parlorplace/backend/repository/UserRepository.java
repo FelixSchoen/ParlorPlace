@@ -38,7 +38,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
      * @param username The username to check for
      * @return All found users
      */
-    Set<User> findAllByUsernameContains(String username);
+    Set<User> findAllByUsernameContainsIgnoreCase(String username);
 
     /**
      * Returns a set of all found users whose nicknames contains the string given by the parameter {@param nickname}.
@@ -46,6 +46,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
      * @param nickname The username to check for
      * @return All found users
      */
-    Set<User> findAllByNicknameContains(String nickname);
+    Set<User> findAllByNicknameContainsIgnoreCase(String nickname);
 
 }

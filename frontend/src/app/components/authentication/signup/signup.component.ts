@@ -5,7 +5,6 @@ import {ModalDismissReasons, NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {User, UserSigninRequest, UserSigninResponse, UserSignupRequest} from "../../../dto/user";
 import {NotificationService} from "../../../services/notification.service";
 import {AuthService} from "../../../services/auth.service";
-import {AuthRequest, AuthResponse} from "../../../dto/authentication";
 
 @Component({
   selector: 'app-signup',

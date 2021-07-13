@@ -5,7 +5,6 @@ import {AuthService} from "../../../services/auth.service";
 import {NotificationService} from "../../../services/notification.service";
 import Validation from "../../../validators/Validation";
 import {UserSigninRequest, UserSigninResponse, UserSignupRequest} from "../../../dto/user";
-import {AuthRequest, AuthResponse} from "../../../dto/authentication";
 
 @Component({
   selector: 'app-signin',

@@ -81,6 +81,38 @@ public class DatabasePopulator {
         userCollection.setUser1(userRepository.save(user1));
         passwordCollection.put(user1, "password");
 
+        //user2
+        Set<Role> rolesUser2 = new HashSet<>() {{
+            add(Role.builder().role(UserRole.ROLE_USER).build());
+        }};
+        User user2 = User.builder()
+                .username("User2")
+                .nickname("User2")
+                .password("$2a$10$G7E1tKKajd3S8/ORM17isOTCH0To0VkAnTjY7R4gkcgNpyLG/.tJC")
+                .email("user2@mail.com")
+                .roles(rolesUser2)
+                .build();
+        user2.getRoles().forEach(role -> role.setUser(user2));
+
+        userCollection.setUser2(userRepository.save(user2));
+        passwordCollection.put(user2, "password");
+
+        //user3
+        Set<Role> rolesUser3 = new HashSet<>() {{
+            add(Role.builder().role(UserRole.ROLE_USER).build());
+        }};
+        User user3 = User.builder()
+                .username("User3")
+                .nickname("User3")
+                .password("$2a$10$G7E1tKKajd3S8/ORM17isOTCH0To0VkAnTjY7R4gkcgNpyLG/.tJC")
+                .email("user3@mail.com")
+                .roles(rolesUser3)
+                .build();
+        user3.getRoles().forEach(role -> role.setUser(user3));
+
+        userCollection.setUser3(userRepository.save(user3));
+        passwordCollection.put(user3, "password");
+
         //non existant user1
         Set<Role> rolesneUser1 = new HashSet<>() {{
             add(Role.builder().role(UserRole.ROLE_USER).build());

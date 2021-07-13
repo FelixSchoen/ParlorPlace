@@ -163,7 +163,7 @@ public class UserServiceImplementation extends AbstractService implements UserSe
     public User getUser(String username) throws DataConflictException {
         LOGGER.info("Obtaining user with username: {}", username);
 
-        User existingUser = userRepository.findOneByUsername(username).orElseThrow(() -> new DataConflictException(Messages.getExceptionExplanationMessage("user.id.exists.not")));
+        User existingUser = userRepository.findOneByUsername(username).orElseThrow(() -> new DataConflictException(Messages.getExceptionExplanationMessage("user.username.exists.not")));
 
         return existingUser;
     }
@@ -175,10 +175,10 @@ public class UserServiceImplementation extends AbstractService implements UserSe
         Set<User> userSet = new HashSet<>();
 
         if (username != null && username.length() >= 3)
-            userSet.addAll(userRepository.findAllByUsernameContains(username));
+            userSet.addAll(userRepository.findAllByUsernameContainsIgnoreCase(username));
 
         if (nickname != null && nickname.length() >= 3)
-            userSet.addAll(userRepository.findAllByNicknameContains(nickname));
+            userSet.addAll(userRepository.findAllByNicknameContainsIgnoreCase(nickname));
 
         return userSet;
     }
