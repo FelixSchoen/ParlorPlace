@@ -23,6 +23,9 @@ import {MatDialogModule} from "@angular/material/dialog";
 import {MatFormFieldModule} from "@angular/material/form-field";
 import {MatInputModule} from "@angular/material/input";
 import {MatSnackBarModule} from "@angular/material/snack-bar";
+import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
+import {MatAutocompleteModule} from "@angular/material/autocomplete";
+import {MatOptionModule} from "@angular/material/core";
 
 @NgModule({
   declarations: [
@@ -51,7 +54,10 @@ import {MatSnackBarModule} from "@angular/material/snack-bar";
     MatDialogModule,
     MatFormFieldModule,
     MatInputModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    MatProgressSpinnerModule,
+    MatAutocompleteModule,
+    MatOptionModule
   ],
   entryComponents: [DialogContentSignupDialog, DialogContentSigninDialog],
   providers: [authInterceptorProviders],
