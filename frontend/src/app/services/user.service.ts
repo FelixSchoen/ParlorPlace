@@ -2,7 +2,7 @@ import {Injectable, OnInit} from '@angular/core';
 import {GlobalValues} from "../globals/global-values.service";
 import {HttpClient, HttpParams} from "@angular/common/http";
 import {BehaviorSubject, Observable} from "rxjs";
-import {User} from "../dto/user";
+import {User, UserUpdateRequest} from "../dto/user";
 import {NotificationService} from "./notification.service";
 import {tap} from "rxjs/operators";
 import {UserRole} from "../enums/userrole";
@@ -15,6 +15,10 @@ const USER_URI = GlobalValues.BASE_URI + 'user/';
 export class UserService {
 
   constructor(private httpClient: HttpClient, private notificationService: NotificationService) {
+  }
+
+  public updateUser(id: number, userUpdateRequest: UserUpdateRequest): Observable<User> {
+    return this.httpClient.put<User>(USER_URI + "update/" + id, userUpdateRequest);
   }
 
   public getCurrentUser(): Observable<User> {
@@ -39,9 +43,9 @@ export class UserService {
     return this.httpClient.get<User[]>(USER_URI, {params: params});
   }
 
-  public isAdmin(user: User):boolean {
-      if (user.roles == null) return false;
-      return user.roles.includes(UserRole.ADMIN);
+  public isAdmin(user: User): boolean {
+    if (user.roles == null) return false;
+    return user.roles.includes(UserRole.ADMIN);
   }
 
 }

@@ -109,8 +109,8 @@ public class UserServiceImplementation extends AbstractService implements UserSe
         User principal = getPrincipal();
 
         if ((!principal.getId().equals(id) && !hasAuthority(principal, UserRole.ROLE_ADMIN))
-                || (!user.getRoles().equals(principal.getRoles()) && !hasAuthority(principal, UserRole.ROLE_ADMIN))
-                || (user.getUsername() != null && !user.getUsername().equals(principal.getUsername()) && !hasAuthority(principal, UserRole.ROLE_ADMIN)))
+                || (user.getRoles() != null && !user.getRoles().equals(principal.getRoles()) && !hasAuthority(principal, UserRole.ROLE_ADMIN))
+                || (user.getUsername() != null && !user.getUsername().equals("") && !user.getUsername().equals(principal.getUsername()) && !hasAuthority(principal, UserRole.ROLE_ADMIN)))
             throw new AuthorizationException(Messages.getExceptionExplanationMessage("authorization.unauthorized"));
 
         if (user.getId() != null && !user.getId().equals(id))
@@ -121,13 +121,13 @@ public class UserServiceImplementation extends AbstractService implements UserSe
 
 //        if (user.getUsername() != null)
 //            persistUserBuilder.username(user.getUsername());
-        if (user.getPassword() != null) {
+        if (user.getPassword() != null && !user.getPassword().isEmpty()) {
             String hashedPassword = passwordEncoder.encode(user.getPassword());
             persistUserBuilder.password(hashedPassword);
         }
-        if (user.getNickname() != null)
+        if (user.getNickname() != null && !user.getNickname().isEmpty())
             persistUserBuilder.nickname(user.getNickname());
-        if (user.getEmail() != null)
+        if (user.getEmail() != null && !user.getEmail().isEmpty())
             persistUserBuilder.email(user.getEmail());
         if (user.getRoles() != null)
             persistUserBuilder.roles(user.getRoles());

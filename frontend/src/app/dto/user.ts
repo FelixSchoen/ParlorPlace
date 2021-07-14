@@ -32,3 +32,14 @@ export class UserSigninResponse {
   }
 
 }
+
+export class UserUpdateRequest {
+  constructor(public id: number | null,
+              public username: string | null,
+              public password: string | null,
+              public nickname: string | null,
+              public email: string | null,
+              public roles: UserRole[] | null) {
+  }
+
+}
