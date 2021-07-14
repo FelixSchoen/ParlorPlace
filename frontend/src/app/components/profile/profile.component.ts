@@ -68,7 +68,7 @@ export class ProfileComponent implements OnInit {
     );
 
     this.form = this.formBuilder.group({
-      username: ["", [Validators.minLength(3), Validators.maxLength(15)]],
+      // username: ["", [Validators.minLength(3), Validators.maxLength(15)]],
       nickname: ["", [Validators.minLength(3), Validators.maxLength(15)]],
       password: ["", [Validators.minLength(8), Validators.maxLength(255)]],
       confirmPassword: [""],
@@ -110,16 +110,9 @@ export class ProfileComponent implements OnInit {
     this.submitted = true;
 
     if (this.form!.invalid) {
-      console.log(this.form.get("username")?.errors)
-      console.log(this.form.get("nickname")?.errors)
-      console.log(this.form.get("password")?.errors)
-      console.log(this.form.get("confirmPassword")?.errors)
-      console.log(this.form.get("password")?.value.length)
-      console.log(this.form.get("confirmPassword")?.value.length)
-      console.log(this.form.get("password")?.value == this.form.get("confirmPassword"))
       return;
     } else {
-      const userUpdateRequest: UserUpdateRequest = new UserUpdateRequest(this.user.id, this.f.username.value, this.f.password.value,
+      const userUpdateRequest: UserUpdateRequest = new UserUpdateRequest(this.user.id, null, this.f.password.value,
         this.f.nickname.value, this.f.email.value, null);
 
       this.userService.updateUser(this.user.id, userUpdateRequest).subscribe(

@@ -10,15 +10,15 @@
     <div class="modal-body">
       <!--/>Form<!-->
       <div class="edit-form">
-        <div class="form-group" *ngIf="userService.isAdmin(currentUser)">
-          <label i18n>Username</label>
-          <input type="text" formControlName="username" class="form-control" [ngClass]="{'is-invalid': submitted &&
-      f.username.errors}"/>
-          <div *ngIf="submitted && f.username.errors" class="invalid-feedback">
-            <div *ngIf="f.username.errors.minlength" i18n>Username must be at least 3 characters</div>
-            <div *ngIf="f.username.errors.maxlength" i18n>Username must not exceed 15 characters</div>
-          </div>
-        </div>
+<!--        <div class="form-group" *ngIf="userService.isAdmin(currentUser)">-->
+<!--          <label i18n>Username</label>-->
+<!--          <input type="text" formControlName="username" class="form-control" [ngClass]="{'is-invalid': submitted &&-->
+<!--      f.username.errors}"/>-->
+<!--          <div *ngIf="submitted && f.username.errors" class="invalid-feedback">-->
+<!--            <div *ngIf="f.username.errors.minlength" i18n>Username must be at least 3 characters</div>-->
+<!--            <div *ngIf="f.username.errors.maxlength" i18n>Username must not exceed 15 characters</div>-->
+<!--          </div>-->
+<!--        </div>-->
 
         <div class="form-group">
           <label i18n>Nickname</label>
