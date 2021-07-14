@@ -10,6 +10,7 @@ import {catchError, debounceTime, distinctUntilChanged, switchMap, tap} from "rx
 import {AbstractControl, FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import Validation from "../../validators/Validation";
+import {UserRole} from "../../enums/userrole";
 
 @Component({
   selector: 'app-profile',
@@ -27,6 +28,7 @@ export class ProfileComponent implements OnInit {
   form: FormGroup
   submitted = false;
   orderObj: any;
+  roles = Object.values(UserRole);
 
   selectUserTypeahead: any;
 

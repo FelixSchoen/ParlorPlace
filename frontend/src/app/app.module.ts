@@ -13,9 +13,15 @@ import {SignupComponent} from './components/authentication/signup/signup.compone
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {ToastrModule} from "ngx-toastr";
 import {ToastComponent} from './components/toast/toast.component';
-import {SigninComponent} from './components/authentication/signin/signin.component';
+import {DialogContentSigninDialog, SigninComponent} from './components/authentication/signin/signin.component';
 import {ProfileComponent} from './components/profile/profile.component';
-import { LoadingIndicatorComponent } from './components/utility/loading-indicator/loading-indicator.component';
+import {LoadingIndicatorComponent} from './components/utility/loading-indicator/loading-indicator.component';
+import {MatChipsModule} from "@angular/material/chips";
+import {MatCardModule} from "@angular/material/card";
+import {MatButtonModule} from "@angular/material/button";
+import {MatDialogModule} from "@angular/material/dialog";
+import {MatFormFieldModule} from "@angular/material/form-field";
+import {MatInputModule} from "@angular/material/input";
 
 @NgModule({
   declarations: [
@@ -24,6 +30,7 @@ import { LoadingIndicatorComponent } from './components/utility/loading-indicato
     SignupComponent,
     ToastComponent,
     SigninComponent,
+    DialogContentSigninDialog,
     ProfileComponent,
     LoadingIndicatorComponent
   ],
@@ -36,7 +43,14 @@ import { LoadingIndicatorComponent } from './components/utility/loading-indicato
     AppRoutingModule,
     NgbModule,
     ToastrModule.forRoot({positionClass: 'toast-bottom-left'}),
+    MatChipsModule,
+    MatCardModule,
+    MatButtonModule,
+    MatDialogModule,
+    MatFormFieldModule,
+    MatInputModule
   ],
+  entryComponents: [DialogContentSigninDialog],
   providers: [authInterceptorProviders],
   bootstrap: [AppComponent]
 })
