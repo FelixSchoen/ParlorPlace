@@ -21,7 +21,6 @@ export default class Validation {
       }
 
       if (control!.value !== checkControl!.value) {
-        console.log("Not matching: {}, {}", control?.value, checkControl?.value);
         controls.get(checkControlName)!.setErrors({ matching: true });
         return { matching: true };
       } else {

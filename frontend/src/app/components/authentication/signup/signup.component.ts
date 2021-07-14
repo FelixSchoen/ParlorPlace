@@ -18,7 +18,6 @@ export class SignupComponent {
 
   private username: string;
   private password: string;
-  private confirmPassword: string;
   private email: string;
 
   constructor(private authService: AuthService, private notificationService: NotificationService, private dialog: MatDialog, private router: Router) {
@@ -49,8 +48,14 @@ export class SignupComponent {
               this.authService.signin(new UserSigninRequest(userSignupRequest.username, userSignupRequest.password)).subscribe(
                 () => {
                   this.router.navigate(["/profile"]).then();
+                },
+                (error) => {
+                  this.notificationService.showError(error.error)
                 }
               )
+            },
+            (error) => {
+              this.notificationService.showError(error.error)
             })
         }
       })
