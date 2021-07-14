@@ -9,7 +9,7 @@ import {HttpClientModule} from "@angular/common/http";
 import {authInterceptorProviders} from './interceptors/auth.interceptor';
 import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from "./app.component";
-import {SignupComponent} from './components/authentication/signup/signup.component';
+import {DialogContentSignupDialog, SignupComponent} from './components/authentication/signup/signup.component';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {ToastrModule} from "ngx-toastr";
 import {ToastComponent} from './components/toast/toast.component';
@@ -28,6 +28,7 @@ import {MatInputModule} from "@angular/material/input";
     AppComponent,
     EntryComponent,
     SignupComponent,
+    DialogContentSignupDialog,
     ToastComponent,
     SigninComponent,
     DialogContentSigninDialog,
@@ -50,7 +51,7 @@ import {MatInputModule} from "@angular/material/input";
     MatFormFieldModule,
     MatInputModule
   ],
-  entryComponents: [DialogContentSigninDialog],
+  entryComponents: [DialogContentSignupDialog, DialogContentSigninDialog],
   providers: [authInterceptorProviders],
   bootstrap: [AppComponent]
 })

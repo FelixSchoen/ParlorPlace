@@ -1,9 +1,8 @@
 import {Component, Inject, OnInit} from '@angular/core';
-import {AbstractControl, FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
-import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
+import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {AuthService} from "../../../services/auth.service";
 import {NotificationService} from "../../../services/notification.service";
-import {UserSigninRequest, UserSigninResponse} from "../../../dto/user";
+import {UserSigninRequest} from "../../../dto/user";
 import {Router} from "@angular/router";
 import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from "@angular/material/dialog";
 
@@ -17,7 +16,7 @@ export class SigninComponent {
   private username: string;
   private password: string;
 
-  constructor(private authService: AuthService, private notificationService: NotificationService, public dialog: MatDialog, private router: Router) {
+  constructor(private authService: AuthService, private notificationService: NotificationService, private dialog: MatDialog, private router: Router) {
   }
 
   openDialog(): void {
@@ -63,9 +62,10 @@ export interface DialogData {
 })
 export class DialogContentSigninDialog implements OnInit {
 
-  usernameControl = new FormControl("", [Validators.required, Validators.minLength(3), Validators.maxLength(15)]);
-  passwordControl = new FormControl("", [Validators.required, Validators.minLength(8), Validators.maxLength(255)]);
-  form: FormGroup;
+  public usernameControl = new FormControl("", [Validators.required, Validators.minLength(3), Validators.maxLength(15)]);
+  public passwordControl = new FormControl("", [Validators.required, Validators.minLength(8), Validators.maxLength(255)]);
+
+  private form: FormGroup;
 
   constructor(public dialogRef: MatDialogRef<DialogContentSigninDialog>,
               @Inject(MAT_DIALOG_DATA) public data: DialogData, public formBuilder: FormBuilder) {
