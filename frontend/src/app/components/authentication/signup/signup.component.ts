@@ -82,7 +82,7 @@ export class DialogContentSignupDialog implements OnInit {
   public emailControl = new FormControl("", [Validators.required, Validators.email]);
 
   private form: FormGroup;
-  matcher: ErrorStateMatcher = new MatchingErrorStateMatcher();
+  public matcher: ErrorStateMatcher = new MatchingErrorStateMatcher();
 
   constructor(public dialogRef: MatDialogRef<DialogContentSignupDialog>,
               @Inject(MAT_DIALOG_DATA) public data: DialogData, public formBuilder: FormBuilder) {

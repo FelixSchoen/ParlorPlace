@@ -24,6 +24,22 @@
           {{profileUser.username}}
         </mat-card-subtitle>
       </mat-card-header>
+
+      <mat-card-content>
+        Placeholder
+      </mat-card-content>
+
+      <div *ngIf="currentUser.id == profileUser.id || this.userService.isAdmin(currentUser)">
+        <mat-card-footer>
+          <div class="float-left" *ngIf="currentUser.id == profileUser.id">
+            <button mat-button (click)="signOut()">SIGN OUT</button>
+          </div>
+          <div class="float-right">
+            <button mat-button (click)="openDialog()">EDIT</button>
+          </div>
+          <div class="clearfix"></div>
+        </mat-card-footer>
+      </div>
     </mat-card>
   </div>
 
