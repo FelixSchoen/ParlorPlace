@@ -1,5 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {NotificationService} from "../../services/notification.service";
+import {AppComponent} from "../../app.component";
 
 @Component({
   selector: 'app-entry',
@@ -8,7 +9,11 @@ import {NotificationService} from "../../services/notification.service";
 })
 export class EntryComponent {
 
-  constructor() {
+  constructor(public appComponent: AppComponent) {
+  }
+
+  changeMode() {
+    this.appComponent.switchMode();
   }
 
 }
