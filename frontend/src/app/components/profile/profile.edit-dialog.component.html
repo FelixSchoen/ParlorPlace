@@ -54,7 +54,7 @@
         [selectable]="this.chipsSelectable"
         [removable]="this.chipsRemovable"
         (removed)="removeChip(role)">
-        {{displayRole(role)}}
+        {{this.userRoleUtil.toStringRepresentation(role)}}
         <mat-icon matChipRemove *ngIf="this.chipsRemovable">cancel</mat-icon>
       </mat-chip>
       <input
@@ -67,7 +67,7 @@
         (matChipInputTokenEnd)="addChip($event)">
       <mat-autocomplete #roleAutocomplete="matAutocomplete" (optionSelected)="selectAutocompleteChip($event)">
         <mat-option *ngFor="let role of this.availableRoles" [value]="role">
-          {{displayRole(role)}}
+          {{this.userRoleUtil.toStringRepresentation(role)}}
         </mat-option>
       </mat-autocomplete>
     </mat-chip-list>

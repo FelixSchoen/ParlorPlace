@@ -7,7 +7,8 @@
            [formControl]="userSearchControl"
            [matAutocomplete]="userSearchAutocomplete">
     <mat-autocomplete #userSearchAutocomplete="matAutocomplete" [displayWith]="displayUser">
-      <mat-option *ngFor="let option of filteredOptions | async" [value]="option" (onSelectionChange)="onSelect($event)">
+      <mat-option *ngFor="let option of filteredOptions | async" [value]="option"
+                  (onSelectionChange)="onSelect($event)">
         {{displayUser(option)}}
       </mat-option>
     </mat-autocomplete>
@@ -16,12 +17,22 @@
   <!-- Profile Section -->
   <div *ngIf="!loading">
     <mat-card class="mx-3">
-      <mat-card-header class="pp-card-center">
+      <mat-card-header class="pp-center">
         <mat-card-title>
           {{profileUser.nickname}}
         </mat-card-title>
         <mat-card-subtitle>
           {{profileUser.username}}
+        </mat-card-subtitle>
+        <mat-card-subtitle>
+          <mat-chip-list class="pp-center">
+            <mat-chip
+              *ngFor="let role of this.profileUser.roles"
+              [selectable]="false"
+              [removable]="false">
+              {{this.userRoleUtil.toStringRepresentation(role)}}
+            </mat-chip>
+          </mat-chip-list>
         </mat-card-subtitle>
       </mat-card-header>
 

@@ -33,7 +33,7 @@ export class ProfileComponent implements OnInit {
   public filteredOptions: Observable<User[]>;
 
   constructor(public userService: UserService, private tokenService: TokenService, private notificationService: NotificationService,
-              private dialog: MatDialog, private activatedRoute: ActivatedRoute, private router: Router) {
+              private dialog: MatDialog, public userRoleUtil: UserRoleUtil, private activatedRoute: ActivatedRoute, private router: Router) {
   }
 
   ngOnInit(): void {
@@ -75,10 +75,6 @@ export class ProfileComponent implements OnInit {
         }
       }
     );
-  }
-
-  displayUser(user: User): string {
-    return user ? user.nickname + " (" + user.username + ")" : "";
   }
 
   onSelect($event: any) {
@@ -127,6 +123,10 @@ export class ProfileComponent implements OnInit {
     this.router.navigate([""]).then();
   }
 
+  displayUser(user: User): string {
+    return user ? user.nickname + " (" + user.username + ")" : "";
+  }
+
 }
 
 export interface DialogData {
@@ -173,7 +173,7 @@ export class DialogContentProfileEditDialog implements OnInit {
   @ViewChild('roleInput') roleInput: ElementRef<HTMLInputElement>;
 
   constructor(public dialogRef: MatDialogRef<DialogContentProfileEditDialog>,
-              @Inject(MAT_DIALOG_DATA) public data: DialogData, public formBuilder: FormBuilder) {
+              @Inject(MAT_DIALOG_DATA) public data: DialogData, public formBuilder: FormBuilder, public userRoleUtil: UserRoleUtil) {
   }
 
   ngOnInit(): void {
@@ -189,7 +189,7 @@ export class DialogContentProfileEditDialog implements OnInit {
     })
 
     this.availableRoles = UserRoleUtil.getUserRoleArray();
-    for (const role of [...this.availableRoles]) {
+    for (const role of this.data.outputData.roles) {
       Utility.removeFromArray(role, this.availableRoles)
     }
   }
@@ -238,10 +238,6 @@ export class DialogContentProfileEditDialog implements OnInit {
 
     this.roleInput.nativeElement.value = "";
     this.roleControl.setValue(null);
-  }
-
-  displayRole(role: UserRole): string {
-    return role ? UserRoleUtil.toStringRepresentation(role) : "";
   }
 
 }
