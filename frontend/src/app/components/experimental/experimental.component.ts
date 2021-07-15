@@ -31,14 +31,14 @@ export class ExperimentalComponent implements OnInit {
   connect() {
     //connect to stomp where stomp endpoint is exposed
     //let ws = new SockJS(http://localhost:8080/greeting);
-    let socket = new WebSocket("ws://localhost:8080/greeting");
+    let socket = new WebSocket("ws://localhost:8080/wss/exp");
     this.ws = Stomp.over(socket);
     let that = this;
     this.ws.connect(this.headers, function() {
       that.ws.subscribe("/errors", function(message: { body: string; }) {
         alert("Error " + message.body);
       });
-      that.ws.subscribe("/topic/reply", function(message: { body: string; }) {
+      that.ws.subscribe("/wss/queue", function(message: { body: string; }) {
         console.log(message)
         that.showGreeting(message.body);
       });
@@ -60,7 +60,7 @@ export class ExperimentalComponent implements OnInit {
     let data = JSON.stringify({
       'name' : this.name
     })
-    this.ws.send("/app/message", {}, data);
+    this.ws.send("/ws/wss/exp", {}, data);
   }
 
   showGreeting(message: string) {

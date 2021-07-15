@@ -20,7 +20,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
 @Configuration
 @EnableWebSecurity
@@ -53,9 +52,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers(HttpMethod.OPTIONS).permitAll()
                 .antMatchers(HttpMethod.POST, "/user/signup", "/user/signin", "/user/refresh").permitAll()
-                .antMatchers(HttpMethod.POST, "/exp", "/greeting").permitAll()
-                .antMatchers(HttpMethod.GET, "/exp", "/greeting").permitAll()
-                .antMatchers(HttpMethod.PUT, "/exp", "/greeting").permitAll();
+                .antMatchers(HttpMethod.GET, "/wss/**").permitAll();
 
         http.authorizeRequests().anyRequest().fullyAuthenticated()
                 .and()
@@ -80,7 +77,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Bean
     public WebMvcConfigurer corsConfigurer() {
-        return new WebMvcConfigurerAdapter() {
+        return new WebMvcConfigurer() {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
                 registry

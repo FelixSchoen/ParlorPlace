@@ -108,9 +108,9 @@ public class UserServiceImplementation extends AbstractService implements UserSe
 
         User principal = getPrincipal();
 
-        if ((!principal.getId().equals(id) && !hasAuthority(principal, UserRole.ROLE_ADMIN))
-                || (user.getRoles() != null && !user.getRoles().equals(principal.getRoles()) && !hasAuthority(principal, UserRole.ROLE_ADMIN))
-                || (user.getUsername() != null && !user.getUsername().equals("") && !user.getUsername().equals(principal.getUsername()) && !hasAuthority(principal, UserRole.ROLE_ADMIN)))
+        if ((!principal.getId().equals(id) && notAuthority(principal, UserRole.ROLE_ADMIN))
+                || (user.getRoles() != null && !user.getRoles().equals(principal.getRoles()) && notAuthority(principal, UserRole.ROLE_ADMIN))
+                || (user.getUsername() != null && !user.getUsername().equals("") && !user.getUsername().equals(principal.getUsername()) && notAuthority(principal, UserRole.ROLE_ADMIN)))
             throw new AuthorizationException(Messages.getExceptionExplanationMessage("authorization.unauthorized"));
 
         if (user.getId() != null && !user.getId().equals(id))

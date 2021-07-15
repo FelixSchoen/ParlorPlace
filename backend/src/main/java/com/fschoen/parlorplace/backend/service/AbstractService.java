@@ -30,11 +30,11 @@ public abstract class AbstractService {
         return potentialUser.get();
     }
 
-    protected boolean hasAuthority(User user, UserRole userRole) {
+    protected boolean notAuthority(User user, UserRole userRole) {
         for (Role role: user.getRoles()) {
-            if (role.getRole().equals(userRole)) return true;
+            if (role.getRole().equals(userRole)) return false;
         }
-        return false;
+        return true;
     }
 
 }
