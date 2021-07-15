@@ -53,7 +53,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
                 .authorizeRequests()
                 .antMatchers(HttpMethod.OPTIONS).permitAll()
-                .antMatchers(HttpMethod.POST, "/user/signup", "/user/signin", "/user/refresh").permitAll();
+                .antMatchers(HttpMethod.POST, "/user/signup", "/user/signin", "/user/refresh").permitAll()
+                .antMatchers(HttpMethod.POST, "/exp", "/greeting").permitAll()
+                .antMatchers(HttpMethod.GET, "/exp", "/greeting").permitAll()
+                .antMatchers(HttpMethod.PUT, "/exp", "/greeting").permitAll();
 
         http.authorizeRequests().anyRequest().fullyAuthenticated()
                 .and()

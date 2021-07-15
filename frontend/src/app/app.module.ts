@@ -26,6 +26,7 @@ import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
 import {MatAutocompleteModule} from "@angular/material/autocomplete";
 import {MatOptionModule} from "@angular/material/core";
 import {MatIconModule} from "@angular/material/icon";
+import { ExperimentalComponent } from './components/experimental/experimental.component';
 
 @NgModule({
   declarations: [
@@ -37,7 +38,8 @@ import {MatIconModule} from "@angular/material/icon";
     DialogContentSigninDialog,
     ProfileComponent,
     DialogContentProfileEditDialog,
-    LoadingIndicatorComponent
+    LoadingIndicatorComponent,
+    ExperimentalComponent
   ],
   imports: [
     BrowserModule,
