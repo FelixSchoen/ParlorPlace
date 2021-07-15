@@ -22,8 +22,7 @@ public class ExperimentalController {
     @MessageMapping("/message")
     @SendTo("/topic/reply")
     public String processMessageFromClient(@Payload String message) throws Exception {
-        String name = new Gson().fromJson(message, Map.class).get("name").toString();
-        return name;
+        return new Gson().fromJson(message, Map.class).get("name").toString();
     }
 
     @MessageExceptionHandler

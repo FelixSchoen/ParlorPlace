@@ -9,7 +9,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
 @EnableWebMvc
-@ComponentScan(basePackageClasses = { MVCConfig.class })
+@ComponentScan(basePackageClasses = {MVCConfig.class})
 public class MVCConfig implements WebMvcConfigurer {
 
     @Override

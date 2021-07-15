@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {Stomp} from "@stomp/stompjs";
+import {TokenService} from "../../services/token.service";
 
 @Component({
   selector: 'app-experimental',
@@ -14,10 +15,18 @@ export class ExperimentalComponent implements OnInit {
   name: string;
   disabled: boolean;
 
-  constructor(){}
+  constructor(private tokenService: TokenService){
+    this.headers.Authentication = this.headers.Authentication + this.tokenService.getToken()?.accessToken;
+    console.log(this.headers.Authentication)
+  }
 
   ngOnInit(): void {
+
   }
+
+  headers = {
+    Authentication: "Bearer "
+  };
 
   connect() {
     //connect to stomp where stomp endpoint is exposed
@@ -25,7 +34,7 @@ export class ExperimentalComponent implements OnInit {
     let socket = new WebSocket("ws://localhost:8080/greeting");
     this.ws = Stomp.over(socket);
     let that = this;
-    this.ws.connect({}, function() {
+    this.ws.connect(this.headers, function() {
       that.ws.subscribe("/errors", function(message: { body: string; }) {
         alert("Error " + message.body);
       });

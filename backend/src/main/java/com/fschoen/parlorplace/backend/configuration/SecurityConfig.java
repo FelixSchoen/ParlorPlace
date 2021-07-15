@@ -1,6 +1,6 @@
 package com.fschoen.parlorplace.backend.configuration;
 
-import com.fschoen.parlorplace.backend.security.AuthEntryPointJwt;
+import com.fschoen.parlorplace.backend.security.AuthEntryPoint;
 import com.fschoen.parlorplace.backend.security.AuthTokenFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -13,7 +13,6 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.config.core.GrantedAuthorityDefaults;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -32,10 +31,10 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final UserDetailsService userDetailsService;
-    private final AuthEntryPointJwt unauthorizedHandler;
+    private final AuthEntryPoint unauthorizedHandler;
 
     @Autowired
-    public SecurityConfig(@Qualifier("UserDetailsServiceImplementation") UserDetailsService userDetailsService, AuthEntryPointJwt unauthorizedHandler) {
+    public SecurityConfig(@Qualifier("UserDetailsServiceImplementation") UserDetailsService userDetailsService, AuthEntryPoint unauthorizedHandler) {
         this.userDetailsService = userDetailsService;
         this.unauthorizedHandler = unauthorizedHandler;
     }
