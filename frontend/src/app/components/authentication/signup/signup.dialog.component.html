@@ -1,6 +1,7 @@
 <h2 mat-dialog-title>Sign Up</h2>
 
-<mat-dialog-content class="mat-typography w-100">
+<mat-dialog-content class="mat-typography">
+
   <mat-form-field class="w-100">
     <mat-label i18n>Username</mat-label>
     <input matInput [(ngModel)]="data.username" [formControl]="usernameControl">
@@ -32,6 +33,7 @@
     <mat-error *ngIf="emailControl.hasError('required')" i18n>E-Mail is required</mat-error>
     <mat-error *ngIf="emailControl.hasError('mail')" i18n>E-Mail is invalid</mat-error>
   </mat-form-field>
+
 </mat-dialog-content>
 
 <mat-dialog-actions align="end">

@@ -1,6 +1,7 @@
 <h2 mat-dialog-title>Edit User</h2>
 
-<mat-dialog-content class="mat-typography w-100">
+<mat-dialog-content class="mat-typography">
+
   <!--  <div *ngIf="this.data.isAdmin">
       <mat-form-field class="w-100">
         <mat-label i18n>Username</mat-label>
@@ -43,36 +44,37 @@
     <input matInput [(ngModel)]="data.outputData.email" [formControl]="emailControl">
     <mat-error *ngIf="emailControl.hasError('mail')" i18n>E-Mail is invalid</mat-error>
   </mat-form-field>
-</mat-dialog-content>
 
-<div *ngIf="this.data.inputData.input_isAdmin">
-  <mat-form-field class="w-100">
-    <mat-label i18n>Roles</mat-label>
-    <mat-chip-list #roleChipList>
-      <mat-chip
-        *ngFor="let role of this.data.outputData.roles"
-        [selectable]="this.chipsSelectable"
-        [removable]="this.chipsRemovable"
-        (removed)="removeChip(role)">
-        {{this.userRoleUtil.toStringRepresentation(role)}}
-        <mat-icon matChipRemove *ngIf="this.chipsRemovable">cancel</mat-icon>
-      </mat-chip>
-      <input
-        matInput
-        #roleInput
-        [formControl]="roleControl"
-        [matAutocomplete]="roleAutocomplete"
-        [matChipInputFor]="roleChipList"
-        [matChipInputSeparatorKeyCodes]="this.separatorKeysCodes"
-        (matChipInputTokenEnd)="addChip($event)">
-      <mat-autocomplete #roleAutocomplete="matAutocomplete" (optionSelected)="selectAutocompleteChip($event)">
-        <mat-option *ngFor="let role of this.availableRoles" [value]="role">
+  <div *ngIf="this.data.inputData.input_isAdmin">
+    <mat-form-field class="w-100">
+      <mat-label i18n>Roles</mat-label>
+      <mat-chip-list #roleChipList>
+        <mat-chip
+          *ngFor="let role of this.data.outputData.roles"
+          [selectable]="this.chipsSelectable"
+          [removable]="this.chipsRemovable"
+          (removed)="removeChip(role)">
           {{this.userRoleUtil.toStringRepresentation(role)}}
-        </mat-option>
-      </mat-autocomplete>
-    </mat-chip-list>
-  </mat-form-field>
-</div>
+          <mat-icon matChipRemove *ngIf="this.chipsRemovable">cancel</mat-icon>
+        </mat-chip>
+        <input
+          matInput
+          #roleInput
+          [formControl]="roleControl"
+          [matAutocomplete]="roleAutocomplete"
+          [matChipInputFor]="roleChipList"
+          [matChipInputSeparatorKeyCodes]="this.separatorKeysCodes"
+          (matChipInputTokenEnd)="addChip($event)">
+        <mat-autocomplete #roleAutocomplete="matAutocomplete" (optionSelected)="selectAutocompleteChip($event)">
+          <mat-option *ngFor="let role of this.availableRoles" [value]="role">
+            {{this.userRoleUtil.toStringRepresentation(role)}}
+          </mat-option>
+        </mat-autocomplete>
+      </mat-chip-list>
+    </mat-form-field>
+  </div>
+
+</mat-dialog-content>
 
 <mat-dialog-actions align="end">
   <button mat-button (click)="onCancel()">Cancel</button>

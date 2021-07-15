@@ -1,6 +1,7 @@
 <h2 mat-dialog-title>Sign In</h2>
 
-<mat-dialog-content class="mat-typography w-100">
+<mat-dialog-content class="mat-typography">
+
   <mat-form-field class="w-100">
     <mat-label i18n>Username</mat-label>
     <input matInput [(ngModel)]="data.username" [formControl]="usernameControl">
@@ -16,6 +17,7 @@
     <mat-error *ngIf="passwordControl.hasError('minlength')" i18n>Password must be at least 8 characters</mat-error>
     <mat-error *ngIf="passwordControl.hasError('maxlength')" i18n>Password must be at most 255 characters</mat-error>
   </mat-form-field>
+
 </mat-dialog-content>
 
 <mat-dialog-actions align="end">
