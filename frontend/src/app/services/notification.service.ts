@@ -1,30 +1,27 @@
-import {Injectable, TemplateRef} from '@angular/core';
+import {Injectable} from '@angular/core';
+import {MatSnackBar} from '@angular/material/snack-bar';
 
 @Injectable({
   providedIn: 'root'
 })
 export class NotificationService {
 
-  public toasts: any[] = [];
-
-  show(header: string, body: string, options: any = {}) {
-    this.toasts.push({ header, body, ...options });
+  constructor(private _snackBar: MatSnackBar) {
   }
 
-  showStandard(message: string) {
-    this.show("Notification", message);
+  show(message: string, action: string, duration: number) {
+    this._snackBar.open(message, action, {
+      duration: duration,
+      panelClass: ['danger-snackbar']
+    });
   }
 
-  showSuccess(message: string) {
-    this.show("Success", message, { classname: 'bg-success text-light', delay: 10000 });
+  showSuccess(message: string, action: string = "Dismiss") {
+    this.show(message, action, 5000)
   }
 
-  showError(message: string) {
-    this.show("Error", message, { classname: 'bg-danger text-light', delay: 15000 });
-  }
-
-  remove(toast: any) {
-    this.toasts = this.toasts.filter(t => t != toast);
+  showError(message: string, action: string = "Dismiss") {
+    this.show(message, action, 15000)
   }
 
 }

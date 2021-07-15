@@ -1,112 +1,53 @@
-<ng-template #content let-modal>
-  <div class="modal-header">
-    <h4 class="modal-title" id="modal-basic-title" i18n>Edit {{user.nickname}}</h4>
-    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss()">
-      <span aria-hidden="true">&times;</span>
-    </button>
-  </div>
+<div class="container p-3">
 
-  <form [formGroup]="form" (ngSubmit)="onSubmit()">
-    <div class="modal-body">
-      <!--/>Form<!-->
-      <div class="edit-form">
-<!--        <div class="form-group" *ngIf="userService.isAdmin(currentUser)">-->
-<!--          <label i18n>Username</label>-->
-<!--          <input type="text" formControlName="username" class="form-control" [ngClass]="{'is-invalid': submitted &&-->
-<!--      f.username.errors}"/>-->
-<!--          <div *ngIf="submitted && f.username.errors" class="invalid-feedback">-->
-<!--            <div *ngIf="f.username.errors.minlength" i18n>Username must be at least 3 characters</div>-->
-<!--            <div *ngIf="f.username.errors.maxlength" i18n>Username must not exceed 15 characters</div>-->
-<!--          </div>-->
-<!--        </div>-->
+  <mat-form-field appearance="outline" class="px-3 w-100">
+    <mat-label>User search</mat-label>
+    <input matInput type="text"
+           placeholder="Search for a user..."
+           [formControl]="userSearchControl"
+           [matAutocomplete]="userSearchAutocomplete">
+    <mat-autocomplete #userSearchAutocomplete="matAutocomplete" [displayWith]="displayUser">
+      <mat-option *ngFor="let option of filteredOptions | async" [value]="option" (onSelectionChange)="onSelect($event)">
+        {{displayUser(option)}}
+      </mat-option>
+    </mat-autocomplete>
+  </mat-form-field>
 
-        <div class="form-group">
-          <label i18n>Nickname</label>
-          <input type="text" formControlName="nickname" class="form-control" [ngClass]="{'is-invalid': submitted &&
-      f.nickname.errors}"/>
-          <div *ngIf="submitted && f.nickname.errors" class="invalid-feedback">
-            <div *ngIf="f.nickname.errors.minlength" i18n>Nickname must be at least 3 characters</div>
-            <div *ngIf="f.nickname.errors.maxlength" i18n>Nickname must not exceed 15 characters</div>
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label i18n>Password</label>
-          <input type="password" formControlName="password" class="form-control" [ngClass]="{'is-invalid': submitted &&
-      f.password.errors}"/>
-          <div *ngIf="submitted && f.password.errors" class="invalid-feedback">
-            <div *ngIf="f.password.errors.minlength" i18n>Password must be at least 8 characters</div>
-            <div *ngIf="f.password.errors.maxlength" i18n>Username must not exceed 255 characters</div>
-          </div>
-        </div>
-
-        <div class="form-group" *ngIf="f.password.value || f.password.errors">
-          <label i18n>Confirm Password</label>
-          <input type="password" formControlName="confirmPassword" class="form-control" [ngClass]="{'is-invalid': submitted &&
-      f.confirmPassword.errors}"/>
-          <div *ngIf="submitted && f.confirmPassword.errors" class="invalid-feedback">
-            <div *ngIf="f.confirmPassword.errors.required" i18n>Confirm Password is required</div>
-            <div *ngIf="f.confirmPassword.errors.minlength" i18n>Confirm Password must be at least 8 characters</div>
-            <div *ngIf="f.confirmPassword.errors.maxlength" i18n>Confirm Password must not exceed 255 characters</div>
-            <div *ngIf="f.confirmPassword.errors.matching" i18n>Passwords do not match</div>
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label i18n>E-Mail</label>
-          <input type="email" formControlName="email" class="form-control" [ngClass]="{'is-invalid': submitted &&
-      f.email.errors}"/>
-          <div *ngIf="submitted && f.email.errors" class="invalid-feedback">
-            <div *ngIf="f.email.errors.email" i18n>E-Mail is invalid</div>
-          </div>
-        </div>
-
-      </div>
-    </div>
-    <div class="modal-footer">
-      <button type="reset" class="btn btn-outline-dark" (click)="form.reset()" i18n>Reset</button>
-      <button type="submit" class="btn btn-outline-primary" i18n>Confirm</button>
-    </div>
-  </form>
-</ng-template>
-
-<div class="container justify-content-center">
-  <!-- User Search -->
-  <fieldset class="form-inline justify-content-center w-100 p-3">
-    <div class="form-group justify-content-center w-100">
-      <input id="typeahead-username" type="text" class="form-control w-100"
-             [(ngModel)]="selectUserTypeahead" [ngbTypeahead]="search" [inputFormatter]="formatter" [resultFormatter]="formatter"
-             [editable]="false" (selectItem)="onSelect($event, $event.item)" placeholder="Search for a user...">
-    </div>
-  </fieldset>
-
+  <!-- Profile Section -->
   <div *ngIf="!loading">
-    <!-- Profile Card -->
-    <div class="card border-dark mx-3 mb-5">
-      <div class="card-body">
-        <h5 class="card-title text-center">
-          {{user.nickname}}
-        </h5>
-        <h6 class="card-subtitle text-center mb-2 text-muted">
-          {{user.username}}
-        </h6>
-      </div>
-      <div class="card-footer" *ngIf="currentUser.id == user.id || this.userService.isAdmin(currentUser)">
-        <div class="float-left" *ngIf="currentUser.id == user.id">
-          <button class="btn btn-outline-secondary" (click)="signOut()">Sign Out</button>
-        </div>
-        <div class="float-right">
-          <button class="btn btn-outline-secondary" (click)="open(content)">Edit</button>
-        </div>
-        <div class="clearfix"></div>
-      </div>
-    </div>
-  </div>
-</div>
+    <mat-card class="mx-3">
+      <mat-card-header class="pp-card-center">
+        <mat-card-title>
+          {{profileUser.nickname}}
+        </mat-card-title>
+        <mat-card-subtitle>
+          {{profileUser.username}}
+        </mat-card-subtitle>
+      </mat-card-header>
 
-<!-- Loading Indicator -->
-<div class="d-flex justify-content-center align-items-center h-100" *ngIf="loading">
-  <app-loading-indicator [loading]="loading" [errorMessage]="errorMessage"></app-loading-indicator>
+      <mat-card-content>
+        Placeholder
+      </mat-card-content>
+
+      <div *ngIf="currentUser.id == profileUser.id || this.userService.isAdmin(currentUser)">
+        <mat-card-footer>
+          <div class="float-left" *ngIf="currentUser.id == profileUser.id">
+            <button mat-button (click)="signOut()">SIGN OUT</button>
+          </div>
+          <div class="float-right">
+            <button mat-button (click)="openDialog()">EDIT</button>
+          </div>
+          <div class="clearfix"></div>
+        </mat-card-footer>
+      </div>
+    </mat-card>
+  </div>
+
+  <!-- Loading Indicator -->
+  <div class="d-flex justify-content-center align-items-center h-100" *ngIf="loading">
+    <app-loading-indicator [loading]="loading" [errorMessage]="errorMessage"></app-loading-indicator>
+  </div>
+
 </div>
 
 

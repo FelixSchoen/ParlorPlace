@@ -1,7 +1,5 @@
-<div *ngIf="loading == true">
-  <div class="spinner-grow" role="status">
-    <span class="sr-only">Loading...</span>
-  </div>
+<div *ngIf="loading">
+  <mat-spinner [diameter]="50"></mat-spinner>
 </div>
 
 <div *ngIf="loading == false && errorMessage != ''">

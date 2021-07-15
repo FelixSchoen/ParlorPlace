@@ -9,22 +9,36 @@ import {HttpClientModule} from "@angular/common/http";
 import {authInterceptorProviders} from './interceptors/auth.interceptor';
 import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from "./app.component";
-import {SignupComponent} from './components/authentication/signup/signup.component';
+import {DialogContentSignupDialog, SignupComponent} from './components/authentication/signup/signup.component';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {ToastrModule} from "ngx-toastr";
 import {ToastComponent} from './components/toast/toast.component';
-import {SigninComponent} from './components/authentication/signin/signin.component';
-import {ProfileComponent} from './components/profile/profile.component';
-import { LoadingIndicatorComponent } from './components/utility/loading-indicator/loading-indicator.component';
+import {DialogContentSigninDialog, SigninComponent} from './components/authentication/signin/signin.component';
+import {DialogContentProfileEditDialog, ProfileComponent} from './components/profile/profile.component';
+import {LoadingIndicatorComponent} from './components/utility/loading-indicator/loading-indicator.component';
+import {MatChipsModule} from "@angular/material/chips";
+import {MatCardModule} from "@angular/material/card";
+import {MatButtonModule} from "@angular/material/button";
+import {MatDialogModule} from "@angular/material/dialog";
+import {MatFormFieldModule} from "@angular/material/form-field";
+import {MatInputModule} from "@angular/material/input";
+import {MatSnackBarModule} from "@angular/material/snack-bar";
+import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
+import {MatAutocompleteModule} from "@angular/material/autocomplete";
+import {MatOptionModule} from "@angular/material/core";
+import {MatIconModule} from "@angular/material/icon";
 
 @NgModule({
   declarations: [
     AppComponent,
     EntryComponent,
     SignupComponent,
+    DialogContentSignupDialog,
     ToastComponent,
     SigninComponent,
+    DialogContentSigninDialog,
     ProfileComponent,
+    DialogContentProfileEditDialog,
     LoadingIndicatorComponent
   ],
   imports: [
@@ -36,7 +50,19 @@ import { LoadingIndicatorComponent } from './components/utility/loading-indicato
     AppRoutingModule,
     NgbModule,
     ToastrModule.forRoot({positionClass: 'toast-bottom-left'}),
+    MatChipsModule,
+    MatCardModule,
+    MatButtonModule,
+    MatDialogModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatSnackBarModule,
+    MatProgressSpinnerModule,
+    MatAutocompleteModule,
+    MatOptionModule,
+    MatIconModule
   ],
+  entryComponents: [DialogContentSignupDialog, DialogContentSigninDialog, DialogContentProfileEditDialog],
   providers: [authInterceptorProviders],
   bootstrap: [AppComponent]
 })
