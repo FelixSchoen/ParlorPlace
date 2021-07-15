@@ -12,7 +12,6 @@ import {AppComponent} from "./app.component";
 import {DialogContentSignupDialog, SignupComponent} from './components/authentication/signup/signup.component';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {ToastrModule} from "ngx-toastr";
-import {ToastComponent} from './components/toast/toast.component';
 import {DialogContentSigninDialog, SigninComponent} from './components/authentication/signin/signin.component';
 import {DialogContentProfileEditDialog, ProfileComponent} from './components/profile/profile.component';
 import {LoadingIndicatorComponent} from './components/utility/loading-indicator/loading-indicator.component';
@@ -34,7 +33,6 @@ import {MatIconModule} from "@angular/material/icon";
     EntryComponent,
     SignupComponent,
     DialogContentSignupDialog,
-    ToastComponent,
     SigninComponent,
     DialogContentSigninDialog,
     ProfileComponent,

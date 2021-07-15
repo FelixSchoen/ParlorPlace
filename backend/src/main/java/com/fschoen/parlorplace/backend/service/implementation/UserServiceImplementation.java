@@ -56,7 +56,7 @@ public class UserServiceImplementation extends AbstractService implements UserSe
         LOGGER.info("Signing up User: {}", user.getUsername());
 
         if (userRepository.findOneByUsername(user.getUsername()).isPresent()) {
-            throw new DataConflictException(Messages.getExceptionExplanationMessage("user.name.exists"));
+            throw new DataConflictException(Messages.getExceptionExplanationMessage("user.username.exists"));
         } else if (userRepository.findOneByEmail(user.getEmail()).isPresent()) {
             throw new DataConflictException(Messages.getExceptionExplanationMessage("user.email.exists"));
         }

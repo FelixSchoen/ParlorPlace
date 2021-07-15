@@ -10,8 +10,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
-import static org.springframework.security.core.userdetails.User.withUsername;
-
 @Service("UserDetailsServiceImplementation")
 public class UserDetailsServiceImplementation implements UserDetailsService {
 
@@ -27,7 +25,7 @@ public class UserDetailsServiceImplementation implements UserDetailsService {
         Optional<User> potentialUser = userRepository.findOneByUsername(s);
 
         if (potentialUser.isEmpty()) {
-            throw new UsernameNotFoundException(Messages.getExceptionExplanationMessage("user.name.exists.not"));
+            throw new UsernameNotFoundException(Messages.getExceptionExplanationMessage("user.username.exists.not"));
         }
 
         return UserDetailsImplementation.fromUser(potentialUser.get());
