@@ -1,4 +1,4 @@
-package com.fschoen.parlorplace.backend.exceptions;
+package com.fschoen.parlorplace.backend.exception;
 
 /**
  * Represents an exception caused by data that conflicts with the database (e.g. username already exists).

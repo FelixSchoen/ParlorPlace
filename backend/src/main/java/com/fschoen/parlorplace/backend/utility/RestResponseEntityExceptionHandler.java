@@ -1,8 +1,8 @@
 package com.fschoen.parlorplace.backend.utility;
 
-import com.fschoen.parlorplace.backend.exceptions.AuthorizationException;
-import com.fschoen.parlorplace.backend.exceptions.DataConflictException;
-import com.fschoen.parlorplace.backend.exceptions.ValidationException;
+import com.fschoen.parlorplace.backend.exception.AuthorizationException;
+import com.fschoen.parlorplace.backend.exception.DataConflictException;
+import com.fschoen.parlorplace.backend.exception.ValidationException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

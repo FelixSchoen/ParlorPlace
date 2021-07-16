@@ -2,7 +2,7 @@ package com.fschoen.parlorplace.backend.datagenerator;
 
 import com.fschoen.parlorplace.backend.entity.persistance.Role;
 import com.fschoen.parlorplace.backend.entity.persistance.User;
-import com.fschoen.parlorplace.backend.enums.UserRole;
+import com.fschoen.parlorplace.backend.enumeration.UserRole;
 import com.fschoen.parlorplace.backend.repository.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

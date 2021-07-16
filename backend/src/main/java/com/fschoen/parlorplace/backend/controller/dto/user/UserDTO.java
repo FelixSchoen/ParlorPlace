@@ -1,6 +1,6 @@
 package com.fschoen.parlorplace.backend.controller.dto.user;
 
-import com.fschoen.parlorplace.backend.enums.UserRole;
+import com.fschoen.parlorplace.backend.enumeration.UserRole;
 import com.fschoen.parlorplace.backend.utility.Obfuscateable;
 import lombok.*;
 

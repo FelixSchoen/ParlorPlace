@@ -1,11 +1,10 @@
 package com.fschoen.parlorplace.backend.controller.mapper;
 
 import com.fschoen.parlorplace.backend.entity.persistance.Role;
-import com.fschoen.parlorplace.backend.enums.UserRole;
+import com.fschoen.parlorplace.backend.enumeration.UserRole;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;
-import org.springframework.stereotype.Component;
 
 import java.util.Set;
 

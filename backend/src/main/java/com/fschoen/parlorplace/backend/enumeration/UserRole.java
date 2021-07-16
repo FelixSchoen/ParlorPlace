@@ -1,4 +1,4 @@
-package com.fschoen.parlorplace.backend.enums;
+package com.fschoen.parlorplace.backend.enumeration;
 
 public enum UserRole {
     ROLE_USER,

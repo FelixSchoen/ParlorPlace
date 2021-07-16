@@ -3,8 +3,8 @@ package com.fschoen.parlorplace.backend.service;
 import com.fschoen.parlorplace.backend.controller.dto.authentication.TokenRefreshResponseDTO;
 import com.fschoen.parlorplace.backend.controller.dto.user.UserSigninResponseDTO;
 import com.fschoen.parlorplace.backend.entity.persistance.User;
-import com.fschoen.parlorplace.backend.exceptions.AuthorizationException;
-import com.fschoen.parlorplace.backend.exceptions.DataConflictException;
+import com.fschoen.parlorplace.backend.exception.AuthorizationException;
+import com.fschoen.parlorplace.backend.exception.DataConflictException;
 
 import java.util.Set;
 

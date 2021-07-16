@@ -2,8 +2,8 @@ package com.fschoen.parlorplace.backend.service.implementation;
 
 import com.fschoen.parlorplace.backend.entity.persistance.RefreshToken;
 import com.fschoen.parlorplace.backend.entity.persistance.User;
-import com.fschoen.parlorplace.backend.exceptions.DataConflictException;
-import com.fschoen.parlorplace.backend.exceptions.TokenExpiredException;
+import com.fschoen.parlorplace.backend.exception.DataConflictException;
+import com.fschoen.parlorplace.backend.exception.TokenExpiredException;
 import com.fschoen.parlorplace.backend.repository.RefreshTokenRepository;
 import com.fschoen.parlorplace.backend.repository.UserRepository;
 import com.fschoen.parlorplace.backend.service.RefreshTokenService;

@@ -1,4 +1,4 @@
-package com.fschoen.parlorplace.backend.exceptions;
+package com.fschoen.parlorplace.backend.exception;
 
 public class ValidationException extends RuntimeException {
 
