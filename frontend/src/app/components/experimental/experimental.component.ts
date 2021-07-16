@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {Stomp} from "@stomp/stompjs";
 import {TokenService} from "../../services/token.service";
 
@@ -9,15 +9,12 @@ import {TokenService} from "../../services/token.service";
 })
 export class ExperimentalComponent implements OnInit {
 
-  greetings: string[] = [];
-  showConversation: boolean = false;
-  ws: any;
-  name: string;
-  disabled: boolean;
+  public ws: any;
+  public sessionId = "";
+  public url = "ws://localhost:8080/websoc/game";
 
-  constructor(private tokenService: TokenService){
+  constructor(private tokenService: TokenService) {
     this.headers.Authentication = this.headers.Authentication + this.tokenService.getToken()?.accessToken;
-    console.log(this.headers.Authentication)
   }
 
   ngOnInit(): void {
@@ -29,21 +26,16 @@ export class ExperimentalComponent implements OnInit {
   };
 
   connect() {
-    //connect to stomp where stomp endpoint is exposed
-    //let ws = new SockJS(http://localhost:8080/greeting);
-    let socket = new WebSocket("ws://localhost:8080/wss/exp");
+    let socket = new WebSocket(this.url);
     this.ws = Stomp.over(socket);
+
     let that = this;
     this.ws.connect(this.headers, function() {
-      that.ws.subscribe("/errors", function(message: { body: string; }) {
-        alert("Error " + message.body);
+      that.ws.subscribe("/user/queue/messages", function(message: any) {
+        console.log(message.body)
       });
-      that.ws.subscribe("/wss/queue", function(message: { body: string; }) {
-        console.log(message)
-        that.showGreeting(message.body);
-      });
-      that.disabled = true;
-    }, function(error: string) {
+
+    }, function (error: string) {
       alert("STOMP error " + error);
     });
   }
@@ -52,26 +44,14 @@ export class ExperimentalComponent implements OnInit {
     if (this.ws != null) {
       this.ws.ws.close();
     }
-    this.setConnected(false);
     console.log("Disconnected");
   }
 
-  sendName() {
+  send(message: String) {
     let data = JSON.stringify({
-      'name' : this.name
+      'name': message
     })
     this.ws.send("/ws/wss/exp", {}, data);
-  }
-
-  showGreeting(message: string) {
-    this.showConversation = true;
-    this.greetings.push(message)
-  }
-
-  setConnected(connected: boolean) {
-    this.disabled = connected;
-    this.showConversation = connected;
-    this.greetings = [];
   }
 
 }

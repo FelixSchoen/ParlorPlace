@@ -1,38 +1,10 @@
-<div id="main-content" class="container">
-  <div class="row">
-    <div class="col-md-6">
-      <form class="form-inline">
-        <div class="form-group">
-          <label for="connect">WebSocket connection:</label>
-          <button id="connect" class="btn btn-default" type="button" [disabled]="disabled" (click)="connect()">Connect</button>
-          <button id="disconnect" class="btn btn-default" type="button" [disabled]="!disabled" (click)="disconnect()">Disconnect
-          </button>
-        </div>
-      </form>
+<div class="container p-3">
+  <div class="row d-flex">
+    <div class="col-4">
+      <button mat-raised-button (click)="connect()">Connect</button>
     </div>
-    <div class="col-md-6">
-      <form class="form-inline" name="test-form">
-        <div class="form-group">
-          <label for="name">What is your name?</label>
-          <input type="text" id="name" name="name" class="form-control" placeholder="Your name here..." [(ngModel)]="name">
-        </div>
-        <button id="send" class="btn btn-default" type="button" (click)="sendName()">Send</button>
-      </form>
+    <div class="col-4">
+      <button mat-raised-button (click)="disconnect()">Disconnect</button>
     </div>
   </div>
-  <div class="row">
-    <div class="col-md-12" *ngIf="showConversation">
-      <table id="conversation" class="table table-striped">
-        <thead>
-        <tr>
-          <th>Greetings</th>
-        </tr>
-        </thead>
-        <tbody *ngFor="let greeting of greetings" >
-        <tr><td> </td></tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
-
 </div>
