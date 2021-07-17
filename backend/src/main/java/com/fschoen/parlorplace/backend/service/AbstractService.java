@@ -6,19 +6,17 @@ import com.fschoen.parlorplace.backend.entity.transience.UserDetailsImplementati
 import com.fschoen.parlorplace.backend.enumeration.UserRole;
 import com.fschoen.parlorplace.backend.exception.AuthorizationException;
 import com.fschoen.parlorplace.backend.repository.UserRepository;
-import com.fschoen.parlorplace.backend.utility.Messages;
+import com.fschoen.parlorplace.backend.utility.messaging.Messages;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
 import java.util.Optional;
 
-@Component
 public abstract class AbstractService {
 
     private final UserRepository userRepository;
 
-    @Autowired
     public AbstractService(UserRepository userRepository) {
         this.userRepository = userRepository;
     }

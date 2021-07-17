@@ -1,5 +1,6 @@
-package com.fschoen.parlorplace.backend.utility;
+package com.fschoen.parlorplace.backend.utility.messaging;
 
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -8,17 +9,16 @@ import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+@Slf4j
 @Component
 public class LoggerInterceptor extends HandlerInterceptorAdapter {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(LoggerInterceptor.class);
 
     @Override
     public boolean preHandle(
             HttpServletRequest request,
             HttpServletResponse response,
             Object handler) {
-        LOGGER.info("Received {} at {}", request.getMethod(), request.getRequestURL());
+        log.info("Received {} at {}", request.getMethod(), request.getRequestURL());
         return true;
     }
 
@@ -28,7 +28,7 @@ public class LoggerInterceptor extends HandlerInterceptorAdapter {
             HttpServletResponse response,
             Object handler,
             Exception ex) {
-        LOGGER.info("Completed {} at {} with status {}", request.getMethod(), request.getRequestURL(), response.getStatus());
+        log.info("Completed {} at {} with status {}", request.getMethod(), request.getRequestURL(), response.getStatus());
     }
 
 }

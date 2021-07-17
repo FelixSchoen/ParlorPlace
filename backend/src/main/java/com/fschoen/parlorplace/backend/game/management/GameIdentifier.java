@@ -1,11 +1,9 @@
-package com.fschoen.parlorplace.backend.entity.transience;
+package com.fschoen.parlorplace.backend.game.management;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 
 import java.util.Random;
 
-@AllArgsConstructor
 @Data
 public class GameIdentifier {
 

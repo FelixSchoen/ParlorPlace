@@ -1,5 +1,6 @@
 package com.fschoen.parlorplace.backend.security;
 
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.messaging.Message;
@@ -12,13 +13,12 @@ import org.springframework.web.socket.messaging.StompSubProtocolErrorHandler;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.AccessDeniedException;
 
+@Slf4j
 public class WebSocketErrorHandler extends StompSubProtocolErrorHandler {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(WebSocketErrorHandler.class);
 
     @Override
     public Message<byte[]> handleClientMessageProcessingError(Message<byte[]> clientMessage, Throwable ex) {
-        LOGGER.error("Unauthorized error: {}", ex.getMessage());
+        log.error("Unauthorized error: {}", ex.getMessage());
 
         if (ex instanceof MessageDeliveryException) {
             return prepareErrorMessage("Error while delivering message");

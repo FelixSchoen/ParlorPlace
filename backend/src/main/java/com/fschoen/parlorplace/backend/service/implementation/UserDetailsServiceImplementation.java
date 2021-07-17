@@ -3,7 +3,7 @@ package com.fschoen.parlorplace.backend.service.implementation;
 import com.fschoen.parlorplace.backend.entity.persistance.User;
 import com.fschoen.parlorplace.backend.entity.transience.UserDetailsImplementation;
 import com.fschoen.parlorplace.backend.repository.UserRepository;
-import com.fschoen.parlorplace.backend.utility.Messages;
+import com.fschoen.parlorplace.backend.utility.messaging.Messages;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.*;
 import org.springframework.stereotype.Service;

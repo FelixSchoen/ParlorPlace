@@ -1,6 +1,7 @@
 package com.fschoen.parlorplace.backend.security;
 
 import com.fschoen.parlorplace.backend.service.implementation.UserDetailsServiceImplementation;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,14 +17,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+@Slf4j
 public class AuthTokenFilter extends OncePerRequestFilter {
 
     @Autowired
     private UserDetailsServiceImplementation userDetailsService;
     @Autowired
     private JwtUtils jwtUtils;
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(AuthTokenFilter.class);
 
     @Override
     protected void doFilterInternal(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, FilterChain filterChain) throws ServletException, IOException {
@@ -47,7 +47,7 @@ public class AuthTokenFilter extends OncePerRequestFilter {
                 return authentication;
             }
         } catch (Exception e) {
-            LOGGER.error("Cannot set user authentication: {}", e.getMessage());
+            log.error("Cannot set user authentication: {}", e.getMessage());
         }
         return null;
     }

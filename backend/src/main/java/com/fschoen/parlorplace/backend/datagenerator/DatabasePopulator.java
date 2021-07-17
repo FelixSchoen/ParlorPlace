@@ -4,6 +4,7 @@ import com.fschoen.parlorplace.backend.entity.persistance.Role;
 import com.fschoen.parlorplace.backend.entity.persistance.User;
 import com.fschoen.parlorplace.backend.enumeration.UserRole;
 import com.fschoen.parlorplace.backend.repository.UserRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,11 +18,10 @@ import java.util.Set;
 
 @Component
 @Profile({"test", "setup"})
+@Slf4j
 public class DatabasePopulator {
 
     private final UserRepository userRepository;
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(GeneratedData.class);
 
     @Autowired
     public DatabasePopulator(UserRepository userRepository) {
@@ -39,7 +39,7 @@ public class DatabasePopulator {
         Map<User, String> passwordCollection = new HashMap<>();
         generatedData.setPasswordCollection(passwordCollection);
 
-        LOGGER.info("Generating UserCollection");
+        log.info("Generating UserCollection");
         generatedData.setUserCollection(setupUserCollection(passwordCollection));
 
         return generatedData;

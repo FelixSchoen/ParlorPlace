@@ -8,13 +8,16 @@ import com.fschoen.parlorplace.backend.entity.persistance.User;
 import com.fschoen.parlorplace.backend.enumeration.UserRole;
 import com.fschoen.parlorplace.backend.unit.base.BaseUnitTest;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.HashSet;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
+@RunWith(SpringRunner.class)
 @SpringBootTest(classes = {UserMapperImpl.class, RoleMapperImpl.class})
 public class UserMapperTest extends BaseUnitTest {
 

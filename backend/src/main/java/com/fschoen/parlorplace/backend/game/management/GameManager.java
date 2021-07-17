@@ -1,4 +1,4 @@
-package com.fschoen.parlorplace.backend.entity.transience;
+package com.fschoen.parlorplace.backend.game.management;
 
 import lombok.Data;
 

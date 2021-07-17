@@ -1,8 +1,9 @@
 package com.fschoen.parlorplace.backend.security;
 
 import com.fschoen.parlorplace.backend.entity.transience.UserDetailsImplementation;
-import com.fschoen.parlorplace.backend.utility.Messages;
+import com.fschoen.parlorplace.backend.utility.messaging.Messages;
 import io.jsonwebtoken.security.Keys;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -13,6 +14,7 @@ import javax.crypto.SecretKey;
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
 
+@Slf4j
 @Component
 public class JwtUtils {
 
@@ -21,8 +23,6 @@ public class JwtUtils {
 
     @Value("${fschoen.parlorplace.jwtExpirationMs}")
     private int jwtExpirationMs;
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(JwtUtils.class);
 
     public String generateJwtToken(UserDetailsImplementation userPrincipal) {
         return generateTokenFromUsername(userPrincipal.getUsername());
@@ -43,15 +43,15 @@ public class JwtUtils {
             Jwts.parserBuilder().setSigningKey(getKey(jwtSecret)).build().parseClaimsJws(authToken);
             return true;
         } catch (SecurityException e) {
-            LOGGER.error(Messages.getExceptionExplanationMessage("authorization.signature.invalid"), e.getMessage());
+            log.error(Messages.getExceptionExplanationMessage("authorization.signature.invalid"), e.getMessage());
         } catch (MalformedJwtException e) {
-            LOGGER.error(Messages.getExceptionExplanationMessage("authorization.token.invalid"), e.getMessage());
+            log.error(Messages.getExceptionExplanationMessage("authorization.token.invalid"), e.getMessage());
         } catch (ExpiredJwtException e) {
-            LOGGER.error(Messages.getExceptionExplanationMessage("authorization.token.expired"), e.getMessage());
+            log.error(Messages.getExceptionExplanationMessage("authorization.token.expired"), e.getMessage());
         } catch (UnsupportedJwtException e) {
-            LOGGER.error(Messages.getExceptionExplanationMessage("authorization.token.unsupported"), e.getMessage());
+            log.error(Messages.getExceptionExplanationMessage("authorization.token.unsupported"), e.getMessage());
         } catch (IllegalArgumentException e) {
-            LOGGER.error(Messages.getExceptionExplanationMessage("authorization.token.empty"), e.getMessage());
+            log.error(Messages.getExceptionExplanationMessage("authorization.token.empty"), e.getMessage());
         }
 
         return false;

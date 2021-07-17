@@ -1,8 +1,6 @@
 package com.fschoen.parlorplace.backend.validation;
 
-import com.fschoen.parlorplace.backend.utility.Messages;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import com.fschoen.parlorplace.backend.utility.messaging.Messages;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;

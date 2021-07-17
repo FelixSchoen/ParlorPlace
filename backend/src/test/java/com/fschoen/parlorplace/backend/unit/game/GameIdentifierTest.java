@@ -1,6 +1,6 @@
 package com.fschoen.parlorplace.backend.unit.game;
 
-import com.fschoen.parlorplace.backend.entity.transience.GameIdentifier;
+import com.fschoen.parlorplace.backend.game.management.GameIdentifier;
 import com.fschoen.parlorplace.backend.unit.base.BaseUnitTest;
 import org.junit.jupiter.api.Test;
 

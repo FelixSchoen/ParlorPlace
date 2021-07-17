@@ -6,6 +6,7 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 import javax.persistence.*;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
 @Data
@@ -23,5 +24,9 @@ public abstract class Player {
     @EqualsAndHashCode.Exclude
     @NotNull
     private User user;
+
+    @NotNull
+    @Min(0)
+    private Integer position;
 
 }

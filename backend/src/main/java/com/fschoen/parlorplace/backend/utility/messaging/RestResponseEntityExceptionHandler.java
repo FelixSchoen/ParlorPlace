@@ -1,4 +1,4 @@
-package com.fschoen.parlorplace.backend.utility;
+package com.fschoen.parlorplace.backend.utility.messaging;
 
 import com.fschoen.parlorplace.backend.exception.AuthorizationException;
 import com.fschoen.parlorplace.backend.exception.DataConflictException;

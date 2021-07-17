@@ -1,4 +1,4 @@
-package com.fschoen.parlorplace.backend.utility;
+package com.fschoen.parlorplace.backend.utility.messaging;
 
 import java.util.ResourceBundle;
 

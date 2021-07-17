@@ -9,7 +9,6 @@ import javax.validation.constraints.Size;
 
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString
 @Builder(toBuilder = true)
 @Data
 public class UserSignupRequestDTO {
