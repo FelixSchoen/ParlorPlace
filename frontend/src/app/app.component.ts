@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import {Component, HostBinding} from '@angular/core';
+import {AuthService} from "./services/auth.service";
 
 @Component({
   selector: 'app-root',
@@ -6,5 +7,15 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  title = 'ParlorPlace';
+
+  public title = 'ParlorPlace';
+  public darkTheme = true;
+
+
+  constructor(authService: AuthService) {
+  }
+
+  public switchMode() {
+    this.darkTheme = !this.darkTheme;
+  }
 }

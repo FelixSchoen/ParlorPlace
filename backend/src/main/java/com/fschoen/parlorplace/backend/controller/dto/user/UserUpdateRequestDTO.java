@@ -1,18 +1,15 @@
 package com.fschoen.parlorplace.backend.controller.dto.user;
 
-import com.fschoen.parlorplace.backend.enums.UserRole;
+import com.fschoen.parlorplace.backend.enumeration.UserRole;
 import lombok.*;
 
 import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.util.List;
 import java.util.Set;
 
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString
 @Builder(toBuilder = true)
 @Data
 public class UserUpdateRequestDTO {

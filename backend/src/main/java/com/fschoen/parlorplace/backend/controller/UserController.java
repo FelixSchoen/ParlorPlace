@@ -25,7 +25,6 @@ public class UserController {
     private final UserMapper userMapper;
 
     private final UserValidator validator = new UserValidator();
-    ;
 
     @Autowired
     public UserController(UserService userService, UserMapper userMapper) {
@@ -87,16 +86,18 @@ public class UserController {
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     public ResponseEntity<UserDTO> getUser(@PathVariable("id") Long id) {
         UserDTO userDTO = userMapper.toDTO(userService.getUser(id));
+        userDTO.obfuscate();
 
-        return ResponseEntity.status(HttpStatus.OK).body(userDTO.obfuscate());
+        return ResponseEntity.status(HttpStatus.OK).body(userDTO);
     }
 
     @GetMapping("/individual/username/{username}")
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     public ResponseEntity<UserDTO> getUser(@PathVariable("username") String username) {
         UserDTO userDTO = userMapper.toDTO(userService.getUser(username));
+        userDTO.obfuscate();
 
-        return ResponseEntity.status(HttpStatus.OK).body(userDTO.obfuscate());
+        return ResponseEntity.status(HttpStatus.OK).body(userDTO);
     }
 
     @GetMapping("")
@@ -104,8 +105,7 @@ public class UserController {
     public ResponseEntity<Set<UserDTO>> getAllUsersFiltered(@RequestParam(value = "username", required = false) String username,
                                                             @RequestParam(value = "nickname", required = false) String nickname) {
         Set<UserDTO> userDTOs = userMapper.toDTO(userService.getAllUsersFiltered(username, nickname));
-
-        userDTOs = userDTOs.stream().map(UserDTO::obfuscate).collect(Collectors.toSet());
+        userDTOs.forEach(UserDTO::obfuscate);
 
         return ResponseEntity.status(HttpStatus.OK).body(userDTOs);
     }

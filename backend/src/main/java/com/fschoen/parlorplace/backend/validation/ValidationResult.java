@@ -1,7 +1,6 @@
 package com.fschoen.parlorplace.backend.validation;
 
-import com.fschoen.parlorplace.backend.exceptions.ValidationException;
-import com.fschoen.parlorplace.backend.utility.Messages;
+import com.fschoen.parlorplace.backend.exception.ValidationException;
 
 import java.util.List;
 

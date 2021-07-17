@@ -6,15 +6,16 @@ import com.fschoen.parlorplace.backend.entity.persistance.RefreshToken;
 import com.fschoen.parlorplace.backend.entity.persistance.Role;
 import com.fschoen.parlorplace.backend.entity.persistance.User;
 import com.fschoen.parlorplace.backend.entity.transience.UserDetailsImplementation;
-import com.fschoen.parlorplace.backend.enums.UserRole;
-import com.fschoen.parlorplace.backend.exceptions.AuthorizationException;
-import com.fschoen.parlorplace.backend.exceptions.DataConflictException;
+import com.fschoen.parlorplace.backend.enumeration.UserRole;
+import com.fschoen.parlorplace.backend.exception.AuthorizationException;
+import com.fschoen.parlorplace.backend.exception.DataConflictException;
 import com.fschoen.parlorplace.backend.repository.UserRepository;
 import com.fschoen.parlorplace.backend.security.JwtUtils;
 import com.fschoen.parlorplace.backend.service.AbstractService;
 import com.fschoen.parlorplace.backend.service.RefreshTokenService;
 import com.fschoen.parlorplace.backend.service.UserService;
-import com.fschoen.parlorplace.backend.utility.Messages;
+import com.fschoen.parlorplace.backend.utility.messaging.Messages;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +30,7 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 public class UserServiceImplementation extends AbstractService implements UserService {
 
@@ -38,8 +40,6 @@ public class UserServiceImplementation extends AbstractService implements UserSe
     private final AuthenticationManager authenticationManager;
     private final PasswordEncoder passwordEncoder;
     private final JwtUtils jwtUtils;
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(UserServiceImplementation.class);
 
     @Autowired
     public UserServiceImplementation(RefreshTokenService refreshTokenService, UserRepository userRepository, AuthenticationManager authenticationManager, PasswordEncoder passwordEncoder, JwtUtils jwtUtils) {
@@ -53,10 +53,10 @@ public class UserServiceImplementation extends AbstractService implements UserSe
 
     @Override
     public User signup(User user) throws DataConflictException {
-        LOGGER.info("Signing up User: {}", user.getUsername());
+        log.info("Signing up User: {}", user.getUsername());
 
         if (userRepository.findOneByUsername(user.getUsername()).isPresent()) {
-            throw new DataConflictException(Messages.getExceptionExplanationMessage("user.name.exists"));
+            throw new DataConflictException(Messages.getExceptionExplanationMessage("user.username.exists"));
         } else if (userRepository.findOneByEmail(user.getEmail()).isPresent()) {
             throw new DataConflictException(Messages.getExceptionExplanationMessage("user.email.exists"));
         }
@@ -73,7 +73,7 @@ public class UserServiceImplementation extends AbstractService implements UserSe
     }
 
     public UserSigninResponseDTO signin(User user) {
-        LOGGER.info("Signing in User: {}", user.getUsername());
+        log.info("Signing in User: {}", user.getUsername());
 
         Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword()));
         SecurityContextHolder.getContext().setAuthentication(authentication);
@@ -89,7 +89,7 @@ public class UserServiceImplementation extends AbstractService implements UserSe
 
     @Override
     public TokenRefreshResponseDTO refresh(String refreshToken) throws AuthorizationException {
-        LOGGER.info("Refreshing Token");
+        log.info("Refreshing Token");
 
         return refreshTokenService.findByRefreshToken(refreshToken)
                 .map(refreshTokenService::verifyExpiration)
@@ -104,13 +104,13 @@ public class UserServiceImplementation extends AbstractService implements UserSe
 
     @Override
     public User update(Long id, User user) throws AuthorizationException, DataConflictException {
-        LOGGER.info("Updating User: {}", user.getUsername());
+        log.info("Updating User: {}", user.getUsername());
 
         User principal = getPrincipal();
 
-        if ((!principal.getId().equals(id) && !hasAuthority(principal, UserRole.ROLE_ADMIN))
-                || (user.getRoles() != null && !user.getRoles().equals(principal.getRoles()) && !hasAuthority(principal, UserRole.ROLE_ADMIN))
-                || (user.getUsername() != null && !user.getUsername().equals("") && !user.getUsername().equals(principal.getUsername()) && !hasAuthority(principal, UserRole.ROLE_ADMIN)))
+        if ((!principal.getId().equals(id) && notAuthority(principal, UserRole.ROLE_ADMIN))
+                || (user.getRoles() != null && !user.getRoles().equals(principal.getRoles()) && notAuthority(principal, UserRole.ROLE_ADMIN))
+                || (user.getUsername() != null && !user.getUsername().equals("") && !user.getUsername().equals(principal.getUsername()) && notAuthority(principal, UserRole.ROLE_ADMIN)))
             throw new AuthorizationException(Messages.getExceptionExplanationMessage("authorization.unauthorized"));
 
         if (user.getId() != null && !user.getId().equals(id))
@@ -140,7 +140,7 @@ public class UserServiceImplementation extends AbstractService implements UserSe
 
     @Override
     public User getCurrentUser() throws DataConflictException {
-        LOGGER.info("Obtaining current user");
+        log.info("Obtaining current user");
 
         User principal = getPrincipal();
 
@@ -152,7 +152,7 @@ public class UserServiceImplementation extends AbstractService implements UserSe
 
     @Override
     public User getUser(Long id) throws DataConflictException {
-        LOGGER.info("Obtaining user with id: {}", id);
+        log.info("Obtaining user with id: {}", id);
 
         User existingUser = userRepository.findOneById(id).orElseThrow(() -> new DataConflictException(Messages.getExceptionExplanationMessage("user.id.exists.not")));
 
@@ -161,7 +161,7 @@ public class UserServiceImplementation extends AbstractService implements UserSe
 
     @Override
     public User getUser(String username) throws DataConflictException {
-        LOGGER.info("Obtaining user with username: {}", username);
+        log.info("Obtaining user with username: {}", username);
 
         User existingUser = userRepository.findOneByUsername(username).orElseThrow(() -> new DataConflictException(Messages.getExceptionExplanationMessage("user.username.exists.not")));
 
@@ -170,7 +170,7 @@ public class UserServiceImplementation extends AbstractService implements UserSe
 
     @Override
     public Set<User> getAllUsersFiltered(String username, String nickname) {
-        LOGGER.info("Obtaining all users with username: {}, nickname: {}", username, nickname);
+        log.info("Obtaining all users with username: {}, nickname: {}", username, nickname);
 
         Set<User> userSet = new HashSet<>();
 

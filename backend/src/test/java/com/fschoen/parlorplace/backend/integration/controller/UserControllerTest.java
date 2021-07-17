@@ -4,7 +4,7 @@ import com.fschoen.parlorplace.backend.controller.dto.authentication.TokenRefres
 import com.fschoen.parlorplace.backend.controller.dto.authentication.TokenRefreshResponseDTO;
 import com.fschoen.parlorplace.backend.controller.dto.user.*;
 import com.fschoen.parlorplace.backend.entity.persistance.User;
-import com.fschoen.parlorplace.backend.enums.UserRole;
+import com.fschoen.parlorplace.backend.enumeration.UserRole;
 import com.fschoen.parlorplace.backend.integration.base.BaseIntegrationTest;
 import io.restassured.response.Response;
 import org.junit.jupiter.api.Test;

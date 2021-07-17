@@ -1,6 +1,6 @@
 package com.fschoen.parlorplace.backend.entity.persistance;
 
-import com.fschoen.parlorplace.backend.enums.UserRole;
+import com.fschoen.parlorplace.backend.enumeration.UserRole;
 import lombok.*;
 
 import javax.persistence.*;
