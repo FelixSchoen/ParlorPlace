@@ -2,6 +2,7 @@ package com.fschoen.parlorplace.backend.utility.messaging;
 
 import com.fschoen.parlorplace.backend.exception.AuthorizationException;
 import com.fschoen.parlorplace.backend.exception.DataConflictException;
+import com.fschoen.parlorplace.backend.exception.GameException;
 import com.fschoen.parlorplace.backend.exception.ValidationException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -21,6 +22,11 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
 
     @ExceptionHandler(value = {DataConflictException.class})
     protected ResponseEntity<Object> handleInvalidDataException(DataConflictException exception, WebRequest webRequest) {
+        return errorMessage(exception, HttpStatus.CONFLICT, webRequest);
+    }
+
+    @ExceptionHandler(value = {GameException.class})
+    protected ResponseEntity<Object> handleInvalidDataException(GameException exception, WebRequest webRequest) {
         return errorMessage(exception, HttpStatus.CONFLICT, webRequest);
     }
 

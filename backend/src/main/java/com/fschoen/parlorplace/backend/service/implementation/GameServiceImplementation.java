@@ -1,36 +1,49 @@
 package com.fschoen.parlorplace.backend.service.implementation;
 
 import com.fschoen.parlorplace.backend.entity.persistance.User;
+import com.fschoen.parlorplace.backend.exception.GameException;
 import com.fschoen.parlorplace.backend.game.management.GameIdentifier;
 import com.fschoen.parlorplace.backend.game.management.GameInstance;
 import com.fschoen.parlorplace.backend.enumeration.GameType;
 import com.fschoen.parlorplace.backend.exception.DataConflictException;
-import com.fschoen.parlorplace.backend.game.werewolf.WerewolfInstance;
+import com.fschoen.parlorplace.backend.game.werewolf.management.WerewolfInstance;
+import com.fschoen.parlorplace.backend.repository.UserRepository;
+import com.fschoen.parlorplace.backend.service.AbstractService;
 import com.fschoen.parlorplace.backend.service.GameService;
 import com.fschoen.parlorplace.backend.utility.messaging.Messages;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
+@Slf4j
 @Service
 @Scope("prototype")
-public class GameServiceImplementation implements GameService {
+public class GameServiceImplementation extends AbstractService implements GameService {
 
     private final ApplicationContext context;
 
     private final List<GameInstance> activesGames;
 
     @Autowired
-    public GameServiceImplementation(ApplicationContext context) {
+    public GameServiceImplementation(UserRepository userRepository, ApplicationContext context) {
+        super(userRepository);
         this.context = context;
-        this.activesGames = new ArrayList<>();
+        this.activesGames = Collections.synchronizedList(new ArrayList<>());
     }
 
-    public GameIdentifier start(GameType gameType) {
+    public GameIdentifier start(GameType gameType) throws GameException {
+        log.info("Starting new Game: {}", gameType);
+
+        if (isInGame(getPrincipal()))
+            throw new GameException(Messages.getExceptionExplanationMessage("game.user.ingame"));
+
         GameInstance game;
 
         switch (gameType) {
@@ -42,8 +55,10 @@ public class GameServiceImplementation implements GameService {
         return game.getGameIdentifier();
     }
 
-    public void join(User user, GameIdentifier gameIdentifier) {
+    public void join(User user, GameIdentifier gameIdentifier) throws DataConflictException {
+        log.info("User {} joining Game: {}", user.getUsername(), gameIdentifier.getToken());
 
+        GameInstance gameInstance = getGameByGameIdentifier(gameIdentifier);
     }
 
     public GameIdentifier generateValidGameIdentifier() {
@@ -57,4 +72,18 @@ public class GameServiceImplementation implements GameService {
                 return gameIdentifier;
         }
     }
+
+    private GameInstance getGameByGameIdentifier(GameIdentifier gameIdentifier) throws DataConflictException {
+        Optional<GameInstance> gameInstanceOptional = this.activesGames.stream().filter(game -> game.getGameIdentifier().equals(gameIdentifier)).findFirst();
+
+        if (gameInstanceOptional.isPresent())
+            return gameInstanceOptional.get();
+
+        throw new DataConflictException(Messages.getExceptionExplanationMessage("game.exists.not"));
+    }
+
+    public Boolean isInGame(User user) {
+        return this.activesGames.stream().anyMatch(game -> game.getPlayers().stream().anyMatch(player -> player.getUser().equals(user)));
+    }
+
 }

@@ -12,7 +12,6 @@ import java.util.Set;
 
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString
 @Builder(toBuilder = true)
 @Data
 @Entity

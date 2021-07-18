@@ -55,11 +55,10 @@ public class UserServiceImplementation extends AbstractService implements UserSe
     public User signup(User user) throws DataConflictException {
         log.info("Signing up User: {}", user.getUsername());
 
-        if (userRepository.findOneByUsername(user.getUsername()).isPresent()) {
+        if (userRepository.findOneByUsername(user.getUsername()).isPresent())
             throw new DataConflictException(Messages.getExceptionExplanationMessage("user.username.exists"));
-        } else if (userRepository.findOneByEmail(user.getEmail()).isPresent()) {
+        else if (userRepository.findOneByEmail(user.getEmail()).isPresent())
             throw new DataConflictException(Messages.getExceptionExplanationMessage("user.email.exists"));
-        }
 
         String hashedPassword = passwordEncoder.encode(user.getPassword());
         Set<Role> roles = new HashSet<>() {{
