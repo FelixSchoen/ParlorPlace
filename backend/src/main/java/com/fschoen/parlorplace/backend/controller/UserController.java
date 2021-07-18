@@ -39,7 +39,7 @@ public class UserController {
 
         User proposedUser = userMapper.toUser(userSignupRequestDTO);
         User createdUser = userService.signup(proposedUser);
-        UserDTO userDTO = userMapper.toDTO(createdUser);
+        UserDTO userDTO = userMapper.toDTO(createdUser, false);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(userDTO);
     }
@@ -69,7 +69,7 @@ public class UserController {
 
         User proposedUser = userMapper.toUser(userUpdateRequestDTO);
         User updatedUser = userService.update(id, proposedUser);
-        UserDTO userDTO = userMapper.toDTO(updatedUser);
+        UserDTO userDTO = userMapper.toDTO(updatedUser, false);
 
         return ResponseEntity.status(HttpStatus.OK).body(userDTO);
     }
@@ -77,7 +77,7 @@ public class UserController {
     @GetMapping("/individual")
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     public ResponseEntity<UserDTO> getCurrentUser() {
-        UserDTO userDTO = userMapper.toDTO(userService.getCurrentUser());
+        UserDTO userDTO = userMapper.toDTO(userService.getCurrentUser(), false);
 
         return ResponseEntity.status(HttpStatus.OK).body(userDTO);
     }
@@ -85,8 +85,7 @@ public class UserController {
     @GetMapping("/individual/{id}")
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     public ResponseEntity<UserDTO> getUser(@PathVariable("id") Long id) {
-        UserDTO userDTO = userMapper.toDTO(userService.getUser(id));
-        userDTO.obfuscate();
+        UserDTO userDTO = userMapper.toDTO(userService.getUser(id), true);
 
         return ResponseEntity.status(HttpStatus.OK).body(userDTO);
     }
@@ -94,8 +93,7 @@ public class UserController {
     @GetMapping("/individual/username/{username}")
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     public ResponseEntity<UserDTO> getUser(@PathVariable("username") String username) {
-        UserDTO userDTO = userMapper.toDTO(userService.getUser(username));
-        userDTO.obfuscate();
+        UserDTO userDTO = userMapper.toDTO(userService.getUser(username), true);
 
         return ResponseEntity.status(HttpStatus.OK).body(userDTO);
     }
@@ -104,8 +102,7 @@ public class UserController {
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     public ResponseEntity<Set<UserDTO>> getAllUsersFiltered(@RequestParam(value = "username", required = false) String username,
                                                             @RequestParam(value = "nickname", required = false) String nickname) {
-        Set<UserDTO> userDTOs = userMapper.toDTO(userService.getAllUsersFiltered(username, nickname));
-        userDTOs.forEach(UserDTO::obfuscate);
+        Set<UserDTO> userDTOs = userMapper.toDTO(userService.getAllUsersFiltered(username, nickname), true);
 
         return ResponseEntity.status(HttpStatus.OK).body(userDTOs);
     }

@@ -14,7 +14,7 @@ import java.util.Set;
 @AllArgsConstructor
 @Builder(toBuilder = true)
 @Data
-public class UserDTO implements Obfuscateable {
+public class UserDTO {
 
     @NotNull
     private Long id;
@@ -34,10 +34,5 @@ public class UserDTO implements Obfuscateable {
 
     @NotNull
     private Set<UserRole> roles;
-
-    @Override
-    public void obfuscate() {
-        this.email = null;
-    }
 
 }
