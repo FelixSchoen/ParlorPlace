@@ -4,6 +4,7 @@ import com.fschoen.parlorplace.backend.entity.persistance.Player;
 import com.fschoen.parlorplace.backend.enumeration.VoteType;
 import lombok.Data;
 
+import java.util.Date;
 import java.util.Map;
 import java.util.Set;
 
@@ -31,14 +32,14 @@ public class VoteRequest<T> {
     private VoteType voteType;
 
     /**
-     * Duration of the vote in seconds.
+     * End time of the vote.
      */
-    private Integer duration;
+    private Date endTime;
 
     /**
      * Duration of the grace period in seconds which determines how long players are allowed to change their selections
      * after the final selection needed to end the vote has been cast. Does not extend over the overall duration given
-     * by {@link #duration}.
+     * by {@link #endTime}.
      */
     private Integer durationGracePeriod;
 

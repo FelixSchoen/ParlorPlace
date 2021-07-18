@@ -20,7 +20,6 @@ public interface UserMapper {
     })
     User toUser(UserSigninRequestDTO userSigninRequestDTO);
 
-    @Mapping(target = "roles", source = "roles")
     User toUser(UserUpdateRequestDTO userUpdateRequestDTO);
 
     @Mapping(target = "email", qualifiedByName = "obfuscateEmail")
