@@ -16,7 +16,7 @@ import java.util.Set;
 @AllArgsConstructor
 @Builder(toBuilder = true)
 @Data
-public class VoteRequestDTO<T> implements Obfuscateable {
+public class VoteRequestDTO<T> {
 
     @NotNull
     private Set<PlayerDTO> voters;
@@ -33,14 +33,14 @@ public class VoteRequestDTO<T> implements Obfuscateable {
     @NotNull
     private Date endTime;
 
-    @Override
-    public void obfuscate() {
-        this.voters.forEach(PlayerDTO::obfuscate);
-        this.subjects.forEach((key, value) -> {
-            key.obfuscate();
-            if (value instanceof Obfuscateable) ((Obfuscateable) value).obfuscate();
-        });
-        this.amountVotes.forEach((key, value) -> key.obfuscate());
-    }
+//    @Override
+//    public void obfuscate() {
+//        this.voters.forEach(PlayerDTO::obfuscate);
+//        this.subjects.forEach((key, value) -> {
+//            key.obfuscate();
+//            if (value instanceof Obfuscateable) ((Obfuscateable) value).obfuscate();
+//        });
+//        this.amountVotes.forEach((key, value) -> key.obfuscate());
+//    }
 
 }

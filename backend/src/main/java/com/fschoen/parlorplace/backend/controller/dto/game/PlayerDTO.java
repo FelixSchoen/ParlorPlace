@@ -12,7 +12,7 @@ import javax.validation.constraints.NotNull;
 @AllArgsConstructor
 @Builder(toBuilder = true)
 @Data
-public class PlayerDTO implements Obfuscateable {
+public class PlayerDTO {
 
     @NotNull
     private Long id;
@@ -23,10 +23,5 @@ public class PlayerDTO implements Obfuscateable {
     @NotNull
     @Min(0)
     private Integer position;
-
-    @Override
-    public void obfuscate() {
-        this.user.obfuscate();
-    }
 
 }

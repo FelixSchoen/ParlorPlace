@@ -21,6 +21,7 @@
 - **User editing functionality**
 - **Web Socket security settings and framework**
 - Dark mode (click the logo on the login page)
+- General game framework groundwork
 
 ## Changed
 
