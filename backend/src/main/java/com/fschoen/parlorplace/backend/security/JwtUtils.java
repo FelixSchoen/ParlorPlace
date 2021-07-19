@@ -4,8 +4,6 @@ import com.fschoen.parlorplace.backend.entity.transience.UserDetailsImplementati
 import com.fschoen.parlorplace.backend.utility.messaging.Messages;
 import io.jsonwebtoken.security.Keys;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import io.jsonwebtoken.*;
@@ -43,15 +41,15 @@ public class JwtUtils {
             Jwts.parserBuilder().setSigningKey(getKey(jwtSecret)).build().parseClaimsJws(authToken);
             return true;
         } catch (SecurityException e) {
-            log.error(Messages.getExceptionExplanationMessage("authorization.signature.invalid"), e.getMessage());
+            log.error(Messages.exception("authorization.signature.invalid"), e.getMessage());
         } catch (MalformedJwtException e) {
-            log.error(Messages.getExceptionExplanationMessage("authorization.token.invalid"), e.getMessage());
+            log.error(Messages.exception("authorization.token.invalid"), e.getMessage());
         } catch (ExpiredJwtException e) {
-            log.error(Messages.getExceptionExplanationMessage("authorization.token.expired"), e.getMessage());
+            log.error(Messages.exception("authorization.token.expired"), e.getMessage());
         } catch (UnsupportedJwtException e) {
-            log.error(Messages.getExceptionExplanationMessage("authorization.token.unsupported"), e.getMessage());
+            log.error(Messages.exception("authorization.token.unsupported"), e.getMessage());
         } catch (IllegalArgumentException e) {
-            log.error(Messages.getExceptionExplanationMessage("authorization.token.empty"), e.getMessage());
+            log.error(Messages.exception("authorization.token.empty"), e.getMessage());
         }
 
         return false;

@@ -7,7 +7,6 @@ import java.time.Instant;
 
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString
 @Builder(toBuilder = true)
 @Data
 @Entity

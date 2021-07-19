@@ -7,9 +7,7 @@ import com.fschoen.parlorplace.backend.enumeration.UserRole;
 import com.fschoen.parlorplace.backend.exception.AuthorizationException;
 import com.fschoen.parlorplace.backend.repository.UserRepository;
 import com.fschoen.parlorplace.backend.utility.messaging.Messages;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.stereotype.Component;
 
 import java.util.Optional;
 
@@ -24,7 +22,7 @@ public abstract class AbstractService {
     protected User getPrincipal() {
         UserDetailsImplementation userDetails = (UserDetailsImplementation) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Optional<User> potentialUser = userRepository.findOneById(userDetails.getId());
-        if (potentialUser.isEmpty()) throw new AuthorizationException(Messages.getExceptionExplanationMessage("authorization.principal.empty"));
+        if (potentialUser.isEmpty()) throw new AuthorizationException(Messages.exception("authorization.principal.empty"));
         return potentialUser.get();
     }
 

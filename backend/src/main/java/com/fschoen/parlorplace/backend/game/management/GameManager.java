@@ -2,9 +2,19 @@ package com.fschoen.parlorplace.backend.game.management;
 
 import lombok.Data;
 
-@Data
+import javax.annotation.PostConstruct;
+
 public abstract class GameManager {
 
-    private GameModerator gameModerator;
+    protected final GameModerator gameModerator;
+
+    public GameManager(GameModerator gameModerator) {
+        this.gameModerator = gameModerator;
+    }
+
+    @PostConstruct
+    public void init() {
+        this.gameModerator.setGameManager(this);
+    }
 
 }

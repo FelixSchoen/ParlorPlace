@@ -1,6 +1,9 @@
 package com.fschoen.parlorplace.backend.controller;
 
+import com.fschoen.parlorplace.backend.controller.dto.game.GameIdentifierDTO;
 import com.fschoen.parlorplace.backend.controller.dto.game.GameStartRequestDTO;
+import com.fschoen.parlorplace.backend.controller.mapper.GameIdentifierMapper;
+import com.fschoen.parlorplace.backend.service.GameService;
 import com.fschoen.parlorplace.backend.service.implementation.GameServiceImplementation;
 import com.fschoen.parlorplace.backend.validation.implementation.GameValidator;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,22 +18,25 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class GameEndpoint {
 
-    private final GameServiceImplementation gameServiceImplementation;
+    private final GameService gameService;
+
+    private final GameIdentifierMapper gameIdentifierMapper;
 
     private final GameValidator validator = new GameValidator();
 
     @Autowired
-    public GameEndpoint(GameServiceImplementation gameServiceImplementation) {
-        this.gameServiceImplementation = gameServiceImplementation;
+    public GameEndpoint(GameService gameService, GameIdentifierMapper gameIdentifierMapper) {
+        this.gameService = gameService;
+        this.gameIdentifierMapper = gameIdentifierMapper;
     }
 
     @PostMapping("/start")
-    public ResponseEntity<String> startGame(@RequestBody GameStartRequestDTO gameStartRequestDTO) {
+    public ResponseEntity<GameIdentifierDTO> startGame(@RequestBody GameStartRequestDTO gameStartRequestDTO) {
         validator.validate(gameStartRequestDTO).throwIfInvalid();
 
-        gameServiceImplementation.start(gameStartRequestDTO.getGameType());
+        GameIdentifierDTO gameIdentifierDTO = gameIdentifierMapper.toDTO(gameService.start(gameStartRequestDTO.getGameType()));
 
-        return ResponseEntity.status(HttpStatus.CREATED).body("OK");
+        return ResponseEntity.status(HttpStatus.CREATED).body(gameIdentifierDTO);
     }
 
 }
