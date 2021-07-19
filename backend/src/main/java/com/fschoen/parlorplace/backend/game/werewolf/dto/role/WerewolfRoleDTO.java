@@ -1,12 +1,10 @@
-package com.fschoen.parlorplace.backend.game.werewolf.entity.persistance;
+package com.fschoen.parlorplace.backend.game.werewolf.dto.role;
 
-import com.fschoen.parlorplace.backend.entity.persistance.GameRole;
+import com.fschoen.parlorplace.backend.controller.dto.game.GameRoleDTO;
 import com.fschoen.parlorplace.backend.game.werewolf.enumeration.WerewolfRoleType;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
 import javax.validation.constraints.NotNull;
 
 @NoArgsConstructor
@@ -15,10 +13,8 @@ import javax.validation.constraints.NotNull;
 @SuperBuilder(toBuilder = true)
 @ToString(callSuper = true)
 @Data
-@Entity
-public class WerewolfRole extends GameRole {
+public class WerewolfRoleDTO extends GameRoleDTO {
 
-    @Column(nullable = false)
     @NotNull
     private WerewolfRoleType werewolfRoleType;
 

@@ -27,9 +27,4 @@ public class WerewolfInstance extends GameInstance<WerewolfGame, WerewolfPlayer,
         super(WerewolfGame.class, WerewolfPlayer.class, gameService, gameRepository, werewolfManager, log);
     }
 
-    @Override
-    protected WerewolfGameRepository getGameRepository() {
-        return (WerewolfGameRepository) this.gameRepository;
-    }
-
 }

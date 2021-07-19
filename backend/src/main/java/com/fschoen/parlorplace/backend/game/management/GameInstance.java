@@ -4,18 +4,14 @@ import com.fschoen.parlorplace.backend.entity.persistance.Game;
 import com.fschoen.parlorplace.backend.entity.persistance.Player;
 import com.fschoen.parlorplace.backend.entity.persistance.User;
 import com.fschoen.parlorplace.backend.exception.DataConflictException;
-import com.fschoen.parlorplace.backend.game.werewolf.entity.persistance.WerewolfGame;
 import com.fschoen.parlorplace.backend.game.werewolf.entity.persistance.WerewolfPlayer;
 import com.fschoen.parlorplace.backend.game.werewolf.management.WerewolfManager;
 import com.fschoen.parlorplace.backend.repository.GameRepository;
-import com.fschoen.parlorplace.backend.repository.PlayerRepository;
 import com.fschoen.parlorplace.backend.service.GameService;
 import com.fschoen.parlorplace.backend.utility.messaging.Messages;
 import lombok.AccessLevel;
 import lombok.Getter;
-import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
-import org.springframework.data.jpa.repository.JpaRepository;
 
 import javax.annotation.PostConstruct;
 import java.lang.reflect.InvocationTargetException;

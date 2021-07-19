@@ -33,6 +33,8 @@ public abstract class Game {
     @Transient
     private GameIdentifier gameIdentifier;
 
+    public abstract GameType getGameType();
+
     public abstract <P extends Player> Set<P> getPlayers();
 
     public abstract <P extends Player> void setPlayers(Set<P> players);

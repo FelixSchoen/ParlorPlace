@@ -1,8 +1,8 @@
-package com.fschoen.parlorplace.backend.controller.dto.game;
+package com.fschoen.parlorplace.backend.game.werewolf.dto;
 
+import com.fschoen.parlorplace.backend.controller.dto.game.PlayerDTO;
 import com.fschoen.parlorplace.backend.controller.dto.user.UserDTO;
-import com.fschoen.parlorplace.backend.entity.persistance.User;
-import com.fschoen.parlorplace.backend.utility.obfuscation.Obfuscateable;
+import com.fschoen.parlorplace.backend.game.werewolf.dto.role.WerewolfRoleDTO;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
@@ -11,9 +11,11 @@ import javax.validation.constraints.NotNull;
 
 @NoArgsConstructor
 @AllArgsConstructor
+@EqualsAndHashCode(callSuper = true)
 @SuperBuilder(toBuilder = true)
+@ToString(callSuper = true)
 @Data
-public class PlayerDTO {
+public class WerewolfPlayerDTO extends PlayerDTO {
 
     @NotNull
     private Long id;
@@ -24,5 +26,7 @@ public class PlayerDTO {
     @NotNull
     @Min(0)
     private Integer position;
+
+    private WerewolfRoleDTO werewolfRoleDTO;
 
 }
