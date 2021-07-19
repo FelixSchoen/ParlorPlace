@@ -27,7 +27,7 @@ public interface PlayerMapper {
 
     Set<WerewolfPlayerDTO> toDTO(Set<WerewolfPlayer> players, @Context Boolean obfuscate);
 
-    Map<PlayerDTO, Set<Object>> toDTO(Map<Player, Set<Object>> playerSetMap, @Context Boolean obfuscate);
+    Map<WerewolfPlayerDTO, Set<Object>> toDTO(Map<WerewolfPlayer, Set<Object>> playerSetMap, @Context Boolean obfuscate);
 
     default PlayerDTO toDTO(Player player, Boolean obfuscate) {
         if (player instanceof WerewolfPlayer) {

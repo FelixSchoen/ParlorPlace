@@ -19,8 +19,8 @@ public class WerewolfPlayer extends Player {
 
     @ManyToOne
     @JoinColumn
-    @ToString.Exclude
     @EqualsAndHashCode.Exclude
+    @ToString.Exclude
     @NotNull
     private WerewolfGame game;
 

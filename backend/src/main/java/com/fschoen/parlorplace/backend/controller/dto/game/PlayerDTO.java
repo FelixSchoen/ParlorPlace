@@ -14,7 +14,7 @@ import javax.validation.constraints.NotNull;
 @AllArgsConstructor
 @SuperBuilder(toBuilder = true)
 @Data
-public class PlayerDTO {
+public abstract class PlayerDTO {
 
     @NotNull
     private Long id;

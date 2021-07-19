@@ -2,6 +2,7 @@ package com.fschoen.parlorplace.backend.game.management;
 
 import com.fschoen.parlorplace.backend.entity.persistance.Game;
 import com.fschoen.parlorplace.backend.entity.persistance.Player;
+import com.fschoen.parlorplace.backend.entity.persistance.RuleSet;
 import com.fschoen.parlorplace.backend.entity.persistance.User;
 import com.fschoen.parlorplace.backend.enumeration.PlayerState;
 import com.fschoen.parlorplace.backend.exception.DataConflictException;
@@ -21,7 +22,7 @@ import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 
-public abstract class GameInstance<G extends Game, P extends Player, GR extends GameRepository<G>> {
+public abstract class GameInstance<G extends Game, P extends Player, GR extends GameRepository<G>, RS extends RuleSet> {
 
     protected final GameService gameService;
     protected final GR gameRepository;
@@ -37,10 +38,12 @@ public abstract class GameInstance<G extends Game, P extends Player, GR extends 
     protected Class<G> gameClass;
     @Getter(value = AccessLevel.PUBLIC)
     protected Class<P> playerClass;
+    @Getter(value = AccessLevel.PUBLIC)
+    protected Class<RS> ruleSetClass;
 
     protected final Logger log;
 
-    public GameInstance(Class<G> gameClass, Class<P> playerClass, GameService gameService, GR gameRepository, WerewolfManager werewolfManager, Logger log) {
+    public GameInstance(Class<G> gameClass, Class<P> playerClass, Class<RS> ruleSetClass, GameService gameService, GR gameRepository, WerewolfManager werewolfManager, Logger log) {
         this.gameService = gameService;
         this.gameRepository = gameRepository;
 
@@ -49,6 +52,7 @@ public abstract class GameInstance<G extends Game, P extends Player, GR extends 
 
         this.gameClass = gameClass;
         this.playerClass = playerClass;
+        this.ruleSetClass = ruleSetClass;
 
         this.log = log;
     }
@@ -57,7 +61,9 @@ public abstract class GameInstance<G extends Game, P extends Player, GR extends 
     public void init() {
         try {
             G game = this.gameClass.getDeclaredConstructor().newInstance();
-            game.setPlayers(new HashSet<WerewolfPlayer>());
+            game.setPlayers(new HashSet<P>());
+            RS ruleSet = this.ruleSetClass.getDeclaredConstructor().newInstance();
+            game.setRuleSet(ruleSet);
             game.setStartedAt(new Date());
             game.setGameIdentifier(this.gameIdentifier);
             game = getGameRepository().save(game);

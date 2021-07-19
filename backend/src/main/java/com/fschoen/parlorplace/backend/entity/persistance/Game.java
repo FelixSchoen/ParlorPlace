@@ -39,4 +39,8 @@ public abstract class Game {
 
     public abstract <P extends Player> void setPlayers(Set<P> players);
 
+    public abstract <R extends RuleSet> R getRuleSet();
+
+    public abstract <R extends RuleSet> void setRuleSet(R ruleSet);
+
 }

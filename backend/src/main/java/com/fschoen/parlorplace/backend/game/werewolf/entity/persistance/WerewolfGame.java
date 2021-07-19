@@ -2,15 +2,13 @@ package com.fschoen.parlorplace.backend.game.werewolf.entity.persistance;
 
 import com.fschoen.parlorplace.backend.entity.persistance.Game;
 import com.fschoen.parlorplace.backend.entity.persistance.Player;
+import com.fschoen.parlorplace.backend.entity.persistance.RuleSet;
 import com.fschoen.parlorplace.backend.enumeration.GameType;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.Cascade;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.Set;
 
@@ -32,10 +30,20 @@ public class WerewolfGame extends Game {
     @NotNull
     private Set<WerewolfPlayer> players;
 
+    @OneToOne
+    @JoinColumn(referencedColumnName = "id")
+    @Cascade({org.hibernate.annotations.CascadeType.ALL})
+    @EqualsAndHashCode.Exclude
+    @NotNull
+    private WerewolfRuleSet ruleSet;
 
     @Override
     public <P extends Player> void setPlayers(Set<P> players) {
         this.players = (Set<WerewolfPlayer>) players;
     }
 
+    @Override
+    public <R extends RuleSet> void setRuleSet(R ruleSet) {
+        this.ruleSet = (WerewolfRuleSet) ruleSet;
+    }
 }

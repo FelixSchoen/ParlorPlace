@@ -18,16 +18,6 @@ import javax.validation.constraints.NotNull;
 @Data
 public class WerewolfPlayerDTO extends PlayerDTO {
 
-    @NotNull
-    private Long id;
-
-    @NotNull
-    private UserDTO user;
-
-    @NotNull
-    @Min(0)
-    private Integer position;
-
     private WerewolfRoleDTO werewolfRoleDTO;
 
 }

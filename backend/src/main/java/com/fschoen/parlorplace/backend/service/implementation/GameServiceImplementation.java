@@ -2,6 +2,7 @@ package com.fschoen.parlorplace.backend.service.implementation;
 
 import com.fschoen.parlorplace.backend.entity.persistance.Game;
 import com.fschoen.parlorplace.backend.entity.persistance.Player;
+import com.fschoen.parlorplace.backend.entity.persistance.RuleSet;
 import com.fschoen.parlorplace.backend.entity.persistance.User;
 import com.fschoen.parlorplace.backend.exception.GameException;
 import com.fschoen.parlorplace.backend.game.management.GameIdentifier;
@@ -32,7 +33,7 @@ public class GameServiceImplementation extends AbstractService implements GameSe
 
     private final ApplicationContext context;
 
-    private final List<GameInstance<? extends Game, ? extends Player, ? extends GameRepository<? extends Game>>> activesGames;
+    private final List<GameInstance<?, ?, ?, ?>> activesGames;
 
     @Autowired
     public GameServiceImplementation(UserRepository userRepository, ApplicationContext context) {
@@ -49,7 +50,7 @@ public class GameServiceImplementation extends AbstractService implements GameSe
         if (isInGame(principal))
             throw new GameException(Messages.exception("game.user.ingame"));
 
-        GameInstance<? extends Game, ? extends Player, ? extends GameRepository<? extends Game>> gameInstance;
+        GameInstance<?, ?, ?, ?> gameInstance;
 
         switch (gameType) {
             case WEREWOLF -> gameInstance = context.getBean(WerewolfInstance.class);
@@ -65,7 +66,7 @@ public class GameServiceImplementation extends AbstractService implements GameSe
     public void join(User user, GameIdentifier gameIdentifier) throws DataConflictException {
         log.info("User {} joining Game: {}", user.getUsername(), gameIdentifier.getToken());
 
-        GameInstance<? extends Game, ? extends Player, ? extends GameRepository<? extends Game>> gameInstance = getGameByGameIdentifier(gameIdentifier);
+        GameInstance<?, ?, ?, ?> gameInstance = getGameByGameIdentifier(gameIdentifier);
         Game game = gameInstance.join(user);
     }
 
@@ -81,8 +82,8 @@ public class GameServiceImplementation extends AbstractService implements GameSe
         }
     }
 
-    private GameInstance<? extends Game, ? extends Player, ? extends GameRepository<? extends Game>> getGameByGameIdentifier(GameIdentifier gameIdentifier) throws DataConflictException {
-        Optional<GameInstance<? extends Game, ? extends Player, ? extends GameRepository<? extends Game>>> gameInstanceOptional = this.activesGames.stream().filter(game -> game.getGameIdentifier().equals(gameIdentifier)).findFirst();
+    private GameInstance<?, ?, ?, ?> getGameByGameIdentifier(GameIdentifier gameIdentifier) throws DataConflictException {
+        Optional<GameInstance<?, ?, ?, ?>> gameInstanceOptional = this.activesGames.stream().filter(game -> game.getGameIdentifier().equals(gameIdentifier)).findFirst();
 
         if (gameInstanceOptional.isPresent())
             return gameInstanceOptional.get();

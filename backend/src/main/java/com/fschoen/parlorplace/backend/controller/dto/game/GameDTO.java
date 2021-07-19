@@ -17,7 +17,7 @@ import java.util.Set;
 @AllArgsConstructor
 @SuperBuilder(toBuilder = true)
 @Data
-public class GameDTO {
+public abstract class GameDTO {
 
     @NotNull
     private Long id;
