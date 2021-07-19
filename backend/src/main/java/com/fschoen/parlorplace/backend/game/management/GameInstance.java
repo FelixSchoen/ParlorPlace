@@ -3,6 +3,7 @@ package com.fschoen.parlorplace.backend.game.management;
 import com.fschoen.parlorplace.backend.entity.persistance.Game;
 import com.fschoen.parlorplace.backend.entity.persistance.Player;
 import com.fschoen.parlorplace.backend.entity.persistance.User;
+import com.fschoen.parlorplace.backend.enumeration.PlayerState;
 import com.fschoen.parlorplace.backend.exception.DataConflictException;
 import com.fschoen.parlorplace.backend.game.werewolf.entity.persistance.WerewolfPlayer;
 import com.fschoen.parlorplace.backend.game.werewolf.management.WerewolfManager;
@@ -65,7 +66,7 @@ public abstract class GameInstance<G extends Game, P extends Player, GR extends 
 
             log.info("Created new {} instance: {}", this.gameClass, this.gameIdentifier.getToken());
         } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
-            throw new DataConflictException(Messages.getExceptionExplanationMessage("game.type"));
+            throw new DataConflictException(Messages.exception("game.type"));
         }
     }
 
@@ -75,13 +76,14 @@ public abstract class GameInstance<G extends Game, P extends Player, GR extends 
         try {
             player = this.playerClass.getDeclaredConstructor().newInstance();
             player.setUser(user);
+            player.setPlayerState(PlayerState.ALIVE);
             player.setGame(game);
             player.setPosition(getPlayers().size());
 
             game.getPlayers().add(player);
             game = getGameRepository().save(game);
         } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
-            throw new DataConflictException(Messages.getExceptionExplanationMessage("game.type"));
+            throw new DataConflictException(Messages.exception("game.type"));
         }
         return game;
     }
@@ -94,7 +96,7 @@ public abstract class GameInstance<G extends Game, P extends Player, GR extends 
         Optional<G> game = this.gameRepository.findOneById(this.gameId);
 
         if (game.isEmpty())
-            throw new DataConflictException(Messages.getExceptionExplanationMessage("game.exists.not"));
+            throw new DataConflictException(Messages.exception("game.exists.not"));
 
         G foundGame = game.get();
         foundGame.setGameIdentifier(this.gameIdentifier);

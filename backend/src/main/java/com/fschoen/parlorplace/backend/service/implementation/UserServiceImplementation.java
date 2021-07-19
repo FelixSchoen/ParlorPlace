@@ -16,8 +16,6 @@ import com.fschoen.parlorplace.backend.service.RefreshTokenService;
 import com.fschoen.parlorplace.backend.service.UserService;
 import com.fschoen.parlorplace.backend.utility.messaging.Messages;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -56,9 +54,9 @@ public class UserServiceImplementation extends AbstractService implements UserSe
         log.info("Signing up User: {}", user.getUsername());
 
         if (userRepository.findOneByUsername(user.getUsername()).isPresent())
-            throw new DataConflictException(Messages.getExceptionExplanationMessage("user.username.exists"));
+            throw new DataConflictException(Messages.exception("user.username.exists"));
         else if (userRepository.findOneByEmail(user.getEmail()).isPresent())
-            throw new DataConflictException(Messages.getExceptionExplanationMessage("user.email.exists"));
+            throw new DataConflictException(Messages.exception("user.email.exists"));
 
         String hashedPassword = passwordEncoder.encode(user.getPassword());
         Set<Role> roles = new HashSet<>() {{
@@ -98,7 +96,7 @@ public class UserServiceImplementation extends AbstractService implements UserSe
                     RefreshToken newRefreshToken = refreshTokenService.createRefreshToken(user.getId());
                     return TokenRefreshResponseDTO.builder().accessToken(accessToken).refreshToken(newRefreshToken.getRefreshToken()).build();
                 })
-                .orElseThrow(() -> new AuthorizationException(Messages.getExceptionExplanationMessage("authorization.token.refresh.exists.not")));
+                .orElseThrow(() -> new AuthorizationException(Messages.exception("authorization.token.refresh.exists.not")));
     }
 
     @Override
@@ -110,12 +108,12 @@ public class UserServiceImplementation extends AbstractService implements UserSe
         if ((!principal.getId().equals(id) && notAuthority(principal, UserRole.ROLE_ADMIN))
                 || (user.getRoles() != null && !user.getRoles().equals(principal.getRoles()) && notAuthority(principal, UserRole.ROLE_ADMIN))
                 || (user.getUsername() != null && !user.getUsername().equals("") && !user.getUsername().equals(principal.getUsername()) && notAuthority(principal, UserRole.ROLE_ADMIN)))
-            throw new AuthorizationException(Messages.getExceptionExplanationMessage("authorization.unauthorized"));
+            throw new AuthorizationException(Messages.exception("authorization.unauthorized"));
 
         if (user.getId() != null && !user.getId().equals(id))
-            throw new DataConflictException(Messages.getExceptionExplanationMessage("data.mismatched.id"));
+            throw new DataConflictException(Messages.exception("data.mismatched.id"));
 
-        User existingUser = userRepository.findOneById(id).orElseThrow(() -> new DataConflictException(Messages.getExceptionExplanationMessage("user.id.exists.not")));
+        User existingUser = userRepository.findOneById(id).orElseThrow(() -> new DataConflictException(Messages.exception("user.id.exists.not")));
         User.UserBuilder persistUserBuilder = existingUser.toBuilder();
 
 //        if (user.getUsername() != null)
@@ -144,7 +142,7 @@ public class UserServiceImplementation extends AbstractService implements UserSe
         User principal = getPrincipal();
 
         if (principal == null)
-            throw new DataConflictException(Messages.getExceptionExplanationMessage("user.exists.not"));
+            throw new DataConflictException(Messages.exception("user.exists.not"));
 
         return principal;
     }
@@ -153,7 +151,7 @@ public class UserServiceImplementation extends AbstractService implements UserSe
     public User getUser(Long id) throws DataConflictException {
         log.info("Obtaining user with id: {}", id);
 
-        User existingUser = userRepository.findOneById(id).orElseThrow(() -> new DataConflictException(Messages.getExceptionExplanationMessage("user.id.exists.not")));
+        User existingUser = userRepository.findOneById(id).orElseThrow(() -> new DataConflictException(Messages.exception("user.id.exists.not")));
 
         return existingUser;
     }
@@ -162,7 +160,7 @@ public class UserServiceImplementation extends AbstractService implements UserSe
     public User getUser(String username) throws DataConflictException {
         log.info("Obtaining user with username: {}", username);
 
-        User existingUser = userRepository.findOneByUsername(username).orElseThrow(() -> new DataConflictException(Messages.getExceptionExplanationMessage("user.username.exists.not")));
+        User existingUser = userRepository.findOneByUsername(username).orElseThrow(() -> new DataConflictException(Messages.exception("user.username.exists.not")));
 
         return existingUser;
     }

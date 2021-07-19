@@ -2,8 +2,6 @@ package com.fschoen.parlorplace.backend.utility.concurrency;
 
 import com.fschoen.parlorplace.backend.utility.messaging.Messages;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.concurrent.Semaphore;
 
@@ -30,7 +28,7 @@ public class Promise<V> {
         try {
             this.semaphore.acquire();
         } catch (InterruptedException e) {
-            log.error(Messages.getExceptionExplanationMessage("multithreading.promise.interrupted"));
+            log.error(Messages.exception("multithreading.promise.interrupted"));
         }
         return this.value;
     }

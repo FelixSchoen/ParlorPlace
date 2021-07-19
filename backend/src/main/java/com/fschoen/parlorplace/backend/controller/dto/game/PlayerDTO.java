@@ -2,6 +2,7 @@ package com.fschoen.parlorplace.backend.controller.dto.game;
 
 import com.fschoen.parlorplace.backend.controller.dto.user.UserDTO;
 import com.fschoen.parlorplace.backend.entity.persistance.User;
+import com.fschoen.parlorplace.backend.enumeration.PlayerState;
 import com.fschoen.parlorplace.backend.utility.obfuscation.Obfuscateable;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
@@ -20,6 +21,9 @@ public class PlayerDTO {
 
     @NotNull
     private UserDTO user;
+
+    @NotNull
+    private PlayerState playerState;
 
     @NotNull
     @Min(0)

@@ -1,6 +1,7 @@
 package com.fschoen.parlorplace.backend.entity.persistance;
 
 import com.fschoen.parlorplace.backend.entity.persistance.User;
+import com.fschoen.parlorplace.backend.enumeration.PlayerState;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.Cascade;
@@ -29,6 +30,10 @@ public abstract class Player {
     @EqualsAndHashCode.Exclude
     @NotNull
     protected User user;
+
+    @Column(nullable = false)
+    @NotNull
+    private PlayerState playerState;
 
     @Column(nullable = false)
     @NotNull

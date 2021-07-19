@@ -8,7 +8,6 @@ import com.fschoen.parlorplace.backend.game.management.GameIdentifier;
 import com.fschoen.parlorplace.backend.game.management.GameInstance;
 import com.fschoen.parlorplace.backend.enumeration.GameType;
 import com.fschoen.parlorplace.backend.exception.DataConflictException;
-import com.fschoen.parlorplace.backend.game.werewolf.entity.persistance.WerewolfPlayer;
 import com.fschoen.parlorplace.backend.game.werewolf.management.WerewolfInstance;
 import com.fschoen.parlorplace.backend.repository.GameRepository;
 import com.fschoen.parlorplace.backend.repository.UserRepository;
@@ -48,13 +47,13 @@ public class GameServiceImplementation extends AbstractService implements GameSe
         User principal = getPrincipal();
 
         if (isInGame(principal))
-            throw new GameException(Messages.getExceptionExplanationMessage("game.user.ingame"));
+            throw new GameException(Messages.exception("game.user.ingame"));
 
         GameInstance<? extends Game, ? extends Player, ? extends GameRepository<? extends Game>> gameInstance;
 
         switch (gameType) {
             case WEREWOLF -> gameInstance = context.getBean(WerewolfInstance.class);
-            default -> throw new DataConflictException(Messages.getExceptionExplanationMessage("game.type.unknown"));
+            default -> throw new DataConflictException(Messages.exception("game.type.unknown"));
         }
 
         this.activesGames.add(gameInstance);
@@ -88,7 +87,7 @@ public class GameServiceImplementation extends AbstractService implements GameSe
         if (gameInstanceOptional.isPresent())
             return gameInstanceOptional.get();
 
-        throw new DataConflictException(Messages.getExceptionExplanationMessage("game.exists.not"));
+        throw new DataConflictException(Messages.exception("game.exists.not"));
     }
 
     public Boolean isInGame(User user) {

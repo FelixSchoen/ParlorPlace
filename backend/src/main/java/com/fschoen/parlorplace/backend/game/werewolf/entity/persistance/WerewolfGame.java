@@ -37,4 +37,5 @@ public class WerewolfGame extends Game {
     public <P extends Player> void setPlayers(Set<P> players) {
         this.players = (Set<WerewolfPlayer>) players;
     }
+
 }

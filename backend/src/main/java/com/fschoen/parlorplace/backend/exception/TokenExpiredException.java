@@ -9,7 +9,7 @@ public class TokenExpiredException extends RuntimeException {
     }
 
     public TokenExpiredException(String token, String message) {
-        super(String.format(Messages.getExceptionExplanationMessage("authorization.token.refresh.failed"), token, message));
+        super(String.format(Messages.exception("authorization.token.refresh.failed"), token, message));
     }
 
     public TokenExpiredException(String message, Throwable cause) {

@@ -2,6 +2,7 @@ package com.fschoen.parlorplace.backend.game.werewolf.dto;
 
 import com.fschoen.parlorplace.backend.controller.dto.game.PlayerDTO;
 import com.fschoen.parlorplace.backend.controller.dto.user.UserDTO;
+import com.fschoen.parlorplace.backend.enumeration.PlayerState;
 import com.fschoen.parlorplace.backend.game.werewolf.dto.role.WerewolfRoleDTO;
 import lombok.*;
 import lombok.experimental.SuperBuilder;

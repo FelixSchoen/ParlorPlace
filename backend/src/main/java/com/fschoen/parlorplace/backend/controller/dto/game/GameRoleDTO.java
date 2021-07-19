@@ -12,7 +12,7 @@ import javax.validation.constraints.NotNull;
 @AllArgsConstructor
 @SuperBuilder(toBuilder = true)
 @Data
-public class GameRoleDTO {
+public abstract class GameRoleDTO {
 
     @NotNull
     private Long id;
