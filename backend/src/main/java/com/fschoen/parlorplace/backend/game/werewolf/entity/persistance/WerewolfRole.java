@@ -2,10 +2,7 @@ package com.fschoen.parlorplace.backend.game.werewolf.entity.persistance;
 
 import com.fschoen.parlorplace.backend.entity.persistance.GameRole;
 import com.fschoen.parlorplace.backend.game.werewolf.enumeration.RoleType;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
 
 import javax.persistence.Column;
@@ -16,6 +13,7 @@ import javax.validation.constraints.NotNull;
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 @SuperBuilder(toBuilder = true)
+@ToString(callSuper = true)
 @Data
 @Entity
 public class WerewolfRole extends GameRole {

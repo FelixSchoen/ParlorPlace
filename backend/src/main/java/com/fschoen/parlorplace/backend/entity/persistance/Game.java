@@ -16,7 +16,7 @@ import java.util.Set;
 @SuperBuilder(toBuilder = true)
 @Data
 @Entity
-@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public abstract class Game {
 
     @Id

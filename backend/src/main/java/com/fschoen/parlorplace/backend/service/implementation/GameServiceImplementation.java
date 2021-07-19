@@ -1,5 +1,6 @@
 package com.fschoen.parlorplace.backend.service.implementation;
 
+import com.fschoen.parlorplace.backend.entity.persistance.Game;
 import com.fschoen.parlorplace.backend.entity.persistance.User;
 import com.fschoen.parlorplace.backend.exception.GameException;
 import com.fschoen.parlorplace.backend.game.management.GameIdentifier;
@@ -41,7 +42,9 @@ public class GameServiceImplementation extends AbstractService implements GameSe
     public GameIdentifier start(GameType gameType) throws GameException {
         log.info("Starting new Game: {}", gameType);
 
-        if (isInGame(getPrincipal()))
+        User principal = getPrincipal();
+
+        if (isInGame(principal))
             throw new GameException(Messages.getExceptionExplanationMessage("game.user.ingame"));
 
         GameInstance game;
@@ -52,6 +55,8 @@ public class GameServiceImplementation extends AbstractService implements GameSe
         }
 
         this.activesGames.add(game);
+        join(principal, game.getGameIdentifier());
+
         return game.getGameIdentifier();
     }
 
@@ -59,6 +64,7 @@ public class GameServiceImplementation extends AbstractService implements GameSe
         log.info("User {} joining Game: {}", user.getUsername(), gameIdentifier.getToken());
 
         GameInstance gameInstance = getGameByGameIdentifier(gameIdentifier);
+        Game game = gameInstance.join(user);
     }
 
     public GameIdentifier generateValidGameIdentifier() {

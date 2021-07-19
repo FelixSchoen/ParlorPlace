@@ -3,6 +3,7 @@ package com.fschoen.parlorplace.backend.entity.persistance;
 import com.fschoen.parlorplace.backend.entity.persistance.User;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
+import org.hibernate.annotations.Cascade;
 
 import javax.persistence.*;
 import javax.validation.constraints.Min;
@@ -13,7 +14,7 @@ import javax.validation.constraints.NotNull;
 @SuperBuilder(toBuilder = true)
 @Data
 @Entity
-@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public abstract class Player {
 
     @Id
