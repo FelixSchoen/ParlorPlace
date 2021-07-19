@@ -25,7 +25,7 @@ public interface PlayerMapper {
     @Mapping(target = "werewolfRoleDTO", source = "werewolfRole", qualifiedByName = "obfuscateWerewolfRole")
     WerewolfPlayerDTO toDTO(WerewolfPlayer player, @Context Boolean obfuscate);
 
-    Set<PlayerDTO> toDTO(Set<Player> players, @Context Boolean obfuscate);
+    Set<WerewolfPlayerDTO> toDTO(Set<WerewolfPlayer> players, @Context Boolean obfuscate);
 
     Map<PlayerDTO, Set<Object>> toDTO(Map<Player, Set<Object>> playerSetMap, @Context Boolean obfuscate);
 

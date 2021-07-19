@@ -21,6 +21,6 @@ public class WerewolfGameDTO extends GameDTO {
     private GameType gameType = GameType.WEREWOLF;
 
     @NotNull
-    private Set<PlayerDTO> players;
+    private Set<WerewolfPlayerDTO> players;
 
 }

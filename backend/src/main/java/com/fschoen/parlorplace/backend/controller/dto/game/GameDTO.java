@@ -26,9 +26,6 @@ public class GameDTO {
     private GameType gameType;
 
     @NotNull
-    private Set<PlayerDTO> players;
-
-    @NotNull
     @DateTimeFormat
     private Date startedAt;
 
