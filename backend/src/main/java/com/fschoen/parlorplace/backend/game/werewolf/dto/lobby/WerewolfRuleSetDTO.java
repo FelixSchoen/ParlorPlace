@@ -1,4 +1,4 @@
-package com.fschoen.parlorplace.backend.game.werewolf.dto;
+package com.fschoen.parlorplace.backend.game.werewolf.dto.lobby;
 
 import com.fschoen.parlorplace.backend.controller.dto.game.RuleSetDTO;
 import lombok.*;

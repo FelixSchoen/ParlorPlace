@@ -1,7 +1,6 @@
-package com.fschoen.parlorplace.backend.game.werewolf.dto;
+package com.fschoen.parlorplace.backend.game.werewolf.dto.game;
 
 import com.fschoen.parlorplace.backend.controller.dto.game.GameDTO;
-import com.fschoen.parlorplace.backend.controller.dto.game.PlayerDTO;
 import com.fschoen.parlorplace.backend.enumeration.GameType;
 import lombok.*;
 import lombok.experimental.SuperBuilder;

@@ -1,7 +1,7 @@
 package com.fschoen.parlorplace.backend.unit.mapper;
 
 import com.fschoen.parlorplace.backend.controller.mapper.*;
-import com.fschoen.parlorplace.backend.game.werewolf.dto.WerewolfRuleSetDTO;
+import com.fschoen.parlorplace.backend.game.werewolf.dto.lobby.WerewolfRuleSetDTO;
 import com.fschoen.parlorplace.backend.game.werewolf.entity.persistance.WerewolfRuleSet;
 import org.junit.Test;
 import org.junit.runner.RunWith;

@@ -6,7 +6,7 @@ import com.fschoen.parlorplace.backend.entity.persistance.RuleSet;
 import com.fschoen.parlorplace.backend.entity.persistance.User;
 import com.fschoen.parlorplace.backend.enumeration.PlayerState;
 import com.fschoen.parlorplace.backend.exception.DataConflictException;
-import com.fschoen.parlorplace.backend.game.werewolf.entity.persistance.WerewolfPlayer;
+import com.fschoen.parlorplace.backend.exception.GameException;
 import com.fschoen.parlorplace.backend.game.werewolf.management.WerewolfManager;
 import com.fschoen.parlorplace.backend.repository.GameRepository;
 import com.fschoen.parlorplace.backend.service.GameService;
@@ -33,13 +33,12 @@ public abstract class GameInstance<G extends Game, P extends Player, GR extends 
     protected final GameIdentifier gameIdentifier;
     @Getter(value = AccessLevel.PUBLIC)
     protected Long gameId;
-
-    @Getter(value = AccessLevel.PUBLIC)
+    
     protected Class<G> gameClass;
-    @Getter(value = AccessLevel.PUBLIC)
     protected Class<P> playerClass;
-    @Getter(value = AccessLevel.PUBLIC)
     protected Class<RS> ruleSetClass;
+
+    protected Boolean hasStarted;
 
     protected final Logger log;
 
@@ -53,6 +52,8 @@ public abstract class GameInstance<G extends Game, P extends Player, GR extends 
         this.gameClass = gameClass;
         this.playerClass = playerClass;
         this.ruleSetClass = ruleSetClass;
+
+        this.hasStarted = false;
 
         this.log = log;
     }
@@ -72,11 +73,16 @@ public abstract class GameInstance<G extends Game, P extends Player, GR extends 
 
             log.info("Created new {} instance: {}", this.gameClass, this.gameIdentifier.getToken());
         } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
-            throw new DataConflictException(Messages.exception("game.type"));
+            throw new DataConflictException(Messages.exception("game.type.mismatch"));
         }
     }
 
     public G join(User user) {
+        validateGameNotStarted();
+
+        if (getPlayers().stream().anyMatch(player -> player.getUser().equals(user)))
+            throw new GameException(Messages.exception("game.user.ingame.this"));
+
         G game = getGame();
         P player;
         try {
@@ -89,10 +95,19 @@ public abstract class GameInstance<G extends Game, P extends Player, GR extends 
             game.getPlayers().add(player);
             game = getGameRepository().save(game);
         } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
-            throw new DataConflictException(Messages.exception("game.type"));
+            throw new DataConflictException(Messages.exception("game.type.mismatch"));
         }
         return game;
     }
+
+    public G changeLobby(Set<Player> players) {
+        if (! (players.stream().allMatch(playerClass::isInstance)))
+            throw new DataConflictException(Messages.exception("player.type.mismatch"));
+
+        return null;
+    }
+
+    // Utility Getter
 
     public Set<P> getPlayers() {
         return this.getGame().getPlayers();
@@ -112,6 +127,13 @@ public abstract class GameInstance<G extends Game, P extends Player, GR extends 
 
     protected GR getGameRepository() {
         return this.gameRepository;
+    }
+
+    // Utility
+
+    protected void validateGameNotStarted() {
+        if (this.hasStarted)
+            throw new GameException(Messages.exception("game.state.started"));
     }
 
 }

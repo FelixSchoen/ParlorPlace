@@ -5,7 +5,7 @@ import com.fschoen.parlorplace.backend.controller.mapper.PlayerMapperImpl;
 import com.fschoen.parlorplace.backend.controller.mapper.RoleMapperImpl;
 import com.fschoen.parlorplace.backend.controller.mapper.UserMapperImpl;
 import com.fschoen.parlorplace.backend.enumeration.PlayerState;
-import com.fschoen.parlorplace.backend.game.werewolf.dto.WerewolfPlayerDTO;
+import com.fschoen.parlorplace.backend.game.werewolf.dto.game.WerewolfPlayerDTO;
 import com.fschoen.parlorplace.backend.game.werewolf.entity.persistance.WerewolfPlayer;
 import com.fschoen.parlorplace.backend.game.werewolf.entity.persistance.WerewolfRole;
 import com.fschoen.parlorplace.backend.game.werewolf.enumeration.WerewolfRoleType;

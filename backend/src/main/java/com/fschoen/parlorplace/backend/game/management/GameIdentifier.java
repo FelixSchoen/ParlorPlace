@@ -15,6 +15,10 @@ public class GameIdentifier {
         this.generateToken(length);
     }
 
+    public GameIdentifier(String token) {
+        this.token = token;
+    }
+
     private void generateToken(int length) {
         Random random = new Random();
         StringBuilder tokenBuilder = new StringBuilder();

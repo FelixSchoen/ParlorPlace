@@ -2,15 +2,13 @@ package com.fschoen.parlorplace.backend.service.implementation;
 
 import com.fschoen.parlorplace.backend.entity.persistance.Game;
 import com.fschoen.parlorplace.backend.entity.persistance.Player;
-import com.fschoen.parlorplace.backend.entity.persistance.RuleSet;
 import com.fschoen.parlorplace.backend.entity.persistance.User;
+import com.fschoen.parlorplace.backend.enumeration.GameType;
+import com.fschoen.parlorplace.backend.exception.DataConflictException;
 import com.fschoen.parlorplace.backend.exception.GameException;
 import com.fschoen.parlorplace.backend.game.management.GameIdentifier;
 import com.fschoen.parlorplace.backend.game.management.GameInstance;
-import com.fschoen.parlorplace.backend.enumeration.GameType;
-import com.fschoen.parlorplace.backend.exception.DataConflictException;
 import com.fschoen.parlorplace.backend.game.werewolf.management.WerewolfInstance;
-import com.fschoen.parlorplace.backend.repository.GameRepository;
 import com.fschoen.parlorplace.backend.repository.UserRepository;
 import com.fschoen.parlorplace.backend.service.AbstractService;
 import com.fschoen.parlorplace.backend.service.GameService;
@@ -21,10 +19,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Slf4j
 @Service
@@ -70,6 +65,20 @@ public class GameServiceImplementation extends AbstractService implements GameSe
         Game game = gameInstance.join(user);
     }
 
+    public void changeLobby(GameIdentifier gameIdentifier, Set<Player> players) throws GameException {
+        log.info("User {} changing Lobby of Game: {}", getPrincipal().getUsername(), gameIdentifier.getToken());
+
+        User principal = getPrincipal();
+
+        if (isNotInGame(principal, gameIdentifier))
+            throw new GameException(Messages.exception("game.user.ingame.not"));
+
+        GameInstance<?, ?, ?, ?> gameInstance = getGameByGameIdentifier(gameIdentifier);
+        gameInstance.changeLobby(players);
+
+        // TODO Stehen geblieben
+    }
+
     public GameIdentifier generateValidGameIdentifier() {
         int standardLength = 4;
 
@@ -92,7 +101,12 @@ public class GameServiceImplementation extends AbstractService implements GameSe
     }
 
     public Boolean isInGame(User user) {
-        return this.activesGames.stream().anyMatch(gameInstance -> gameInstance.getPlayers().stream().anyMatch(player -> ((Player) player).getUser().equals(user)));
+        return this.activesGames.stream().anyMatch(gameInstance -> gameInstance.getPlayers().stream().anyMatch(player -> player.getUser().equals(user)));
+    }
+
+    public Boolean isNotInGame(User user, GameIdentifier gameIdentifier) {
+        GameInstance<?,?,?,?> gameInstance = getGameByGameIdentifier(gameIdentifier);
+        return gameInstance.getPlayers().stream().noneMatch(player -> player.getUser().equals(user));
     }
 
 }
