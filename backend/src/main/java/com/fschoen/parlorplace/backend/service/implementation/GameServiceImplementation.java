@@ -1,13 +1,16 @@
 package com.fschoen.parlorplace.backend.service.implementation;
 
 import com.fschoen.parlorplace.backend.entity.persistance.Game;
+import com.fschoen.parlorplace.backend.entity.persistance.Player;
 import com.fschoen.parlorplace.backend.entity.persistance.User;
 import com.fschoen.parlorplace.backend.exception.GameException;
 import com.fschoen.parlorplace.backend.game.management.GameIdentifier;
 import com.fschoen.parlorplace.backend.game.management.GameInstance;
 import com.fschoen.parlorplace.backend.enumeration.GameType;
 import com.fschoen.parlorplace.backend.exception.DataConflictException;
+import com.fschoen.parlorplace.backend.game.werewolf.entity.persistance.WerewolfPlayer;
 import com.fschoen.parlorplace.backend.game.werewolf.management.WerewolfInstance;
+import com.fschoen.parlorplace.backend.repository.GameRepository;
 import com.fschoen.parlorplace.backend.repository.UserRepository;
 import com.fschoen.parlorplace.backend.service.AbstractService;
 import com.fschoen.parlorplace.backend.service.GameService;
@@ -30,7 +33,7 @@ public class GameServiceImplementation extends AbstractService implements GameSe
 
     private final ApplicationContext context;
 
-    private final List<GameInstance> activesGames;
+    private final List<GameInstance<? extends Game, ? extends Player, ? extends GameRepository<? extends Game>>> activesGames;
 
     @Autowired
     public GameServiceImplementation(UserRepository userRepository, ApplicationContext context) {
@@ -47,23 +50,23 @@ public class GameServiceImplementation extends AbstractService implements GameSe
         if (isInGame(principal))
             throw new GameException(Messages.getExceptionExplanationMessage("game.user.ingame"));
 
-        GameInstance game;
+        GameInstance<? extends Game, ? extends Player, ? extends GameRepository<? extends Game>> gameInstance;
 
         switch (gameType) {
-            case WEREWOLF -> game = context.getBean(WerewolfInstance.class);
+            case WEREWOLF -> gameInstance = context.getBean(WerewolfInstance.class);
             default -> throw new DataConflictException(Messages.getExceptionExplanationMessage("game.type.unknown"));
         }
 
-        this.activesGames.add(game);
-        join(principal, game.getGameIdentifier());
+        this.activesGames.add(gameInstance);
+        join(principal, gameInstance.getGameIdentifier());
 
-        return game.getGameIdentifier();
+        return gameInstance.getGameIdentifier();
     }
 
     public void join(User user, GameIdentifier gameIdentifier) throws DataConflictException {
         log.info("User {} joining Game: {}", user.getUsername(), gameIdentifier.getToken());
 
-        GameInstance gameInstance = getGameByGameIdentifier(gameIdentifier);
+        GameInstance<? extends Game, ? extends Player, ? extends GameRepository<? extends Game>> gameInstance = getGameByGameIdentifier(gameIdentifier);
         Game game = gameInstance.join(user);
     }
 
@@ -79,8 +82,8 @@ public class GameServiceImplementation extends AbstractService implements GameSe
         }
     }
 
-    private GameInstance getGameByGameIdentifier(GameIdentifier gameIdentifier) throws DataConflictException {
-        Optional<GameInstance> gameInstanceOptional = this.activesGames.stream().filter(game -> game.getGameIdentifier().equals(gameIdentifier)).findFirst();
+    private GameInstance<? extends Game, ? extends Player, ? extends GameRepository<? extends Game>> getGameByGameIdentifier(GameIdentifier gameIdentifier) throws DataConflictException {
+        Optional<GameInstance<? extends Game, ? extends Player, ? extends GameRepository<? extends Game>>> gameInstanceOptional = this.activesGames.stream().filter(game -> game.getGameIdentifier().equals(gameIdentifier)).findFirst();
 
         if (gameInstanceOptional.isPresent())
             return gameInstanceOptional.get();
@@ -89,7 +92,7 @@ public class GameServiceImplementation extends AbstractService implements GameSe
     }
 
     public Boolean isInGame(User user) {
-        return this.activesGames.stream().anyMatch(game -> game.getPlayers().stream().anyMatch(player -> player.getUser().equals(user)));
+        return this.activesGames.stream().anyMatch(gameInstance -> gameInstance.getPlayers().stream().anyMatch(player -> ((Player) player).getUser().equals(user)));
     }
 
 }

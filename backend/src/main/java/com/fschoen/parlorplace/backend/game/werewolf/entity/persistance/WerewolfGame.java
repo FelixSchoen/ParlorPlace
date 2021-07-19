@@ -26,10 +26,15 @@ public class WerewolfGame extends Game {
     @Column(nullable = false)
     private final GameType gameType = GameType.WEREWOLF;
 
-    @OneToMany(mappedBy = "werewolfGame", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "game", fetch = FetchType.EAGER)
     @Cascade({org.hibernate.annotations.CascadeType.ALL})
     @EqualsAndHashCode.Exclude
     @NotNull
     private Set<WerewolfPlayer> players;
 
+
+    @Override
+    public <P extends Player> void setPlayers(Set<P> players) {
+        this.players = (Set<WerewolfPlayer>) players;
+    }
 }

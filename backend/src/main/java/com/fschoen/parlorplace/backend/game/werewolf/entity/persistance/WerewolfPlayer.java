@@ -1,5 +1,6 @@
 package com.fschoen.parlorplace.backend.game.werewolf.entity.persistance;
 
+import com.fschoen.parlorplace.backend.entity.persistance.Game;
 import com.fschoen.parlorplace.backend.entity.persistance.Player;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
@@ -17,14 +18,19 @@ import javax.validation.constraints.NotNull;
 public class WerewolfPlayer extends Player {
 
     @ManyToOne
-    @JoinColumn(name = "werewolfgame_id")
+    @JoinColumn
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
     @NotNull
-    private WerewolfGame werewolfGame;
+    private WerewolfGame game;
 
     @OneToOne
-    @JoinColumn(name = "werewolfrole_id", referencedColumnName = "id")
+    @JoinColumn(referencedColumnName = "id")
     private WerewolfRole werewolfRole;
+
+    @Override
+    public <G extends Game> void setGame(G game) {
+        this.game = (WerewolfGame) game;
+    }
 
 }

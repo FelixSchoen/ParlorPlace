@@ -8,6 +8,7 @@ import org.hibernate.annotations.Cascade;
 import javax.persistence.*;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
+import java.util.Set;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -33,5 +34,7 @@ public abstract class Player {
     @NotNull
     @Min(0)
     protected Integer position;
+
+    public abstract <G extends Game> void setGame(G game);
 
 }
