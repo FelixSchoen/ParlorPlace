@@ -80,7 +80,6 @@ export class AppModule {
   }
 
   changeTheme(theme: 'light-theme' | 'dark-theme'): void {
-    console.log(theme)
     const overlayContainerClasses = this.overlayContainer.getContainerElement().classList;
 
     const themeClassesToRemove = Array.from(overlayContainerClasses)

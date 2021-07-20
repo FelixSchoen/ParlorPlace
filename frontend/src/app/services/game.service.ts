@@ -1,8 +1,10 @@
 import { Injectable } from '@angular/core';
 import {GlobalValues} from "../globals/global-values.service";
 import {HttpClient} from "@angular/common/http";
+import {Game, GameIdentifier, GameStartRequest} from "../dto/game";
+import {Observable} from "rxjs";
 
-const USER_URI = GlobalValues.BASE_URI + 'game/';
+const GAME_URI = GlobalValues.BASE_URI + 'game/';
 
 @Injectable({
   providedIn: 'root'
@@ -12,7 +14,13 @@ export class GameService {
   constructor(private httpClient: HttpClient) {
   }
 
+  public startGame(gameStartRequest: GameStartRequest): Observable<Game> {
+    return this.httpClient.post<Game>(GAME_URI + "start", gameStartRequest);
+  }
 
+  public joinGame(gameIdentifier: GameIdentifier): Observable<Game> {
+    return this.httpClient.post<Game>(GAME_URI + "join/" + gameIdentifier.token, null);
+  }
 
 
 }

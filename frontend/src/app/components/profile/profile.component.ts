@@ -16,6 +16,8 @@ import {ENTER} from "@angular/cdk/keycodes";
 import {MatAutocompleteSelectedEvent} from "@angular/material/autocomplete";
 import {Utility} from "../../utility/utility";
 import {GameType, GameTypeUtil} from "../../enums/gametype";
+import {GameService} from "../../services/game.service";
+import {GameIdentifier, GameStartRequest} from "../../dto/game";
 
 @Component({
   selector: 'app-profile',
@@ -33,7 +35,7 @@ export class ProfileComponent implements OnInit {
   public userSearchControl: FormControl = new FormControl();
   public filteredOptions: Observable<User[]>;
 
-  constructor(public userService: UserService, private tokenService: TokenService, private notificationService: NotificationService,
+  constructor(public userService: UserService, public gameService: GameService, private tokenService: TokenService, private notificationService: NotificationService,
               private dialog: MatDialog, public userRoleUtil: UserRoleUtil, private activatedRoute: ActivatedRoute, private router: Router) {
   }
 
@@ -133,9 +135,15 @@ export class ProfileComponent implements OnInit {
     dialogRef.afterClosed().subscribe(
       result => {
         if (result.host) {
-
+          this.gameService.startGame(new GameStartRequest(result.game)).subscribe(
+            result => console.log(result),
+            error => this.notificationService.showError(error.error)
+          )
         } else if (result.submitted) {
-
+          this.gameService.joinGame(new GameIdentifier(result.identifier)).subscribe(
+            result => console.log(result),
+            error => this.notificationService.showError(error.error)
+          )
         }
       }
     )

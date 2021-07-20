@@ -5,7 +5,7 @@ export class Game {
   constructor(public id: number,
               public gameType: GameType,
               public startedAt: string,
-              public endedAt: string,
+              public endedAt: string | null,
               public gameIdentifier: GameIdentifier) {
   }
 }
