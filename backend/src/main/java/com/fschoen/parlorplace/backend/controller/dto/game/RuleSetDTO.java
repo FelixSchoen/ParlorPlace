@@ -14,6 +14,6 @@ import javax.validation.constraints.NotNull;
 public abstract class RuleSetDTO {
 
     @NotNull
-    private Long id;
+    protected Long id;
 
 }

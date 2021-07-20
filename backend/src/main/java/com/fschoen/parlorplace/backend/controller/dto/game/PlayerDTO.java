@@ -2,13 +2,16 @@
 
 import com.fschoen.parlorplace.backend.controller.dto.user.UserDTO;
 import com.fschoen.parlorplace.backend.entity.persistance.User;
+import com.fschoen.parlorplace.backend.enumeration.LobbyRole;
 import com.fschoen.parlorplace.backend.enumeration.PlayerState;
 import com.fschoen.parlorplace.backend.utility.obfuscation.Obfuscateable;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
+import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
+import java.util.Set;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -17,16 +20,20 @@ import javax.validation.constraints.NotNull;
 public abstract class PlayerDTO {
 
     @NotNull
-    private Long id;
+    protected Long id;
 
     @NotNull
-    private UserDTO user;
+    @Valid
+    protected UserDTO user;
 
     @NotNull
-    private PlayerState playerState;
+    protected LobbyRole lobbyRole;
+
+    @NotNull
+    protected PlayerState playerState;
 
     @NotNull
     @Min(0)
-    private Integer position;
+    protected Integer position;
 
 }

@@ -9,7 +9,7 @@ import com.fschoen.parlorplace.backend.utility.messaging.Messages;
 import org.mapstruct.Context;
 import org.mapstruct.Mapper;
 
-@Mapper(componentModel = "spring", uses = {PlayerMapper.class})
+@Mapper(componentModel = "spring", uses = {PlayerMapper.class, GameIdentifierMapper.class})
 public interface GameMapper {
 
     WerewolfGameDTO toDTO(WerewolfGame game, @Context Boolean obfuscate);

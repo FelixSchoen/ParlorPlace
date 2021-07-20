@@ -37,7 +37,7 @@ public class GameServiceImplementation extends AbstractService implements GameSe
         this.activesGames = Collections.synchronizedList(new ArrayList<>());
     }
 
-    public GameIdentifier start(GameType gameType) throws GameException {
+    public Game create(GameType gameType) throws GameException {
         log.info("Starting new Game: {}", gameType);
 
         User principal = getPrincipal();
@@ -53,19 +53,20 @@ public class GameServiceImplementation extends AbstractService implements GameSe
         }
 
         this.activesGames.add(gameInstance);
-        join(principal, gameInstance.getGameIdentifier());
+        Game game = join(gameInstance.getGameIdentifier());
 
-        return gameInstance.getGameIdentifier();
+        return game;
     }
 
-    public void join(User user, GameIdentifier gameIdentifier) throws DataConflictException {
+    public Game join(GameIdentifier gameIdentifier) throws GameException, DataConflictException {
+        User user = getPrincipal();
         log.info("User {} joining Game: {}", user.getUsername(), gameIdentifier.getToken());
 
         GameInstance<?, ?, ?, ?> gameInstance = getGameByGameIdentifier(gameIdentifier);
-        Game game = gameInstance.join(user);
+        return gameInstance.join(user);
     }
 
-    public void changeLobby(GameIdentifier gameIdentifier, Set<Player> players) throws GameException {
+    public Game changeLobby(GameIdentifier gameIdentifier, Set<Player> players) throws GameException {
         log.info("User {} changing Lobby of Game: {}", getPrincipal().getUsername(), gameIdentifier.getToken());
 
         User principal = getPrincipal();
@@ -74,9 +75,8 @@ public class GameServiceImplementation extends AbstractService implements GameSe
             throw new GameException(Messages.exception("game.user.ingame.not"));
 
         GameInstance<?, ?, ?, ?> gameInstance = getGameByGameIdentifier(gameIdentifier);
-        gameInstance.changeLobby(players);
 
-        // TODO Stehen geblieben
+        return gameInstance.changeLobby(players);
     }
 
     public GameIdentifier generateValidGameIdentifier() {
