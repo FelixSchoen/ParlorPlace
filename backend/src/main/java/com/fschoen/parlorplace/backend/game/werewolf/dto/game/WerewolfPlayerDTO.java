@@ -1,4 +1,4 @@
-package com.fschoen.parlorplace.backend.game.werewolf.dto;
+package com.fschoen.parlorplace.backend.game.werewolf.dto.game;
 
 import com.fschoen.parlorplace.backend.controller.dto.game.PlayerDTO;
 import com.fschoen.parlorplace.backend.controller.dto.user.UserDTO;

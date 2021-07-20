@@ -1,16 +1,15 @@
 package com.fschoen.parlorplace.backend.game.werewolf.entity.persistance;
 
 import com.fschoen.parlorplace.backend.entity.persistance.RuleSet;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import com.fschoen.parlorplace.backend.game.werewolf.enumeration.WerewolfRoleType;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
 
-import javax.persistence.Entity;
+import javax.persistence.*;
+import java.util.List;
 
 @NoArgsConstructor
-//@AllArgsConstructor
+@AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 @SuperBuilder(toBuilder = true)
 @ToString(callSuper = true)
@@ -18,5 +17,9 @@ import javax.persistence.Entity;
 @Entity
 public class WerewolfRuleSet extends RuleSet {
 
+    @Column(nullable = false)
+    @Enumerated
+    @ElementCollection(targetClass = WerewolfRoleType.class)
+    List<WerewolfRoleType> roles;
 
 }

@@ -1,8 +1,8 @@
-package com.fschoen.parlorplace.backend.game.werewolf.dto;
+package com.fschoen.parlorplace.backend.game.werewolf.dto.game;
 
 import com.fschoen.parlorplace.backend.controller.dto.game.GameDTO;
-import com.fschoen.parlorplace.backend.controller.dto.game.PlayerDTO;
 import com.fschoen.parlorplace.backend.enumeration.GameType;
+import com.fschoen.parlorplace.backend.game.werewolf.dto.lobby.WerewolfRuleSetDTO;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
@@ -22,5 +22,8 @@ public class WerewolfGameDTO extends GameDTO {
 
     @NotNull
     private Set<WerewolfPlayerDTO> players;
+
+    @NotNull
+    private WerewolfRuleSetDTO ruleSet;
 
 }

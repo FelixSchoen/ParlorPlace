@@ -3,8 +3,7 @@ package com.fschoen.parlorplace.backend.unit.mapper;
 import com.fschoen.parlorplace.backend.controller.mapper.*;
 import com.fschoen.parlorplace.backend.enumeration.GameType;
 import com.fschoen.parlorplace.backend.enumeration.PlayerState;
-import com.fschoen.parlorplace.backend.game.werewolf.dto.WerewolfGameDTO;
-import com.fschoen.parlorplace.backend.game.werewolf.dto.WerewolfPlayerDTO;
+import com.fschoen.parlorplace.backend.game.werewolf.dto.game.WerewolfGameDTO;
 import com.fschoen.parlorplace.backend.game.werewolf.entity.persistance.WerewolfGame;
 import com.fschoen.parlorplace.backend.game.werewolf.entity.persistance.WerewolfPlayer;
 import com.fschoen.parlorplace.backend.game.werewolf.entity.persistance.WerewolfRole;
@@ -21,7 +20,7 @@ import java.util.Set;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes = {GameMapperImpl.class, PlayerMapperImpl.class, UserMapperImpl.class, RoleMapperImpl.class})
+@SpringBootTest(classes = {GameMapperImpl.class, PlayerMapperImpl.class, UserMapperImpl.class, RoleMapperImpl.class, GameIdentifierMapperImpl.class})
 public class GameMapperTest {
 
     @Autowired

@@ -1,2 +1,6 @@
 
 *.db
+
+.idea
+
+backend/src/main/resources/templates/Project.xml

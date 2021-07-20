@@ -22,12 +22,13 @@ public abstract class AbstractService {
     protected User getPrincipal() {
         UserDetailsImplementation userDetails = (UserDetailsImplementation) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Optional<User> potentialUser = userRepository.findOneById(userDetails.getId());
-        if (potentialUser.isEmpty()) throw new AuthorizationException(Messages.exception("authorization.principal.empty"));
+        if (potentialUser.isEmpty())
+            throw new AuthorizationException(Messages.exception("authorization.principal.empty"));
         return potentialUser.get();
     }
 
     protected boolean notAuthority(User user, UserRole userRole) {
-        for (Role role: user.getRoles()) {
+        for (Role role : user.getRoles()) {
             if (role.getRole().equals(userRole)) return false;
         }
         return true;

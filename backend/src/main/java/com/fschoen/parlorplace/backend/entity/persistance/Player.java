@@ -1,6 +1,7 @@
 package com.fschoen.parlorplace.backend.entity.persistance;
 
 import com.fschoen.parlorplace.backend.entity.persistance.User;
+import com.fschoen.parlorplace.backend.enumeration.LobbyRole;
 import com.fschoen.parlorplace.backend.enumeration.PlayerState;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
@@ -32,8 +33,13 @@ public abstract class Player {
     protected User user;
 
     @Column(nullable = false)
+    @Enumerated
     @NotNull
-    private PlayerState playerState;
+    protected LobbyRole lobbyRole;
+
+    @Column(nullable = false)
+    @NotNull
+    protected PlayerState playerState;
 
     @Column(nullable = false)
     @NotNull

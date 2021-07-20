@@ -4,13 +4,12 @@ import com.fschoen.parlorplace.backend.entity.persistance.Game;
 import com.fschoen.parlorplace.backend.entity.persistance.Player;
 import com.fschoen.parlorplace.backend.entity.persistance.RuleSet;
 import com.fschoen.parlorplace.backend.entity.persistance.User;
+import com.fschoen.parlorplace.backend.enumeration.GameType;
+import com.fschoen.parlorplace.backend.exception.DataConflictException;
 import com.fschoen.parlorplace.backend.exception.GameException;
 import com.fschoen.parlorplace.backend.game.management.GameIdentifier;
 import com.fschoen.parlorplace.backend.game.management.GameInstance;
-import com.fschoen.parlorplace.backend.enumeration.GameType;
-import com.fschoen.parlorplace.backend.exception.DataConflictException;
 import com.fschoen.parlorplace.backend.game.werewolf.management.WerewolfInstance;
-import com.fschoen.parlorplace.backend.repository.GameRepository;
 import com.fschoen.parlorplace.backend.repository.UserRepository;
 import com.fschoen.parlorplace.backend.service.AbstractService;
 import com.fschoen.parlorplace.backend.service.GameService;
@@ -21,10 +20,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Slf4j
 @Service
@@ -42,7 +38,7 @@ public class GameServiceImplementation extends AbstractService implements GameSe
         this.activesGames = Collections.synchronizedList(new ArrayList<>());
     }
 
-    public GameIdentifier start(GameType gameType) throws GameException {
+    public Game create(GameType gameType) throws GameException {
         log.info("Starting new Game: {}", gameType);
 
         User principal = getPrincipal();
@@ -58,16 +54,43 @@ public class GameServiceImplementation extends AbstractService implements GameSe
         }
 
         this.activesGames.add(gameInstance);
-        join(principal, gameInstance.getGameIdentifier());
+        Game game = join(gameInstance.getGameIdentifier());
 
-        return gameInstance.getGameIdentifier();
+        return game;
     }
 
-    public void join(User user, GameIdentifier gameIdentifier) throws DataConflictException {
+    public Game join(GameIdentifier gameIdentifier) throws GameException, DataConflictException {
+        User user = getPrincipal();
         log.info("User {} joining Game: {}", user.getUsername(), gameIdentifier.getToken());
 
         GameInstance<?, ?, ?, ?> gameInstance = getGameByGameIdentifier(gameIdentifier);
-        Game game = gameInstance.join(user);
+        return gameInstance.join(user);
+    }
+
+    public Game changeLobby(GameIdentifier gameIdentifier, Set<? extends Player> players) throws GameException {
+        log.info("User {} changing Lobby of Game: {}", getPrincipal().getUsername(), gameIdentifier.getToken());
+
+        User principal = getPrincipal();
+
+        if (isNotInGame(principal, gameIdentifier))
+            throw new GameException(Messages.exception("game.user.ingame.not"));
+
+        GameInstance<?, ?, ?, ?> gameInstance = getGameByGameIdentifier(gameIdentifier);
+
+        return gameInstance.changeLobby(players);
+    }
+
+    public Game changeLobby(GameIdentifier gameIdentifier, RuleSet ruleSet) {
+        log.info("User {} changing Rule Set of Game: {}", getPrincipal().getUsername(), gameIdentifier.getToken());
+
+        User principal = getPrincipal();
+
+        if (isNotInGame(principal, gameIdentifier))
+            throw new GameException(Messages.exception("game.user.ingame.not"));
+
+        GameInstance<?, ?, ?, ?> gameInstance = getGameByGameIdentifier(gameIdentifier);
+
+        return gameInstance.changeLobby(ruleSet);
     }
 
     public GameIdentifier generateValidGameIdentifier() {
@@ -92,7 +115,12 @@ public class GameServiceImplementation extends AbstractService implements GameSe
     }
 
     public Boolean isInGame(User user) {
-        return this.activesGames.stream().anyMatch(gameInstance -> gameInstance.getPlayers().stream().anyMatch(player -> ((Player) player).getUser().equals(user)));
+        return this.activesGames.stream().anyMatch(gameInstance -> gameInstance.getPlayers().stream().anyMatch(player -> player.getUser().equals(user)));
+    }
+
+    public Boolean isNotInGame(User user, GameIdentifier gameIdentifier) {
+        GameInstance<?,?,?,?> gameInstance = getGameByGameIdentifier(gameIdentifier);
+        return gameInstance.getPlayers().stream().noneMatch(player -> player.getUser().equals(user));
     }
 
 }

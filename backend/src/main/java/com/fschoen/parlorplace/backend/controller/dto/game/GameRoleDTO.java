@@ -15,6 +15,6 @@ import javax.validation.constraints.NotNull;
 public abstract class GameRoleDTO {
 
     @NotNull
-    private Long id;
+    protected Long id;
 
 }

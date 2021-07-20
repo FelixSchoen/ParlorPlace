@@ -3,7 +3,7 @@
 import com.fschoen.parlorplace.backend.controller.dto.game.PlayerDTO;
 import com.fschoen.parlorplace.backend.entity.persistance.Player;
 import com.fschoen.parlorplace.backend.exception.MappingException;
-import com.fschoen.parlorplace.backend.game.werewolf.dto.WerewolfPlayerDTO;
+import com.fschoen.parlorplace.backend.game.werewolf.dto.game.WerewolfPlayerDTO;
 import com.fschoen.parlorplace.backend.game.werewolf.dto.role.WerewolfRoleDTO;
 import com.fschoen.parlorplace.backend.game.werewolf.entity.persistance.WerewolfPlayer;
 import com.fschoen.parlorplace.backend.game.werewolf.entity.persistance.WerewolfRole;
@@ -29,6 +29,10 @@ public interface PlayerMapper {
 
     Map<WerewolfPlayerDTO, Set<Object>> toDTO(Map<WerewolfPlayer, Set<Object>> playerSetMap, @Context Boolean obfuscate);
 
+    WerewolfPlayer fromDTO(WerewolfPlayerDTO playerDTO);
+
+    Set<Player> fromDTO(Set<? extends PlayerDTO> playerDTOS);
+
     default PlayerDTO toDTO(Player player, Boolean obfuscate) {
         if (player instanceof WerewolfPlayer) {
             return toDTO((WerewolfPlayer) player, obfuscate);
@@ -36,6 +40,16 @@ public interface PlayerMapper {
 
         throw new MappingException(Messages.exception("mapping.type"));
     }
+
+    default Player fromDTO(PlayerDTO player) {
+        if (player instanceof WerewolfPlayerDTO) {
+            return fromDTO((WerewolfPlayerDTO) player);
+        }
+
+        throw new MappingException(Messages.exception("mapping.type"));
+    }
+
+    // Named Methods
 
     @Named("obfuscateWerewolfRole")
     default WerewolfRoleDTO obfuscateWerewolfRole(WerewolfRole werewolfRole, @Context Boolean obfuscate) {
