@@ -2,6 +2,7 @@ package com.fschoen.parlorplace.backend.service;
 
 import com.fschoen.parlorplace.backend.entity.persistance.Game;
 import com.fschoen.parlorplace.backend.entity.persistance.Player;
+import com.fschoen.parlorplace.backend.entity.persistance.RuleSet;
 import com.fschoen.parlorplace.backend.entity.persistance.User;
 import com.fschoen.parlorplace.backend.enumeration.GameType;
 import com.fschoen.parlorplace.backend.exception.DataConflictException;
@@ -41,6 +42,17 @@ public interface GameService {
      * @throws DataConflictException If the request is faulty
      */
     Game changeLobby(GameIdentifier gameIdentifier, Set<? extends Player> players) throws GameException, DataConflictException;
+
+    /**
+     * Modifies the rule set of the game specified by the identifier.
+     *
+     * @param gameIdentifier Identifier of the game to modify
+     * @param ruleSet        The new set of rules
+     * @return The changed game
+     * @throws GameException         If the data is not consistent with the game
+     * @throws DataConflictException If the data is invalid or no game could be found
+     */
+    Game changeLobby(GameIdentifier gameIdentifier, RuleSet ruleSet) throws GameException, DataConflictException;
 
     GameIdentifier generateValidGameIdentifier();
 

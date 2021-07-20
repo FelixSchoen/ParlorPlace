@@ -134,6 +134,13 @@ public abstract class GameInstance<G extends Game, P extends Player, GR extends 
         return game;
     }
 
+    /**
+     * Applies the rules specified in the ruleset to the game
+     * @param ruleSet
+     * @return
+     */
+    public abstract G changeLobby(RuleSet ruleSet);
+
     // Utility Getter
 
     public Set<P> getPlayers() {

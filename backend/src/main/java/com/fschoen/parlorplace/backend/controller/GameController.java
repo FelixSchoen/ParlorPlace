@@ -8,6 +8,7 @@ import com.fschoen.parlorplace.backend.controller.dto.lobby.LobbyChangeRequestDT
 import com.fschoen.parlorplace.backend.controller.mapper.GameIdentifierMapper;
 import com.fschoen.parlorplace.backend.controller.mapper.GameMapper;
 import com.fschoen.parlorplace.backend.controller.mapper.PlayerMapper;
+import com.fschoen.parlorplace.backend.controller.mapper.RuleSetMapper;
 import com.fschoen.parlorplace.backend.entity.persistance.Game;
 import com.fschoen.parlorplace.backend.entity.persistance.Player;
 import com.fschoen.parlorplace.backend.game.management.GameIdentifier;
@@ -28,15 +29,17 @@ public class GameController {
 
     private final GameMapper gameMapper;
     private final PlayerMapper playerMapper;
+    private final RuleSetMapper ruleSetMapper;
     private final GameIdentifierMapper gameIdentifierMapper;
 
     private final GameValidator validator = new GameValidator();
 
     @Autowired
-    public GameController(GameService gameService, GameMapper gameMapper, PlayerMapper playerMapper, GameIdentifierMapper gameIdentifierMapper) {
+    public GameController(GameService gameService, GameMapper gameMapper, PlayerMapper playerMapper, RuleSetMapper ruleSetMapper, GameIdentifierMapper gameIdentifierMapper) {
         this.gameService = gameService;
         this.gameMapper = gameMapper;
         this.playerMapper = playerMapper;
+        this.ruleSetMapper = ruleSetMapper;
         this.gameIdentifierMapper = gameIdentifierMapper;
     }
 
@@ -61,7 +64,8 @@ public class GameController {
         validator.validate(lobbyChangeRequestDTO).throwIfInvalid();
 
         GameIdentifier gameIdentifier = new GameIdentifier(identifier);
-        GameDTO game = gameMapper.toDTO(gameService.changeLobby(gameIdentifier, playerMapper.fromDTO(lobbyChangeRequestDTO.getPlayers())), true);
+        gameService.changeLobby(gameIdentifier, playerMapper.fromDTO(lobbyChangeRequestDTO.getPlayers()));
+        GameDTO game = gameMapper.toDTO(gameService.changeLobby(gameIdentifier, ruleSetMapper.fromDTO(lobbyChangeRequestDTO.getRuleSet())), true);
 
         return ResponseEntity.status(HttpStatus.OK).body(game);
     }

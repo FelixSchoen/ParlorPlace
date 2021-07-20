@@ -8,13 +8,16 @@ import com.fschoen.parlorplace.backend.enumeration.GameType;
 import com.fschoen.parlorplace.backend.game.werewolf.dto.game.WerewolfGameDTO;
 import com.fschoen.parlorplace.backend.game.werewolf.dto.game.WerewolfPlayerDTO;
 import com.fschoen.parlorplace.backend.game.werewolf.dto.lobby.WerewolfLobbyChangeRequestDTO;
+import com.fschoen.parlorplace.backend.game.werewolf.dto.lobby.WerewolfRuleSetDTO;
 import com.fschoen.parlorplace.backend.game.werewolf.entity.persistance.WerewolfGame;
+import com.fschoen.parlorplace.backend.game.werewolf.enumeration.WerewolfRoleType;
 import com.fschoen.parlorplace.backend.integration.base.BaseIntegrationTest;
 import io.restassured.response.Response;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.annotation.DirtiesContext;
 
+import java.util.ArrayList;
 import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -103,7 +106,7 @@ public class GameControllerTest extends BaseIntegrationTest {
         Set<WerewolfPlayerDTO> werewolfPlayerDTOS = werewolfGameDTO.getPlayers();
         werewolfPlayerDTOS.forEach(playerDTO -> playerDTO.setPosition((playerDTO.getPosition() + 1) % 2));
 
-        WerewolfLobbyChangeRequestDTO werewolfLobbyChangeRequestDTO = WerewolfLobbyChangeRequestDTO.builder().players(werewolfPlayerDTOS).build();
+        WerewolfLobbyChangeRequestDTO werewolfLobbyChangeRequestDTO = WerewolfLobbyChangeRequestDTO.builder().players(werewolfPlayerDTOS).ruleSet(werewolfGameDTO.getRuleSet()).build();
 
         Response response = payload(werewolfLobbyChangeRequestDTO, getToken(existingUser1)).pathParam("identifier", werewolfGameDTO.getGameIdentifier().getToken())
                 .post(GAME_BASE_URI + "lobby/change/{identifier}").then().extract().response();
@@ -124,7 +127,7 @@ public class GameControllerTest extends BaseIntegrationTest {
         WerewolfGameDTO werewolfGameDTO = withWerewolfGame(existingUser1, existingUser2);
         Set<WerewolfPlayerDTO> werewolfPlayerDTOS = werewolfGameDTO.getPlayers();
 
-        WerewolfLobbyChangeRequestDTO werewolfLobbyChangeRequestDTO = WerewolfLobbyChangeRequestDTO.builder().players(werewolfPlayerDTOS).build();
+        WerewolfLobbyChangeRequestDTO werewolfLobbyChangeRequestDTO = WerewolfLobbyChangeRequestDTO.builder().players(werewolfPlayerDTOS).ruleSet(werewolfGameDTO.getRuleSet()).build();
 
         Response response = payload(werewolfLobbyChangeRequestDTO, getToken(existingUser1)).pathParam("identifier", "NOT")
                 .post(GAME_BASE_URI + "lobby/change/{identifier}").then().extract().response();
@@ -140,11 +143,32 @@ public class GameControllerTest extends BaseIntegrationTest {
         Set<WerewolfPlayerDTO> werewolfPlayerDTOS = werewolfGameDTO.getPlayers();
         werewolfPlayerDTOS.forEach(playerDTO -> playerDTO.setPosition(playerDTO.getPosition() + 1));
 
-        WerewolfLobbyChangeRequestDTO werewolfLobbyChangeRequestDTO = WerewolfLobbyChangeRequestDTO.builder().players(werewolfPlayerDTOS).build();
+        WerewolfLobbyChangeRequestDTO werewolfLobbyChangeRequestDTO = WerewolfLobbyChangeRequestDTO.builder().players(werewolfPlayerDTOS).ruleSet(werewolfGameDTO.getRuleSet()).build();
 
         Response response = payload(werewolfLobbyChangeRequestDTO, getToken(existingUser1)).pathParam("identifier", werewolfGameDTO.getGameIdentifier().getToken())
                 .post(GAME_BASE_URI + "lobby/change/{identifier}").then().extract().response();
         assertThat(response.statusCode()).isEqualTo(HttpStatus.CONFLICT.value());
+    }
+
+    @Test
+    public void addRolesToWerewolfLobby_resultsInRolesAdded() {
+        User existingUser1 = this.generatedData.getUserCollection().getUser1();
+        User existingUser2 = this.generatedData.getUserCollection().getUser2();
+
+        WerewolfGameDTO werewolfGameDTO = withWerewolfGame(existingUser1, existingUser2);
+        WerewolfRuleSetDTO werewolfRuleSetDTO = werewolfGameDTO.getRuleSet();
+        werewolfRuleSetDTO.getRoles().add(WerewolfRoleType.WEREWOLF);
+        werewolfRuleSetDTO.getRoles().add(WerewolfRoleType.VILLAGER);
+
+        WerewolfLobbyChangeRequestDTO werewolfLobbyChangeRequestDTO = WerewolfLobbyChangeRequestDTO.builder().players(werewolfGameDTO.getPlayers()).ruleSet(werewolfRuleSetDTO).build();
+
+        Response response = payload(werewolfLobbyChangeRequestDTO, getToken(existingUser1)).pathParam("identifier", werewolfGameDTO.getGameIdentifier().getToken())
+                .post(GAME_BASE_URI + "lobby/change/{identifier}").then().extract().response();
+        assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
+
+        werewolfGameDTO = response.getBody().as(WerewolfGameDTO.class);
+        assertThat(werewolfGameDTO.getRuleSet().getRoles()).contains(WerewolfRoleType.WEREWOLF);
+        assertThat(werewolfGameDTO.getRuleSet().getRoles()).contains(WerewolfRoleType.VILLAGER);
     }
 
     private WerewolfGameDTO withWerewolfGame(User initiator, User... participants) {

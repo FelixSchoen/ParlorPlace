@@ -23,4 +23,8 @@ public class WerewolfLobbyChangeRequestDTO extends LobbyChangeRequestDTO {
     @NotNull
     private Set<WerewolfPlayerDTO> players;
 
+    @Valid
+    @NotNull
+    private WerewolfRuleSetDTO ruleSet;
+
 }

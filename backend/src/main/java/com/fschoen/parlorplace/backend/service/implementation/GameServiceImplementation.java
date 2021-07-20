@@ -2,6 +2,7 @@ package com.fschoen.parlorplace.backend.service.implementation;
 
 import com.fschoen.parlorplace.backend.entity.persistance.Game;
 import com.fschoen.parlorplace.backend.entity.persistance.Player;
+import com.fschoen.parlorplace.backend.entity.persistance.RuleSet;
 import com.fschoen.parlorplace.backend.entity.persistance.User;
 import com.fschoen.parlorplace.backend.enumeration.GameType;
 import com.fschoen.parlorplace.backend.exception.DataConflictException;
@@ -77,6 +78,19 @@ public class GameServiceImplementation extends AbstractService implements GameSe
         GameInstance<?, ?, ?, ?> gameInstance = getGameByGameIdentifier(gameIdentifier);
 
         return gameInstance.changeLobby(players);
+    }
+
+    public Game changeLobby(GameIdentifier gameIdentifier, RuleSet ruleSet) {
+        log.info("User {} changing Rule Set of Game: {}", getPrincipal().getUsername(), gameIdentifier.getToken());
+
+        User principal = getPrincipal();
+
+        if (isNotInGame(principal, gameIdentifier))
+            throw new GameException(Messages.exception("game.user.ingame.not"));
+
+        GameInstance<?, ?, ?, ?> gameInstance = getGameByGameIdentifier(gameIdentifier);
+
+        return gameInstance.changeLobby(ruleSet);
     }
 
     public GameIdentifier generateValidGameIdentifier() {
