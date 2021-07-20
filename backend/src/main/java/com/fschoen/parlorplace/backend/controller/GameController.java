@@ -48,7 +48,7 @@ public class GameController {
     public ResponseEntity<GameDTO> startGame(@PathVariable("identifier") String identifier) {
         GameDTO gameDTO = gameMapper.toDTO(gameService.join(new GameIdentifier(identifier)), true);
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(gameDTO);
+        return ResponseEntity.status(HttpStatus.OK).body(gameDTO);
     }
 
     @PostMapping("/lobby/change/{identifier}")

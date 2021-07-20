@@ -2,7 +2,15 @@ package com.fschoen.parlorplace.backend.datagenerator;
 
 import com.fschoen.parlorplace.backend.entity.persistance.Role;
 import com.fschoen.parlorplace.backend.entity.persistance.User;
+import com.fschoen.parlorplace.backend.enumeration.LobbyRole;
+import com.fschoen.parlorplace.backend.enumeration.PlayerState;
 import com.fschoen.parlorplace.backend.enumeration.UserRole;
+import com.fschoen.parlorplace.backend.game.management.GameIdentifier;
+import com.fschoen.parlorplace.backend.game.werewolf.entity.persistance.WerewolfGame;
+import com.fschoen.parlorplace.backend.game.werewolf.entity.persistance.WerewolfPlayer;
+import com.fschoen.parlorplace.backend.game.werewolf.entity.persistance.WerewolfRuleSet;
+import com.fschoen.parlorplace.backend.repository.GameRepository;
+import com.fschoen.parlorplace.backend.repository.PlayerRepository;
 import com.fschoen.parlorplace.backend.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
@@ -11,10 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 @Component
 @Profile({"test", "setup"})
@@ -22,10 +27,14 @@ import java.util.Set;
 public class DatabasePopulator {
 
     private final UserRepository userRepository;
+    private final GameRepository gameRepository;
+    private final PlayerRepository playerRepository;
 
     @Autowired
-    public DatabasePopulator(UserRepository userRepository) {
+    public DatabasePopulator(UserRepository userRepository, GameRepository gameRepository, PlayerRepository playerRepository) {
         this.userRepository = userRepository;
+        this.gameRepository = gameRepository;
+        this.playerRepository = playerRepository;
     }
 
     /**
@@ -41,6 +50,12 @@ public class DatabasePopulator {
 
         log.info("Generating UserCollection");
         generatedData.setUserCollection(setupUserCollection(passwordCollection));
+
+        log.info("Generating WerewolfGameCollection");
+        generatedData.setWerewolfGameCollection(setupWerewolfGameCollection());
+
+        log.info("Generating WerewolfPlayerCollection");
+        generatedData.setWerewolfPlayerCollection(setupWerewolfPlayerCollection(generatedData.getUserCollection(), generatedData.getWerewolfGameCollection()));
 
         return generatedData;
     }
@@ -131,6 +146,39 @@ public class DatabasePopulator {
 
         userRepository.flush();
         return userCollection;
+    }
+
+    private GeneratedData.WerewolfGameCollection setupWerewolfGameCollection() {
+        GeneratedData.WerewolfGameCollection werewolfGameCollection = new GeneratedData.WerewolfGameCollection();
+
+        // Werewolf Game 1
+        WerewolfGame werewolfGame1 = WerewolfGame.builder()
+                .startedAt(new Date())
+                .gameIdentifier(new GameIdentifier("GAME1"))
+                .players(new HashSet<>())
+                .ruleSet(new WerewolfRuleSet())
+                .build();
+
+        werewolfGameCollection.setWerewolfGame1((WerewolfGame) gameRepository.save(werewolfGame1));
+
+        return werewolfGameCollection;
+    }
+
+    private GeneratedData.WerewolfPlayerCollection setupWerewolfPlayerCollection(GeneratedData.UserCollection userCollection, GeneratedData.WerewolfGameCollection werewolfGameCollection) {
+        GeneratedData.WerewolfPlayerCollection werewolfPlayerCollection = new GeneratedData.WerewolfPlayerCollection();
+
+        // Werewolf Player 1
+        WerewolfPlayer werewolfPlayer1 = WerewolfPlayer.builder()
+                .user(userCollection.getUser1())
+                .lobbyRole(LobbyRole.ROLE_ADMIN)
+                .playerState(PlayerState.ALIVE)
+                .position(0)
+                .game(werewolfGameCollection.getWerewolfGame1())
+                .werewolfRole(null)
+                .build();
+        werewolfPlayerCollection.setWerewolfPlayer1((WerewolfPlayer) playerRepository.save(werewolfPlayer1));
+
+        return werewolfPlayerCollection;
     }
 
 }

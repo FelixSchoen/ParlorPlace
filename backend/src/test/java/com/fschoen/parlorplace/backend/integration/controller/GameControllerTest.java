@@ -1,7 +1,6 @@
 package com.fschoen.parlorplace.backend.integration.controller;
 
 import com.fschoen.parlorplace.backend.controller.dto.game.GameDTO;
-import com.fschoen.parlorplace.backend.controller.dto.game.GameIdentifierDTO;
 import com.fschoen.parlorplace.backend.controller.dto.game.GameStartRequestDTO;
 import com.fschoen.parlorplace.backend.entity.persistance.User;
 import com.fschoen.parlorplace.backend.enumeration.GameType;
@@ -55,6 +54,35 @@ public class GameControllerTest extends BaseIntegrationTest {
 
         Response response = payload("", getToken(existingUser)).pathParam("identifier", identifier).post(GAME_BASE_URI + "join/{identifier}").then().extract().response();
         assertThat(response.statusCode()).isEqualTo(HttpStatus.CONFLICT.value());
+    }
+
+    @Test
+    public void joinGame_withUserAlreadyJoined_resultsInGameException() {
+        User existingUser = this.generatedData.getUserCollection().getUser1();
+        GameStartRequestDTO gameStartRequestDTO = GameStartRequestDTO.builder().gameType(GameType.WEREWOLF).build();
+
+        Response response1 = post(gameStartRequestDTO, GAME_BASE_URI + "start", getToken(existingUser));
+        assertThat(response1.statusCode()).isEqualTo(HttpStatus.CREATED.value());
+        GameDTO game1 = response1.getBody().as(WerewolfGameDTO.class);
+
+        Response response2 = payload("", getToken(existingUser)).pathParam("identifier", game1.getGameIdentifier().getToken()).post(GAME_BASE_URI + "join/{identifier}").then().extract().response();
+        assertThat(response2.statusCode()).isEqualTo(HttpStatus.CONFLICT.value());
+    }
+
+    @Test
+    public void joinExistingGame_withValidIdentifier_resultsInGameJoined() {
+        User existingUser1 = this.generatedData.getUserCollection().getUser1();
+        User existingUser2 = this.generatedData.getUserCollection().getUser2();
+        GameStartRequestDTO gameStartRequestDTO = GameStartRequestDTO.builder().gameType(GameType.WEREWOLF).build();
+
+        Response response1 = post(gameStartRequestDTO, GAME_BASE_URI + "start", getToken(existingUser1));
+        assertThat(response1.statusCode()).isEqualTo(HttpStatus.CREATED.value());
+        GameDTO game1 = response1.getBody().as(WerewolfGameDTO.class);
+
+        Response response2 = payload("", getToken(existingUser2)).pathParam("identifier", game1.getGameIdentifier().getToken()).post(GAME_BASE_URI + "join/{identifier}").then().extract().response();
+        assertThat(response2.statusCode()).isEqualTo(HttpStatus.OK.value());
+        GameDTO game2 = response1.getBody().as(WerewolfGameDTO.class);
+        assertThat(game2.getGameIdentifier()).isEqualTo(game1.getGameIdentifier());
     }
 
 }

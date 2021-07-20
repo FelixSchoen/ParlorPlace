@@ -20,7 +20,7 @@ import java.util.Set;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes = {GameMapperImpl.class, PlayerMapperImpl.class, UserMapperImpl.class, RoleMapperImpl.class})
+@SpringBootTest(classes = {GameMapperImpl.class, PlayerMapperImpl.class, UserMapperImpl.class, RoleMapperImpl.class, GameIdentifierMapperImpl.class})
 public class GameMapperTest {
 
     @Autowired
