@@ -31,7 +31,7 @@ public interface PlayerMapper {
 
     WerewolfPlayer fromDTO(WerewolfPlayerDTO playerDTO);
 
-    Set<Player> fromDTO(Set<PlayerDTO> playerDTOS);
+    Set<Player> fromDTO(Set<? extends PlayerDTO> playerDTOS);
 
     default PlayerDTO toDTO(Player player, Boolean obfuscate) {
         if (player instanceof WerewolfPlayer) {

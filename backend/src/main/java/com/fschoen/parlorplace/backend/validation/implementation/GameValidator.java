@@ -13,7 +13,7 @@ public class GameValidator extends BaseValidator {
     }
 
     public ValidationResult validate(LobbyChangeRequestDTO lobbyChangeRequestDTO) {
-        return new ValidationResult(validateConstraints(lobbyChangeRequestDTO, false));
+        return new ValidationResult(validateConstraints(lobbyChangeRequestDTO, true));
     }
 
 }

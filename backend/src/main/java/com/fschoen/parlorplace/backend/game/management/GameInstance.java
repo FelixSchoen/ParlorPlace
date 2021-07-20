@@ -106,7 +106,7 @@ public abstract class GameInstance<G extends Game, P extends Player, GR extends 
         return game;
     }
 
-    public G changeLobby(Set<Player> players) {
+    public G changeLobby(Set<? extends Player> players) {
         validateGameNotStarted();
         validateUserIsLobbyAdmin(getPrincipal());
 
@@ -117,9 +117,10 @@ public abstract class GameInstance<G extends Game, P extends Player, GR extends 
         G game = getGame();
 
         if (players.stream().min(Comparator.comparingInt(Player::getPosition)).orElseThrow(() -> new GameException(Messages.exception("game.modify.invalid"))).getPosition() != 0
-                || players.stream().max(Comparator.comparingInt(Player::getPosition)).orElseThrow(() -> new GameException(Messages.exception("game.modify.invalid"))).getPosition() != game.getPlayers().size()
-                || players.stream().map(Player::getPosition).collect(Collectors.toSet()).size() != game.getPlayers().size())
+                || players.stream().max(Comparator.comparingInt(Player::getPosition)).orElseThrow(() -> new GameException(Messages.exception("game.modify.invalid"))).getPosition() != game.getPlayers().size() - 1
+                || players.stream().map(Player::getPosition).collect(Collectors.toSet()).size() != game.getPlayers().size()) {
             throw new DataConflictException(Messages.exception("game.modify.invalid"));
+        }
 
         G finalGame = game;
         players.forEach(requestPlayer -> {

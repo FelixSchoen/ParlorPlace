@@ -9,7 +9,6 @@ import javax.validation.constraints.Size;
 import java.util.Random;
 
 @NoArgsConstructor
-@AllArgsConstructor
 @EqualsAndHashCode
 @Builder(toBuilder = true)
 @Data
@@ -23,6 +22,10 @@ public class GameIdentifier {
 
     public GameIdentifier(int length) {
         this.generateToken(length);
+    }
+
+    public GameIdentifier(String token) {
+        this.token = token.toUpperCase();
     }
 
     private void generateToken(int length) {

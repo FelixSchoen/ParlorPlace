@@ -3,10 +3,13 @@ package com.fschoen.parlorplace.backend.controller;
 import com.fschoen.parlorplace.backend.controller.dto.game.GameDTO;
 import com.fschoen.parlorplace.backend.controller.dto.game.GameIdentifierDTO;
 import com.fschoen.parlorplace.backend.controller.dto.game.GameStartRequestDTO;
+import com.fschoen.parlorplace.backend.controller.dto.game.PlayerDTO;
 import com.fschoen.parlorplace.backend.controller.dto.lobby.LobbyChangeRequestDTO;
 import com.fschoen.parlorplace.backend.controller.mapper.GameIdentifierMapper;
 import com.fschoen.parlorplace.backend.controller.mapper.GameMapper;
 import com.fschoen.parlorplace.backend.controller.mapper.PlayerMapper;
+import com.fschoen.parlorplace.backend.entity.persistance.Game;
+import com.fschoen.parlorplace.backend.entity.persistance.Player;
 import com.fschoen.parlorplace.backend.game.management.GameIdentifier;
 import com.fschoen.parlorplace.backend.service.GameService;
 import com.fschoen.parlorplace.backend.validation.implementation.GameValidator;
@@ -14,6 +17,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Set;
 
 @RequestMapping("/game")
 @RestController
@@ -52,13 +57,13 @@ public class GameController {
     }
 
     @PostMapping("/lobby/change/{identifier}")
-    public ResponseEntity<Void> changeLobby(@PathVariable("identifier") String identifier, @RequestBody LobbyChangeRequestDTO lobbyChangeRequestDTO) {
+    public ResponseEntity<GameDTO> changeLobby(@PathVariable("identifier") String identifier, @RequestBody LobbyChangeRequestDTO lobbyChangeRequestDTO) {
         validator.validate(lobbyChangeRequestDTO).throwIfInvalid();
 
         GameIdentifier gameIdentifier = new GameIdentifier(identifier);
-        gameService.changeLobby(gameIdentifier, playerMapper.fromDTO(lobbyChangeRequestDTO.getPlayerDTOSet()));
+        GameDTO game = gameMapper.toDTO(gameService.changeLobby(gameIdentifier, playerMapper.fromDTO(lobbyChangeRequestDTO.getPlayers())), true);
 
-        return ResponseEntity.status(HttpStatus.OK).build();
+        return ResponseEntity.status(HttpStatus.OK).body(game);
     }
 
 }

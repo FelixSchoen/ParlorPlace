@@ -40,7 +40,7 @@ public interface GameService {
      * @throws GameException         If no game could be found using the identifier, the player issuing the request is not in the lobby, or the lobby cannot be edited
      * @throws DataConflictException If the request is faulty
      */
-    Game changeLobby(GameIdentifier gameIdentifier, Set<Player> players) throws GameException, DataConflictException;
+    Game changeLobby(GameIdentifier gameIdentifier, Set<? extends Player> players) throws GameException, DataConflictException;
 
     GameIdentifier generateValidGameIdentifier();
 

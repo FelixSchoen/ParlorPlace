@@ -66,7 +66,7 @@ public class GameServiceImplementation extends AbstractService implements GameSe
         return gameInstance.join(user);
     }
 
-    public Game changeLobby(GameIdentifier gameIdentifier, Set<Player> players) throws GameException {
+    public Game changeLobby(GameIdentifier gameIdentifier, Set<? extends Player> players) throws GameException {
         log.info("User {} changing Lobby of Game: {}", getPrincipal().getUsername(), gameIdentifier.getToken());
 
         User principal = getPrincipal();
