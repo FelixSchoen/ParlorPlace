@@ -1,5 +1,7 @@
 import {Component, HostBinding} from '@angular/core';
 import {AuthService} from "./services/auth.service";
+import {AppModule} from "./app.module";
+import {getAppModulePath} from "@angular/cdk/schematics";
 
 @Component({
   selector: 'app-root',
@@ -9,13 +11,21 @@ import {AuthService} from "./services/auth.service";
 export class AppComponent {
 
   public title = 'ParlorPlace';
-  public darkTheme = true;
+  public darkTheme = false;
 
 
-  constructor(authService: AuthService) {
+  constructor(private appModule: AppModule) {
   }
 
   public switchMode() {
     this.darkTheme = !this.darkTheme;
+
+    if (this.darkTheme) {
+      this.appModule.changeTheme('dark-theme');
+    } else {
+      this.appModule.changeTheme('light-theme');
+    }
+
   }
+
 }

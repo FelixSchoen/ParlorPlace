@@ -15,6 +15,7 @@ import {MatChipInputEvent} from "@angular/material/chips";
 import {ENTER} from "@angular/cdk/keycodes";
 import {MatAutocompleteSelectedEvent} from "@angular/material/autocomplete";
 import {Utility} from "../../utility/utility";
+import {GameType, GameTypeUtil} from "../../enums/gametype";
 
 @Component({
   selector: 'app-profile',
@@ -82,7 +83,7 @@ export class ProfileComponent implements OnInit {
     this.router.navigate(["profile/" + selectedUser.username]).then();
   }
 
-  openDialog(): void {
+  openEditDialog(): void {
     const dialogRef = this.dialog.open(DialogContentProfileEditDialog, {
       data: {
         inputData: {
@@ -117,6 +118,29 @@ export class ProfileComponent implements OnInit {
     )
   }
 
+  openEnterGameDialog(): void {
+    const dialogRef = this.dialog.open(DialogContentProfileEnterGameDialog, {
+      data: {
+        outputData: {
+          submitted: false,
+          host: false,
+          identifier: "",
+          game: null
+        }
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(
+      result => {
+        if (result.host) {
+
+        } else if (result.submitted) {
+
+        }
+      }
+    )
+  }
+
   signOut() {
     this.tokenService.signout();
     this.notificationService.showSuccess("Signed out");
@@ -129,23 +153,34 @@ export class ProfileComponent implements OnInit {
 
 }
 
-export interface DialogData {
-  inputData: DialogInputData;
-  outputData: DialogOutputData;
+export interface EditDialogData {
+  inputData: EditDialogInputData;
+  outputData: EditDialogOutputData;
 }
 
-export interface DialogInputData {
+export interface EditDialogInputData {
   input_isAdmin: boolean;
   input_nickname: string;
 }
 
-export interface DialogOutputData {
+export interface EditDialogOutputData {
   submitted: boolean;
   // username: string;
   password: string;
   nickname: string;
   email: string;
   roles: UserRole[];
+}
+
+export interface EnterGameDialogData {
+  outputData: EnterGameDialogOutputData;
+}
+
+export interface EnterGameDialogOutputData {
+  submitted: boolean;
+  host: boolean;
+  identifier: string;
+  game: GameType | null;
 }
 
 @Component({
@@ -173,7 +208,7 @@ export class DialogContentProfileEditDialog implements OnInit {
   @ViewChild('roleInput') roleInput: ElementRef<HTMLInputElement>;
 
   constructor(public dialogRef: MatDialogRef<DialogContentProfileEditDialog>,
-              @Inject(MAT_DIALOG_DATA) public data: DialogData, public formBuilder: FormBuilder, public userRoleUtil: UserRoleUtil) {
+              @Inject(MAT_DIALOG_DATA) public data: EditDialogData, public formBuilder: FormBuilder, public userRoleUtil: UserRoleUtil) {
   }
 
   ngOnInit(): void {
@@ -238,6 +273,50 @@ export class DialogContentProfileEditDialog implements OnInit {
 
     this.roleInput.nativeElement.value = "";
     this.roleControl.setValue(null);
+  }
+
+}
+
+@Component({
+    selector: "dialog-content-profile-enter-game-dialog",
+    templateUrl: "profile.enter-game-dialog.component.html"
+  }
+)
+export class DialogContentProfileEnterGameDialog implements OnInit {
+
+  public identifierControl = new FormControl("", [Validators.minLength(4)]);
+
+  private form: FormGroup;
+
+  public games: GameType[] = GameTypeUtil.getUserRoleArray();
+
+  constructor(public dialogRef: MatDialogRef<DialogContentProfileEnterGameDialog>,
+              @Inject(MAT_DIALOG_DATA) public data: EnterGameDialogData, public formBuilder: FormBuilder, public gameTypeUtil: GameTypeUtil) {
+  }
+
+  ngOnInit(): void {
+    this.dialogRef.beforeClosed().subscribe(() => this.dialogRef.close(this.data.outputData));
+    this.form = this.formBuilder.group({
+      identifier: this.identifierControl
+    })
+  }
+
+  onCancel(): void {
+    this.dialogRef.close(this.data.outputData);
+  }
+
+  onSubmit(): void {
+    if (this.form.invalid) {
+      return;
+    }
+    this.data.outputData.submitted = true;
+    this.dialogRef.close(this.data.outputData)
+  }
+
+  onHost(game: GameType) {
+    this.data.outputData.host = true;
+    this.data.outputData.game = game;
+    this.dialogRef.close(this.data.outputData);
   }
 
 }

@@ -16,6 +16,12 @@
 
   <!-- Profile Section -->
   <div *ngIf="!loading">
+    <!-- Floating Action Button -->
+    <button mat-fab color="accent" class="btn-fab" (click)="openEnterGameDialog()">
+      <mat-icon>games</mat-icon>
+    </button>
+
+    <!-- Profile Card -->
     <mat-card class="mx-3">
       <mat-card-header class="pp-center">
         <mat-card-title>
@@ -46,7 +52,7 @@
             <button mat-button (click)="signOut()">SIGN OUT</button>
           </div>
           <div class="float-right">
-            <button mat-button (click)="openDialog()">EDIT</button>
+            <button mat-button (click)="openEditDialog()">EDIT</button>
           </div>
           <div class="clearfix"></div>
         </mat-card-footer>
