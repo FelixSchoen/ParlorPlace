@@ -116,6 +116,37 @@ public class GameControllerTest extends BaseIntegrationTest {
                 .filter(playerDTO -> playerDTO.getUser().getId().equals(existingUser2.getId())).findFirst().get().getPosition()).isEqualTo(0);
     }
 
+    @Test
+    public void changeLobbyOptions_withInvalidLobby_resultsInDataConflictException() {
+        User existingUser1 = this.generatedData.getUserCollection().getUser1();
+        User existingUser2 = this.generatedData.getUserCollection().getUser2();
+
+        WerewolfGameDTO werewolfGameDTO = withWerewolfGame(existingUser1, existingUser2);
+        Set<WerewolfPlayerDTO> werewolfPlayerDTOS = werewolfGameDTO.getPlayers();
+
+        WerewolfLobbyChangeRequestDTO werewolfLobbyChangeRequestDTO = WerewolfLobbyChangeRequestDTO.builder().players(werewolfPlayerDTOS).build();
+
+        Response response = payload(werewolfLobbyChangeRequestDTO, getToken(existingUser1)).pathParam("identifier", "NOT")
+                .post(GAME_BASE_URI + "lobby/change/{identifier}").then().extract().response();
+        assertThat(response.statusCode()).isEqualTo(HttpStatus.CONFLICT.value());
+    }
+
+    @Test
+    public void changeLobbyOptions_withInvalidData_resultsInDataConflictException() {
+        User existingUser1 = this.generatedData.getUserCollection().getUser1();
+        User existingUser2 = this.generatedData.getUserCollection().getUser2();
+
+        WerewolfGameDTO werewolfGameDTO = withWerewolfGame(existingUser1, existingUser2);
+        Set<WerewolfPlayerDTO> werewolfPlayerDTOS = werewolfGameDTO.getPlayers();
+        werewolfPlayerDTOS.forEach(playerDTO -> playerDTO.setPosition(playerDTO.getPosition() + 1));
+
+        WerewolfLobbyChangeRequestDTO werewolfLobbyChangeRequestDTO = WerewolfLobbyChangeRequestDTO.builder().players(werewolfPlayerDTOS).build();
+
+        Response response = payload(werewolfLobbyChangeRequestDTO, getToken(existingUser1)).pathParam("identifier", werewolfGameDTO.getGameIdentifier().getToken())
+                .post(GAME_BASE_URI + "lobby/change/{identifier}").then().extract().response();
+        assertThat(response.statusCode()).isEqualTo(HttpStatus.CONFLICT.value());
+    }
+
     private WerewolfGameDTO withWerewolfGame(User initiator, User... participants) {
         GameStartRequestDTO gameStartRequestDTO = GameStartRequestDTO.builder().gameType(GameType.WEREWOLF).build();
         Response responseStart = post(gameStartRequestDTO, GAME_BASE_URI + "start", getToken(initiator));
