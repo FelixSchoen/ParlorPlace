@@ -27,14 +27,10 @@ import java.util.*;
 public class DatabasePopulator {
 
     private final UserRepository userRepository;
-    private final GameRepository gameRepository;
-    private final PlayerRepository playerRepository;
 
     @Autowired
-    public DatabasePopulator(UserRepository userRepository, GameRepository gameRepository, PlayerRepository playerRepository) {
+    public DatabasePopulator(UserRepository userRepository) {
         this.userRepository = userRepository;
-        this.gameRepository = gameRepository;
-        this.playerRepository = playerRepository;
     }
 
     /**
@@ -50,12 +46,6 @@ public class DatabasePopulator {
 
         log.info("Generating UserCollection");
         generatedData.setUserCollection(setupUserCollection(passwordCollection));
-
-        log.info("Generating WerewolfGameCollection");
-        generatedData.setWerewolfGameCollection(setupWerewolfGameCollection());
-
-        log.info("Generating WerewolfPlayerCollection");
-        generatedData.setWerewolfPlayerCollection(setupWerewolfPlayerCollection(generatedData.getUserCollection(), generatedData.getWerewolfGameCollection()));
 
         return generatedData;
     }
@@ -146,39 +136,6 @@ public class DatabasePopulator {
 
         userRepository.flush();
         return userCollection;
-    }
-
-    private GeneratedData.WerewolfGameCollection setupWerewolfGameCollection() {
-        GeneratedData.WerewolfGameCollection werewolfGameCollection = new GeneratedData.WerewolfGameCollection();
-
-        // Werewolf Game 1
-        WerewolfGame werewolfGame1 = WerewolfGame.builder()
-                .startedAt(new Date())
-                .gameIdentifier(new GameIdentifier("GAME1"))
-                .players(new HashSet<>())
-                .ruleSet(new WerewolfRuleSet())
-                .build();
-
-        werewolfGameCollection.setWerewolfGame1((WerewolfGame) gameRepository.save(werewolfGame1));
-
-        return werewolfGameCollection;
-    }
-
-    private GeneratedData.WerewolfPlayerCollection setupWerewolfPlayerCollection(GeneratedData.UserCollection userCollection, GeneratedData.WerewolfGameCollection werewolfGameCollection) {
-        GeneratedData.WerewolfPlayerCollection werewolfPlayerCollection = new GeneratedData.WerewolfPlayerCollection();
-
-        // Werewolf Player 1
-        WerewolfPlayer werewolfPlayer1 = WerewolfPlayer.builder()
-                .user(userCollection.getUser1())
-                .lobbyRole(LobbyRole.ROLE_ADMIN)
-                .playerState(PlayerState.ALIVE)
-                .position(0)
-                .game(werewolfGameCollection.getWerewolfGame1())
-                .werewolfRole(null)
-                .build();
-        werewolfPlayerCollection.setWerewolfPlayer1((WerewolfPlayer) playerRepository.save(werewolfPlayer1));
-
-        return werewolfPlayerCollection;
     }
 
 }

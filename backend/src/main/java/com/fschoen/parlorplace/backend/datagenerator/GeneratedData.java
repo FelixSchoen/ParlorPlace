@@ -1,15 +1,13 @@
 package com.fschoen.parlorplace.backend.datagenerator;
 
-import com.fschoen.parlorplace.backend.entity.persistance.Player;
 import com.fschoen.parlorplace.backend.entity.persistance.User;
+import com.fschoen.parlorplace.backend.game.werewolf.dto.game.WerewolfGameDTO;
+import com.fschoen.parlorplace.backend.game.werewolf.dto.game.WerewolfPlayerDTO;
 import com.fschoen.parlorplace.backend.game.werewolf.entity.persistance.WerewolfGame;
 import com.fschoen.parlorplace.backend.game.werewolf.entity.persistance.WerewolfPlayer;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-import java.util.HashMap;
 import java.util.Map;
 
 @Slf4j
@@ -18,8 +16,6 @@ public class GeneratedData {
 
     private UserCollection userCollection;
     private Map<User, String> passwordCollection;
-    private WerewolfGameCollection werewolfGameCollection;
-    private WerewolfPlayerCollection werewolfPlayerCollection;
 
     @Data
     public static class UserCollection {
@@ -29,18 +25,6 @@ public class GeneratedData {
         private User user3;
 
         private User neUser1; // non existent user
-    }
-
-    @Data
-    public static class WerewolfGameCollection {
-        private WerewolfGame werewolfGame1;
-    }
-
-    @Data
-    public static class WerewolfPlayerCollection {
-        private WerewolfPlayer werewolfPlayer1;
-        private WerewolfPlayer werewolfPlayer2;
-        private WerewolfPlayer werewolfPlayer3;
     }
 
 }

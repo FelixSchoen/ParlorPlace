@@ -5,13 +5,16 @@ import com.fschoen.parlorplace.backend.controller.dto.game.GameStartRequestDTO;
 import com.fschoen.parlorplace.backend.entity.persistance.User;
 import com.fschoen.parlorplace.backend.enumeration.GameType;
 import com.fschoen.parlorplace.backend.game.werewolf.dto.game.WerewolfGameDTO;
+import com.fschoen.parlorplace.backend.game.werewolf.entity.persistance.WerewolfGame;
 import com.fschoen.parlorplace.backend.integration.base.BaseIntegrationTest;
 import io.restassured.response.Response;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
+import org.springframework.test.annotation.DirtiesContext;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 public class GameControllerTest extends BaseIntegrationTest {
 
     @Test
@@ -81,8 +84,20 @@ public class GameControllerTest extends BaseIntegrationTest {
 
         Response response2 = payload("", getToken(existingUser2)).pathParam("identifier", game1.getGameIdentifier().getToken()).post(GAME_BASE_URI + "join/{identifier}").then().extract().response();
         assertThat(response2.statusCode()).isEqualTo(HttpStatus.OK.value());
-        GameDTO game2 = response1.getBody().as(WerewolfGameDTO.class);
+        GameDTO game2 = response2.getBody().as(WerewolfGameDTO.class);
         assertThat(game2.getGameIdentifier()).isEqualTo(game1.getGameIdentifier());
+    }
+
+    private WerewolfGameDTO withWerewolfGame(User initiator, User... participants) {
+        GameStartRequestDTO gameStartRequestDTO = GameStartRequestDTO.builder().gameType(GameType.WEREWOLF).build();
+        Response responseStart = post(gameStartRequestDTO, GAME_BASE_URI + "start", getToken(initiator));
+        WerewolfGameDTO gameDTO = responseStart.getBody().as(WerewolfGameDTO.class);
+
+        for (User participant : participants) {
+            payload("", getToken(participant)).pathParam("identifier", gameDTO.getGameIdentifier().getToken()).post(GAME_BASE_URI + "join/{identifier}").then().extract().response();
+        }
+
+        return gameDTO;
     }
 
 }
