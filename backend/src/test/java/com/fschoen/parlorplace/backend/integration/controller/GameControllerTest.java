@@ -163,7 +163,7 @@ public class GameControllerTest extends BaseIntegrationTest {
         WerewolfLobbyChangeRequestDTO werewolfLobbyChangeRequestDTO = WerewolfLobbyChangeRequestDTO.builder().players(werewolfGameDTO.getPlayers()).ruleSet(werewolfRuleSetDTO).build();
 
         Response response = payload(werewolfLobbyChangeRequestDTO, getToken(existingUser1)).pathParam("identifier", werewolfGameDTO.getGameIdentifier().getToken())
-                .post(GAME_BASE_URI + "lobby/change/{identifier}").then().extract().response();
+                .log().body().post(GAME_BASE_URI + "lobby/change/{identifier}").then().extract().response();
         assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
 
         werewolfGameDTO = response.getBody().as(WerewolfGameDTO.class);

@@ -5,27 +5,29 @@ import {Game, GameIdentifier} from "../../dto/game";
 import {GameType, GameTypeUtil} from "../../enums/gametype";
 import {NotificationService} from "../../services/notification.service";
 import {GameState} from "../../enums/gamestate";
-import {Player} from "../../dto/player";
+import {Player, WerewolfPlayer} from "../../dto/player";
 import {UserService} from "../../services/user.service";
 import {User} from "../../dto/user";
 import {GlobalValues} from "../../globals/global-values.service";
+import {CdkDragDrop} from "@angular/cdk/drag-drop";
+import {LobbyChangeRequest} from "../../dto/lobby";
 
 @Component({
   selector: 'app-lobby',
   templateUrl: './lobby.component.html',
   styleUrls: ['./lobby.component.css']
 })
-export class LobbyComponent implements OnInit {
+export class LobbyComponent<G extends Game, P extends Player> implements OnInit {
 
   public initialLoading: boolean;
   public refreshLoading: boolean;
   public errorMessage: string;
 
   protected gameIdentifier: GameIdentifier;
-  public currentPlayer: Player;
-  public game: Game;
+  public currentPlayer: P;
+  public game: G;
 
-  constructor(public userService: UserService, public gameService: GameService<Game>, public notificationService: NotificationService, public activatedRoute: ActivatedRoute, public router: Router) {
+  constructor(public userService: UserService, public gameService: GameService<G>, public notificationService: NotificationService, public activatedRoute: ActivatedRoute, public router: Router) {
   }
 
   ngOnInit(): void {
@@ -59,20 +61,48 @@ export class LobbyComponent implements OnInit {
   protected refresh(): void {
     this.refreshLoading = true;
     this.gameService.getGameState(this.gameIdentifier).subscribe(
-      (result: Game) => {
+      (result: G) => {
         this.game = result
         this.userService.getCurrentUser().subscribe(
           (user: User) => {
-            this.currentPlayer = [...this.game.players].filter(function (player) {
+            this.currentPlayer = <P>[...this.game.players].filter(function (player) {
               return player.user.id == user.id;
             })[0];
             this.refreshLoading = false;
           }
-
         )
       },
-      error => this.errorMessage = error.error
+      () => this.router.navigate([GlobalValues.ENTRY_URI]).then()
     )
+  }
+
+  public sortPlayers(players: Set<Player>): Player[] {
+    let playersArray = [...players];
+    playersArray.sort((a, b) => (a.position > b.position) ? 1 : -1)
+    return playersArray
+  }
+
+  public changePosition(event: CdkDragDrop<string[]>) {
+    let oldPosition = event.previousIndex
+    let newPosition = event.currentIndex
+
+    if (oldPosition == newPosition)
+      return
+
+    let operation = oldPosition < newPosition ? -1 : 1
+    let playerToChange = this.sortPlayers(this.game.players)[oldPosition]
+
+    for (let player of this.game.players) {
+      if (player.position > oldPosition && player.position <= newPosition || player.position < oldPosition && player.position >= newPosition) {
+        player.position += operation
+      }
+    }
+
+    playerToChange.position = newPosition
+    this.changeLobby();
+  }
+
+  public changeLobby(): void {
   }
 
 }
