@@ -68,9 +68,8 @@ public class GameServiceImplementation extends AbstractService implements GameSe
     }
 
     public Game changeLobby(GameIdentifier gameIdentifier, Set<? extends Player> players) throws GameException {
-        log.info("User {} changing Lobby of Game: {}", getPrincipal().getUsername(), gameIdentifier.getToken());
-
         User principal = getPrincipal();
+        log.info("User {} changing Lobby of Game: {}", principal, gameIdentifier.getToken());
 
         if (isNotInGame(principal, gameIdentifier))
             throw new GameException(Messages.exception("game.user.ingame.not"));
@@ -81,9 +80,8 @@ public class GameServiceImplementation extends AbstractService implements GameSe
     }
 
     public Game changeLobby(GameIdentifier gameIdentifier, RuleSet ruleSet) {
-        log.info("User {} changing Rule Set of Game: {}", getPrincipal().getUsername(), gameIdentifier.getToken());
-
         User principal = getPrincipal();
+        log.info("User {} changing Rule Set of Game: {}", principal, gameIdentifier.getToken());
 
         if (isNotInGame(principal, gameIdentifier))
             throw new GameException(Messages.exception("game.user.ingame.not"));
@@ -91,6 +89,18 @@ public class GameServiceImplementation extends AbstractService implements GameSe
         GameInstance<?, ?, ?, ?> gameInstance = getGameByGameIdentifier(gameIdentifier);
 
         return gameInstance.changeLobby(ruleSet);
+    }
+
+    public Game getActiveGame(GameIdentifier gameIdentifier) {
+        User principal = getPrincipal();
+        log.info("User {} obtaining information about Game: {}", principal, gameIdentifier.getToken());
+
+        if (isNotInGame(principal, gameIdentifier))
+            throw new GameException(Messages.exception("game.user.ingame.not"));
+
+        GameInstance<?, ?, ?, ?> gameInstance = getGameByGameIdentifier(gameIdentifier);
+
+        return gameInstance.getGame();
     }
 
     public GameIdentifier generateValidGameIdentifier() {

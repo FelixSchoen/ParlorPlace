@@ -54,6 +54,14 @@ public interface GameService {
      */
     Game changeLobby(GameIdentifier gameIdentifier, RuleSet ruleSet) throws GameException, DataConflictException;
 
+    /**
+     * Obtains a running game with the given identifier.
+     *
+     * @param gameIdentifier Identifier of the game to obtain
+     * @return The found game
+     */
+    Game getActiveGame(GameIdentifier gameIdentifier);
+
     GameIdentifier generateValidGameIdentifier();
 
 }

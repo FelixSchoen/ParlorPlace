@@ -141,13 +141,7 @@ public abstract class GameInstance<G extends Game, P extends Player, GR extends 
      */
     public abstract G changeLobby(RuleSet ruleSet);
 
-    // Utility Getter
-
-    public Set<P> getPlayers() {
-        return this.getGame().getPlayers();
-    }
-
-    protected G getGame() throws DataConflictException {
+    public G getGame() throws DataConflictException {
         Optional<G> game = this.gameRepository.findOneById(this.gameId);
 
         if (game.isEmpty())
@@ -157,6 +151,12 @@ public abstract class GameInstance<G extends Game, P extends Player, GR extends 
         foundGame.setGameIdentifier(this.gameIdentifier);
 
         return foundGame;
+    }
+
+    // Utility Getter
+
+    public Set<P> getPlayers() {
+        return this.getGame().getPlayers();
     }
 
     protected GR getGameRepository() {

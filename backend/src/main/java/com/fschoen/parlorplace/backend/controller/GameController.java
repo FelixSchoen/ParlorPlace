@@ -53,7 +53,7 @@ public class GameController {
     }
 
     @PostMapping("/join/{identifier}")
-    public ResponseEntity<GameDTO> startGame(@PathVariable("identifier") String identifier) {
+    public ResponseEntity<GameDTO> joinGame(@PathVariable("identifier") String identifier) {
         GameDTO gameDTO = gameMapper.toDTO(gameService.join(new GameIdentifier(identifier)), true);
 
         return ResponseEntity.status(HttpStatus.OK).body(gameDTO);
@@ -66,6 +66,14 @@ public class GameController {
         GameIdentifier gameIdentifier = new GameIdentifier(identifier);
         gameService.changeLobby(gameIdentifier, playerMapper.fromDTO(lobbyChangeRequestDTO.getPlayers()));
         GameDTO game = gameMapper.toDTO(gameService.changeLobby(gameIdentifier, ruleSetMapper.fromDTO(lobbyChangeRequestDTO.getRuleSet())), true);
+
+        return ResponseEntity.status(HttpStatus.OK).body(game);
+    }
+
+    @GetMapping("/{identifier}")
+    public ResponseEntity<GameDTO> getGame(@PathVariable("identifier") String identifier) {
+        GameIdentifier gameIdentifier = new GameIdentifier(identifier);
+        GameDTO game = gameMapper.toDTO(gameService.getActiveGame(gameIdentifier), true);
 
         return ResponseEntity.status(HttpStatus.OK).body(game);
     }
