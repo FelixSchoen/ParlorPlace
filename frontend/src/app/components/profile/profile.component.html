@@ -36,7 +36,7 @@
               *ngFor="let role of this.profileUser.roles"
               [selectable]="false"
               [removable]="false">
-              {{this.userRoleUtil.toStringRepresentation(role)}}
+              {{userRoleToString(role)}}
             </mat-chip>
           </mat-chip-list>
         </mat-card-subtitle>
@@ -47,7 +47,7 @@
       </mat-card-content>
 
       <div *ngIf="currentUser.id == profileUser.id || this.userService.isAdmin(currentUser)">
-        <mat-card-footer>
+        <mat-card-actions>
           <div class="float-left" *ngIf="currentUser.id == profileUser.id">
             <button mat-button (click)="signOut()">SIGN OUT</button>
           </div>
@@ -55,7 +55,7 @@
             <button mat-button (click)="openEditDialog()">EDIT</button>
           </div>
           <div class="clearfix"></div>
-        </mat-card-footer>
+        </mat-card-actions>
       </div>
     </mat-card>
 

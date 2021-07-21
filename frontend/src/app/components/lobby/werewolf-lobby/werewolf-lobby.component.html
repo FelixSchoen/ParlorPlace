@@ -1,14 +1,19 @@
 <div class="container p-3 h-100">
 
-  <mat-tab-group id="group" dynamicHeight>
-    <mat-tab label="Participants">
+  <mat-tab-group id="group" dynamicHeight mat-align-tabs="center">
+
+    <mat-tab>
+      <ng-template mat-tab-label>
+        <mat-icon class="tab-icon material-icons-outlined">people</mat-icon>
+        Players
+      </ng-template>
       <div *ngIf="!initialLoading" class="pt-3">
 
         <!-- Participants Card -->
         <mat-card class="mx-3 mb-3">
           <mat-card-header class="pp-center">
             <mat-card-title>
-              Participants
+              Players
             </mat-card-title>
             <mat-card-subtitle *ngIf="refreshLoading">
               <mat-progress-bar mode="indeterminate"></mat-progress-bar>
@@ -20,16 +25,19 @@
               <mat-list>
                 <mat-list-item *ngFor="let player of sortPlayers(this.game.players)" cdkDrag
                                [cdkDragDisabled]="currentPlayer.lobbyRole != 'ROLE_ADMIN'">
+                  <mat-icon *ngIf="player.lobbyRole == 'ROLE_ADMIN'" mat-list-icon>person_outline</mat-icon>
+                  <mat-icon *ngIf="player.lobbyRole == 'ROLE_USER'" mat-list-icon>person</mat-icon>
                   <h3 matLine>
                     {{player.user.nickname}}
                   </h3>
-                  <p *ngIf="player.lobbyRole == 'ROLE_ADMIN'" matLine>Host</p>
+                  <p matLine>{{player.user.username}}</p>
+
                 </mat-list-item>
               </mat-list>
             </div>
           </mat-card-content>
 
-          <mat-card-footer>
+          <mat-card-actions>
             <div class="float-left">
               <button mat-button>QUIT</button>
             </div>
@@ -37,12 +45,17 @@
               <button mat-button color="primary">START</button>
             </div>
             <div class="clearfix"></div>
-          </mat-card-footer>
+          </mat-card-actions>
         </mat-card>
 
       </div>
     </mat-tab>
-    <mat-tab label="Rules" class="h-100">
+
+    <mat-tab>
+      <ng-template mat-tab-label>
+        <mat-icon class="tab-icon material-icons-outlined">list_alt</mat-icon>
+        Rules
+      </ng-template>
       <div *ngIf="!initialLoading" class="h-100 pt-3">
 
         <!-- Rules Card -->
@@ -50,6 +63,34 @@
           <mat-card-header class="pp-center">
             <mat-card-title>
               Rules
+            </mat-card-title>
+            <mat-card-subtitle>
+              {{gameIdentifier.token}}
+            </mat-card-subtitle>
+            <mat-card-subtitle *ngIf="refreshLoading">
+              <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+            </mat-card-subtitle>
+          </mat-card-header>
+
+          <mat-card-content>
+          </mat-card-content>
+        </mat-card>
+
+      </div>
+    </mat-tab>
+
+    <mat-tab>
+      <ng-template mat-tab-label>
+        <mat-icon class="tab-icon material-icons-outlined">settings</mat-icon>
+        Settings
+      </ng-template>
+      <div *ngIf="!initialLoading" class="h-100 pt-3">
+
+        <!-- Rules Card -->
+        <mat-card class="mx-3 mb-3">
+          <mat-card-header class="pp-center">
+            <mat-card-title>
+              Settings
             </mat-card-title>
             <mat-card-subtitle *ngIf="refreshLoading">
               <mat-progress-bar mode="indeterminate"></mat-progress-bar>
@@ -62,6 +103,7 @@
 
       </div>
     </mat-tab>
+
   </mat-tab-group>
 
   <!-- Loading Indicator -->

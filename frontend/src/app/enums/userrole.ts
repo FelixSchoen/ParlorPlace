@@ -16,7 +16,7 @@ export class UserRoleUtil {
     return [UserRole.USER, UserRole.ADMIN]
   }
 
-  public toStringRepresentation(role: UserRole): string {
+  public static toStringRepresentation(role: UserRole): string {
     switch (role) {
       case UserRole.USER:
         return "User";

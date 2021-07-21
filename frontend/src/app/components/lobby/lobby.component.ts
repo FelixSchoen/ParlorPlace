@@ -23,7 +23,7 @@ export class LobbyComponent<G extends Game, P extends Player> implements OnInit 
   public refreshLoading: boolean;
   public errorMessage: string;
 
-  protected gameIdentifier: GameIdentifier;
+  public gameIdentifier: GameIdentifier;
   public currentPlayer: P;
   public game: G;
 

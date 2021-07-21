@@ -36,8 +36,10 @@ export class ProfileComponent implements OnInit {
   public userSearchControl: FormControl = new FormControl();
   public filteredOptions: Observable<User[]>;
 
+  public userRoleToString = UserRoleUtil.toStringRepresentation;
+
   constructor(public userService: UserService, public gameService: GameService<Game>, private tokenService: TokenService, private notificationService: NotificationService,
-              private dialog: MatDialog, public userRoleUtil: UserRoleUtil, private activatedRoute: ActivatedRoute, private router: Router) {
+              private dialog: MatDialog, private activatedRoute: ActivatedRoute, private router: Router) {
   }
 
   ngOnInit(): void {
@@ -222,10 +224,12 @@ export class DialogContentProfileEditDialog implements OnInit {
   public separatorKeysCodes: number[] = [ENTER];
   public availableRoles: UserRole[];
 
+  public userRoleToString = UserRoleUtil.toStringRepresentation;
+
   @ViewChild('roleInput') roleInput: ElementRef<HTMLInputElement>;
 
   constructor(public dialogRef: MatDialogRef<DialogContentProfileEditDialog>,
-              @Inject(MAT_DIALOG_DATA) public data: EditDialogData, public formBuilder: FormBuilder, public userRoleUtil: UserRoleUtil) {
+              @Inject(MAT_DIALOG_DATA) public data: EditDialogData, public formBuilder: FormBuilder) {
   }
 
   ngOnInit(): void {
@@ -305,7 +309,7 @@ export class DialogContentProfileEnterGameDialog implements OnInit {
 
   private form: FormGroup;
 
-  public games: GameType[] = GameTypeUtil.getUserRoleArray();
+  public games: GameType[] = GameTypeUtil.getGameTypeArray();
 
   constructor(public dialogRef: MatDialogRef<DialogContentProfileEnterGameDialog>,
               @Inject(MAT_DIALOG_DATA) public data: EnterGameDialogData, public formBuilder: FormBuilder, public gameTypeUtil: GameTypeUtil) {

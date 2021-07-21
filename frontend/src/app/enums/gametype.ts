@@ -13,12 +13,8 @@ export class GameTypeUtil {
   constructor() {
   }
 
-  public static getUserRoleArray(): GameType[] {
+  public static getGameTypeArray(): GameType[] {
     return [GameType.WEREWOLF]
-  }
-
-  public toStringRepresentation(type: GameType): string {
-    return GameTypeUtil.toStringRepresentation(type);
   }
 
   public static toStringRepresentation(type: GameType): string {

@@ -31,7 +31,7 @@
     <mat-label i18n>E-Mail</mat-label>
     <input matInput [(ngModel)]="data.email" [formControl]="emailControl">
     <mat-error *ngIf="emailControl.hasError('required')" i18n>E-Mail is required</mat-error>
-    <mat-error *ngIf="emailControl.hasError('mail')" i18n>E-Mail is invalid</mat-error>
+    <mat-error *ngIf="emailControl.hasError('email')" i18n>E-Mail is invalid</mat-error>
   </mat-form-field>
 
 </mat-dialog-content>
