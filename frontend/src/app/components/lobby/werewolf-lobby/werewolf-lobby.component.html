@@ -1,38 +1,72 @@
-<div class="container p-3">
+<div class="container p-3 h-100">
 
-  <!-- Profile Section -->
-  <div *ngIf="!loading">
+  <mat-tab-group id="group">
+    <mat-tab label="Participants">
+      <div *ngIf="!initialLoading" class="h-100 pt-3">
 
-    <!-- Profile Card -->
-    <mat-card class="mx-3">
-      <mat-card-header class="pp-center">
-        <mat-card-title>
-          Participants
-        </mat-card-title>
-      </mat-card-header>
+        <!-- Participants Card -->
+        <mat-card class="mx-3 h-100">
+          <mat-card-header class="pp-center">
+            <mat-card-title>
+              Participants
+            </mat-card-title>
+            <mat-card-subtitle *ngIf="refreshLoading">
+              <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+            </mat-card-subtitle>
+          </mat-card-header>
 
-      <mat-card-content>
-        <div cdkDropList>
-          <mat-list>
-            <mat-list-item *ngFor="let player of this.game.players" cdkDrag [cdkDragDisabled]="currentPlayer.lobbyRole != 'ROLE_ADMIN'">
-              <h3 matLine>
-                {{player.user.nickname}}
-              </h3>
-              <p *ngIf="player.lobbyRole == 'ROLE_ADMIN'" matLine>Host</p>
-            </mat-list-item>
-          </mat-list>
-        </div>
-<!--        <div cdkDropList (cdkDropListDropped)="drop($event)">-->
-<!--          <div *ngFor="let player of this.game.players" cdkDrag>{{player.user.nickname}}</div>-->
-<!--        </div>-->
-      </mat-card-content>
-    </mat-card>
+          <mat-card-content>
+            <div cdkDropList (cdkDropListDropped)="drop($event)" *ngIf="!refreshLoading">
+              <mat-list>
+                <mat-list-item *ngFor="let player of this.game.players" cdkDrag
+                               [cdkDragDisabled]="currentPlayer.lobbyRole != 'ROLE_ADMIN'">
+                  <h3 matLine>
+                    {{player.user.nickname}}
+                  </h3>
+                  <p *ngIf="player.lobbyRole == 'ROLE_ADMIN'" matLine>Host</p>
+                </mat-list-item>
+              </mat-list>
+            </div>
+          </mat-card-content>
 
-  </div>
+          <mat-card-footer>
+            <div class="float-left">
+              <button mat-button>QUIT</button>
+            </div>
+            <div class="float-right" *ngIf="!refreshLoading && currentPlayer.lobbyRole == 'ROLE_ADMIN'">
+              <button mat-button color="primary">START</button>
+            </div>
+            <div class="clearfix"></div>
+          </mat-card-footer>
+        </mat-card>
+
+      </div>
+    </mat-tab>
+    <mat-tab label="Rules" class="h-100">
+      <div *ngIf="!initialLoading" class="h-100 pt-3">
+
+        <!-- Rules Card -->
+        <mat-card class="mx-3 h-100">
+          <mat-card-header class="pp-center">
+            <mat-card-title>
+              Rules
+            </mat-card-title>
+            <mat-card-subtitle *ngIf="refreshLoading">
+              <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+            </mat-card-subtitle>
+          </mat-card-header>
+
+          <mat-card-content>
+          </mat-card-content>
+        </mat-card>
+
+      </div>
+    </mat-tab>
+  </mat-tab-group>
 
   <!-- Loading Indicator -->
-  <div class="d-flex justify-content-center align-items-center h-100" *ngIf="loading">
-    <app-loading-indicator [loading]="loading" [errorMessage]="errorMessage"></app-loading-indicator>
+  <div class="d-flex justify-content-center align-items-center h-100" *ngIf="initialLoading">
+    <app-loading-indicator [loading]="initialLoading" [errorMessage]="errorMessage"></app-loading-indicator>
   </div>
 
 </div>

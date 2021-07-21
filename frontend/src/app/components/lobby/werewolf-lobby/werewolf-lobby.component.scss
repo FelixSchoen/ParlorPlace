@@ -1,0 +1,23 @@
+.cdk-drop-dragging .cdk-drag {
+  transition: transform 100ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+.cdk-drag-animating {
+  transition: transform 100ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+.cdk-drag-placeholder {
+  background: rgba(0, 0, 0, .1);
+}
+
+#group {
+  height: 100%; // Whole group height.
+
+  ::ng-deep .mat-tab-body-wrapper {
+    height: 100%; // Tabs body height. I also don't like ng-deep, but there is no other way :(
+  }
+
+  .tab-content-container {
+    height: 100%;  // Content height.
+  }
+}

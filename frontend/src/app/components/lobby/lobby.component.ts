@@ -8,6 +8,7 @@ import {GameState} from "../../enums/gamestate";
 import {Player} from "../../dto/player";
 import {UserService} from "../../services/user.service";
 import {User} from "../../dto/user";
+import {GlobalValues} from "../../globals/global-values.service";
 
 @Component({
   selector: 'app-lobby',
@@ -16,7 +17,8 @@ import {User} from "../../dto/user";
 })
 export class LobbyComponent implements OnInit {
 
-  public loading: boolean;
+  public initialLoading: boolean;
+  public refreshLoading: boolean;
   public errorMessage: string;
 
   protected gameIdentifier: GameIdentifier;
@@ -28,7 +30,7 @@ export class LobbyComponent implements OnInit {
 
   ngOnInit(): void {
     const queryIdentifier: string = this.activatedRoute.snapshot.params["identifier"];
-    let redirectString = "/game/";
+    let redirectString = GlobalValues.GAME_URI;
 
     this.gameService.getGameState(new GameIdentifier(queryIdentifier)).subscribe(
       (result: Game) => {
@@ -45,7 +47,7 @@ export class LobbyComponent implements OnInit {
 
         this.router.navigate([redirectString]).then();
       },
-      () => this.router.navigate(["/entry"]).then()
+      () => this.router.navigate([GlobalValues.ENTRY_URI]).then()
     )
   }
 
@@ -55,7 +57,7 @@ export class LobbyComponent implements OnInit {
   }
 
   protected refresh(): void {
-    this.loading = true;
+    this.refreshLoading = true;
     this.gameService.getGameState(this.gameIdentifier).subscribe(
       (result: Game) => {
         this.game = result
@@ -64,7 +66,7 @@ export class LobbyComponent implements OnInit {
             this.currentPlayer = [...this.game.players].filter(function (player) {
               return player.user.id == user.id;
             })[0];
-            this.loading = false;
+            this.refreshLoading = false;
           }
 
         )

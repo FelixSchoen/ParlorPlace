@@ -10,7 +10,7 @@ import {UserService} from "../../../services/user.service";
 @Component({
   selector: 'app-werewolf-lobby',
   templateUrl: './werewolf-lobby.component.html',
-  styleUrls: ['./werewolf-lobby.component.css']
+  styleUrls: ['./werewolf-lobby.component.scss']
 })
 export class WerewolfLobbyComponent extends LobbyComponent implements OnInit {
 
@@ -24,8 +24,9 @@ export class WerewolfLobbyComponent extends LobbyComponent implements OnInit {
   }
 
   drop(event: CdkDragDrop<string[]>) {
-    console.log(event.previousIndex)
-    console.log(event.currentIndex)
+    this.refresh();
+    // console.log(event.previousIndex)
+    // console.log(event.currentIndex)
   }
 
 }

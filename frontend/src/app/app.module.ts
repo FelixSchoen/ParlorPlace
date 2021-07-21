@@ -37,6 +37,8 @@ import { LobbyComponent } from './components/lobby/lobby.component';
 import { WerewolfLobbyComponent } from './components/lobby/werewolf-lobby/werewolf-lobby.component';
 import {DragDropModule} from "@angular/cdk/drag-drop";
 import {MatListModule} from "@angular/material/list";
+import {MatProgressBarModule} from "@angular/material/progress-bar";
+import {MatTabsModule} from "@angular/material/tabs";
 
 const THEME_KEY = 'theme-style';
 
@@ -78,7 +80,9 @@ const THEME_KEY = 'theme-style';
     MatIconModule,
     MatMenuModule,
     DragDropModule,
-    MatListModule
+    MatListModule,
+    MatProgressBarModule,
+    MatTabsModule
   ],
   entryComponents: [DialogContentSignupDialog, DialogContentSigninDialog, DialogContentProfileEditDialog],
   providers: [authInterceptorProviders],

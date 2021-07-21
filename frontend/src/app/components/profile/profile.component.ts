@@ -18,6 +18,7 @@ import {Utility} from "../../utility/utility";
 import {GameType, GameTypeUtil} from "../../enums/gametype";
 import {GameService} from "../../services/game.service";
 import {Game, GameIdentifier, GameStartRequest} from "../../dto/game";
+import {GlobalValues} from "../../globals/global-values.service";
 
 @Component({
   selector: 'app-profile',
@@ -66,7 +67,7 @@ export class ProfileComponent implements OnInit {
       (user) => {
         this.currentUser = user;
         if (queryName == undefined) {
-          this.router.navigate(["profile/" + user.username]).then();
+          this.router.navigate([GlobalValues.PROFILE_URI + user.username]).then();
         } else {
           this.userService.getUserByUsername(queryName).subscribe(
             (user: User) => {
@@ -82,7 +83,7 @@ export class ProfileComponent implements OnInit {
 
   onSelect($event: any) {
     const selectedUser: User = $event.source.value
-    this.router.navigate(["profile/" + selectedUser.username]).then();
+    this.router.navigate([GlobalValues.PROFILE_URI + selectedUser.username]).then();
   }
 
   openEditDialog(): void {
