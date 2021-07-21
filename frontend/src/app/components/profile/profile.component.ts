@@ -17,7 +17,7 @@ import {MatAutocompleteSelectedEvent} from "@angular/material/autocomplete";
 import {Utility} from "../../utility/utility";
 import {GameType, GameTypeUtil} from "../../enums/gametype";
 import {GameService} from "../../services/game.service";
-import {GameIdentifier, GameStartRequest} from "../../dto/game";
+import {Game, GameIdentifier, GameStartRequest} from "../../dto/game";
 
 @Component({
   selector: 'app-profile',
@@ -35,7 +35,7 @@ export class ProfileComponent implements OnInit {
   public userSearchControl: FormControl = new FormControl();
   public filteredOptions: Observable<User[]>;
 
-  constructor(public userService: UserService, public gameService: GameService, private tokenService: TokenService, private notificationService: NotificationService,
+  constructor(public userService: UserService, public gameService: GameService<Game>, private tokenService: TokenService, private notificationService: NotificationService,
               private dialog: MatDialog, public userRoleUtil: UserRoleUtil, private activatedRoute: ActivatedRoute, private router: Router) {
   }
 

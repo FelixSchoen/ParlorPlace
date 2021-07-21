@@ -6,6 +6,7 @@ import {ProfileComponent} from "./components/profile/profile.component";
 import {AuthGuard} from "./guards/auth.guard";
 import {ExperimentalComponent} from "./components/experimental/experimental.component";
 import {LobbyComponent} from "./components/lobby/lobby.component";
+import {WerewolfLobbyComponent} from "./components/lobby/werewolf-lobby/werewolf-lobby.component";
 
 const routes: Routes = [
   {path: '', redirectTo: 'entry', pathMatch: 'full'},
@@ -14,7 +15,7 @@ const routes: Routes = [
   {path: 'profile/:username', component: ProfileComponent, canActivate: [AuthGuard]},
   {path: 'game/lobby', redirectTo: 'entry', pathMatch: 'full'},
   {path: 'game/lobby/:identifier', component: LobbyComponent, canActivate: [AuthGuard]},
-  {path: 'game/werewolf', redirectTo: 'entry', pathMatch: 'full'},
+  {path: 'game/werewolf/:identifier/lobby', component: WerewolfLobbyComponent, canActivate: [AuthGuard]},
   {path: 'experimental', component: ExperimentalComponent},
   {path: '**', redirectTo: 'entry', pathMatch: 'full'},
 ];

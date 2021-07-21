@@ -1,4 +1,4 @@
 export enum PlayerState {
-  ALIVE,
-  DECEASED
+  ALIVE = "ALIVE",
+  DECEASED = "DECEASED"
 }

@@ -35,6 +35,8 @@ import {OverlayContainer} from "@angular/cdk/overlay";
 import {MatMenuModule} from "@angular/material/menu";
 import { LobbyComponent } from './components/lobby/lobby.component';
 import { WerewolfLobbyComponent } from './components/lobby/werewolf-lobby/werewolf-lobby.component';
+import {DragDropModule} from "@angular/cdk/drag-drop";
+import {MatListModule} from "@angular/material/list";
 
 const THEME_KEY = 'theme-style';
 
@@ -74,7 +76,9 @@ const THEME_KEY = 'theme-style';
     MatAutocompleteModule,
     MatOptionModule,
     MatIconModule,
-    MatMenuModule
+    MatMenuModule,
+    DragDropModule,
+    MatListModule
   ],
   entryComponents: [DialogContentSignupDialog, DialogContentSigninDialog, DialogContentProfileEditDialog],
   providers: [authInterceptorProviders],

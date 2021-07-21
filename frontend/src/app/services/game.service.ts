@@ -9,21 +9,21 @@ const GAME_URI = GlobalValues.BASE_URI + 'game/';
 @Injectable({
   providedIn: 'root'
 })
-export class GameService {
+export class GameService<G extends Game> {
 
   constructor(private httpClient: HttpClient) {
   }
 
   public startGame(gameStartRequest: GameStartRequest): Observable<Game> {
-    return this.httpClient.post<Game>(GAME_URI + "start", gameStartRequest);
+    return this.httpClient.post<G>(GAME_URI + "start", gameStartRequest);
   }
 
   public joinGame(gameIdentifier: GameIdentifier): Observable<Game> {
-    return this.httpClient.post<Game>(GAME_URI + "join/" + gameIdentifier.token, null);
+    return this.httpClient.post<G>(GAME_URI + "join/" + gameIdentifier.token, null);
   }
 
   public getGameState(gameIdentifier: GameIdentifier): Observable<Game> {
-    return this.httpClient.get<Game>(GAME_URI + "state/game/" + gameIdentifier.token);
+    return this.httpClient.get<G>(GAME_URI + "state/game/" + gameIdentifier.token);
   }
 
 

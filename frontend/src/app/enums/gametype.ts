@@ -2,7 +2,7 @@ import {Injectable} from "@angular/core";
 import {UserRole} from "./userrole";
 
 export enum GameType {
-  WEREWOLF
+  WEREWOLF = "WEREWOLF"
 }
 
 @Injectable({
@@ -18,6 +18,10 @@ export class GameTypeUtil {
   }
 
   public toStringRepresentation(type: GameType): string {
+    return GameTypeUtil.toStringRepresentation(type);
+  }
+
+  public static toStringRepresentation(type: GameType): string {
     switch (type) {
       case GameType.WEREWOLF:
         return "Werewolf";
