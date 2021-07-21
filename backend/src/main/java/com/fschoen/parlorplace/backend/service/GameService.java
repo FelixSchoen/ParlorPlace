@@ -60,7 +60,7 @@ public interface GameService {
      * @param gameIdentifier Identifier of the game to obtain
      * @return The found game
      */
-    Game getActiveGame(GameIdentifier gameIdentifier);
+    Game getGameState(GameIdentifier gameIdentifier);
 
     GameIdentifier generateValidGameIdentifier();
 

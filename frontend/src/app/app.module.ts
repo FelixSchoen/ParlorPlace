@@ -1,4 +1,4 @@
-import {NgModule} from '@angular/core';
+import {NgModule, OnInit} from '@angular/core';
 import {BrowserModule} from '@angular/platform-browser';
 
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
@@ -33,6 +33,10 @@ import {MatIconModule} from "@angular/material/icon";
 import { ExperimentalComponent } from './components/experimental/experimental.component';
 import {OverlayContainer} from "@angular/cdk/overlay";
 import {MatMenuModule} from "@angular/material/menu";
+import { LobbyComponent } from './components/lobby/lobby.component';
+import { WerewolfLobbyComponent } from './components/lobby/werewolf-lobby/werewolf-lobby.component';
+
+const THEME_KEY = 'theme-style';
 
 @NgModule({
   declarations: [
@@ -46,7 +50,9 @@ import {MatMenuModule} from "@angular/material/menu";
     DialogContentProfileEditDialog,
     DialogContentProfileEnterGameDialog,
     LoadingIndicatorComponent,
-    ExperimentalComponent
+    ExperimentalComponent,
+    LobbyComponent,
+    WerewolfLobbyComponent
   ],
   imports: [
     BrowserModule,

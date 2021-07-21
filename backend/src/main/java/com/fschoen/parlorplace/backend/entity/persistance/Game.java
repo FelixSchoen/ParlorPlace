@@ -1,5 +1,7 @@
 package com.fschoen.parlorplace.backend.entity.persistance;
 
+import com.fschoen.parlorplace.backend.enumeration.GameState;
+import com.fschoen.parlorplace.backend.enumeration.LobbyRole;
 import com.fschoen.parlorplace.backend.game.management.GameIdentifier;
 import com.fschoen.parlorplace.backend.enumeration.GameType;
 import lombok.*;
@@ -23,6 +25,11 @@ public abstract class Game {
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "seq_game_instance_id")
     @SequenceGenerator(name = "seq_game_instance_id", sequenceName = "seq_game_instance_id")
     protected Long id;
+
+    @Column(nullable = false)
+    @Enumerated
+    @NotNull
+    protected GameState gameState;
 
     @Column(nullable = false)
     protected Date startedAt;

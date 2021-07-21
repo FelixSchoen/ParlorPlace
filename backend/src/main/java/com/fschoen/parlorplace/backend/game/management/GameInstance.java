@@ -4,6 +4,7 @@ import com.fschoen.parlorplace.backend.entity.persistance.Game;
 import com.fschoen.parlorplace.backend.entity.persistance.Player;
 import com.fschoen.parlorplace.backend.entity.persistance.RuleSet;
 import com.fschoen.parlorplace.backend.entity.persistance.User;
+import com.fschoen.parlorplace.backend.enumeration.GameState;
 import com.fschoen.parlorplace.backend.enumeration.LobbyRole;
 import com.fschoen.parlorplace.backend.enumeration.PlayerState;
 import com.fschoen.parlorplace.backend.exception.DataConflictException;
@@ -64,6 +65,7 @@ public abstract class GameInstance<G extends Game, P extends Player, GR extends 
     public void init() {
         try {
             G game = this.gameClass.getDeclaredConstructor().newInstance();
+            game.setGameState(GameState.LOBBY);
             game.setPlayers(new HashSet<P>());
             RS ruleSet = this.ruleSetClass.getDeclaredConstructor().newInstance();
             game.setRuleSet(ruleSet);

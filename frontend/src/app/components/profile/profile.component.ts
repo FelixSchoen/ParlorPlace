@@ -155,6 +155,10 @@ export class ProfileComponent implements OnInit {
     this.router.navigate([""]).then();
   }
 
+  goHome() {
+    this.router.navigate(["/profile"]).then();
+  }
+
   displayUser(user: User): string {
     return user ? user.nickname + " (" + user.username + ")" : "";
   }

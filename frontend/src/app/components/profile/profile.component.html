@@ -58,6 +58,12 @@
         </mat-card-footer>
       </div>
     </mat-card>
+
+    <!-- Home -->
+    <div *ngIf="profileUser.id != currentUser.id" class="pp-center pt-3">
+      <button mat-button color="accent" (click)="goHome()">Home</button>
+    </div>
+
   </div>
 
   <!-- Loading Indicator -->

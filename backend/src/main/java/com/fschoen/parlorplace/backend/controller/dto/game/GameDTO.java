@@ -1,5 +1,6 @@
 package com.fschoen.parlorplace.backend.controller.dto.game;
 
+import com.fschoen.parlorplace.backend.enumeration.GameState;
 import com.fschoen.parlorplace.backend.enumeration.GameType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -21,6 +22,9 @@ public abstract class GameDTO {
 
     @NotNull
     protected GameType gameType;
+
+    @NotNull
+    protected GameState gameState;
 
     @NotNull
     @DateTimeFormat

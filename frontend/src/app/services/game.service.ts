@@ -22,5 +22,9 @@ export class GameService {
     return this.httpClient.post<Game>(GAME_URI + "join/" + gameIdentifier.token, null);
   }
 
+  public getGameState(gameIdentifier: GameIdentifier): Observable<Game> {
+    return this.httpClient.get<Game>(GAME_URI + "state/game/" + gameIdentifier.token);
+  }
+
 
 }

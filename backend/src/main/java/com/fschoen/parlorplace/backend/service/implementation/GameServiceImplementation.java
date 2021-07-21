@@ -91,7 +91,7 @@ public class GameServiceImplementation extends AbstractService implements GameSe
         return gameInstance.changeLobby(ruleSet);
     }
 
-    public Game getActiveGame(GameIdentifier gameIdentifier) {
+    public Game getGameState(GameIdentifier gameIdentifier) {
         User principal = getPrincipal();
         log.info("User {} obtaining information about Game: {}", principal, gameIdentifier.getToken());
 
