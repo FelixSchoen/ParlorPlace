@@ -137,12 +137,16 @@ export class ProfileComponent implements OnInit {
       result => {
         if (result.host) {
           this.gameService.startGame(new GameStartRequest(result.game)).subscribe(
-            result => console.log(result),
+            result => {
+              this.router.navigate([GlobalValues.LOBBY_URI + result.gameIdentifier.token]).then();
+            },
             error => this.notificationService.showError(error.error)
           )
         } else if (result.submitted) {
           this.gameService.joinGame(new GameIdentifier(result.identifier)).subscribe(
-            result => console.log(result),
+            result => {
+              this.router.navigate([GlobalValues.LOBBY_URI + result.gameIdentifier.token]).then();
+            },
             error => this.notificationService.showError(error.error)
           )
         }
