@@ -2,15 +2,13 @@ import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from "@angular/router";
 import {GameService} from "../../services/game.service";
 import {Game, GameIdentifier} from "../../dto/game";
-import {GameType, GameTypeUtil} from "../../enums/gametype";
+import {GameTypeUtil} from "../../enums/gametype";
 import {NotificationService} from "../../services/notification.service";
 import {GameState} from "../../enums/gamestate";
-import {Player, WerewolfPlayer} from "../../dto/player";
+import {Player} from "../../dto/player";
 import {UserService} from "../../services/user.service";
 import {User} from "../../dto/user";
 import {GlobalValues} from "../../globals/global-values.service";
-import {CdkDragDrop} from "@angular/cdk/drag-drop";
-import {LobbyChangeRequest} from "../../dto/lobby";
 
 @Component({
   selector: 'app-lobby',
