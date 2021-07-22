@@ -1,11 +1,10 @@
-export class AuthRequest {
+export class TokenRefreshRequest {
   constructor(
-    public username: string,
-    public password: string
+    public refreshToken: string
   ) {}
 }
 
-export class AuthResponse {
+export class TokenRefreshResponse {
   constructor(
     public accessToken: string,
     public refreshToken: string

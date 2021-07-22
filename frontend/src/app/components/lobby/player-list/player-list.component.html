@@ -1,0 +1,14 @@
+<div cdkDropList (cdkDropListDropped)="changePosition($event)">
+  <mat-list>
+    <mat-list-item *ngFor="let player of sortPlayers(this.players)" cdkDrag
+                   [cdkDragDisabled]="!mayEdit(currentPlayer)">
+      <mat-icon *ngIf="player.lobbyRole == 'ROLE_ADMIN'" mat-list-icon>person_outline</mat-icon>
+      <mat-icon *ngIf="player.lobbyRole == 'ROLE_USER'" mat-list-icon>person</mat-icon>
+      <h3 matLine>
+        {{player.user.nickname}}
+      </h3>
+      <p matLine>{{player.user.username}}</p>
+
+    </mat-list-item>
+  </mat-list>
+</div>

@@ -4,6 +4,7 @@ import com.fschoen.parlorplace.backend.entity.persistance.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
+import java.util.Set;
 
 public interface UserRepository extends JpaRepository<User, Long> {
 
@@ -30,5 +31,21 @@ public interface UserRepository extends JpaRepository<User, Long> {
      * @return The found user
      */
     Optional<User> findOneByEmail(String email);
+
+    /**
+     * Returns a set of all found users whose usernames contains the string given by the parameter {@param username}.
+     *
+     * @param username The username to check for
+     * @return All found users
+     */
+    Set<User> findAllByUsernameContainsIgnoreCase(String username);
+
+    /**
+     * Returns a set of all found users whose nicknames contains the string given by the parameter {@param nickname}.
+     *
+     * @param nickname The username to check for
+     * @return All found users
+     */
+    Set<User> findAllByNicknameContainsIgnoreCase(String nickname);
 
 }

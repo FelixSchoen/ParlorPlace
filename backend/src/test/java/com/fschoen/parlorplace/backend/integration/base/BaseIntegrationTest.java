@@ -11,6 +11,7 @@ import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
+import lombok.extern.slf4j.Slf4j;
 import org.assertj.core.util.Strings;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -24,12 +25,14 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(classes = ParlorPlaceApplication.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
+@Slf4j
 public abstract class BaseIntegrationTest {
 
     protected GeneratedData generatedData;
@@ -43,13 +46,12 @@ public abstract class BaseIntegrationTest {
     @Autowired
     private JwtUtils jwtUtils;
 
-    protected String BASE_URI = "";
-    protected String USER_BASE_URI = "/user";
+    protected String BASE_URI = "/";
+    protected String USER_BASE_URI = BASE_URI + "user/";
+    protected String GAME_BASE_URI = BASE_URI + "game/";
 
     @LocalServerPort
     protected int port;
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(BaseIntegrationTest.class);
 
     @BeforeEach
     public void beforeBase() {
@@ -115,7 +117,7 @@ public abstract class BaseIntegrationTest {
                 .response();
     }
 
-    private RequestSpecification payload(Object o, String authorization) {
+    protected RequestSpecification payload(Object o, String authorization) {
         return RestAssured.given()
                 .contentType(ContentType.JSON)
                 .header(HttpHeaders.AUTHORIZATION, authorization)

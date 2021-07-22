@@ -1,0 +1,51 @@
+<div class="container p-3">
+
+  <!-- Logo -->
+  <div class="row pt-3">
+    <div class="col text-center">
+      <img alt="ParlorPlace logo" class="mb-3 mt-2" src="assets/image/ParlorPlace.svg" style="max-width: 25%;" (click)="changeMode()"/>
+    </div>
+  </div>
+
+  <!-- Description -->
+  <mat-card class="mt-3 mx-3">
+    <mat-card-header class="pp-center">
+      <mat-card-title i18n>
+        ParlorPlace
+      </mat-card-title>
+    </mat-card-header>
+    <mat-card-content class="text-center">
+      <p i18n>Welcome to ParlorPlace, your central hub for all social deduction based games!</p>
+      <p i18n>Please sign up for a new account or log in if you are already registered.</p>
+    </mat-card-content>
+  </mat-card>
+
+  <!-- Authentication -->
+  <mat-card class="mt-3 mx-3">
+    <mat-card-header class="pp-center">
+      <mat-card-title i18n>
+        Authentication
+      </mat-card-title>
+    </mat-card-header>
+    <mat-card-content class="text-center">
+      <div class="row">
+        <div class="col">
+          <app-signup></app-signup>
+        </div>
+      </div>
+      <div class="row mt-1">
+        <div class="col">
+          <app-signin></app-signin>
+        </div>
+      </div>
+    </mat-card-content>
+  </mat-card>
+
+  <!-- Credits -->
+  <mat-card class="mt-3 mx-3">
+    <mat-card-content class="text-center">
+      Created by Felix Schön, 2021
+    </mat-card-content>
+  </mat-card>
+
+</div>

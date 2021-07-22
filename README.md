@@ -25,10 +25,23 @@ Users are able to securely sign up for the service, using a username, a password
 Furthermore, they are able to securely log into their accounts.
 Users are assigned different roles, according to which different actions are available to them (for instance, normal users and administrators are supposed to have different authority and make use of different functionality).
 
+##### User Profiles
+
+Each user has a profile, which shows essential information about them, for instance their nickname and their roles.
+They can use this profile to edit their account (change their nickname, password and email) and sign out.
+An administrator has the authority to edit not only his own account, but also the ones of others.
+
+#### Game Management
+
+Users are able to start ("host") and join existing games, using an identifier made up of at least 4 characters.
+Doing so they will be placed in a game lobby, in which they can see the other participants and the rules of the game to be played.
+The user who started the lobby will have additional privileges, like for example changing the seat position of the players, or editing the rules.
+Furthermore this host user has a special icon next to them, indicating to all other players that they are indeed the host.
+
 ## Prerequisites
 
-- Java 16 with Spring Boot 2.4.5
-- Angular 12
+- Open JDK 16 with Spring Boot 2.5.2
+- Angular 12 with Material Design 12
 
 ## Changelog
 

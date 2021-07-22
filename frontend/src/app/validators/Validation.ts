@@ -1,4 +1,13 @@
-import { AbstractControl, ValidatorFn } from '@angular/forms';
+import {
+  AbstractControl,
+  FormControl,
+  FormGroup,
+  FormGroupDirective,
+  NgForm,
+  ValidationErrors,
+  ValidatorFn
+} from '@angular/forms';
+import {ErrorStateMatcher} from "@angular/material/core";
 
 export default class Validation {
 
@@ -20,4 +29,11 @@ export default class Validation {
     };
   }
 
+}
+
+export class MatchingErrorStateMatcher
+  implements ErrorStateMatcher {
+  isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
+    return !!(control?.errors?.matching && control?.parent?.dirty);
+  }
 }

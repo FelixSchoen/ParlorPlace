@@ -1,14 +1,70 @@
-/* You can add global styles to this file, and also import other style files */
+@use '~@angular/material' as mat;
 
-/* Importing Bootstrap SCSS file. */
-@import '~bootstrap/scss/bootstrap';
+@include mat.core();
 
-html, body { height: 100%; }
-body { margin: 0; font-family: 'Open Sans', sans-serif; }
+$frontend-primary: mat.define-palette(mat.$cyan-palette);
+$frontend-accent: mat.define-palette(mat.$pink-palette);
+$frontend-warn: mat.define-palette(mat.$red-palette);
 
-html, body { height: 100%; }
-body { margin: 0; font-family: 'Open Sans', sans-serif; }
+$mat-light-theme-background: (
+  background: map_get(mat.$cyan-palette, 200)
+);
+
+$light-theme: mat.define-light-theme((
+  color: (
+    primary: $frontend-primary,
+    accent: $frontend-accent,
+    warn: $frontend-warn,
+    background: $mat-light-theme-background
+  ),
+  background: $mat-light-theme-background
+));
+
+$dark-theme: mat.define-dark-theme((
+  color: (
+    primary: $frontend-primary,
+    accent: $frontend-accent,
+    warn: $frontend-warn,
+  )
+));
+
+.light-theme {
+  @include mat.all-component-themes($light-theme);
+}
+
+.dark-theme {
+  @include mat.all-component-themes($dark-theme);
+}
+
+@include mat.all-component-themes($light-theme);
+
+// Bootstrap CSS Load
+
+@import 'variables';
+
+// Imports functions, variables, and mixins that are needed by other Bootstrap files
+@import '~bootstrap/scss/functions';
+@import '~bootstrap/scss/variables';
+@import '~bootstrap/scss/mixins';
+// Import Reboot
+@import '~bootstrap/scss/reboot';
+@import '~bootstrap/scss/grid'; // add the grid
+@import '~bootstrap/scss/utilities'; // add css utilities
+
+@import 'reset';
+
+html, body {
+  height: 100%;
+}
 
 body {
-  background-color: whitesmoke;
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
 }
+
+.pp-center {
+  display: flex !important;
+  justify-content: center !important;
+  text-align: center !important;
+}
+

@@ -1,0 +1,9 @@
+<div *ngIf="loading">
+  <mat-spinner [diameter]="50"></mat-spinner>
+</div>
+
+<div *ngIf="loading == false && errorMessage != ''">
+  <div class="d-flex justify-content-center">
+    Error loading data: {{errorMessage}}
+  </div>
+</div>

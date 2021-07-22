@@ -1,0 +1,69 @@
+<div class="container p-3">
+
+  <mat-form-field appearance="outline" class="px-3 w-100">
+    <mat-label>User search</mat-label>
+    <input matInput type="text"
+           placeholder="Search for a user..."
+           [formControl]="userSearchControl"
+           [matAutocomplete]="userSearchAutocomplete">
+    <mat-autocomplete #userSearchAutocomplete="matAutocomplete" [displayWith]="displayUser">
+      <mat-option *ngFor="let option of filteredOptions | async" [value]="option"
+                  (onSelectionChange)="onSelect($event)">
+        {{displayUser(option)}}
+      </mat-option>
+    </mat-autocomplete>
+  </mat-form-field>
+
+  <!-- Profile Section -->
+  <div *ngIf="!loading">
+    <!-- Floating Action Button -->
+    <button mat-fab color="accent" class="btn-fab" (click)="openEnterGameDialog()">
+      <mat-icon>games</mat-icon>
+    </button>
+
+    <!-- Profile Card -->
+    <mat-card class="mx-3">
+      <mat-card-header class="pp-center">
+        <mat-card-title>
+          {{profileUser.nickname}}
+        </mat-card-title>
+        <mat-card-subtitle>
+          {{profileUser.username}}
+        </mat-card-subtitle>
+        <mat-card-subtitle>
+          <mat-chip-list class="pp-center">
+            <mat-chip
+              *ngFor="let role of this.profileUser.roles"
+              [selectable]="false"
+              [removable]="false">
+              {{userRoleToString(role)}}
+            </mat-chip>
+          </mat-chip-list>
+        </mat-card-subtitle>
+      </mat-card-header>
+
+      <mat-card-content>
+        Placeholder
+      </mat-card-content>
+
+      <mat-card-actions *ngIf="currentUser.id == profileUser.id || this.userService.isAdmin(currentUser)">
+        <button mat-button (click)="signOut()" *ngIf="currentUser.id == profileUser.id">SIGN OUT</button>
+        <button mat-button (click)="openEditDialog()">EDIT</button>
+      </mat-card-actions>
+    </mat-card>
+
+    <!-- Home -->
+    <div *ngIf="profileUser.id != currentUser.id" class="pp-center pt-3">
+      <button mat-button color="accent" (click)="goHome()">Home</button>
+    </div>
+
+  </div>
+
+  <!-- Loading Indicator -->
+  <div class="d-flex justify-content-center align-items-center h-100" *ngIf="loading">
+    <app-loading-indicator [loading]="loading" [errorMessage]="errorMessage"></app-loading-indicator>
+  </div>
+
+</div>
+
+
