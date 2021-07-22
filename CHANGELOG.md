@@ -27,6 +27,9 @@
     - Implement changing of positions of players
     - Implement changing of rules of game
 - Frontend creation and joining of games
+- **Frontend lobby interface**
+  - Changing positions of players per drag & drop
+  - Changing ruleset (add roles)
 
 ## Changed
 

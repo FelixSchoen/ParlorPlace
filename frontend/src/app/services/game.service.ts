@@ -25,7 +25,6 @@ export class GameService<G extends Game> {
 
   public changeLobby(gameIdentifier: GameIdentifier, lobbyChangeRequest: LobbyChangeRequest): Observable<G> {
     return this.httpClient.post<G>(GAME_URI + "lobby/change/" + gameIdentifier.token, lobbyChangeRequest);
-    console.log("dod")
   }
 
   public getGameState(gameIdentifier: GameIdentifier): Observable<G> {

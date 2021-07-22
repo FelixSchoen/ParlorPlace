@@ -105,4 +105,8 @@ export class LobbyComponent<G extends Game, P extends Player> implements OnInit 
   public changeLobby(): void {
   }
 
+  public isLobbyAdmin(player: P) {
+    return player.lobbyRole == "ROLE_ADMIN"
+  }
+
 }

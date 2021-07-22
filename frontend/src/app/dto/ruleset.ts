@@ -5,11 +5,8 @@ export abstract class RuleSet {
   }
 }
 
-class List<T> {
-}
-
 export class WerewolfRuleSet extends RuleSet {
-  constructor(public id: number, public roles: List<WerewolfRoleType>) {
+  constructor(public id: number, public roles: WerewolfRoleType[]) {
     super(id);
   }
 }

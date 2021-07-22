@@ -310,6 +310,7 @@ export class DialogContentProfileEnterGameDialog implements OnInit {
   private form: FormGroup;
 
   public games: GameType[] = GameTypeUtil.getGameTypeArray();
+  public gameTypeToString = GameTypeUtil.toStringRepresentation;
 
   constructor(public dialogRef: MatDialogRef<DialogContentProfileEnterGameDialog>,
               @Inject(MAT_DIALOG_DATA) public data: EnterGameDialogData, public formBuilder: FormBuilder, public gameTypeUtil: GameTypeUtil) {

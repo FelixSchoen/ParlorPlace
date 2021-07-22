@@ -46,17 +46,10 @@
         Placeholder
       </mat-card-content>
 
-      <div *ngIf="currentUser.id == profileUser.id || this.userService.isAdmin(currentUser)">
-        <mat-card-actions>
-          <div class="float-left" *ngIf="currentUser.id == profileUser.id">
-            <button mat-button (click)="signOut()">SIGN OUT</button>
-          </div>
-          <div class="float-right">
-            <button mat-button (click)="openEditDialog()">EDIT</button>
-          </div>
-          <div class="clearfix"></div>
-        </mat-card-actions>
-      </div>
+      <mat-card-actions *ngIf="currentUser.id == profileUser.id || this.userService.isAdmin(currentUser)">
+        <button mat-button (click)="signOut()" *ngIf="currentUser.id == profileUser.id">SIGN OUT</button>
+        <button mat-button (click)="openEditDialog()">EDIT</button>
+      </mat-card-actions>
     </mat-card>
 
     <!-- Home -->

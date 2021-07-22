@@ -15,7 +15,7 @@ export class WerewolfRoleTypeUtil {
   }
 
   public static getWerewolfRoleTypeArray(): WerewolfRoleType[] {
-    return [WerewolfRoleType.VILLAGER, WerewolfRoleType.VILLAGER, WerewolfRoleType.SEER]
+    return [WerewolfRoleType.VILLAGER, WerewolfRoleType.WEREWOLF, WerewolfRoleType.SEER]
   }
 
   public static toStringRepresentation(type: WerewolfRoleType): string {
