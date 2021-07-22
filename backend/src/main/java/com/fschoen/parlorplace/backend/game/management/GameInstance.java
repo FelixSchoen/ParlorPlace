@@ -4,6 +4,7 @@ import com.fschoen.parlorplace.backend.entity.persistance.Game;
 import com.fschoen.parlorplace.backend.entity.persistance.Player;
 import com.fschoen.parlorplace.backend.entity.persistance.RuleSet;
 import com.fschoen.parlorplace.backend.entity.persistance.User;
+import com.fschoen.parlorplace.backend.enumeration.GameState;
 import com.fschoen.parlorplace.backend.enumeration.LobbyRole;
 import com.fschoen.parlorplace.backend.enumeration.PlayerState;
 import com.fschoen.parlorplace.backend.exception.DataConflictException;
@@ -64,6 +65,7 @@ public abstract class GameInstance<G extends Game, P extends Player, GR extends 
     public void init() {
         try {
             G game = this.gameClass.getDeclaredConstructor().newInstance();
+            game.setGameState(GameState.LOBBY);
             game.setPlayers(new HashSet<P>());
             RS ruleSet = this.ruleSetClass.getDeclaredConstructor().newInstance();
             game.setRuleSet(ruleSet);
@@ -141,13 +143,7 @@ public abstract class GameInstance<G extends Game, P extends Player, GR extends 
      */
     public abstract G changeLobby(RuleSet ruleSet);
 
-    // Utility Getter
-
-    public Set<P> getPlayers() {
-        return this.getGame().getPlayers();
-    }
-
-    protected G getGame() throws DataConflictException {
+    public G getGame() throws DataConflictException {
         Optional<G> game = this.gameRepository.findOneById(this.gameId);
 
         if (game.isEmpty())
@@ -157,6 +153,12 @@ public abstract class GameInstance<G extends Game, P extends Player, GR extends 
         foundGame.setGameIdentifier(this.gameIdentifier);
 
         return foundGame;
+    }
+
+    // Utility Getter
+
+    public Set<P> getPlayers() {
+        return this.getGame().getPlayers();
     }
 
     protected GR getGameRepository() {

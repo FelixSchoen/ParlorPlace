@@ -163,12 +163,36 @@ public class GameControllerTest extends BaseIntegrationTest {
         WerewolfLobbyChangeRequestDTO werewolfLobbyChangeRequestDTO = WerewolfLobbyChangeRequestDTO.builder().players(werewolfGameDTO.getPlayers()).ruleSet(werewolfRuleSetDTO).build();
 
         Response response = payload(werewolfLobbyChangeRequestDTO, getToken(existingUser1)).pathParam("identifier", werewolfGameDTO.getGameIdentifier().getToken())
-                .post(GAME_BASE_URI + "lobby/change/{identifier}").then().extract().response();
+                .log().body().post(GAME_BASE_URI + "lobby/change/{identifier}").then().extract().response();
         assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
 
         werewolfGameDTO = response.getBody().as(WerewolfGameDTO.class);
         assertThat(werewolfGameDTO.getRuleSet().getRoles()).contains(WerewolfRoleType.WEREWOLF);
         assertThat(werewolfGameDTO.getRuleSet().getRoles()).contains(WerewolfRoleType.VILLAGER);
+    }
+
+    @Test
+    public void getActiveGame_withValidIdentifier_resultsInGameReturned() {
+        User existingUser1 = this.generatedData.getUserCollection().getUser1();
+        User existingUser2 = this.generatedData.getUserCollection().getUser2();
+
+        WerewolfGameDTO werewolfGameDTO = withWerewolfGame(existingUser1, existingUser2);
+
+        Response response = payload("", getToken(existingUser1)).pathParam("identifier", werewolfGameDTO.getGameIdentifier().getToken())
+                .get(GAME_BASE_URI + "state/game/{identifier}").then().extract().response();
+        assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
+
+        WerewolfGameDTO gameDTOResponse = response.getBody().as(WerewolfGameDTO.class);
+        assertThat(gameDTOResponse).isEqualTo(werewolfGameDTO);
+    }
+
+    @Test
+    public void getGame_withInvalidIdentifier_resultsInDataConflictException() {
+        User existingUser1 = this.generatedData.getUserCollection().getUser1();
+
+        Response response = payload("", getToken(existingUser1)).pathParam("identifier", "NOT")
+                .get(GAME_BASE_URI + "state/game/{identifier}").then().extract().response();
+        assertThat(response.statusCode()).isEqualTo(HttpStatus.CONFLICT.value());
     }
 
     private WerewolfGameDTO withWerewolfGame(User initiator, User... participants) {

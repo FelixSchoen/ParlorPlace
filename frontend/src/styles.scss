@@ -6,12 +6,18 @@ $frontend-primary: mat.define-palette(mat.$cyan-palette);
 $frontend-accent: mat.define-palette(mat.$pink-palette);
 $frontend-warn: mat.define-palette(mat.$red-palette);
 
+$mat-light-theme-background: (
+  background: map_get(mat.$cyan-palette, 200)
+);
+
 $light-theme: mat.define-light-theme((
   color: (
     primary: $frontend-primary,
     accent: $frontend-accent,
     warn: $frontend-warn,
-  )
+    background: $mat-light-theme-background
+  ),
+  background: $mat-light-theme-background
 ));
 
 $dark-theme: mat.define-dark-theme((
@@ -21,6 +27,10 @@ $dark-theme: mat.define-dark-theme((
     warn: $frontend-warn,
   )
 ));
+
+.light-theme {
+  @include mat.all-component-themes($light-theme);
+}
 
 .dark-theme {
   @include mat.all-component-themes($dark-theme);

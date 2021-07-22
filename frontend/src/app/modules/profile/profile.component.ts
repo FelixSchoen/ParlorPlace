@@ -15,6 +15,10 @@ import {MatChipInputEvent} from "@angular/material/chips";
 import {ENTER} from "@angular/cdk/keycodes";
 import {MatAutocompleteSelectedEvent} from "@angular/material/autocomplete";
 import {Utility} from "../../utility/utility";
+import {GameType, GameTypeUtil} from "../../enums/gametype";
+import {GameService} from "../../services/game.service";
+import {Game, GameIdentifier, GameStartRequest} from "../../dto/game";
+import {GlobalValues} from "../../globals/global-values.service";
 
 @Component({
   selector: 'app-profile',
@@ -32,8 +36,10 @@ export class ProfileComponent implements OnInit {
   public userSearchControl: FormControl = new FormControl();
   public filteredOptions: Observable<User[]>;
 
-  constructor(public userService: UserService, private tokenService: TokenService, private notificationService: NotificationService,
-              private dialog: MatDialog, public userRoleUtil: UserRoleUtil, private activatedRoute: ActivatedRoute, private router: Router) {
+  public userRoleToString = UserRoleUtil.toStringRepresentation;
+
+  constructor(public userService: UserService, public gameService: GameService<Game>, private tokenService: TokenService, private notificationService: NotificationService,
+              private dialog: MatDialog, private activatedRoute: ActivatedRoute, private router: Router) {
   }
 
   ngOnInit(): void {
@@ -63,7 +69,7 @@ export class ProfileComponent implements OnInit {
       (user) => {
         this.currentUser = user;
         if (queryName == undefined) {
-          this.router.navigate(["profile/" + user.username]).then();
+          this.router.navigate([GlobalValues.PROFILE_URI + user.username]).then();
         } else {
           this.userService.getUserByUsername(queryName).subscribe(
             (user: User) => {
@@ -79,10 +85,10 @@ export class ProfileComponent implements OnInit {
 
   onSelect($event: any) {
     const selectedUser: User = $event.source.value
-    this.router.navigate(["profile/" + selectedUser.username]).then();
+    this.router.navigate([GlobalValues.PROFILE_URI + selectedUser.username]).then();
   }
 
-  openDialog(): void {
+  openEditDialog(): void {
     const dialogRef = this.dialog.open(DialogContentProfileEditDialog, {
       data: {
         inputData: {
@@ -117,10 +123,47 @@ export class ProfileComponent implements OnInit {
     )
   }
 
+  openEnterGameDialog(): void {
+    const dialogRef = this.dialog.open(DialogContentProfileEnterGameDialog, {
+      data: {
+        outputData: {
+          submitted: false,
+          host: false,
+          identifier: "",
+          game: null
+        }
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(
+      result => {
+        if (result.host) {
+          this.gameService.startGame(new GameStartRequest(result.game)).subscribe(
+            result => {
+              this.router.navigate([GlobalValues.LOBBY_URI + result.gameIdentifier.token]).then();
+            },
+            error => this.notificationService.showError(error.error)
+          )
+        } else if (result.submitted) {
+          this.gameService.joinGame(new GameIdentifier(result.identifier)).subscribe(
+            result => {
+              this.router.navigate([GlobalValues.LOBBY_URI + result.gameIdentifier.token]).then();
+            },
+            error => this.notificationService.showError(error.error)
+          )
+        }
+      }
+    )
+  }
+
   signOut() {
     this.tokenService.signout();
     this.notificationService.showSuccess("Signed out");
     this.router.navigate([""]).then();
+  }
+
+  goHome() {
+    this.router.navigate(["/profile"]).then();
   }
 
   displayUser(user: User): string {
@@ -129,23 +172,34 @@ export class ProfileComponent implements OnInit {
 
 }
 
-export interface DialogData {
-  inputData: DialogInputData;
-  outputData: DialogOutputData;
+export interface EditDialogData {
+  inputData: EditDialogInputData;
+  outputData: EditDialogOutputData;
 }
 
-export interface DialogInputData {
+export interface EditDialogInputData {
   input_isAdmin: boolean;
   input_nickname: string;
 }
 
-export interface DialogOutputData {
+export interface EditDialogOutputData {
   submitted: boolean;
   // username: string;
   password: string;
   nickname: string;
   email: string;
   roles: UserRole[];
+}
+
+export interface EnterGameDialogData {
+  outputData: EnterGameDialogOutputData;
+}
+
+export interface EnterGameDialogOutputData {
+  submitted: boolean;
+  host: boolean;
+  identifier: string;
+  game: GameType | null;
 }
 
 @Component({
@@ -170,10 +224,12 @@ export class DialogContentProfileEditDialog implements OnInit {
   public separatorKeysCodes: number[] = [ENTER];
   public availableRoles: UserRole[];
 
+  public userRoleToString = UserRoleUtil.toStringRepresentation;
+
   @ViewChild('roleInput') roleInput: ElementRef<HTMLInputElement>;
 
   constructor(public dialogRef: MatDialogRef<DialogContentProfileEditDialog>,
-              @Inject(MAT_DIALOG_DATA) public data: DialogData, public formBuilder: FormBuilder, public userRoleUtil: UserRoleUtil) {
+              @Inject(MAT_DIALOG_DATA) public data: EditDialogData, public formBuilder: FormBuilder) {
   }
 
   ngOnInit(): void {
@@ -238,6 +294,51 @@ export class DialogContentProfileEditDialog implements OnInit {
 
     this.roleInput.nativeElement.value = "";
     this.roleControl.setValue(null);
+  }
+
+}
+
+@Component({
+    selector: "dialog-content-profile-enter-game-dialog",
+    templateUrl: "profile.enter-game-dialog.component.html"
+  }
+)
+export class DialogContentProfileEnterGameDialog implements OnInit {
+
+  public identifierControl = new FormControl("", [Validators.minLength(4)]);
+
+  private form: FormGroup;
+
+  public games: GameType[] = GameTypeUtil.getGameTypeArray();
+  public gameTypeToString = GameTypeUtil.toStringRepresentation;
+
+  constructor(public dialogRef: MatDialogRef<DialogContentProfileEnterGameDialog>,
+              @Inject(MAT_DIALOG_DATA) public data: EnterGameDialogData, public formBuilder: FormBuilder, public gameTypeUtil: GameTypeUtil) {
+  }
+
+  ngOnInit(): void {
+    this.dialogRef.beforeClosed().subscribe(() => this.dialogRef.close(this.data.outputData));
+    this.form = this.formBuilder.group({
+      identifier: this.identifierControl
+    })
+  }
+
+  onCancel(): void {
+    this.dialogRef.close(this.data.outputData);
+  }
+
+  onSubmit(): void {
+    if (this.form.invalid) {
+      return;
+    }
+    this.data.outputData.submitted = true;
+    this.dialogRef.close(this.data.outputData)
+  }
+
+  onHost(game: GameType) {
+    this.data.outputData.host = true;
+    this.data.outputData.game = game;
+    this.dialogRef.close(this.data.outputData);
   }
 
 }

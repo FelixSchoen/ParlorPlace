@@ -14,7 +14,7 @@ const USER_URI = GlobalValues.BASE_URI + 'user/';
 })
 export class UserService {
 
-  constructor(private httpClient: HttpClient, private notificationService: NotificationService) {
+  constructor(private httpClient: HttpClient) {
   }
 
   public updateUser(id: number, userUpdateRequest: UserUpdateRequest): Observable<User> {

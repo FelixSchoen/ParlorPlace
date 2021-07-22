@@ -21,7 +21,15 @@
 - **User editing functionality**
 - **Web Socket security settings and framework**
 - Dark mode (click the logo on the login page)
-- General game framework groundwork
+- **General game framework**
+  - Implement joining of games
+  - Implement changing of game lobbies
+    - Implement changing of positions of players
+    - Implement changing of rules of game
+- Frontend creation and joining of games
+- **Frontend lobby interface**
+  - Changing positions of players per drag & drop
+  - Changing ruleset (add roles)
 
 ## Changed
 

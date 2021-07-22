@@ -3,6 +3,7 @@ package com.fschoen.parlorplace.backend.game.werewolf.dto.lobby;
 import com.fasterxml.jackson.annotation.JsonRootName;
 import com.fschoen.parlorplace.backend.controller.dto.game.PlayerDTO;
 import com.fschoen.parlorplace.backend.controller.dto.lobby.LobbyChangeRequestDTO;
+import com.fschoen.parlorplace.backend.enumeration.GameType;
 import com.fschoen.parlorplace.backend.game.werewolf.dto.game.WerewolfPlayerDTO;
 import lombok.*;
 import lombok.experimental.SuperBuilder;

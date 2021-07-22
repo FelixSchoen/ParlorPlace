@@ -22,4 +22,5 @@ describe('LoadingIndicatorComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
 });

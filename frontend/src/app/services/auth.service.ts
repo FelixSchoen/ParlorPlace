@@ -9,6 +9,7 @@ import {User, UserSigninRequest, UserSigninResponse, UserSignupRequest} from "..
 import {UserService} from "./user.service";
 import {NotificationService} from "./notification.service";
 import {TokenRefreshRequest, TokenRefreshResponse} from "../dto/authentication";
+import {Router} from "@angular/router";
 
 const AUTH_URI = GlobalValues.BASE_URI + 'user/';
 
@@ -23,7 +24,7 @@ export class AuthService {
 
   private authScheduler: Observable<number> = interval(1000);
 
-  constructor(private httpClient: HttpClient, private tokenService: TokenService, private userService: UserService, private notificationService: NotificationService) {
+  constructor(private httpClient: HttpClient, private tokenService: TokenService, private router: Router) {
     this.scheduleReAuthentication();
   }
 
@@ -52,7 +53,11 @@ export class AuthService {
         if ((timeLeft / 1000) < 2 * 60) {
           this.reauthenticate().subscribe(
             () => console.log("Re-authenticated successfully"),
-            () => console.log("Could not re-authenticate")
+            () => {
+              console.log("Could not re-authenticate");
+              this.tokenService.signout();
+              this.router.navigate([GlobalValues.ENTRY_URI]).then();
+            }
           );
         }
       }
