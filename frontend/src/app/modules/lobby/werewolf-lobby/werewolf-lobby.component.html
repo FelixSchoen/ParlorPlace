@@ -68,46 +68,12 @@
           </mat-card-header>
 
           <mat-card-content *ngIf="!refreshLoading">
-
-
-            <mat-form-field class="w-100" *ngIf="isLobbyAdmin(this.currentPlayer)">
-              <mat-label i18n>Roles</mat-label>
-              <mat-chip-list #roleChipList>
-                <mat-chip
-                  *ngFor="let role of this.game.ruleSet.roles"
-                  [selectable]="false"
-                  [removable]="true"
-                  (removed)="removeRole(role)">
-                  {{this.werewolfRoleTypeToString(role)}}
-                  <mat-icon matChipRemove>cancel</mat-icon>
-                </mat-chip>
-              </mat-chip-list>
-              <input
-                matInput
-                #roleInput
-                [formControl]="roleControl"
-                [matAutocomplete]="roleAutocomplete"
-                [matChipInputFor]="roleChipList"
-                [matChipInputSeparatorKeyCodes]="this.separatorKeysCodes"
-                (matChipInputTokenEnd)="inputChip($event)">
-              <mat-autocomplete #roleAutocomplete="matAutocomplete"
-                                (optionSelected)="selectAutocompleteChip($event)">
-                <mat-option *ngFor="let role of this.werewolfRoleTypeArray" [value]="role">
-                  {{this.werewolfRoleTypeToString(role)}}
-                </mat-option>
-              </mat-autocomplete>
-            </mat-form-field>
-            <div *ngIf="!isLobbyAdmin(this.currentPlayer)">
-              <p>Roles</p>
-              <mat-chip-list>
-                <mat-chip
-                  *ngFor="let role of this.game.ruleSet.roles"
-                  [selectable]="false"
-                  [removable]="false">
-                  {{this.werewolfRoleTypeToString(role)}}
-                </mat-chip>
-              </mat-chip-list>
-            </div>
+            <app-role-selection [roles]="game.ruleSet.roles"
+                                [currentPlayer]="currentPlayer"
+                                [mayEdit]="isLobbyAdmin"
+                                [getArray]="werewolfRoleTypeArray"
+                                [toStringRepresentation]="werewolfRoleTypeToString"
+                                (roleChanged)="changeRoles($event)"></app-role-selection>
           </mat-card-content>
         </mat-card>
 

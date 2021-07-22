@@ -14,7 +14,7 @@ export class WerewolfRoleTypeUtil {
   constructor() {
   }
 
-  public static getWerewolfRoleTypeArray(): WerewolfRoleType[] {
+  public static getArray(): WerewolfRoleType[] {
     return [WerewolfRoleType.VILLAGER, WerewolfRoleType.WEREWOLF, WerewolfRoleType.SEER]
   }
 

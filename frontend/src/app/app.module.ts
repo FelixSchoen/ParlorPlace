@@ -39,6 +39,7 @@ import {DragDropModule} from "@angular/cdk/drag-drop";
 import {MatListModule} from "@angular/material/list";
 import {MatProgressBarModule} from "@angular/material/progress-bar";
 import {MatTabsModule} from "@angular/material/tabs";
+import { RoleSelectionComponent } from './components/lobby/role-selection/role-selection.component';
 
 const THEME_KEY = 'theme-style';
 
@@ -56,7 +57,8 @@ const THEME_KEY = 'theme-style';
     LoadingIndicatorComponent,
     ExperimentalComponent,
     LobbyComponent,
-    WerewolfLobbyComponent
+    WerewolfLobbyComponent,
+    RoleSelectionComponent
   ],
   imports: [
     BrowserModule,
