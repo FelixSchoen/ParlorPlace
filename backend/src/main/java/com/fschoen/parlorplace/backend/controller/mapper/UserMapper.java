@@ -12,15 +12,17 @@ import java.util.Set;
 @Mapper(componentModel = "spring", uses = {RoleMapper.class})
 public interface UserMapper {
 
-    User toUser(UserSignupRequestDTO userSignupRequestDTO);
+    User fromDTO(UserDTO userDTO);
+
+    User fromDTO(UserSignupRequestDTO userSignupRequestDTO);
 
     @Mappings({
             @Mapping(target = "nickname", ignore = true),
             @Mapping(target = "email", ignore = true)
     })
-    User toUser(UserSigninRequestDTO userSigninRequestDTO);
+    User fromDTO(UserSigninRequestDTO userSigninRequestDTO);
 
-    User toUser(UserUpdateRequestDTO userUpdateRequestDTO);
+    User fromDTO(UserUpdateRequestDTO userUpdateRequestDTO);
 
     @Mapping(target = "email", qualifiedByName = "obfuscateEmail")
     UserDTO toDTO(User user, @Context Boolean obfuscate);

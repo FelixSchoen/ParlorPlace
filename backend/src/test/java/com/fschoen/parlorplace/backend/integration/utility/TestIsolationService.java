@@ -9,7 +9,7 @@ import static org.hibernate.tool.schema.TargetType.DATABASE;
 
 public class TestIsolationService {
 
-    private Metadata metadata;
+    private final Metadata metadata;
 
     TestIsolationService(Metadata metadata) {
         this.metadata = metadata;

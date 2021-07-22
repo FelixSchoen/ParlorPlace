@@ -14,7 +14,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @RequestMapping("/user")
 @RestController
@@ -37,7 +36,7 @@ public class UserController {
     public ResponseEntity<UserDTO> signupUser(@RequestBody UserSignupRequestDTO userSignupRequestDTO) {
         validator.validate(userSignupRequestDTO).throwIfInvalid();
 
-        User proposedUser = userMapper.toUser(userSignupRequestDTO);
+        User proposedUser = userMapper.fromDTO(userSignupRequestDTO);
         User createdUser = userService.signup(proposedUser);
         UserDTO userDTO = userMapper.toDTO(createdUser, false);
 
@@ -48,7 +47,7 @@ public class UserController {
     public ResponseEntity<UserSigninResponseDTO> signinUser(@RequestBody UserSigninRequestDTO userSigninRequestDTO) {
         validator.validate(userSigninRequestDTO).throwIfInvalid();
 
-        UserSigninResponseDTO userSigninResponseDTO = userService.signin(userMapper.toUser(userSigninRequestDTO));
+        UserSigninResponseDTO userSigninResponseDTO = userService.signin(userMapper.fromDTO(userSigninRequestDTO));
 
         return ResponseEntity.status(HttpStatus.OK).body(userSigninResponseDTO);
     }
@@ -67,7 +66,7 @@ public class UserController {
     public ResponseEntity<UserDTO> updateUser(@PathVariable("id") Long id, @RequestBody UserUpdateRequestDTO userUpdateRequestDTO) {
         validator.validate(userUpdateRequestDTO).throwIfInvalid();
 
-        User proposedUser = userMapper.toUser(userUpdateRequestDTO);
+        User proposedUser = userMapper.fromDTO(userUpdateRequestDTO);
         User updatedUser = userService.update(id, proposedUser);
         UserDTO userDTO = userMapper.toDTO(updatedUser, false);
 

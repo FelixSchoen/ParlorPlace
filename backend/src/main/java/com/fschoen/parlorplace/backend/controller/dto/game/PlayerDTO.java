@@ -32,6 +32,9 @@ public abstract class PlayerDTO {
     protected UserDTO user;
 
     @NotNull
+    protected Boolean disconnected;
+
+    @NotNull
     protected LobbyRole lobbyRole;
 
     @NotNull

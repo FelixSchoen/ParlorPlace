@@ -63,8 +63,26 @@ public class GameServiceImplementation extends AbstractService implements GameSe
         User principal = getPrincipal();
         log.info("User {} joining Game: {}", principal.getUsername(), gameIdentifier.getToken());
 
+        if (isInGame(principal))
+            throw new GameException(Messages.exception("game.user.ingame"));
+
         GameInstance<?, ?, ?, ?> gameInstance = getGameByGameIdentifier(gameIdentifier);
         return gameInstance.join(principal);
+    }
+
+    public void quit(GameIdentifier gameIdentifier, User user) throws GameException {
+        User principal = getPrincipal();
+        if (user == null) user = principal;
+        log.info("User {} removes {} from Game: {}", principal.getUsername(), user.getUsername(), gameIdentifier.getToken());
+
+        if (!isInGame(user, gameIdentifier))
+            throw new GameException(Messages.exception("game.user.ingame.not"));
+
+        GameInstance<?, ?, ?, ?> gameInstance = getGameByGameIdentifier(gameIdentifier);
+
+        if (gameInstance.quit(user)) {
+            this.activesGames.remove(gameInstance);
+        }
     }
 
     public Game changeLobby(GameIdentifier gameIdentifier, Set<? extends Player> players) throws GameException {
@@ -128,8 +146,13 @@ public class GameServiceImplementation extends AbstractService implements GameSe
         return this.activesGames.stream().anyMatch(gameInstance -> gameInstance.getPlayers().stream().anyMatch(player -> player.getUser().equals(user)));
     }
 
+    public Boolean isInGame(User user, GameIdentifier gameIdentifier) {
+        return this.activesGames.stream().anyMatch(gameInstance -> gameInstance.getGameIdentifier().equals(gameIdentifier)
+                && gameInstance.getPlayers().stream().anyMatch(player -> player.getUser().equals(user)));
+    }
+
     public Boolean isNotInGame(User user, GameIdentifier gameIdentifier) {
-        GameInstance<?,?,?,?> gameInstance = getGameByGameIdentifier(gameIdentifier);
+        GameInstance<?, ?, ?, ?> gameInstance = getGameByGameIdentifier(gameIdentifier);
         return gameInstance.getPlayers().stream().noneMatch(player -> player.getUser().equals(user));
     }
 

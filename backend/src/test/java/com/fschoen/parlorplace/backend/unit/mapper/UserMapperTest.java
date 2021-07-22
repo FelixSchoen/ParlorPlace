@@ -36,7 +36,7 @@ public class UserMapperTest extends BaseUnitTest {
                     add(UserRole.ROLE_USER);
                 }})
                 .build();
-        User user = sut.toUser(userUpdateRequestDTO);
+        User user = sut.fromDTO(userUpdateRequestDTO);
 
         assertThat(user.getRoles()).isNotNull();
         assertThat(user.getRoles().size()).isEqualTo(1);

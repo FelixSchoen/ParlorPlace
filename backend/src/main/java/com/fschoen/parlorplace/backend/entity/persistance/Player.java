@@ -18,6 +18,9 @@ import java.util.Set;
 @Data
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
+/**
+ * Entity representing a player, for the DTO look for {@link com.fschoen.parlorplace.backend.controller.dto.game.PlayerDTO}
+ */
 public abstract class Player {
 
     @Id
@@ -31,6 +34,10 @@ public abstract class Player {
     @EqualsAndHashCode.Exclude
     @NotNull
     protected User user;
+
+    @Column(nullable = false)
+    @NotNull
+    protected Boolean disconnected;
 
     @Column(nullable = false)
     @Enumerated

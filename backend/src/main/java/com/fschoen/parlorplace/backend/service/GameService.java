@@ -33,6 +33,16 @@ public interface GameService {
     Game join(GameIdentifier gameIdentifier) throws GameException, DataConflictException;
 
     /**
+     * Issues a request to disconnect the given player from the game. If the request was successful, and the player was the
+     * last player in the game, the game gets destroyed. If the player was the last host in the game, a new host will be
+     * randomly elected.
+     *
+     * @param gameIdentifier Identifier of the game
+     * @param user           The user to remove from the game
+     */
+    void quit(GameIdentifier gameIdentifier, User user);
+
+    /**
      * Issues a lobby change request, which can change e.g. the seating position of the players present.
      *
      * @param gameIdentifier The game identifier of the lobby to change
