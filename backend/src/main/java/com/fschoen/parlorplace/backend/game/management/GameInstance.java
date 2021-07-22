@@ -121,11 +121,11 @@ public abstract class GameInstance<G extends Game, P extends Player, GR extends 
             validateUserIsLobbyAdmin(principal);
 
         G game = getGame();
-        Set<P> players = getPlayers();
+        Set<P> players = game.getPlayers();
         P player = players.stream().filter(playerCandidate -> playerCandidate.getUser().equals(user)).findFirst().orElseThrow();
 
         if (!this.hasStarted) {
-            getPlayers().remove(player);
+            players.remove(player);
 
             if (players.size() == 0) {
                 // Destroy game
@@ -191,6 +191,7 @@ public abstract class GameInstance<G extends Game, P extends Player, GR extends 
         G foundGame = game.get();
         foundGame.setGameIdentifier(this.gameIdentifier);
 
+        foundGame.toString();
         return foundGame;
     }
 

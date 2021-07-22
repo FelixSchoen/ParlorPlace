@@ -30,8 +30,6 @@ public abstract class Player {
 
     @OneToOne
     @JoinColumn(name = "user_id")
-    @ToString.Exclude
-    @EqualsAndHashCode.Exclude
     @NotNull
     protected User user;
 
