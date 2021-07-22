@@ -195,6 +195,43 @@ public class GameControllerTest extends BaseIntegrationTest {
         assertThat(response.statusCode()).isEqualTo(HttpStatus.CONFLICT.value());
     }
 
+    @Test
+    public void quitExistingGame_resultsInGameRemoved() {
+        User existingUser = this.generatedData.getUserCollection().getUser1();
+        GameStartRequestDTO gameStartRequestDTO = GameStartRequestDTO.builder().gameType(GameType.WEREWOLF).build();
+        Response responseCreate = post(gameStartRequestDTO, GAME_BASE_URI + "start", getToken(existingUser));
+        GameDTO game = responseCreate.getBody().as(WerewolfGameDTO.class);
+
+        Response responseQuit = payload("", getToken(existingUser)).pathParam("identifier", game.getGameIdentifier().getToken())
+                .post(GAME_BASE_URI + "quit/{identifier}").then().extract().response();
+        assertThat(responseQuit.statusCode()).isEqualTo(HttpStatus.OK.value());
+
+        Response responseRejoin = payload("", getToken(existingUser)).pathParam("identifier", game.getGameIdentifier().getToken())
+                .post(GAME_BASE_URI + "join/{identifier}").then().extract().response();
+        assertThat(responseRejoin.statusCode()).isEqualTo(HttpStatus.CONFLICT.value());
+    }
+
+    @Test
+    public void quitNonExistingGame_resultsInDataConflictException() {
+        User existingUser = this.generatedData.getUserCollection().getUser1();
+        Response responseQuit = payload("", getToken(existingUser)).pathParam("identifier", "NOT")
+                .post(GAME_BASE_URI + "quit/{identifier}").then().extract().response();
+        assertThat(responseQuit.statusCode()).isEqualTo(HttpStatus.CONFLICT.value());
+    }
+
+    @Test
+    public void quitGame_notPartOf_resultsInGameException() {
+        User existingUser1 = this.generatedData.getUserCollection().getUser1();
+        User existingUser2 = this.generatedData.getUserCollection().getUser2();
+        GameStartRequestDTO gameStartRequestDTO = GameStartRequestDTO.builder().gameType(GameType.WEREWOLF).build();
+        Response responseCreate = post(gameStartRequestDTO, GAME_BASE_URI + "start", getToken(existingUser1));
+        GameDTO game = responseCreate.getBody().as(WerewolfGameDTO.class);
+
+        Response responseQuit = payload("", getToken(existingUser2)).pathParam("identifier", game.getGameIdentifier().getToken())
+                .post(GAME_BASE_URI + "quit/{identifier}").then().extract().response();
+        assertThat(responseQuit.statusCode()).isEqualTo(HttpStatus.CONFLICT.value());
+    }
+
     private WerewolfGameDTO withWerewolfGame(User initiator, User... participants) {
         GameStartRequestDTO gameStartRequestDTO = GameStartRequestDTO.builder().gameType(GameType.WEREWOLF).build();
         Response responseStart = post(gameStartRequestDTO, GAME_BASE_URI + "start", getToken(initiator));

@@ -7,6 +7,8 @@ import com.fschoen.parlorplace.backend.enumeration.GameType;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -24,15 +26,15 @@ public class WerewolfGame extends Game {
     @Column(nullable = false)
     private final GameType gameType = GameType.WEREWOLF;
 
-    @OneToMany(mappedBy = "game", fetch = FetchType.EAGER)
-    @Cascade({org.hibernate.annotations.CascadeType.ALL})
+    @OneToMany(mappedBy = "game", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @EqualsAndHashCode.Exclude
     @NotNull
     private Set<WerewolfPlayer> players;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(referencedColumnName = "id")
-    @Cascade({org.hibernate.annotations.CascadeType.ALL})
     @EqualsAndHashCode.Exclude
     @NotNull
     private WerewolfRuleSet ruleSet;
