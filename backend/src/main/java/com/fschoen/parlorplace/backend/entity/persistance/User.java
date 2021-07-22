@@ -49,8 +49,7 @@ public class User {
     @Email
     private String email;
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
-    @Cascade({org.hibernate.annotations.CascadeType.ALL})
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     @EqualsAndHashCode.Exclude
     @NotNull
     private Set<Role> roles;

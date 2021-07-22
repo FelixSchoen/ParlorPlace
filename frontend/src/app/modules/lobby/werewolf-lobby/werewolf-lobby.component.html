@@ -28,7 +28,7 @@
           </mat-card-content>
 
           <mat-card-actions *ngIf="!refreshLoading">
-            <button mat-button>QUIT</button>
+            <button mat-button (click)="quitLobby(this.currentPlayer.user)">QUIT</button>
             <button mat-button color="primary" *ngIf="isLobbyAdmin(this.currentPlayer)">START</button>
           </mat-card-actions>
         </mat-card>

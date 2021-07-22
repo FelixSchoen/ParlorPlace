@@ -70,11 +70,18 @@ export class LobbyComponent<G extends Game, P extends Player> implements OnInit 
           }
         )
       },
-      () => this.router.navigate([GlobalValues.ENTRY_URI]).then()
+      () => this.router.navigate([GlobalValues.PROFILE_URI]).then()
     )
   }
 
-  public changeLobby(): void {
+  protected changeLobby(): void {
+  }
+
+  public quitLobby(user: User | null): void {
+    this.gameService.quitGame(this.gameIdentifier, user).subscribe(
+      () => this.router.navigate([GlobalValues.PROFILE_URI]).then(),
+      (error => this.notificationService.showError(error.error))
+    )
   }
 
   changePlayers(players: Set<P>): void {

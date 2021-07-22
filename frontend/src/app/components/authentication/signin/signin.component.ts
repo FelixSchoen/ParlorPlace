@@ -36,10 +36,7 @@ export class SigninComponent {
         const userSigninRequest: UserSigninRequest = new UserSigninRequest(this.username, this.password);
 
         this.authService.signin(userSigninRequest).subscribe(
-          () => {
-            this.notificationService.showSuccess("Signed in");
-            this.router.navigate(["/profile"]).then();
-          },
+          () => this.router.navigate(["/profile"]).then(),
           (error) => {
             this.notificationService.showError(error.error)
           }

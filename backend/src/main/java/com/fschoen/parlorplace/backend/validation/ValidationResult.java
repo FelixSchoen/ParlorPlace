@@ -6,7 +6,7 @@ import java.util.List;
 
 public class ValidationResult {
 
-    private List<String> violations;
+    private final List<String> violations;
 
     public ValidationResult(List<String> violations) {
         this.violations = violations;

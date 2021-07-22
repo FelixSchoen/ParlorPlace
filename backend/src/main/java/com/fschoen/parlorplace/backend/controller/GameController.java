@@ -3,10 +3,8 @@ package com.fschoen.parlorplace.backend.controller;
 import com.fschoen.parlorplace.backend.controller.dto.game.GameDTO;
 import com.fschoen.parlorplace.backend.controller.dto.game.GameStartRequestDTO;
 import com.fschoen.parlorplace.backend.controller.dto.lobby.LobbyChangeRequestDTO;
-import com.fschoen.parlorplace.backend.controller.mapper.GameIdentifierMapper;
-import com.fschoen.parlorplace.backend.controller.mapper.GameMapper;
-import com.fschoen.parlorplace.backend.controller.mapper.PlayerMapper;
-import com.fschoen.parlorplace.backend.controller.mapper.RuleSetMapper;
+import com.fschoen.parlorplace.backend.controller.dto.user.UserDTO;
+import com.fschoen.parlorplace.backend.controller.mapper.*;
 import com.fschoen.parlorplace.backend.game.management.GameIdentifier;
 import com.fschoen.parlorplace.backend.service.GameService;
 import com.fschoen.parlorplace.backend.validation.implementation.GameValidator;
@@ -21,6 +19,7 @@ public class GameController {
 
     private final GameService gameService;
 
+    private final UserMapper userMapper;
     private final GameMapper gameMapper;
     private final PlayerMapper playerMapper;
     private final RuleSetMapper ruleSetMapper;
@@ -29,8 +28,9 @@ public class GameController {
     private final GameValidator validator = new GameValidator();
 
     @Autowired
-    public GameController(GameService gameService, GameMapper gameMapper, PlayerMapper playerMapper, RuleSetMapper ruleSetMapper, GameIdentifierMapper gameIdentifierMapper) {
+    public GameController(GameService gameService, UserMapper userMapper, GameMapper gameMapper, PlayerMapper playerMapper, RuleSetMapper ruleSetMapper, GameIdentifierMapper gameIdentifierMapper) {
         this.gameService = gameService;
+        this.userMapper = userMapper;
         this.gameMapper = gameMapper;
         this.playerMapper = playerMapper;
         this.ruleSetMapper = ruleSetMapper;
@@ -51,6 +51,13 @@ public class GameController {
         GameDTO gameDTO = gameMapper.toDTO(gameService.join(new GameIdentifier(identifier)), true);
 
         return ResponseEntity.status(HttpStatus.OK).body(gameDTO);
+    }
+
+    @PostMapping("/quit/{identifier}")
+    public ResponseEntity<Void> quitGame(@PathVariable("identifier") String identifier, @RequestBody(required = false) UserDTO user) {
+        gameService.quit(new GameIdentifier(identifier), userMapper.fromDTO(user));
+
+        return ResponseEntity.status(HttpStatus.OK).build();
     }
 
     @PostMapping("/lobby/change/{identifier}")

@@ -21,7 +21,7 @@ public interface RoleMapper {
 
     default UserRole toUserRole(Role role) {
         return role.getRole();
-    };
+    }
 
     Set<UserRole> toUserRole(Set<Role> roles);
 

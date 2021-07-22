@@ -1,6 +1,7 @@
 package com.fschoen.parlorplace.backend.game.werewolf.management;
 
 import com.fschoen.parlorplace.backend.entity.persistance.RuleSet;
+import com.fschoen.parlorplace.backend.entity.persistance.User;
 import com.fschoen.parlorplace.backend.exception.DataConflictException;
 import com.fschoen.parlorplace.backend.game.management.GameInstance;
 import com.fschoen.parlorplace.backend.game.werewolf.entity.persistance.WerewolfGame;
@@ -43,4 +44,5 @@ public class WerewolfInstance extends GameInstance<WerewolfGame, WerewolfPlayer,
 
         return gameRepository.save(game);
     }
+
 }

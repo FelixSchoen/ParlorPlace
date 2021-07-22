@@ -92,6 +92,7 @@ public abstract class GameInstance<G extends Game, P extends Player, GR extends 
         try {
             player = this.playerClass.getDeclaredConstructor().newInstance();
             player.setUser(user);
+            player.setDisconnected(false);
             if (getGame().getPlayers().size() == 0)
                 player.setLobbyRole(LobbyRole.ROLE_ADMIN);
             else
@@ -106,6 +107,43 @@ public abstract class GameInstance<G extends Game, P extends Player, GR extends 
             throw new DataConflictException(Messages.exception("game.type.mismatch"));
         }
         return game;
+    }
+
+    /**
+     * Removes a player from the game.
+     *
+     * @param user The user to remove from the game
+     * @return {@code true} if the game was closed, {@code false} otherwise
+     */
+    public Boolean quit(User user) {
+        User principal = getPrincipal();
+        if (!user.equals(principal))
+            validateUserIsLobbyAdmin(principal);
+
+        G game = getGame();
+        Set<P> players = game.getPlayers();
+        P player = players.stream().filter(playerCandidate -> playerCandidate.getUser().equals(user)).findFirst().orElseThrow();
+
+        if (!this.hasStarted) {
+            players.remove(player);
+
+            if (players.size() == 0) {
+                // Destroy game
+                this.gameRepository.delete(game);
+                return true;
+            }
+
+            if (players.stream().noneMatch(playerCandidate -> playerCandidate.getLobbyRole().equals(LobbyRole.ROLE_ADMIN))) {
+                players.stream().findAny().orElseThrow().setLobbyRole(LobbyRole.ROLE_ADMIN);
+            }
+
+            this.gameRepository.save(game);
+            return false;
+        } else {
+            player.setDisconnected(true);
+            this.gameRepository.save(game);
+            return onPlayerQuit(user);
+        }
     }
 
     public G changeLobby(Set<? extends Player> players) {
@@ -138,8 +176,9 @@ public abstract class GameInstance<G extends Game, P extends Player, GR extends 
 
     /**
      * Applies the rules specified in the ruleset to the game
-     * @param ruleSet
-     * @return
+     *
+     * @param ruleSet The rule set containing the different rules of the game to apply
+     * @return The modified game
      */
     public abstract G changeLobby(RuleSet ruleSet);
 
@@ -152,8 +191,21 @@ public abstract class GameInstance<G extends Game, P extends Player, GR extends 
         G foundGame = game.get();
         foundGame.setGameIdentifier(this.gameIdentifier);
 
+        foundGame.toString();
         return foundGame;
     }
+
+    // Interfaces
+
+    /**
+     * Interface to implement when a user quits.
+     *
+     * @param user The user that issued the quit command
+     * @return True if the game was destroyed
+     */
+    protected Boolean onPlayerQuit(User user) {
+        return false;
+    };
 
     // Utility Getter
 
