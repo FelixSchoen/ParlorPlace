@@ -1,11 +1,11 @@
 # Changelog
 
-- [v0.2](#v0.2)
+- [v0.2 (2021-07-22)](#v0.2)
 - [v0.1 (2021-07-11)](#v0.1)
 
 ---
 
-## v0.2
+## v0.2 (2021-07-22)
 <a name="v0.2"></a>
 
 ## Added
@@ -30,6 +30,7 @@
 - **Frontend lobby interface**
   - Changing positions of players per drag & drop
   - Changing ruleset (add roles)
+- Added support for Continuous Integration
 
 ## Changed
 
