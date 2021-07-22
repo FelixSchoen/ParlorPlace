@@ -76,33 +76,12 @@ export class LobbyComponent<G extends Game, P extends Player> implements OnInit 
     )
   }
 
-  public sortPlayers(players: Set<Player>): Player[] {
-    let playersArray = [...players];
-    playersArray.sort((a, b) => (a.position > b.position) ? 1 : -1)
-    return playersArray
-  }
-
-  public changePosition(event: CdkDragDrop<string[]>) {
-    let oldPosition = event.previousIndex
-    let newPosition = event.currentIndex
-
-    if (oldPosition == newPosition)
-      return
-
-    let operation = oldPosition < newPosition ? -1 : 1
-    let playerToChange = this.sortPlayers(this.game.players)[oldPosition]
-
-    for (let player of this.game.players) {
-      if (player.position > oldPosition && player.position <= newPosition || player.position < oldPosition && player.position >= newPosition) {
-        player.position += operation
-      }
-    }
-
-    playerToChange.position = newPosition
-    this.changeLobby();
-  }
-
   public changeLobby(): void {
+  }
+
+  changePlayers(players: Set<P>): void {
+    this.game.players = players;
+    this.changeLobby();
   }
 
   public isLobbyAdmin(player: P) {

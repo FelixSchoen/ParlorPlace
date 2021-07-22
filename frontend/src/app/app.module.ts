@@ -9,16 +9,16 @@ import {HttpClientModule} from "@angular/common/http";
 import {authInterceptorProviders} from './interceptors/auth.interceptor';
 import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from "./app.component";
-import {DialogContentSignupDialog, SignupComponent} from './modules/authentication/signup/signup.component';
+import {DialogContentSignupDialog, SignupComponent} from './components/authentication/signup/signup.component';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {ToastrModule} from "ngx-toastr";
-import {DialogContentSigninDialog, SigninComponent} from './modules/authentication/signin/signin.component';
+import {DialogContentSigninDialog, SigninComponent} from './components/authentication/signin/signin.component';
 import {
   DialogContentProfileEditDialog,
   DialogContentProfileEnterGameDialog,
   ProfileComponent
 } from './modules/profile/profile.component';
-import {LoadingIndicatorComponent} from './modules/utility/loading-indicator/loading-indicator.component';
+import {LoadingIndicatorComponent} from './components/utility/loading-indicator/loading-indicator.component';
 import {MatChipsModule} from "@angular/material/chips";
 import {MatCardModule} from "@angular/material/card";
 import {MatButtonModule} from "@angular/material/button";
@@ -40,6 +40,7 @@ import {MatListModule} from "@angular/material/list";
 import {MatProgressBarModule} from "@angular/material/progress-bar";
 import {MatTabsModule} from "@angular/material/tabs";
 import { RoleSelectionComponent } from './components/lobby/role-selection/role-selection.component';
+import { PlayerListComponent } from './components/lobby/player-list/player-list.component';
 
 const THEME_KEY = 'theme-style';
 
@@ -58,7 +59,8 @@ const THEME_KEY = 'theme-style';
     ExperimentalComponent,
     LobbyComponent,
     WerewolfLobbyComponent,
-    RoleSelectionComponent
+    RoleSelectionComponent,
+    PlayerListComponent
   ],
   imports: [
     BrowserModule,
