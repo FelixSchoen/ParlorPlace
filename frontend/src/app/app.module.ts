@@ -30,19 +30,17 @@ import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
 import {MatAutocompleteModule} from "@angular/material/autocomplete";
 import {MatOptionModule} from "@angular/material/core";
 import {MatIconModule} from "@angular/material/icon";
-import { ExperimentalComponent } from './modules/experimental/experimental.component';
+import {ExperimentalComponent} from './modules/experimental/experimental.component';
 import {OverlayContainer} from "@angular/cdk/overlay";
 import {MatMenuModule} from "@angular/material/menu";
-import { LobbyComponent } from './modules/lobby/lobby.component';
-import { WerewolfLobbyComponent } from './modules/lobby/werewolf-lobby/werewolf-lobby.component';
+import {LobbyComponent} from './modules/lobby/lobby.component';
+import {WerewolfLobbyComponent} from './modules/lobby/werewolf-lobby/werewolf-lobby.component';
 import {DragDropModule} from "@angular/cdk/drag-drop";
 import {MatListModule} from "@angular/material/list";
 import {MatProgressBarModule} from "@angular/material/progress-bar";
 import {MatTabsModule} from "@angular/material/tabs";
-import { RoleSelectionComponent } from './components/lobby/role-selection/role-selection.component';
-import { PlayerListComponent } from './components/lobby/player-list/player-list.component';
-
-const THEME_KEY = 'theme-style';
+import {RoleSelectionComponent} from './components/lobby/role-selection/role-selection.component';
+import {PlayerListComponent} from './components/lobby/player-list/player-list.component';
 
 @NgModule({
   declarations: [
@@ -97,7 +95,9 @@ export class AppModule {
   constructor(private overlayContainer: OverlayContainer) {
   }
 
-  changeTheme(theme: 'light-theme' | 'dark-theme'): void {
+  changeTheme(
+    theme: 'light-theme' | 'dark-theme'
+  ): void {
     const overlayContainerClasses = this.overlayContainer.getContainerElement().classList;
 
     const themeClassesToRemove = Array.from(overlayContainerClasses)

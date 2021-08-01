@@ -16,23 +16,35 @@ export class GameService<G extends Game> {
   constructor(private httpClient: HttpClient) {
   }
 
-  public startGame(gameStartRequest: GameStartRequest): Observable<G> {
+  public startGame(
+    gameStartRequest: GameStartRequest
+  ): Observable<G> {
     return this.httpClient.post<G>(GAME_URI + "start", gameStartRequest);
   }
 
-  public joinGame(gameIdentifier: GameIdentifier): Observable<G> {
+  public joinGame(
+    gameIdentifier: GameIdentifier
+  ): Observable<G> {
     return this.httpClient.post<G>(GAME_URI + "join/" + gameIdentifier.token, null);
   }
 
-  public quitGame(gameIdentifier: GameIdentifier, user: User | null): Observable<void> {
+  public quitGame(
+    gameIdentifier: GameIdentifier,
+    user: User | null
+  ): Observable<void> {
     return this.httpClient.post<void>(GAME_URI + "quit/" + gameIdentifier.token, user);
   }
 
-  public changeLobby(gameIdentifier: GameIdentifier, lobbyChangeRequest: LobbyChangeRequest): Observable<G> {
+  public changeLobby(
+    gameIdentifier: GameIdentifier,
+    lobbyChangeRequest: LobbyChangeRequest
+  ): Observable<G> {
     return this.httpClient.post<G>(GAME_URI + "lobby/change/" + gameIdentifier.token, lobbyChangeRequest);
   }
 
-  public getGameState(gameIdentifier: GameIdentifier): Observable<G> {
+  public getGameState(
+    gameIdentifier: GameIdentifier
+  ): Observable<G> {
     return this.httpClient.get<G>(GAME_URI + "state/game/" + gameIdentifier.token);
   }
 

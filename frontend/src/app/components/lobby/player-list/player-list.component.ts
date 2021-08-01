@@ -21,13 +21,17 @@ export class PlayerListComponent<P extends Player> implements OnInit {
   ngOnInit(): void {
   }
 
-  public sortPlayers(players: Set<P>): P[] {
+  public sortPlayers(
+    players: Set<P>
+  ): P[] {
     let playersArray = [...players];
     playersArray.sort((a, b) => (a.position > b.position) ? 1 : -1)
     return playersArray
   }
 
-  public changePosition(event: CdkDragDrop<string[]>) {
+  public changePosition(
+    event: CdkDragDrop<string[]>
+  ) {
     let oldPosition = event.previousIndex;
     let newPosition = event.currentIndex;
 

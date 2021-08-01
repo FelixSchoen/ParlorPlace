@@ -28,7 +28,9 @@ export class AuthService {
     this.scheduleReAuthentication();
   }
 
-  public signin(userSigninRequest: UserSigninRequest): Observable<UserSigninResponse> {
+  public signin(
+    userSigninRequest: UserSigninRequest
+  ): Observable<UserSigninResponse> {
     this.tokenService.signout();
     return this.httpClient.post<UserSigninResponse>(AUTH_URI + 'signin', userSigninRequest, httpOptions)
       .pipe(
@@ -38,7 +40,9 @@ export class AuthService {
       );
   }
 
-  public signup(userSignupRequestDTO: UserSignupRequest): Observable<User> {
+  public signup(
+    userSignupRequestDTO: UserSignupRequest
+  ): Observable<User> {
     return this.httpClient.post<User>(AUTH_URI + 'signup', userSignupRequestDTO, httpOptions);
   }
 
@@ -70,8 +74,9 @@ export class AuthService {
     );
   }
 
-  private static getTokenExpirationDate(token: string): Date | null {
-
+  private static getTokenExpirationDate(
+    token: string
+  ): Date | null {
     const decoded: any = jwt_decode(token);
     if (decoded.exp === undefined) {
       return null;

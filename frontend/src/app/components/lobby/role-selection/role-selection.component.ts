@@ -28,12 +28,16 @@ export class RoleSelectionComponent<R, P extends Player> implements OnInit {
   ngOnInit(): void {
   }
 
-  removeRole(role: R): void {
+  removeRole(
+    role: R
+  ): void {
     Utility.removeFromArray(role, this.roles)
     this.roleChanged.emit(this.roles);
   }
 
-  selectAutocomplete(event: MatAutocompleteSelectedEvent): void {
+  selectAutocomplete(
+    event: MatAutocompleteSelectedEvent
+  ): void {
     const roleToAdd: R = event.option.value
 
     if (roleToAdd)
