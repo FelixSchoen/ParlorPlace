@@ -66,21 +66,23 @@ export class ProfileComponent implements OnInit {
       ))
     )
 
-    this.userService.getCurrentUser().subscribe(
-      (user) => {
-        this.currentUser = user;
-        if (queryName == undefined) {
-          this.router.navigate([GlobalValues.PROFILE_URI + user.username]).then();
-        } else {
-          this.userService.getUserByUsername(queryName).subscribe(
-            (user: User) => {
-              this.profileUser = user
-              this.error = false;
-            },
-            (error) => {
-              this.errorMessage = error.error;
-              this.error = true;
+    this.userService.getCurrentUser().subscribe({
+        next: (user) => {
+          this.currentUser = user;
+          if (queryName == undefined) {
+            this.router.navigate([GlobalValues.PROFILE_URI + user.username]).then();
+          } else {
+            this.userService.getUserByUsername(queryName).subscribe({
+              next: (user: User) => {
+                this.profileUser = user
+                this.error = false;
+              },
+              error: (error) => {
+                this.errorMessage = error.error;
+                this.error = true;
+              }
             }).add(() => this.loading = false)
+          }
         }
       }
     );
@@ -108,19 +110,22 @@ export class ProfileComponent implements OnInit {
       }
     });
 
-    dialogRef.afterClosed().subscribe(
-      result => {
-        if (result.submitted) {
-          const userUpdateRequest: UserUpdateRequest = new UserUpdateRequest(this.profileUser.id, null, result.password,
-            result.nickname, result.email, result.roles);
+    dialogRef.afterClosed().subscribe({
+        next: result => {
+          if (result.submitted) {
+            const userUpdateRequest: UserUpdateRequest = new UserUpdateRequest(this.profileUser.id, null, result.password,
+              result.nickname, result.email, result.roles);
 
-          this.userService.updateUser(this.profileUser.id, userUpdateRequest).subscribe(
-            (updatedUser: User) => {
-              this.router.navigate(["profile/" + updatedUser.username], {queryParams: {updated: 1}}).then();
-            }, (error) => {
-              this.notificationService.showError(error.error);
-            }
-          )
+            this.userService.updateUser(this.profileUser.id, userUpdateRequest).subscribe({
+                next: (updatedUser: User) => {
+                  this.router.navigate(["profile/" + updatedUser.username], {queryParams: {updated: 1}}).then();
+                },
+                error: (error) => {
+                  this.notificationService.showError(error.error);
+                }
+              }
+            )
+          }
         }
       }
     )
@@ -138,22 +143,25 @@ export class ProfileComponent implements OnInit {
       }
     });
 
-    dialogRef.afterClosed().subscribe(
-      result => {
-        if (result.host) {
-          this.gameService.startGame(new GameStartRequest(result.game)).subscribe(
-            result => {
-              this.router.navigate([GlobalValues.GAME_URI + result.gameIdentifier.token]).then();
-            },
-            error => this.notificationService.showError(error.error)
-          )
-        } else if (result.submitted) {
-          this.gameService.joinGame(new GameIdentifier(result.identifier)).subscribe(
-            result => {
-              this.router.navigate([GlobalValues.GAME_URI + result.gameIdentifier.token]).then();
-            },
-            error => this.notificationService.showError(error.error)
-          )
+    dialogRef.afterClosed().subscribe({
+        next: result => {
+          if (result.host) {
+            this.gameService.startGame(new GameStartRequest(result.game)).subscribe({
+                next: result => {
+                  this.router.navigate([GlobalValues.GAME_URI + result.gameIdentifier.token]).then();
+                },
+                error: error => this.notificationService.showError(error.error)
+              }
+            )
+          } else if (result.submitted) {
+            this.gameService.joinGame(new GameIdentifier(result.identifier)).subscribe({
+                next: result => {
+                  this.router.navigate([GlobalValues.GAME_URI + result.gameIdentifier.token]).then();
+                },
+                error: error => this.notificationService.showError(error.error)
+              }
+            )
+          }
         }
       }
     )
@@ -236,7 +244,9 @@ export class DialogContentProfileEditDialog implements OnInit {
   }
 
   ngOnInit(): void {
-    this.dialogRef.beforeClosed().subscribe(() => this.dialogRef.close(this.data.outputData));
+    this.dialogRef.beforeClosed().subscribe({
+      next: () => this.dialogRef.close(this.data.outputData)
+    });
     this.form = this.formBuilder.group({
       // username: this.usernameControl,
       password: this.passwordControl,
@@ -320,7 +330,9 @@ export class DialogContentProfileEnterGameDialog implements OnInit {
   }
 
   ngOnInit(): void {
-    this.dialogRef.beforeClosed().subscribe(() => this.dialogRef.close(this.data.outputData));
+    this.dialogRef.beforeClosed().subscribe({
+      next: () => this.dialogRef.close(this.data.outputData)
+    });
     this.form = this.formBuilder.group({
       identifier: this.identifierControl
     })

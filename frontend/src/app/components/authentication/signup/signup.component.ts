@@ -33,29 +33,34 @@ export class SignupComponent {
     });
 
     dialogRef.afterClosed().subscribe(
-      result => {
-        if (result.submitted) {
-          this.username = result.username;
-          this.password = result.password;
-          this.email = result.email;
+      {
+        next: result => {
+          if (result.submitted) {
+            this.username = result.username;
+            this.password = result.password;
+            this.email = result.email;
 
-          const userSignupRequest: UserSignupRequest = new UserSignupRequest(this.username, this.password, this.username, this.email);
+            const userSignupRequest: UserSignupRequest = new UserSignupRequest(this.username, this.password, this.username, this.email);
 
-          this.authService.signup(userSignupRequest).subscribe(
-            () => {
-              this.notificationService.showSuccess("Signed up");
-              this.authService.signin(new UserSigninRequest(userSignupRequest.username, userSignupRequest.password)).subscribe(
-                () => {
-                  this.router.navigate(["/profile"]).then();
+            this.authService.signup(userSignupRequest).subscribe(
+              {
+                next: () => {
+                  this.notificationService.showSuccess("Signed up");
+                  this.authService.signin(new UserSigninRequest(userSignupRequest.username, userSignupRequest.password)).subscribe(
+                    () => {
+                      this.router.navigate(["/profile"]).then();
+                    },
+                    (error) => {
+                      this.notificationService.showError(error.error)
+                    }
+                  )
                 },
-                (error) => {
+                error: (error) => {
                   this.notificationService.showError(error.error)
                 }
-              )
-            },
-            (error) => {
-              this.notificationService.showError(error.error)
-            })
+              }
+            )
+          }
         }
       })
   }
@@ -88,7 +93,7 @@ export class DialogContentSignupDialog implements OnInit {
   }
 
   ngOnInit(): void {
-    this.dialogRef.beforeClosed().subscribe(() => this.dialogRef.close(this.data));
+    this.dialogRef.beforeClosed().subscribe({next: () => this.dialogRef.close(this.data)});
     this.form = this.formBuilder.group({
       username: this.usernameControl,
       password: this.passwordControl,

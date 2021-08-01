@@ -57,18 +57,22 @@ export class LobbyComponent<G extends Game, P extends Player> implements OnInit 
   protected refresh(): void {
     this.refreshLoading = true;
     this.gameService.getGameState(this.gameIdentifier).subscribe(
-      (result: G) => {
-        this.game = result
-        this.userService.getCurrentUser().subscribe(
-          (user: User) => {
-            this.currentPlayer = <P>[...this.game.players].filter(function (player) {
-              return player.user.id == user.id;
-            })[0];
-            this.refreshLoading = false;
-          }
-        )
-      },
-      () => this.router.navigate([GlobalValues.PROFILE_URI]).then()
+      {
+        next: (result: G) => {
+          this.game = result
+          this.userService.getCurrentUser().subscribe(
+            {
+              next: (user: User) => {
+                this.currentPlayer = <P>[...this.game.players].filter(function (player) {
+                  return player.user.id == user.id;
+                })[0];
+                this.refreshLoading = false;
+              }
+            }
+          )
+        },
+        error: () => this.router.navigate([GlobalValues.PROFILE_URI]).then()
+      }
     )
   }
 
@@ -77,8 +81,12 @@ export class LobbyComponent<G extends Game, P extends Player> implements OnInit 
 
   public quitLobby(user: User | null): void {
     this.gameService.quitGame(this.gameIdentifier, user).subscribe(
-      () => this.router.navigate([GlobalValues.PROFILE_URI]).then(),
-      (error => this.notificationService.showError(error.error))
+      {
+        next: () => {
+          this.router.navigate([GlobalValues.PROFILE_URI]).then()
+        },
+        error: error => this.notificationService.showError(error.error)
+      }
     )
   }
 

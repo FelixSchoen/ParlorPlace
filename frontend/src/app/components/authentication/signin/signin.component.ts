@@ -28,19 +28,22 @@ export class SigninComponent {
       }
     });
 
-    dialogRef.afterClosed().subscribe(result => {
-      if (result.submitted) {
-        this.username = result.username;
-        this.password = result.password;
+    dialogRef.afterClosed().subscribe({
+      next: result => {
+        if (result.submitted) {
+          this.username = result.username;
+          this.password = result.password;
 
-        const userSigninRequest: UserSigninRequest = new UserSigninRequest(this.username, this.password);
+          const userSigninRequest: UserSigninRequest = new UserSigninRequest(this.username, this.password);
 
-        this.authService.signin(userSigninRequest).subscribe(
-          () => this.router.navigate(["/profile"]).then(),
-          (error) => {
-            this.notificationService.showError(error.error)
-          }
-        )
+          this.authService.signin(userSigninRequest).subscribe({
+              next: () => this.router.navigate(["/profile"]).then(),
+              error: (error) => {
+                this.notificationService.showError(error.error)
+              }
+            }
+          )
+        }
       }
     });
   }
@@ -69,7 +72,7 @@ export class DialogContentSigninDialog implements OnInit {
   }
 
   ngOnInit() {
-    this.dialogRef.beforeClosed().subscribe(() => this.dialogRef.close(this.data));
+    this.dialogRef.beforeClosed().subscribe({next: () => this.dialogRef.close(this.data)});
     this.form = this.formBuilder.group({username: this.usernameControl, password: this.passwordControl});
   }
 
