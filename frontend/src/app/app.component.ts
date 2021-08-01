@@ -1,5 +1,5 @@
 import {Component, HostBinding, OnInit} from '@angular/core';
-import {AuthService} from "./services/auth.service";
+import {AuthService} from "./authentication/auth.service";
 import {AppModule} from "./app.module";
 import {getAppModulePath} from "@angular/cdk/schematics";
 

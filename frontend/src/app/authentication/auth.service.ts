@@ -6,8 +6,8 @@ import {TokenService} from "./token.service";
 import jwt_decode from "jwt-decode";
 import {GlobalValues} from "../globals/global-values.service";
 import {User, UserSigninRequest, UserSigninResponse, UserSignupRequest} from "../dto/user";
-import {UserService} from "./user.service";
-import {NotificationService} from "./notification.service";
+import {UserService} from "../services/user.service";
+import {NotificationService} from "../services/notification.service";
 import {TokenRefreshRequest, TokenRefreshResponse} from "../dto/authentication";
 import {Router} from "@angular/router";
 

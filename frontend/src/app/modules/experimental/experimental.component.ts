@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {Stomp} from "@stomp/stompjs";
-import {TokenService} from "../../services/token.service";
+import {TokenService} from "../../authentication/token.service";
 
 @Component({
   selector: 'app-experimental',

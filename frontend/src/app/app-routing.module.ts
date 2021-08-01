@@ -3,7 +3,7 @@ import {CommonModule} from '@angular/common';
 import {RouterModule, Routes} from "@angular/router";
 import {EntryComponent} from "./modules/entry/entry.component";
 import {ProfileComponent} from "./modules/profile/profile.component";
-import {AuthGuard} from "./guards/auth.guard";
+import {AuthGuard} from "./authentication/auth.guard";
 import {ExperimentalComponent} from "./modules/experimental/experimental.component";
 import {LobbyComponent} from "./modules/lobby/lobby.component";
 import {WerewolfLobbyComponent} from "./modules/lobby/werewolf-lobby/werewolf-lobby.component";

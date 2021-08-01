@@ -1,6 +1,6 @@
 import {Component, Inject, OnInit} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
-import {AuthService} from "../../../services/auth.service";
+import {AuthService} from "../../../authentication/auth.service";
 import {NotificationService} from "../../../services/notification.service";
 import {UserSigninRequest} from "../../../dto/user";
 import {Router} from "@angular/router";

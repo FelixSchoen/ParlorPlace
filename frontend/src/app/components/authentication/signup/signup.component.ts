@@ -5,7 +5,7 @@ import {ErrorStateMatcher} from "@angular/material/core";
 import Validation, {MatchingErrorStateMatcher} from "../../../validators/Validation";
 import {DialogContentSigninDialog} from "../signin/signin.component";
 import {UserSigninRequest, UserSignupRequest} from "../../../dto/user";
-import {AuthService} from "../../../services/auth.service";
+import {AuthService} from "../../../authentication/auth.service";
 import {NotificationService} from "../../../services/notification.service";
 import {Router} from "@angular/router";
 

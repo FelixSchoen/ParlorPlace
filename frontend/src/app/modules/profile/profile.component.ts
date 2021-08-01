@@ -3,7 +3,7 @@ import {ActivatedRoute, Router} from "@angular/router";
 import {UserService} from "../../services/user.service";
 import {User, UserUpdateRequest} from "../../dto/user";
 import {NotificationService} from "../../services/notification.service";
-import {TokenService} from "../../services/token.service";
+import {TokenService} from "../../authentication/token.service";
 import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {catchError, debounceTime, distinctUntilChanged, switchMap} from "rxjs/operators";
 import {Observable, of} from "rxjs";
