@@ -1,6 +1,6 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import {ComponentFixture, TestBed} from '@angular/core/testing';
 
-import { GeneralComponent } from './general.component';
+import {GeneralComponent} from './general.component';
 
 describe('GeneralComponent', () => {
   let component: GeneralComponent;
