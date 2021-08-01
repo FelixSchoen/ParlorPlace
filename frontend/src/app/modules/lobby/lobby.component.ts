@@ -6,7 +6,7 @@ import {NotificationService} from "../../services/notification.service";
 import {Player} from "../../dto/player";
 import {UserService} from "../../services/user.service";
 import {User} from "../../dto/user";
-import {GlobalValues} from "../../globals/global-values.service";
+import {environment} from "../../../environments/environment";
 
 @Component({
   selector: 'app-lobby',
@@ -71,7 +71,7 @@ export class LobbyComponent<G extends Game, P extends Player> implements OnInit 
             }
           )
         },
-        error: () => this.router.navigate([GlobalValues.PROFILE_URI]).then()
+        error: () => this.router.navigate([environment.general.PROFILE_URI]).then()
       }
     )
   }
@@ -83,7 +83,7 @@ export class LobbyComponent<G extends Game, P extends Player> implements OnInit 
     this.gameService.quitGame(this.gameIdentifier, user).subscribe(
       {
         next: () => {
-          this.router.navigate([GlobalValues.PROFILE_URI]).then()
+          this.router.navigate([environment.general.PROFILE_URI]).then()
         },
         error: error => this.notificationService.showError(error.error)
       }

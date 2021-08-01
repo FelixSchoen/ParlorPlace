@@ -4,12 +4,12 @@ import {Observable, timer} from "rxjs";
 import {tap} from "rxjs/operators";
 import {TokenService} from "./token.service";
 import jwt_decode from "jwt-decode";
-import {GlobalValues} from "../globals/global-values.service";
 import {User, UserSigninRequest, UserSigninResponse, UserSignupRequest} from "../dto/user";
 import {TokenRefreshRequest, TokenRefreshResponse} from "../dto/authentication";
 import {Router} from "@angular/router";
+import {environment} from "../../environments/environment";
 
-const AUTH_URI = GlobalValues.BASE_URI + 'user/';
+const AUTH_URI = environment.BASE_URI + environment.general.USER_API;
 const BUFFER_SECONDS = 120;
 
 const httpOptions = {
@@ -60,7 +60,7 @@ export class AuthService {
               error: () => {
                 console.log("Could not re-authenticate");
                 this.tokenService.signout();
-                this.router.navigate([GlobalValues.ENTRY_URI]).then();
+                this.router.navigate([environment.general.ENTRY_URI]).then();
               }
             }
           ).add(() => subscription.unsubscribe())

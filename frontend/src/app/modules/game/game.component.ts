@@ -5,8 +5,8 @@ import {ActivatedRoute, Router} from "@angular/router";
 import {GameService} from "../../services/game.service";
 import {Game, GameIdentifier} from "../../dto/game";
 import {GameType} from "../../enums/gametype";
-import {GlobalValues} from "../../globals/global-values.service";
 import {NotificationService} from "../../services/notification.service";
+import {environment} from "../../../environments/environment";
 
 export interface GameComponents {
   mainComponent?: any,
@@ -81,7 +81,7 @@ export class GameComponent implements OnInit {
       },
       error: (error) => {
         this.notificationService.showError(error.error);
-        this.router.navigate([GlobalValues.PROFILE_URI]).then();
+        this.router.navigate([environment.general.PROFILE_URI]).then();
       }
     });
   }

@@ -1,11 +1,11 @@
 import {Injectable} from '@angular/core';
-import {GlobalValues} from "../globals/global-values.service";
 import {HttpClient, HttpParams} from "@angular/common/http";
 import {Observable} from "rxjs";
 import {User, UserUpdateRequest} from "../dto/user";
 import {UserRole} from "../enums/userrole";
+import {environment} from "../../environments/environment";
 
-const USER_URI = GlobalValues.BASE_URI + 'user/';
+const USER_URI = environment.BASE_URI + environment.general.USER_API;
 
 @Injectable({
   providedIn: 'root'

@@ -1,12 +1,12 @@
 import {Injectable} from '@angular/core';
-import {GlobalValues} from "../globals/global-values.service";
 import {HttpClient} from "@angular/common/http";
 import {Game, GameIdentifier, GameStartRequest} from "../dto/game";
 import {Observable} from "rxjs";
 import {LobbyChangeRequest} from "../dto/lobby";
 import {User} from "../dto/user";
+import {environment} from "../../environments/environment";
 
-const GAME_URI = GlobalValues.BASE_URI + 'game/';
+const GAME_URI = environment.BASE_URI + environment.general.GAME_API;
 
 @Injectable({
   providedIn: 'root'

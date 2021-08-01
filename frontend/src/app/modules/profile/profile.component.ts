@@ -17,8 +17,8 @@ import {MatAutocompleteSelectedEvent} from "@angular/material/autocomplete";
 import {GameType, GameTypeUtil} from "../../enums/gametype";
 import {GameService} from "../../services/game.service";
 import {Game, GameIdentifier, GameStartRequest} from "../../dto/game";
-import {GlobalValues} from "../../globals/global-values.service";
 import {removeFromArray} from "../../utility/utility";
+import {environment} from "../../../environments/environment";
 
 @Component({
   selector: 'app-profile',
@@ -70,7 +70,7 @@ export class ProfileComponent implements OnInit {
         next: (user) => {
           this.currentUser = user;
           if (queryName == undefined) {
-            this.router.navigate([GlobalValues.PROFILE_URI + user.username]).then();
+            this.router.navigate([environment.general.PROFILE_URI + user.username]).then();
           } else {
             this.userService.getUserByUsername(queryName).subscribe({
               next: (user: User) => {
@@ -90,7 +90,7 @@ export class ProfileComponent implements OnInit {
 
   onSelect($event: any) {
     const selectedUser: User = $event.source.value
-    this.router.navigate([GlobalValues.PROFILE_URI + selectedUser.username]).then();
+    this.router.navigate([environment.general.PROFILE_URI + selectedUser.username]).then();
   }
 
   openEditDialog(): void {
@@ -148,7 +148,7 @@ export class ProfileComponent implements OnInit {
           if (result.host) {
             this.gameService.startGame(new GameStartRequest(result.game)).subscribe({
                 next: result => {
-                  this.router.navigate([GlobalValues.GAME_URI + result.gameIdentifier.token]).then();
+                  this.router.navigate([environment.general.GAME_URI + result.gameIdentifier.token]).then();
                 },
                 error: error => this.notificationService.showError(error.error)
               }
@@ -156,7 +156,7 @@ export class ProfileComponent implements OnInit {
           } else if (result.submitted) {
             this.gameService.joinGame(new GameIdentifier(result.identifier)).subscribe({
                 next: result => {
-                  this.router.navigate([GlobalValues.GAME_URI + result.gameIdentifier.token]).then();
+                  this.router.navigate([environment.general.GAME_URI + result.gameIdentifier.token]).then();
                 },
                 error: error => this.notificationService.showError(error.error)
               }
