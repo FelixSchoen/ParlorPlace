@@ -1,8 +1,8 @@
 import {Component, Input, OnInit, Output, EventEmitter, ViewChild, ElementRef} from '@angular/core';
 import {Player} from "../../../dto/player";
-import {Utility} from "../../../utility/utility";
 import {MatAutocompleteSelectedEvent} from "@angular/material/autocomplete";
 import {FormControl} from "@angular/forms";
+import {removeFromArray} from "../../../utility/utility";
 
 @Component({
   selector: 'app-role-selection',
@@ -31,7 +31,7 @@ export class RoleSelectionComponent<R, P extends Player> implements OnInit {
   removeRole(
     role: R
   ): void {
-    Utility.removeFromArray(role, this.roles)
+    removeFromArray(role, this.roles)
     this.roleChanged.emit(this.roles);
   }
 

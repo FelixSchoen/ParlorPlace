@@ -14,11 +14,11 @@ import Validation, {MatchingErrorStateMatcher} from "../../validators/Validation
 import {MatChipInputEvent} from "@angular/material/chips";
 import {ENTER} from "@angular/cdk/keycodes";
 import {MatAutocompleteSelectedEvent} from "@angular/material/autocomplete";
-import {Utility} from "../../utility/utility";
 import {GameType, GameTypeUtil} from "../../enums/gametype";
 import {GameService} from "../../services/game.service";
 import {Game, GameIdentifier, GameStartRequest} from "../../dto/game";
 import {GlobalValues} from "../../globals/global-values.service";
+import {removeFromArray} from "../../utility/utility";
 
 @Component({
   selector: 'app-profile',
@@ -246,7 +246,7 @@ export class DialogContentProfileEditDialog implements OnInit {
 
     this.availableRoles = UserRoleUtil.getUserRoleArray();
     for (const role of this.data.outputData.roles) {
-      Utility.removeFromArray(role, this.availableRoles)
+      removeFromArray(role, this.availableRoles)
     }
   }
 
@@ -276,7 +276,7 @@ export class DialogContentProfileEditDialog implements OnInit {
   }
 
   removeChip(role: UserRole): void {
-    Utility.removeFromArray(role, this.data.outputData.roles)
+    removeFromArray(role, this.data.outputData.roles)
 
     if (!this.availableRoles.includes(role)) {
       this.availableRoles.push(role);
@@ -289,7 +289,7 @@ export class DialogContentProfileEditDialog implements OnInit {
     if (roleToAdd && !this.data.outputData.roles.includes(roleToAdd)) {
       this.data.outputData.roles.push(roleToAdd);
 
-      Utility.removeFromArray(roleToAdd, this.availableRoles);
+      removeFromArray(roleToAdd, this.availableRoles);
     }
 
     this.roleInput.nativeElement.value = "";
