@@ -3,17 +3,17 @@ import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from "@angular/material/dialog
 import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {ErrorStateMatcher} from "@angular/material/core";
 import Validation, {MatchingErrorStateMatcher} from "../../../validators/Validation";
-import {UserSigninRequest, UserSignupRequest} from "../../../dto/user";
+import {UserLoginRequest, UserRegisterRequest} from "../../../dto/user";
 import {AuthService} from "../../../authentication/auth.service";
 import {NotificationService} from "../../../services/notification.service";
 import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-signup',
-  templateUrl: './signup.component.html',
-  styleUrls: ['./signup.component.css']
+  templateUrl: './register.component.html',
+  styleUrls: ['./register.component.css']
 })
-export class SignupComponent {
+export class RegisterComponent {
 
   private username: string;
   private password: string;
@@ -40,13 +40,13 @@ export class SignupComponent {
             this.password = result.password;
             this.email = result.email;
 
-            const userSignupRequest: UserSignupRequest = new UserSignupRequest(this.username, this.password, this.username, this.email);
+            const userSignupRequest: UserRegisterRequest = new UserRegisterRequest(this.username, this.password, this.username, this.email);
 
-            this.authService.signup(userSignupRequest).subscribe(
+            this.authService.register(userSignupRequest).subscribe(
               {
                 next: () => {
                   this.notificationService.showSuccess("Signed up");
-                  this.authService.signin(new UserSigninRequest(userSignupRequest.username, userSignupRequest.password)).subscribe(
+                  this.authService.login(new UserLoginRequest(userSignupRequest.username, userSignupRequest.password)).subscribe(
                     () => {
                       this.router.navigate(["/profile"]).then();
                     },
@@ -76,7 +76,7 @@ export interface DialogData {
 
 @Component({
   selector: "dialog-content-signup-dialog",
-  templateUrl: "signup.dialog.component.html",
+  templateUrl: "register.dialog.component.html",
 })
 export class DialogContentSignupDialog implements OnInit {
 

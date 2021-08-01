@@ -2,16 +2,16 @@ import {Component, Inject, OnInit} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {AuthService} from "../../../authentication/auth.service";
 import {NotificationService} from "../../../services/notification.service";
-import {UserSigninRequest} from "../../../dto/user";
+import {UserLoginRequest} from "../../../dto/user";
 import {Router} from "@angular/router";
 import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from "@angular/material/dialog";
 
 @Component({
   selector: 'app-signin',
-  templateUrl: './signin.component.html',
-  styleUrls: ['./signin.component.css']
+  templateUrl: './login.component.html',
+  styleUrls: ['./login.component.css']
 })
-export class SigninComponent {
+export class LoginComponent {
 
   private username: string;
   private password: string;
@@ -34,9 +34,9 @@ export class SigninComponent {
           this.username = result.username;
           this.password = result.password;
 
-          const userSigninRequest: UserSigninRequest = new UserSigninRequest(this.username, this.password);
+          const userSigninRequest: UserLoginRequest = new UserLoginRequest(this.username, this.password);
 
-          this.authService.signin(userSigninRequest).subscribe({
+          this.authService.login(userSigninRequest).subscribe({
               next: () => this.router.navigate(["/profile"]).then(),
               error: (error) => {
                 this.notificationService.showError(error.error)
@@ -58,7 +58,7 @@ export interface DialogData {
 
 @Component({
   selector: "dialog-content-signin-dialog",
-  templateUrl: "signin.dialog.component.html",
+  templateUrl: "login.dialog.component.html",
 })
 export class DialogContentSigninDialog implements OnInit {
 

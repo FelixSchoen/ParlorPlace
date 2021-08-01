@@ -12,7 +12,7 @@ import java.util.Set;
 @AllArgsConstructor
 @Builder(toBuilder = true)
 @Data
-public class UserSigninResponseDTO {
+public class UserLoginResponseDTO {
 
     @NotNull
     private Long id;

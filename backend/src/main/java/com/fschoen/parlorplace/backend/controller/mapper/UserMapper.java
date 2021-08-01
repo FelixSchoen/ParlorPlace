@@ -1,8 +1,8 @@
 package com.fschoen.parlorplace.backend.controller.mapper;
 
 import com.fschoen.parlorplace.backend.controller.dto.user.UserDTO;
-import com.fschoen.parlorplace.backend.controller.dto.user.UserSigninRequestDTO;
-import com.fschoen.parlorplace.backend.controller.dto.user.UserSignupRequestDTO;
+import com.fschoen.parlorplace.backend.controller.dto.user.UserLoginRequestDTO;
+import com.fschoen.parlorplace.backend.controller.dto.user.UserRegisterRequestDTO;
 import com.fschoen.parlorplace.backend.controller.dto.user.UserUpdateRequestDTO;
 import com.fschoen.parlorplace.backend.entity.persistance.User;
 import org.mapstruct.*;
@@ -14,13 +14,13 @@ public interface UserMapper {
 
     User fromDTO(UserDTO userDTO);
 
-    User fromDTO(UserSignupRequestDTO userSignupRequestDTO);
+    User fromDTO(UserRegisterRequestDTO userRegisterRequestDTO);
 
     @Mappings({
             @Mapping(target = "nickname", ignore = true),
             @Mapping(target = "email", ignore = true)
     })
-    User fromDTO(UserSigninRequestDTO userSigninRequestDTO);
+    User fromDTO(UserLoginRequestDTO userLoginRequestDTO);
 
     User fromDTO(UserUpdateRequestDTO userUpdateRequestDTO);
 

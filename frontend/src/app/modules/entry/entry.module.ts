@@ -2,8 +2,8 @@ import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
 
 import {EntryRoutingModule} from './entry-routing.module';
-import {DialogContentSignupDialog, SignupComponent} from "../../components/authentication/signup/signup.component";
-import {DialogContentSigninDialog, SigninComponent} from "../../components/authentication/signin/signin.component";
+import {DialogContentSignupDialog, RegisterComponent} from "../../components/authentication/register/register.component";
+import {DialogContentSigninDialog, LoginComponent} from "../../components/authentication/login/login.component";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {MatCardModule} from "@angular/material/card";
 import {MatButtonModule} from "@angular/material/button";
@@ -15,9 +15,9 @@ import {EntryComponent} from "./entry.component";
 @NgModule({
   declarations: [
     EntryComponent,
-    SignupComponent,
+    RegisterComponent,
     DialogContentSignupDialog,
-    SigninComponent,
+    LoginComponent,
     DialogContentSigninDialog,
   ],
   imports: [

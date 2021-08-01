@@ -14,7 +14,7 @@ export class EntryComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    if (this.authService.isSignedIn()) {
+    if (this.authService.isLoggedIn()) {
       this.router.navigate(["/profile"]).then();
     }
   }

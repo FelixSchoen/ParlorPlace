@@ -32,24 +32,24 @@ public class UserController {
     }
 
 
-    @PostMapping("/signup")
-    public ResponseEntity<UserDTO> signupUser(@RequestBody UserSignupRequestDTO userSignupRequestDTO) {
-        validator.validate(userSignupRequestDTO).throwIfInvalid();
+    @PostMapping("/register")
+    public ResponseEntity<UserDTO> registerUser(@RequestBody UserRegisterRequestDTO userRegisterRequestDTO) {
+        validator.validate(userRegisterRequestDTO).throwIfInvalid();
 
-        User proposedUser = userMapper.fromDTO(userSignupRequestDTO);
-        User createdUser = userService.signup(proposedUser);
+        User proposedUser = userMapper.fromDTO(userRegisterRequestDTO);
+        User createdUser = userService.register(proposedUser);
         UserDTO userDTO = userMapper.toDTO(createdUser, false);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(userDTO);
     }
 
-    @PostMapping("/signin")
-    public ResponseEntity<UserSigninResponseDTO> signinUser(@RequestBody UserSigninRequestDTO userSigninRequestDTO) {
-        validator.validate(userSigninRequestDTO).throwIfInvalid();
+    @PostMapping("/login")
+    public ResponseEntity<UserLoginResponseDTO> loginUser(@RequestBody UserLoginRequestDTO userLoginRequestDTO) {
+        validator.validate(userLoginRequestDTO).throwIfInvalid();
 
-        UserSigninResponseDTO userSigninResponseDTO = userService.signin(userMapper.fromDTO(userSigninRequestDTO));
+        UserLoginResponseDTO userLoginResponseDTO = userService.login(userMapper.fromDTO(userLoginRequestDTO));
 
-        return ResponseEntity.status(HttpStatus.OK).body(userSigninResponseDTO);
+        return ResponseEntity.status(HttpStatus.OK).body(userLoginResponseDTO);
     }
 
     @PostMapping("/refresh")

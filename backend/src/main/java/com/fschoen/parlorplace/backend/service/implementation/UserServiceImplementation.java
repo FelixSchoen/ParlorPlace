@@ -1,7 +1,7 @@
 package com.fschoen.parlorplace.backend.service.implementation;
 
 import com.fschoen.parlorplace.backend.controller.dto.authentication.TokenRefreshResponseDTO;
-import com.fschoen.parlorplace.backend.controller.dto.user.UserSigninResponseDTO;
+import com.fschoen.parlorplace.backend.controller.dto.user.UserLoginResponseDTO;
 import com.fschoen.parlorplace.backend.entity.persistance.RefreshToken;
 import com.fschoen.parlorplace.backend.entity.persistance.Role;
 import com.fschoen.parlorplace.backend.entity.persistance.User;
@@ -50,7 +50,7 @@ public class UserServiceImplementation extends AbstractService implements UserSe
     }
 
     @Override
-    public User signup(User user) throws DataConflictException {
+    public User register(User user) throws DataConflictException {
         log.info("Signing up User: {}", user.getUsername());
 
         if (userRepository.findOneByUsername(user.getUsername()).isPresent())
@@ -69,7 +69,7 @@ public class UserServiceImplementation extends AbstractService implements UserSe
         return userRepository.save(persistUser);
     }
 
-    public UserSigninResponseDTO signin(User user) {
+    public UserLoginResponseDTO login(User user) {
         log.info("Signing in User: {}", user.getUsername());
 
         Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword()));
@@ -81,7 +81,7 @@ public class UserServiceImplementation extends AbstractService implements UserSe
 
         RefreshToken refreshToken = refreshTokenService.createRefreshToken(userDetails.getId());
 
-        return UserSigninResponseDTO.builder().id(userDetails.getId()).username(userDetails.getUsername()).roles(roles).accessToken(accessToken).refreshToken(refreshToken.getRefreshToken()).build();
+        return UserLoginResponseDTO.builder().id(userDetails.getId()).username(userDetails.getUsername()).roles(roles).accessToken(accessToken).refreshToken(refreshToken.getRefreshToken()).build();
     }
 
     @Override

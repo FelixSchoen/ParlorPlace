@@ -4,7 +4,7 @@ import {Observable, timer} from "rxjs";
 import {tap} from "rxjs/operators";
 import {TokenService} from "./token.service";
 import jwt_decode from "jwt-decode";
-import {User, UserSigninRequest, UserSigninResponse, UserSignupRequest} from "../dto/user";
+import {User, UserLoginRequest, UserLoginResponse, UserRegisterRequest} from "../dto/user";
 import {TokenRefreshRequest, TokenRefreshResponse} from "../dto/authentication";
 import {Router} from "@angular/router";
 import {environment} from "../../environments/environment";
@@ -25,25 +25,25 @@ export class AuthService {
     this.scheduleReAuthentication();
   }
 
-  public signin(
-    userSigninRequest: UserSigninRequest
-  ): Observable<UserSigninResponse> {
+  public login(
+    userLoginRequest: UserLoginRequest
+  ): Observable<UserLoginResponse> {
     this.tokenService.signout();
-    return this.httpClient.post<UserSigninResponse>(AUTH_URI + 'signin', userSigninRequest, httpOptions)
+    return this.httpClient.post<UserLoginResponse>(AUTH_URI + 'login', userLoginRequest, httpOptions)
       .pipe(
-        tap((userSigninResponse: UserSigninResponse) => {
+        tap((userSigninResponse: UserLoginResponse) => {
           this.tokenService.saveToken(new TokenRefreshResponse(userSigninResponse.accessToken, userSigninResponse.refreshToken));
         })
       );
   }
 
-  public signup(
-    userSignupRequestDTO: UserSignupRequest
+  public register(
+    userRegisterRequest: UserRegisterRequest
   ): Observable<User> {
-    return this.httpClient.post<User>(AUTH_URI + 'signup', userSignupRequestDTO, httpOptions);
+    return this.httpClient.post<User>(AUTH_URI + 'register', userRegisterRequest, httpOptions);
   }
 
-  public isSignedIn(): boolean {
+  public isLoggedIn(): boolean {
     return !!this.tokenService.getToken() && AuthService.getTokenExpirationDate(this.tokenService.getToken()!.accessToken)!.valueOf() > new Date().valueOf();
   }
 
@@ -51,7 +51,7 @@ export class AuthService {
     let reauthenticateTimer: Observable<number> = this.setupTimer();
     let subscription = reauthenticateTimer.subscribe({
       next: () => {
-        if (this.isSignedIn()) {
+        if (this.isLoggedIn()) {
           this.reauthenticate().subscribe({
               next: () => {
                 console.log("Re-authenticated successfully")
