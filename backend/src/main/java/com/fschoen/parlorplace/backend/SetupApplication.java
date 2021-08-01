@@ -1,11 +1,10 @@
 package com.fschoen.parlorplace.backend;
 
-import com.fschoen.parlorplace.backend.datagenerator.DatabasePopulator;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.CommandLineRunner;
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.Profile;
+import com.fschoen.parlorplace.backend.datagenerator.*;
+import org.springframework.beans.factory.annotation.*;
+import org.springframework.boot.*;
+import org.springframework.boot.autoconfigure.*;
+import org.springframework.context.annotation.*;
 
 @SpringBootApplication
 @Profile("setup")

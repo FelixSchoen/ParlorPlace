@@ -1,11 +1,11 @@
 package com.fschoen.parlorplace.backend.integration.utility;
 
-import org.hibernate.boot.Metadata;
-import org.hibernate.tool.hbm2ddl.SchemaExport;
+import org.hibernate.boot.*;
+import org.hibernate.tool.hbm2ddl.*;
 
-import java.util.EnumSet;
+import java.util.*;
 
-import static org.hibernate.tool.schema.TargetType.DATABASE;
+import static org.hibernate.tool.schema.TargetType.*;
 
 public class TestIsolationService {
 

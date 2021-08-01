@@ -1,28 +1,19 @@
 package com.fschoen.parlorplace.backend.game.management;
 
-import com.fschoen.parlorplace.backend.entity.persistance.Game;
-import com.fschoen.parlorplace.backend.entity.persistance.Player;
-import com.fschoen.parlorplace.backend.entity.persistance.RuleSet;
-import com.fschoen.parlorplace.backend.entity.persistance.User;
-import com.fschoen.parlorplace.backend.enumeration.GameState;
-import com.fschoen.parlorplace.backend.enumeration.LobbyRole;
-import com.fschoen.parlorplace.backend.enumeration.PlayerState;
-import com.fschoen.parlorplace.backend.exception.DataConflictException;
-import com.fschoen.parlorplace.backend.exception.GameException;
-import com.fschoen.parlorplace.backend.game.werewolf.management.WerewolfManager;
-import com.fschoen.parlorplace.backend.repository.GameRepository;
-import com.fschoen.parlorplace.backend.repository.UserRepository;
-import com.fschoen.parlorplace.backend.service.AbstractService;
-import com.fschoen.parlorplace.backend.service.GameService;
-import com.fschoen.parlorplace.backend.utility.messaging.Messages;
-import lombok.AccessLevel;
-import lombok.Getter;
-import org.slf4j.Logger;
+import com.fschoen.parlorplace.backend.entity.persistance.*;
+import com.fschoen.parlorplace.backend.enumeration.*;
+import com.fschoen.parlorplace.backend.exception.*;
+import com.fschoen.parlorplace.backend.game.werewolf.management.*;
+import com.fschoen.parlorplace.backend.repository.*;
+import com.fschoen.parlorplace.backend.service.*;
+import com.fschoen.parlorplace.backend.utility.messaging.*;
+import lombok.*;
+import org.slf4j.*;
 
-import javax.annotation.PostConstruct;
-import java.lang.reflect.InvocationTargetException;
+import javax.annotation.*;
+import java.lang.reflect.*;
 import java.util.*;
-import java.util.stream.Collectors;
+import java.util.stream.*;
 
 public abstract class GameInstance<G extends Game, P extends Player, GR extends GameRepository<G>, RS extends RuleSet> extends AbstractService {
 

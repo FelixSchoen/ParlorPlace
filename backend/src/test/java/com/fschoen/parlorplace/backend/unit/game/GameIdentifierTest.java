@@ -1,10 +1,10 @@
 package com.fschoen.parlorplace.backend.unit.game;
 
-import com.fschoen.parlorplace.backend.game.management.GameIdentifier;
-import com.fschoen.parlorplace.backend.unit.base.BaseUnitTest;
-import org.junit.jupiter.api.Test;
+import com.fschoen.parlorplace.backend.game.management.*;
+import com.fschoen.parlorplace.backend.unit.base.*;
+import org.junit.jupiter.api.*;
 
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.assertj.core.api.AssertionsForClassTypes.*;
 
 public class GameIdentifierTest extends BaseUnitTest {
 

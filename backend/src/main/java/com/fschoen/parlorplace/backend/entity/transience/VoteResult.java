@@ -1,10 +1,9 @@
 package com.fschoen.parlorplace.backend.entity.transience;
 
-import com.fschoen.parlorplace.backend.entity.persistance.Player;
-import lombok.Data;
+import com.fschoen.parlorplace.backend.entity.persistance.*;
+import lombok.*;
 
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 @Data
 public class VoteResult<T> {

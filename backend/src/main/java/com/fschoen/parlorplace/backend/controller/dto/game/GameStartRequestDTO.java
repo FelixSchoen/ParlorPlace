@@ -1,12 +1,9 @@
 package com.fschoen.parlorplace.backend.controller.dto.game;
 
-import com.fschoen.parlorplace.backend.enumeration.GameType;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.fschoen.parlorplace.backend.enumeration.*;
+import lombok.*;
 
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.*;
 
 @NoArgsConstructor
 @AllArgsConstructor

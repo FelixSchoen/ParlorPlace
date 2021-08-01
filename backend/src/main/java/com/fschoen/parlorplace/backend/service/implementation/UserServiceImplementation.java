@@ -1,32 +1,25 @@
 package com.fschoen.parlorplace.backend.service.implementation;
 
-import com.fschoen.parlorplace.backend.controller.dto.authentication.TokenRefreshResponseDTO;
-import com.fschoen.parlorplace.backend.controller.dto.user.UserLoginResponseDTO;
-import com.fschoen.parlorplace.backend.entity.persistance.RefreshToken;
-import com.fschoen.parlorplace.backend.entity.persistance.Role;
-import com.fschoen.parlorplace.backend.entity.persistance.User;
-import com.fschoen.parlorplace.backend.entity.transience.UserDetailsImplementation;
-import com.fschoen.parlorplace.backend.enumeration.UserRole;
-import com.fschoen.parlorplace.backend.exception.AuthorizationException;
-import com.fschoen.parlorplace.backend.exception.DataConflictException;
-import com.fschoen.parlorplace.backend.repository.UserRepository;
-import com.fschoen.parlorplace.backend.security.JwtUtils;
-import com.fschoen.parlorplace.backend.service.AbstractService;
-import com.fschoen.parlorplace.backend.service.RefreshTokenService;
-import com.fschoen.parlorplace.backend.service.UserService;
-import com.fschoen.parlorplace.backend.utility.messaging.Messages;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Service;
+import com.fschoen.parlorplace.backend.controller.dto.authentication.*;
+import com.fschoen.parlorplace.backend.controller.dto.user.*;
+import com.fschoen.parlorplace.backend.entity.persistance.*;
+import com.fschoen.parlorplace.backend.entity.transience.*;
+import com.fschoen.parlorplace.backend.enumeration.*;
+import com.fschoen.parlorplace.backend.exception.*;
+import com.fschoen.parlorplace.backend.repository.*;
+import com.fschoen.parlorplace.backend.security.*;
+import com.fschoen.parlorplace.backend.service.*;
+import com.fschoen.parlorplace.backend.utility.messaging.*;
+import lombok.extern.slf4j.*;
+import org.springframework.beans.factory.annotation.*;
+import org.springframework.security.authentication.*;
+import org.springframework.security.core.*;
+import org.springframework.security.core.context.*;
+import org.springframework.security.crypto.password.*;
+import org.springframework.stereotype.*;
 
-import java.util.HashSet;
-import java.util.Set;
-import java.util.stream.Collectors;
+import java.util.*;
+import java.util.stream.*;
 
 @Slf4j
 @Service

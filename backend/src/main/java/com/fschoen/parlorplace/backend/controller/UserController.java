@@ -1,19 +1,17 @@
 package com.fschoen.parlorplace.backend.controller;
 
-import com.fschoen.parlorplace.backend.controller.dto.authentication.TokenRefreshRequestDTO;
-import com.fschoen.parlorplace.backend.controller.dto.authentication.TokenRefreshResponseDTO;
+import com.fschoen.parlorplace.backend.controller.dto.authentication.*;
 import com.fschoen.parlorplace.backend.controller.dto.user.*;
-import com.fschoen.parlorplace.backend.controller.mapper.UserMapper;
-import com.fschoen.parlorplace.backend.entity.persistance.User;
-import com.fschoen.parlorplace.backend.service.UserService;
-import com.fschoen.parlorplace.backend.validation.implementation.UserValidator;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
+import com.fschoen.parlorplace.backend.controller.mapper.*;
+import com.fschoen.parlorplace.backend.entity.persistance.*;
+import com.fschoen.parlorplace.backend.service.*;
+import com.fschoen.parlorplace.backend.validation.implementation.*;
+import org.springframework.beans.factory.annotation.*;
+import org.springframework.http.*;
+import org.springframework.security.access.prepost.*;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Set;
+import java.util.*;
 
 @RequestMapping("/user")
 @RestController

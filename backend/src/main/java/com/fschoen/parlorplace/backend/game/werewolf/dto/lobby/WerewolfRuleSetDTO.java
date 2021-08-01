@@ -1,13 +1,12 @@
 package com.fschoen.parlorplace.backend.game.werewolf.dto.lobby;
 
-import com.fschoen.parlorplace.backend.controller.dto.game.RuleSetDTO;
-import com.fschoen.parlorplace.backend.game.werewolf.enumeration.WerewolfRoleType;
+import com.fschoen.parlorplace.backend.controller.dto.game.*;
+import com.fschoen.parlorplace.backend.game.werewolf.enumeration.*;
 import lombok.*;
-import lombok.experimental.SuperBuilder;
+import lombok.experimental.*;
 
-import javax.validation.constraints.NotNull;
-import java.util.ArrayList;
-import java.util.List;
+import javax.validation.constraints.*;
+import java.util.*;
 
 @NoArgsConstructor
 //@AllArgsConstructor

@@ -1,10 +1,10 @@
 package com.fschoen.parlorplace.backend.repository;
 
-import com.fschoen.parlorplace.backend.entity.persistance.RuleSet;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.repository.NoRepositoryBean;
+import com.fschoen.parlorplace.backend.entity.persistance.*;
+import org.springframework.data.jpa.repository.*;
+import org.springframework.data.repository.*;
 
-import java.util.Optional;
+import java.util.*;
 
 @NoRepositoryBean
 public interface RuleSetRepository<T extends RuleSet> extends JpaRepository<T, Long> {

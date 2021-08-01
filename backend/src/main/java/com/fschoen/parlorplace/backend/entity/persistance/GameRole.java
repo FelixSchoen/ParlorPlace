@@ -1,10 +1,7 @@
 package com.fschoen.parlorplace.backend.entity.persistance;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
-import lombok.experimental.SuperBuilder;
+import lombok.*;
+import lombok.experimental.*;
 
 import javax.persistence.*;
 

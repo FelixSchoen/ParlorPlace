@@ -1,16 +1,11 @@
 package com.fschoen.parlorplace.backend.entity.persistance;
 
-import com.fschoen.parlorplace.backend.entity.persistance.User;
-import com.fschoen.parlorplace.backend.enumeration.LobbyRole;
-import com.fschoen.parlorplace.backend.enumeration.PlayerState;
+import com.fschoen.parlorplace.backend.enumeration.*;
 import lombok.*;
-import lombok.experimental.SuperBuilder;
-import org.hibernate.annotations.Cascade;
+import lombok.experimental.*;
 
 import javax.persistence.*;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotNull;
-import java.util.Set;
+import javax.validation.constraints.*;
 
 @NoArgsConstructor
 @AllArgsConstructor

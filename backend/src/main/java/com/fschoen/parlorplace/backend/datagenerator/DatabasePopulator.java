@@ -1,23 +1,13 @@
 package com.fschoen.parlorplace.backend.datagenerator;
 
 import com.fschoen.parlorplace.backend.entity.persistance.Role;
-import com.fschoen.parlorplace.backend.entity.persistance.User;
-import com.fschoen.parlorplace.backend.enumeration.LobbyRole;
-import com.fschoen.parlorplace.backend.enumeration.PlayerState;
-import com.fschoen.parlorplace.backend.enumeration.UserRole;
-import com.fschoen.parlorplace.backend.game.management.GameIdentifier;
-import com.fschoen.parlorplace.backend.game.werewolf.entity.persistance.WerewolfGame;
-import com.fschoen.parlorplace.backend.game.werewolf.entity.persistance.WerewolfPlayer;
-import com.fschoen.parlorplace.backend.game.werewolf.entity.persistance.WerewolfRuleSet;
-import com.fschoen.parlorplace.backend.repository.GameRepository;
-import com.fschoen.parlorplace.backend.repository.PlayerRepository;
-import com.fschoen.parlorplace.backend.repository.UserRepository;
-import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Profile;
-import org.springframework.stereotype.Component;
+import com.fschoen.parlorplace.backend.entity.persistance.*;
+import com.fschoen.parlorplace.backend.enumeration.*;
+import com.fschoen.parlorplace.backend.repository.*;
+import lombok.extern.slf4j.*;
+import org.springframework.beans.factory.annotation.*;
+import org.springframework.context.annotation.*;
+import org.springframework.stereotype.*;
 
 import java.util.*;
 

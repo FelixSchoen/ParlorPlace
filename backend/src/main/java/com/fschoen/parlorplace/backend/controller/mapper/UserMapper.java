@@ -1,13 +1,10 @@
 package com.fschoen.parlorplace.backend.controller.mapper;
 
-import com.fschoen.parlorplace.backend.controller.dto.user.UserDTO;
-import com.fschoen.parlorplace.backend.controller.dto.user.UserLoginRequestDTO;
-import com.fschoen.parlorplace.backend.controller.dto.user.UserRegisterRequestDTO;
-import com.fschoen.parlorplace.backend.controller.dto.user.UserUpdateRequestDTO;
-import com.fschoen.parlorplace.backend.entity.persistance.User;
+import com.fschoen.parlorplace.backend.controller.dto.user.*;
+import com.fschoen.parlorplace.backend.entity.persistance.*;
 import org.mapstruct.*;
 
-import java.util.Set;
+import java.util.*;
 
 @Mapper(componentModel = "spring", uses = {RoleMapper.class})
 public interface UserMapper {

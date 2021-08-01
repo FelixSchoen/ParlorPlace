@@ -1,8 +1,6 @@
 package com.fschoen.parlorplace.backend.game.management;
 
-import lombok.Data;
-
-import javax.annotation.PostConstruct;
+import javax.annotation.*;
 
 public abstract class GameManager {
 

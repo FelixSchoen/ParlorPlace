@@ -1,24 +1,18 @@
 package com.fschoen.parlorplace.backend.service.implementation;
 
-import com.fschoen.parlorplace.backend.entity.persistance.Game;
-import com.fschoen.parlorplace.backend.entity.persistance.Player;
-import com.fschoen.parlorplace.backend.entity.persistance.RuleSet;
-import com.fschoen.parlorplace.backend.entity.persistance.User;
-import com.fschoen.parlorplace.backend.enumeration.GameType;
-import com.fschoen.parlorplace.backend.exception.DataConflictException;
-import com.fschoen.parlorplace.backend.exception.GameException;
-import com.fschoen.parlorplace.backend.game.management.GameIdentifier;
-import com.fschoen.parlorplace.backend.game.management.GameInstance;
-import com.fschoen.parlorplace.backend.game.werewolf.management.WerewolfInstance;
-import com.fschoen.parlorplace.backend.repository.UserRepository;
-import com.fschoen.parlorplace.backend.service.AbstractService;
-import com.fschoen.parlorplace.backend.service.GameService;
-import com.fschoen.parlorplace.backend.utility.messaging.Messages;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Service;
+import com.fschoen.parlorplace.backend.entity.persistance.*;
+import com.fschoen.parlorplace.backend.enumeration.*;
+import com.fschoen.parlorplace.backend.exception.*;
+import com.fschoen.parlorplace.backend.game.management.*;
+import com.fschoen.parlorplace.backend.game.werewolf.management.*;
+import com.fschoen.parlorplace.backend.repository.*;
+import com.fschoen.parlorplace.backend.service.*;
+import com.fschoen.parlorplace.backend.utility.messaging.*;
+import lombok.extern.slf4j.*;
+import org.springframework.beans.factory.annotation.*;
+import org.springframework.context.*;
+import org.springframework.context.annotation.*;
+import org.springframework.stereotype.*;
 
 import java.util.*;
 

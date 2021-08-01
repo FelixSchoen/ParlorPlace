@@ -1,11 +1,8 @@
 package com.fschoen.parlorplace.backend.validation.implementation;
 
-import com.fschoen.parlorplace.backend.controller.dto.authentication.TokenRefreshRequestDTO;
-import com.fschoen.parlorplace.backend.controller.dto.user.UserLoginRequestDTO;
-import com.fschoen.parlorplace.backend.controller.dto.user.UserRegisterRequestDTO;
-import com.fschoen.parlorplace.backend.controller.dto.user.UserUpdateRequestDTO;
-import com.fschoen.parlorplace.backend.validation.BaseValidator;
-import com.fschoen.parlorplace.backend.validation.ValidationResult;
+import com.fschoen.parlorplace.backend.controller.dto.authentication.*;
+import com.fschoen.parlorplace.backend.controller.dto.user.*;
+import com.fschoen.parlorplace.backend.validation.*;
 
 public class UserValidator extends BaseValidator {
 

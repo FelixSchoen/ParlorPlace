@@ -1,14 +1,14 @@
 package com.fschoen.parlorplace.backend.service.implementation;
 
 import com.fschoen.parlorplace.backend.entity.persistance.User;
-import com.fschoen.parlorplace.backend.entity.transience.UserDetailsImplementation;
-import com.fschoen.parlorplace.backend.repository.UserRepository;
-import com.fschoen.parlorplace.backend.utility.messaging.Messages;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.fschoen.parlorplace.backend.entity.transience.*;
+import com.fschoen.parlorplace.backend.repository.*;
+import com.fschoen.parlorplace.backend.utility.messaging.*;
+import org.springframework.beans.factory.annotation.*;
 import org.springframework.security.core.userdetails.*;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.*;
 
-import java.util.Optional;
+import java.util.*;
 
 @Service("UserDetailsServiceImplementation")
 public class UserDetailsServiceImplementation implements UserDetailsService {

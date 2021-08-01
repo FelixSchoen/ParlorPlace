@@ -1,15 +1,11 @@
 package com.fschoen.parlorplace.backend.service;
 
-import com.fschoen.parlorplace.backend.entity.persistance.Game;
-import com.fschoen.parlorplace.backend.entity.persistance.Player;
-import com.fschoen.parlorplace.backend.entity.persistance.RuleSet;
-import com.fschoen.parlorplace.backend.entity.persistance.User;
-import com.fschoen.parlorplace.backend.enumeration.GameType;
-import com.fschoen.parlorplace.backend.exception.DataConflictException;
-import com.fschoen.parlorplace.backend.exception.GameException;
-import com.fschoen.parlorplace.backend.game.management.GameIdentifier;
+import com.fschoen.parlorplace.backend.entity.persistance.*;
+import com.fschoen.parlorplace.backend.enumeration.*;
+import com.fschoen.parlorplace.backend.exception.*;
+import com.fschoen.parlorplace.backend.game.management.*;
 
-import java.util.Set;
+import java.util.*;
 
 public interface GameService {
 

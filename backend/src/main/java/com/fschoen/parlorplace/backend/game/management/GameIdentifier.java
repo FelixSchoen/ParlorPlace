@@ -1,12 +1,9 @@
 package com.fschoen.parlorplace.backend.game.management;
 
 import lombok.*;
-import org.hibernate.validator.constraints.Length;
 
-import javax.persistence.Entity;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
-import java.util.Random;
+import javax.validation.constraints.*;
+import java.util.*;
 
 @NoArgsConstructor
 @EqualsAndHashCode

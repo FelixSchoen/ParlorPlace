@@ -1,18 +1,16 @@
 package com.fschoen.parlorplace.backend.game.werewolf.entity.persistance;
 
-import com.fschoen.parlorplace.backend.entity.persistance.Game;
-import com.fschoen.parlorplace.backend.entity.persistance.Player;
-import com.fschoen.parlorplace.backend.entity.persistance.RuleSet;
-import com.fschoen.parlorplace.backend.enumeration.GameType;
+import com.fschoen.parlorplace.backend.entity.persistance.*;
+import com.fschoen.parlorplace.backend.enumeration.*;
 import lombok.*;
-import lombok.experimental.SuperBuilder;
-import org.hibernate.annotations.Cascade;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
+import lombok.experimental.*;
+import org.hibernate.annotations.*;
 
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
-import java.util.Set;
+import javax.validation.constraints.*;
+import java.util.*;
 
 @NoArgsConstructor
 @AllArgsConstructor

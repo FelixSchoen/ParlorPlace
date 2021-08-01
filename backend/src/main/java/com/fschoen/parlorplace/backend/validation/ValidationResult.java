@@ -1,8 +1,8 @@
 package com.fschoen.parlorplace.backend.validation;
 
-import com.fschoen.parlorplace.backend.exception.ValidationException;
+import com.fschoen.parlorplace.backend.exception.*;
 
-import java.util.List;
+import java.util.*;
 
 public class ValidationResult {
 

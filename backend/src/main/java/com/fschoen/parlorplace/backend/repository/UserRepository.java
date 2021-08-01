@@ -1,10 +1,9 @@
 package com.fschoen.parlorplace.backend.repository;
 
-import com.fschoen.parlorplace.backend.entity.persistance.User;
-import org.springframework.data.jpa.repository.JpaRepository;
+import com.fschoen.parlorplace.backend.entity.persistance.*;
+import org.springframework.data.jpa.repository.*;
 
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 public interface UserRepository extends JpaRepository<User, Long> {
 

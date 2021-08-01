@@ -1,16 +1,14 @@
 package com.fschoen.parlorplace.backend.controller;
 
-import com.fschoen.parlorplace.backend.controller.dto.game.GameDTO;
-import com.fschoen.parlorplace.backend.controller.dto.game.GameStartRequestDTO;
-import com.fschoen.parlorplace.backend.controller.dto.lobby.LobbyChangeRequestDTO;
-import com.fschoen.parlorplace.backend.controller.dto.user.UserDTO;
+import com.fschoen.parlorplace.backend.controller.dto.game.*;
+import com.fschoen.parlorplace.backend.controller.dto.lobby.*;
+import com.fschoen.parlorplace.backend.controller.dto.user.*;
 import com.fschoen.parlorplace.backend.controller.mapper.*;
-import com.fschoen.parlorplace.backend.game.management.GameIdentifier;
-import com.fschoen.parlorplace.backend.service.GameService;
-import com.fschoen.parlorplace.backend.validation.implementation.GameValidator;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import com.fschoen.parlorplace.backend.game.management.*;
+import com.fschoen.parlorplace.backend.service.*;
+import com.fschoen.parlorplace.backend.validation.implementation.*;
+import org.springframework.beans.factory.annotation.*;
+import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 
 @RequestMapping("/game")

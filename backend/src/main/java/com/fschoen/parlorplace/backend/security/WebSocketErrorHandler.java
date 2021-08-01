@@ -1,17 +1,13 @@
 package com.fschoen.parlorplace.backend.security;
 
-import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.messaging.Message;
-import org.springframework.messaging.MessageDeliveryException;
-import org.springframework.messaging.simp.stomp.StompCommand;
-import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
-import org.springframework.messaging.support.MessageBuilder;
-import org.springframework.web.socket.messaging.StompSubProtocolErrorHandler;
+import lombok.extern.slf4j.*;
+import org.springframework.messaging.*;
+import org.springframework.messaging.simp.stomp.*;
+import org.springframework.messaging.support.*;
+import org.springframework.web.socket.messaging.*;
 
-import java.nio.charset.StandardCharsets;
-import java.nio.file.AccessDeniedException;
+import java.nio.charset.*;
+import java.nio.file.*;
 
 @Slf4j
 public class WebSocketErrorHandler extends StompSubProtocolErrorHandler {

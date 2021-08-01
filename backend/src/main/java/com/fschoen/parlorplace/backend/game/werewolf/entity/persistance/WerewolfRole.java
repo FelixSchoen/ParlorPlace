@@ -1,13 +1,12 @@
 package com.fschoen.parlorplace.backend.game.werewolf.entity.persistance;
 
-import com.fschoen.parlorplace.backend.entity.persistance.GameRole;
-import com.fschoen.parlorplace.backend.game.werewolf.enumeration.WerewolfRoleType;
+import com.fschoen.parlorplace.backend.entity.persistance.*;
+import com.fschoen.parlorplace.backend.game.werewolf.enumeration.*;
 import lombok.*;
-import lombok.experimental.SuperBuilder;
+import lombok.experimental.*;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.validation.constraints.NotNull;
+import javax.persistence.*;
+import javax.validation.constraints.*;
 
 @NoArgsConstructor
 @AllArgsConstructor

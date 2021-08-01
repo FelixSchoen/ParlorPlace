@@ -1,15 +1,14 @@
 package com.fschoen.parlorplace.backend.service;
 
-import com.fschoen.parlorplace.backend.entity.persistance.Role;
-import com.fschoen.parlorplace.backend.entity.persistance.User;
-import com.fschoen.parlorplace.backend.entity.transience.UserDetailsImplementation;
-import com.fschoen.parlorplace.backend.enumeration.UserRole;
-import com.fschoen.parlorplace.backend.exception.AuthorizationException;
-import com.fschoen.parlorplace.backend.repository.UserRepository;
-import com.fschoen.parlorplace.backend.utility.messaging.Messages;
-import org.springframework.security.core.context.SecurityContextHolder;
+import com.fschoen.parlorplace.backend.entity.persistance.*;
+import com.fschoen.parlorplace.backend.entity.transience.*;
+import com.fschoen.parlorplace.backend.enumeration.*;
+import com.fschoen.parlorplace.backend.exception.*;
+import com.fschoen.parlorplace.backend.repository.*;
+import com.fschoen.parlorplace.backend.utility.messaging.*;
+import org.springframework.security.core.context.*;
 
-import java.util.Optional;
+import java.util.*;
 
 public abstract class AbstractService {
 

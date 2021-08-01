@@ -1,15 +1,13 @@
 package com.fschoen.parlorplace.backend.integration.utility;
 
-import org.hibernate.boot.Metadata;
-import org.hibernate.boot.MetadataSources;
-import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
-import org.hibernate.dialect.H2Dialect;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
-import org.springframework.orm.hibernate5.LocalSessionFactoryBuilder;
+import org.hibernate.boot.*;
+import org.hibernate.boot.registry.*;
+import org.hibernate.dialect.*;
+import org.springframework.context.annotation.*;
+import org.springframework.core.io.support.*;
+import org.springframework.orm.hibernate5.*;
 
-import javax.sql.DataSource;
+import javax.sql.*;
 
 import static org.hibernate.cfg.AvailableSettings.*;
 

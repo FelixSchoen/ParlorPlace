@@ -2,7 +2,7 @@ package com.fschoen.parlorplace.backend.controller.dto.authentication;
 
 import lombok.*;
 
-import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.*;
 
 @NoArgsConstructor
 @AllArgsConstructor

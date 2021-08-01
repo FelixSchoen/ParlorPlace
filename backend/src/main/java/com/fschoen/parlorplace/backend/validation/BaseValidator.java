@@ -1,17 +1,10 @@
 package com.fschoen.parlorplace.backend.validation;
 
-import com.fschoen.parlorplace.backend.utility.messaging.Messages;
+import com.fschoen.parlorplace.backend.utility.messaging.*;
 
-import javax.validation.ConstraintViolation;
-import javax.validation.Validation;
-import javax.validation.Validator;
-import javax.validation.ValidatorFactory;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Set;
+import javax.validation.*;
+import javax.validation.constraints.*;
+import java.util.*;
 
 public abstract class BaseValidator {
 

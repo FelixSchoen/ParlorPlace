@@ -1,9 +1,9 @@
 package com.fschoen.parlorplace.backend.game.werewolf.management;
 
-import com.fschoen.parlorplace.backend.game.management.GameManager;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Component;
+import com.fschoen.parlorplace.backend.game.management.*;
+import org.springframework.beans.factory.annotation.*;
+import org.springframework.context.annotation.*;
+import org.springframework.stereotype.*;
 
 @Component
 @Scope("prototype")

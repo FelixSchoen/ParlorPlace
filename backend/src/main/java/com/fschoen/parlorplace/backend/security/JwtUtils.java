@@ -1,16 +1,17 @@
 package com.fschoen.parlorplace.backend.security;
 
-import com.fschoen.parlorplace.backend.entity.transience.UserDetailsImplementation;
-import com.fschoen.parlorplace.backend.utility.messaging.Messages;
-import io.jsonwebtoken.security.Keys;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
+import com.fschoen.parlorplace.backend.entity.transience.*;
+import com.fschoen.parlorplace.backend.utility.messaging.*;
 import io.jsonwebtoken.*;
+import io.jsonwebtoken.security.*;
+import lombok.extern.slf4j.*;
+import org.springframework.beans.factory.annotation.*;
+import org.springframework.stereotype.*;
 
-import javax.crypto.SecretKey;
-import java.nio.charset.StandardCharsets;
-import java.util.Date;
+import javax.crypto.*;
+import java.nio.charset.*;
+import java.util.*;
+import java.lang.SecurityException;
 
 @Slf4j
 @Component

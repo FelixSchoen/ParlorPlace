@@ -1,21 +1,16 @@
 ﻿package com.fschoen.parlorplace.backend.controller.mapper;
 
-import com.fschoen.parlorplace.backend.controller.dto.game.PlayerDTO;
-import com.fschoen.parlorplace.backend.entity.persistance.Player;
-import com.fschoen.parlorplace.backend.exception.MappingException;
-import com.fschoen.parlorplace.backend.game.werewolf.dto.game.WerewolfPlayerDTO;
-import com.fschoen.parlorplace.backend.game.werewolf.dto.role.WerewolfRoleDTO;
-import com.fschoen.parlorplace.backend.game.werewolf.entity.persistance.WerewolfPlayer;
-import com.fschoen.parlorplace.backend.game.werewolf.entity.persistance.WerewolfRole;
-import com.fschoen.parlorplace.backend.utility.messaging.Messages;
-import org.mapstruct.Context;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.Named;
-import org.mapstruct.factory.Mappers;
+import com.fschoen.parlorplace.backend.controller.dto.game.*;
+import com.fschoen.parlorplace.backend.entity.persistance.*;
+import com.fschoen.parlorplace.backend.exception.*;
+import com.fschoen.parlorplace.backend.game.werewolf.dto.game.*;
+import com.fschoen.parlorplace.backend.game.werewolf.dto.role.*;
+import com.fschoen.parlorplace.backend.game.werewolf.entity.persistance.*;
+import com.fschoen.parlorplace.backend.utility.messaging.*;
+import org.mapstruct.*;
+import org.mapstruct.factory.*;
 
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 @Mapper(componentModel = "spring", uses = {UserMapper.class, GameRoleMapper.class})
 public interface PlayerMapper {

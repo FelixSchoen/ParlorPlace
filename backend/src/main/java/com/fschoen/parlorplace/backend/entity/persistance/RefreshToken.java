@@ -3,7 +3,7 @@ package com.fschoen.parlorplace.backend.entity.persistance;
 import lombok.*;
 
 import javax.persistence.*;
-import java.time.Instant;
+import java.time.*;
 
 @NoArgsConstructor
 @AllArgsConstructor
