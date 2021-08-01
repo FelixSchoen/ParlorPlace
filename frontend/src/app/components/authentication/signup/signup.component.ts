@@ -3,7 +3,6 @@ import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from "@angular/material/dialog
 import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {ErrorStateMatcher} from "@angular/material/core";
 import Validation, {MatchingErrorStateMatcher} from "../../../validators/Validation";
-import {DialogContentSigninDialog} from "../signin/signin.component";
 import {UserSigninRequest, UserSignupRequest} from "../../../dto/user";
 import {AuthService} from "../../../authentication/auth.service";
 import {NotificationService} from "../../../services/notification.service";

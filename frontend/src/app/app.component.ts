@@ -1,7 +1,5 @@
-import {Component, HostBinding, OnInit} from '@angular/core';
-import {AuthService} from "./authentication/auth.service";
+import {Component, OnInit} from '@angular/core';
 import {AppModule} from "./app.module";
-import {getAppModulePath} from "@angular/cdk/schematics";
 
 const THEME_KEY = 'theme-style';
 

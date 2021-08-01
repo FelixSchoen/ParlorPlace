@@ -1,4 +1,4 @@
-import {Component, Input, OnInit, Output, EventEmitter, ViewChild, ElementRef} from '@angular/core';
+import {Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
 import {Player} from "../../../dto/player";
 import {MatAutocompleteSelectedEvent} from "@angular/material/autocomplete";
 import {FormControl} from "@angular/forms";

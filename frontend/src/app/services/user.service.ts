@@ -1,10 +1,8 @@
-import {Injectable, OnInit} from '@angular/core';
+import {Injectable} from '@angular/core';
 import {GlobalValues} from "../globals/global-values.service";
 import {HttpClient, HttpParams} from "@angular/common/http";
-import {BehaviorSubject, Observable} from "rxjs";
+import {Observable} from "rxjs";
 import {User, UserUpdateRequest} from "../dto/user";
-import {NotificationService} from "./notification.service";
-import {tap} from "rxjs/operators";
 import {UserRole} from "../enums/userrole";
 
 const USER_URI = GlobalValues.BASE_URI + 'user/';

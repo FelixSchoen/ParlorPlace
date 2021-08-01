@@ -1,5 +1,4 @@
 import {NgModule} from '@angular/core';
-import {CommonModule} from '@angular/common';
 import {RouterModule, Routes} from "@angular/router";
 import {EntryComponent} from "./modules/entry/entry.component";
 import {ProfileComponent} from "./modules/profile/profile.component";

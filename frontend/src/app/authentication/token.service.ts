@@ -1,6 +1,5 @@
 import {Injectable} from '@angular/core';
 import {TokenRefreshResponse} from "../dto/authentication";
-import {User} from "../dto/user";
 
 const ACCESS_TOKEN_KEY = 'auth-access-token';
 const REFRESH_TOKEN_KEY = 'auth-refresh-token';
