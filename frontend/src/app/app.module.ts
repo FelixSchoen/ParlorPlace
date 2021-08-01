@@ -18,7 +18,7 @@ import {
   DialogContentProfileEnterGameDialog,
   ProfileComponent
 } from './modules/profile/profile.component';
-import {LoadingIndicatorComponent} from './components/utility/loading-indicator/loading-indicator.component';
+import {LoadingIndicatorComponent} from './modules/general/loading-indicator/loading-indicator.component';
 import {MatChipsModule} from "@angular/material/chips";
 import {MatCardModule} from "@angular/material/card";
 import {MatButtonModule} from "@angular/material/button";
@@ -41,52 +41,20 @@ import {MatProgressBarModule} from "@angular/material/progress-bar";
 import {MatTabsModule} from "@angular/material/tabs";
 import {RoleSelectionComponent} from './components/lobby/role-selection/role-selection.component';
 import {PlayerListComponent} from './components/lobby/player-list/player-list.component';
+import {GeneralModule} from "./modules/general/general.module";
 
 @NgModule({
   declarations: [
     AppComponent,
-    EntryComponent,
-    SignupComponent,
-    DialogContentSignupDialog,
-    SigninComponent,
-    DialogContentSigninDialog,
-    ProfileComponent,
-    DialogContentProfileEditDialog,
-    DialogContentProfileEnterGameDialog,
-    LoadingIndicatorComponent,
-    ExperimentalComponent,
-    LobbyComponent,
-    WerewolfLobbyComponent,
-    RoleSelectionComponent,
-    PlayerListComponent
   ],
   imports: [
+    AppRoutingModule,
     BrowserModule,
     BrowserAnimationsModule,
-    FormsModule,
-    ReactiveFormsModule,
     HttpClientModule,
-    AppRoutingModule,
-    NgbModule,
-    ToastrModule.forRoot({positionClass: 'toast-bottom-left'}),
-    MatChipsModule,
-    MatCardModule,
-    MatButtonModule,
-    MatDialogModule,
-    MatFormFieldModule,
-    MatInputModule,
+    GeneralModule,
     MatSnackBarModule,
-    MatProgressSpinnerModule,
-    MatAutocompleteModule,
-    MatOptionModule,
-    MatIconModule,
-    MatMenuModule,
-    DragDropModule,
-    MatListModule,
-    MatProgressBarModule,
-    MatTabsModule
   ],
-  entryComponents: [DialogContentSignupDialog, DialogContentSigninDialog, DialogContentProfileEditDialog],
   providers: [authInterceptorProviders],
   bootstrap: [AppComponent]
 })

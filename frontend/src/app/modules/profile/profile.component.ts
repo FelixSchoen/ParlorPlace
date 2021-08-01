@@ -31,6 +31,7 @@ export class ProfileComponent implements OnInit {
   public currentUser: User;
 
   public loading: boolean;
+  public error: boolean = false;
   public errorMessage: string;
 
   public userSearchControl: FormControl = new FormControl();
@@ -74,9 +75,11 @@ export class ProfileComponent implements OnInit {
           this.userService.getUserByUsername(queryName).subscribe(
             (user: User) => {
               this.profileUser = user
+              this.error = false;
             },
             (error) => {
               this.errorMessage = error.error;
+              this.error = true;
             }).add(() => this.loading = false)
         }
       }

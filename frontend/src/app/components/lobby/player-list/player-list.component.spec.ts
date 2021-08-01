@@ -1,10 +1,11 @@
 import {ComponentFixture, TestBed} from '@angular/core/testing';
 
 import {PlayerListComponent} from './player-list.component';
+import {Player} from "../../../dto/player";
 
 describe('PlayerListComponent', () => {
-  let component: PlayerListComponent;
-  let fixture: ComponentFixture<PlayerListComponent>;
+  let component: PlayerListComponent<any>;
+  let fixture: ComponentFixture<PlayerListComponent<any>>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
