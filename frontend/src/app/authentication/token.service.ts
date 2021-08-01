@@ -22,8 +22,6 @@ export class TokenService {
   public saveToken(
     tokenRefreshResponse: TokenRefreshResponse
   ): void {
-    localStorage.removeItem(ACCESS_TOKEN_KEY);
-    localStorage.removeItem(REFRESH_TOKEN_KEY);
     localStorage.setItem(ACCESS_TOKEN_KEY, tokenRefreshResponse.accessToken);
     localStorage.setItem(REFRESH_TOKEN_KEY, tokenRefreshResponse.refreshToken);
   }
