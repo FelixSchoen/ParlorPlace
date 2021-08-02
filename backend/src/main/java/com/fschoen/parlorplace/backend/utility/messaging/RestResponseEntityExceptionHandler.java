@@ -15,13 +15,18 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
     }
 
     @ExceptionHandler(value = {DataConflictException.class})
-    protected ResponseEntity<Object> handleInvalidDataException(DataConflictException exception, WebRequest webRequest) {
+    protected ResponseEntity<Object> handleDataConflictException(DataConflictException exception, WebRequest webRequest) {
         return errorMessage(exception, HttpStatus.CONFLICT, webRequest);
     }
 
     @ExceptionHandler(value = {GameException.class})
-    protected ResponseEntity<Object> handleInvalidDataException(GameException exception, WebRequest webRequest) {
+    protected ResponseEntity<Object> handleGameException(GameException exception, WebRequest webRequest) {
         return errorMessage(exception, HttpStatus.CONFLICT, webRequest);
+    }
+
+    @ExceptionHandler(value = {NotImplementedException.class})
+    protected ResponseEntity<Object> handleNotImplementedException(AuthorizationException exception, WebRequest webRequest) {
+        return errorMessage(exception, HttpStatus.NOT_IMPLEMENTED, webRequest);
     }
 
     @ExceptionHandler(value = {ValidationException.class})

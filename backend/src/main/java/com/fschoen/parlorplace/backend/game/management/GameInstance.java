@@ -17,7 +17,7 @@ import java.util.stream.*;
 
 public abstract class GameInstance<G extends Game, P extends Player, GR extends GameRepository<G>, RS extends RuleSet> extends AbstractService {
 
-    protected final GameService gameService;
+    protected final GameCoordinationService gameCoordinationService;
     protected final GR gameRepository;
 
     protected final WerewolfManager werewolfManager;
@@ -35,13 +35,13 @@ public abstract class GameInstance<G extends Game, P extends Player, GR extends 
 
     protected final Logger log;
 
-    public GameInstance(Class<G> gameClass, Class<P> playerClass, Class<RS> ruleSetClass, GameService gameService, GR gameRepository, UserRepository userRepository, WerewolfManager werewolfManager, Logger log) {
+    public GameInstance(Class<G> gameClass, Class<P> playerClass, Class<RS> ruleSetClass, GameCoordinationService gameCoordinationService, GR gameRepository, UserRepository userRepository, WerewolfManager werewolfManager, Logger log) {
         super(userRepository);
-        this.gameService = gameService;
+        this.gameCoordinationService = gameCoordinationService;
         this.gameRepository = gameRepository;
 
         this.werewolfManager = werewolfManager;
-        this.gameIdentifier = gameService.generateValidGameIdentifier();
+        this.gameIdentifier = gameCoordinationService.generateValidGameIdentifier();
 
         this.gameClass = gameClass;
         this.playerClass = playerClass;
@@ -68,7 +68,7 @@ public abstract class GameInstance<G extends Game, P extends Player, GR extends 
 
             log.info("Created new {} instance: {}", this.gameClass, this.gameIdentifier.getToken());
         } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
-            throw new DataConflictException(Messages.exception("game.type.mismatch"));
+            throw new DataConflictException(Messages.exception(MessageIdentifiers.GAME_TYPE_MISMATCH));
         }
     }
 
@@ -76,7 +76,7 @@ public abstract class GameInstance<G extends Game, P extends Player, GR extends 
         validateGameNotStarted();
 
         if (getPlayers().stream().anyMatch(player -> player.getUser().equals(user)))
-            throw new GameException(Messages.exception("game.user.ingame.this"));
+            throw new GameException(Messages.exception(MessageIdentifiers.GAME_USER_INGAME_THIS));
 
         G game = getGame();
         P player;
@@ -95,7 +95,7 @@ public abstract class GameInstance<G extends Game, P extends Player, GR extends 
             game.getPlayers().add(player);
             game = getGameRepository().save(game);
         } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
-            throw new DataConflictException(Messages.exception("game.type.mismatch"));
+            throw new DataConflictException(Messages.exception(MessageIdentifiers.GAME_TYPE_MISMATCH));
         }
         return game;
     }
@@ -142,21 +142,21 @@ public abstract class GameInstance<G extends Game, P extends Player, GR extends 
         validateUserIsLobbyAdmin(getPrincipal());
 
         if (!(players.stream().allMatch(playerClass::isInstance)))
-            throw new DataConflictException(Messages.exception("player.type.mismatch"));
+            throw new DataConflictException(Messages.exception(MessageIdentifiers.PLAYER_TYPE_MISMATCH));
 
         // Change positions
         G game = getGame();
 
-        if (players.stream().min(Comparator.comparingInt(Player::getPosition)).orElseThrow(() -> new GameException(Messages.exception("game.modify.invalid"))).getPosition() != 0
-                || players.stream().max(Comparator.comparingInt(Player::getPosition)).orElseThrow(() -> new GameException(Messages.exception("game.modify.invalid"))).getPosition() != game.getPlayers().size() - 1
+        if (players.stream().min(Comparator.comparingInt(Player::getPosition)).orElseThrow(() -> new GameException(Messages.exception(MessageIdentifiers.GAME_MODIFY_INVALID))).getPosition() != 0
+                || players.stream().max(Comparator.comparingInt(Player::getPosition)).orElseThrow(() -> new GameException(Messages.exception(MessageIdentifiers.GAME_MODIFY_INVALID))).getPosition() != game.getPlayers().size() - 1
                 || players.stream().map(Player::getPosition).collect(Collectors.toSet()).size() != game.getPlayers().size()) {
-            throw new DataConflictException(Messages.exception("game.modify.invalid"));
+            throw new DataConflictException(Messages.exception(MessageIdentifiers.GAME_MODIFY_INVALID));
         }
 
         G finalGame = game;
         players.forEach(requestPlayer -> {
             Player foundPlayer = finalGame.getPlayers().stream().filter(existingPlayer ->
-                    existingPlayer.getUser().equals(requestPlayer.getUser())).findFirst().orElseThrow(() -> new GameException(Messages.exception("game.modify.invalid")));
+                    existingPlayer.getUser().equals(requestPlayer.getUser())).findFirst().orElseThrow(() -> new GameException(Messages.exception(MessageIdentifiers.GAME_MODIFY_INVALID)));
             foundPlayer.setPosition(requestPlayer.getPosition());
         });
 
@@ -177,7 +177,7 @@ public abstract class GameInstance<G extends Game, P extends Player, GR extends 
         Optional<G> game = this.gameRepository.findOneById(this.gameId);
 
         if (game.isEmpty())
-            throw new DataConflictException(Messages.exception("game.exists.not"));
+            throw new DataConflictException(Messages.exception(MessageIdentifiers.GAME_EXISTS_NOT));
 
         G foundGame = game.get();
         foundGame.setGameIdentifier(this.gameIdentifier);
@@ -213,19 +213,19 @@ public abstract class GameInstance<G extends Game, P extends Player, GR extends 
     protected P getPlayerFromUser(User user) throws GameException {
         Optional<P> optionalPlayer = getPlayers().stream().filter(player -> player.getUser().equals(user)).findFirst();
         if (optionalPlayer.isEmpty())
-            throw new GameException(Messages.exception("game.user.ingame.not"));
+            throw new GameException(Messages.exception(MessageIdentifiers.GAME_USER_INGAME_NOT));
         return optionalPlayer.get();
     }
 
     protected void validateGameNotStarted() throws GameException {
         if (this.hasStarted)
-            throw new GameException(Messages.exception("game.state.started"));
+            throw new GameException(Messages.exception(MessageIdentifiers.GAME_STATE_STARTED));
     }
 
     protected void validateUserIsLobbyAdmin(User user) throws GameException {
         P player = getPlayerFromUser(user);
         if (!player.getLobbyRole().equals(LobbyRole.ROLE_ADMIN))
-            throw new GameException(Messages.exception("authorization.unauthorized"));
+            throw new GameException(Messages.exception(MessageIdentifiers.AUTHORIZATION_UNAUTHORIZED));
     }
 
 }

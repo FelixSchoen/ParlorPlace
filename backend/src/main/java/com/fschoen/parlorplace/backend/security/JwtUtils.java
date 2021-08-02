@@ -41,15 +41,15 @@ public class JwtUtils {
             Jwts.parserBuilder().setSigningKey(getKey(jwtSecret)).build().parseClaimsJws(authToken);
             return true;
         } catch (SecurityException e) {
-            log.error(Messages.exception("authorization.signature.invalid"), e.getMessage());
+            log.error(Messages.exception(MessageIdentifiers.AUTHORIZATION_SIGNATURE_INVALID), e);
         } catch (MalformedJwtException e) {
-            log.error(Messages.exception("authorization.token.invalid"), e.getMessage());
+            log.error(Messages.exception(MessageIdentifiers.AUTHORIZATION_TOKEN_INVALID), e);
         } catch (ExpiredJwtException e) {
-            log.error(Messages.exception("authorization.token.expired"), e.getMessage());
+            log.error(Messages.exception(MessageIdentifiers.AUTHORIZATION_TOKEN_EXPIRED), e);
         } catch (UnsupportedJwtException e) {
-            log.error(Messages.exception("authorization.token.unsupported"), e.getMessage());
+            log.error(Messages.exception(MessageIdentifiers.AUTHORIZATION_TOKEN_UNSUPPORTED), e);
         } catch (IllegalArgumentException e) {
-            log.error(Messages.exception("authorization.token.empty"), e.getMessage());
+            log.error(Messages.exception(MessageIdentifiers.AUTHORIZATION_TOKEN_EMPTY), e);
         }
 
         return false;

@@ -22,7 +22,7 @@ public abstract class AbstractService {
         UserDetailsImplementation userDetails = (UserDetailsImplementation) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Optional<User> potentialUser = userRepository.findOneById(userDetails.getId());
         if (potentialUser.isEmpty())
-            throw new AuthorizationException(Messages.exception("authorization.principal.empty"));
+            throw new AuthorizationException(Messages.exception(MessageIdentifiers.AUTHORIZATION_PRINCIPAL_EMPTY));
         return potentialUser.get();
     }
 

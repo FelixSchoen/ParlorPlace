@@ -39,7 +39,7 @@ public abstract class BaseValidator {
     }
 
     private String getMessage(Object property, Object message) {
-        return String.format(Messages.exception("validation.message.template"), property, message);
+        return String.format(Messages.exception(MessageIdentifiers.VALIDATION_MESSAGE_TEMPLATE), property, message);
     }
 
 }

@@ -22,7 +22,7 @@ public interface GameRoleMapper {
             return toDTO((WerewolfRole) gameRole);
         }
 
-        throw new MappingException(Messages.exception("mapping.type"));
+        throw new MappingException(Messages.exception(MessageIdentifiers.MAPPING_TYPE));
     }
 
 }

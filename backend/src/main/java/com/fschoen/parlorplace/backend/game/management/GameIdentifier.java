@@ -30,7 +30,7 @@ public class GameIdentifier {
         StringBuilder tokenBuilder = new StringBuilder();
 
         while (tokenBuilder.length() < length) {
-            int index = (int) (random.nextFloat() * CHARSET.length());
+            int index = random.nextInt(CHARSET.length());
             tokenBuilder.append(CHARSET.charAt(index));
         }
 

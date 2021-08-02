@@ -18,7 +18,7 @@ public interface GameMapper {
             return toDTO((WerewolfGame) game, obfuscate);
         }
 
-        throw new MappingException(Messages.exception("mapping.type"));
+        throw new MappingException(Messages.exception(MessageIdentifiers.MAPPING_TYPE));
     }
 
 }

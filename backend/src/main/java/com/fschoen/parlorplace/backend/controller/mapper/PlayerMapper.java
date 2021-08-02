@@ -33,7 +33,7 @@ public interface PlayerMapper {
             return toDTO((WerewolfPlayer) player, obfuscate);
         }
 
-        throw new MappingException(Messages.exception("mapping.type"));
+        throw new MappingException(Messages.exception(MessageIdentifiers.MAPPING_TYPE));
     }
 
     default Player fromDTO(PlayerDTO player) {
@@ -41,7 +41,7 @@ public interface PlayerMapper {
             return fromDTO((WerewolfPlayerDTO) player);
         }
 
-        throw new MappingException(Messages.exception("mapping.type"));
+        throw new MappingException(Messages.exception(MessageIdentifiers.MAPPING_TYPE));
     }
 
     // Named Methods

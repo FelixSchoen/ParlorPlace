@@ -25,7 +25,7 @@ public class UserDetailsServiceImplementation implements UserDetailsService {
         Optional<User> potentialUser = userRepository.findOneByUsername(s);
 
         if (potentialUser.isEmpty()) {
-            throw new UsernameNotFoundException(Messages.exception("user.username.exists.not"));
+            throw new UsernameNotFoundException(Messages.exception(MessageIdentifiers.USER_USERNAME_EXISTS_NOT));
         }
 
         return UserDetailsImplementation.fromUser(potentialUser.get());

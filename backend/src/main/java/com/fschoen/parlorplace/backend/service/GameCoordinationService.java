@@ -7,7 +7,7 @@ import com.fschoen.parlorplace.backend.game.management.*;
 
 import java.util.*;
 
-public interface GameService {
+public interface GameCoordinationService {
 
     /**
      * Created a new game of the given type.

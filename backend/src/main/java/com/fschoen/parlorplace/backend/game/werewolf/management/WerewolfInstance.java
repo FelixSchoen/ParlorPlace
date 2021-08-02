@@ -19,14 +19,14 @@ import org.springframework.stereotype.*;
 public class WerewolfInstance extends GameInstance<WerewolfGame, WerewolfPlayer, WerewolfGameRepository, WerewolfRuleSet> {
 
     @Autowired
-    public WerewolfInstance(GameService gameService, WerewolfGameRepository gameRepository, UserRepository userRepository, WerewolfManager werewolfManager) {
-        super(WerewolfGame.class, WerewolfPlayer.class, WerewolfRuleSet.class, gameService, gameRepository, userRepository,werewolfManager, log);
+    public WerewolfInstance(GameCoordinationService gameCoordinationService, WerewolfGameRepository gameRepository, UserRepository userRepository, WerewolfManager werewolfManager) {
+        super(WerewolfGame.class, WerewolfPlayer.class, WerewolfRuleSet.class, gameCoordinationService, gameRepository, userRepository,werewolfManager, log);
     }
 
     @Override
     public WerewolfGame changeLobby(RuleSet ruleSet) {
         if (!(ruleSet instanceof WerewolfRuleSet))
-            throw new DataConflictException(Messages.exception("game.type.mismatch"));
+            throw new DataConflictException(Messages.exception(MessageIdentifiers.GAME_TYPE_MISMATCH));
 
         WerewolfGame game = getGame();
 

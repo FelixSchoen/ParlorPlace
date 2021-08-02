@@ -20,7 +20,7 @@ public interface RuleSetMapper {
             return toDTO((WerewolfRuleSet) ruleSet, obfuscate);
         }
 
-        throw new MappingException(Messages.exception("mapping.type"));
+        throw new MappingException(Messages.exception(MessageIdentifiers.MAPPING_TYPE));
     }
 
     default RuleSet fromDTO(RuleSetDTO ruleset) {
@@ -28,7 +28,7 @@ public interface RuleSetMapper {
             return fromDTO((WerewolfRuleSetDTO) ruleset);
         }
 
-        throw new MappingException(Messages.exception("mapping.type"));
+        throw new MappingException(Messages.exception(MessageIdentifiers.MAPPING_TYPE));
     }
 
 }

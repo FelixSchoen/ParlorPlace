@@ -11,22 +11,24 @@ import com.fschoen.parlorplace.backend.utility.messaging.*;
 import lombok.extern.slf4j.*;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.context.*;
-import org.springframework.context.annotation.*;
 import org.springframework.stereotype.*;
 
 import java.util.*;
 
 @Slf4j
 @Service
-@Scope("prototype")
-public class GameServiceImplementation extends AbstractService implements GameService {
+public class GameCoordinationServiceImplementation extends AbstractService implements GameCoordinationService {
 
     private final ApplicationContext context;
 
     private final List<GameInstance<?, ?, ?, ?>> activesGames;
 
+    private static final Map<GameType, Class<? extends GameInstance<?, ?, ?, ?>>> GAME_INSTANCES = new HashMap<>() {{
+        put(GameType.WEREWOLF, WerewolfInstance.class);
+    }};
+
     @Autowired
-    public GameServiceImplementation(UserRepository userRepository, ApplicationContext context) {
+    public GameCoordinationServiceImplementation(UserRepository userRepository, ApplicationContext context) {
         super(userRepository);
         this.context = context;
         this.activesGames = Collections.synchronizedList(new ArrayList<>());
@@ -38,14 +40,14 @@ public class GameServiceImplementation extends AbstractService implements GameSe
         User principal = getPrincipal();
 
         if (isInGame(principal))
-            throw new GameException(Messages.exception("game.user.ingame"));
+            throw new GameException(Messages.exception(MessageIdentifiers.GAME_USER_INGAME));
 
         GameInstance<?, ?, ?, ?> gameInstance;
 
-        switch (gameType) {
-            case WEREWOLF -> gameInstance = context.getBean(WerewolfInstance.class);
-            default -> throw new DataConflictException(Messages.exception("game.type.unknown"));
-        }
+        if (!GAME_INSTANCES.containsKey(gameType))
+            throw new NotImplementedException(Messages.exception(MessageIdentifiers.GAME_TYPE_UNKNOWN));
+
+        gameInstance = context.getBean(GAME_INSTANCES.get(gameType));
 
         this.activesGames.add(gameInstance);
         Game game = join(gameInstance.getGameIdentifier());
@@ -58,7 +60,7 @@ public class GameServiceImplementation extends AbstractService implements GameSe
         log.info("User {} joining Game: {}", principal.getUsername(), gameIdentifier.getToken());
 
         if (isInGame(principal))
-            throw new GameException(Messages.exception("game.user.ingame"));
+            throw new GameException(Messages.exception(MessageIdentifiers.GAME_USER_INGAME));
 
         GameInstance<?, ?, ?, ?> gameInstance = getGameByGameIdentifier(gameIdentifier);
         return gameInstance.join(principal);
@@ -70,7 +72,7 @@ public class GameServiceImplementation extends AbstractService implements GameSe
         log.info("User {} removes {} from Game: {}", principal.getUsername(), user.getUsername(), gameIdentifier.getToken());
 
         if (!isInGame(user, gameIdentifier))
-            throw new GameException(Messages.exception("game.user.ingame.not"));
+            throw new GameException(Messages.exception(MessageIdentifiers.GAME_USER_INGAME_NOT));
 
         GameInstance<?, ?, ?, ?> gameInstance = getGameByGameIdentifier(gameIdentifier);
 
@@ -84,7 +86,7 @@ public class GameServiceImplementation extends AbstractService implements GameSe
         log.info("User {} changing Lobby of Game: {}", principal.getUsername(), gameIdentifier.getToken());
 
         if (isNotInGame(principal, gameIdentifier))
-            throw new GameException(Messages.exception("game.user.ingame.not"));
+            throw new GameException(Messages.exception(MessageIdentifiers.GAME_USER_INGAME_NOT));
 
         GameInstance<?, ?, ?, ?> gameInstance = getGameByGameIdentifier(gameIdentifier);
 
@@ -96,7 +98,7 @@ public class GameServiceImplementation extends AbstractService implements GameSe
         log.info("User {} changing Rule Set of Game: {}", principal.getUsername(), gameIdentifier.getToken());
 
         if (isNotInGame(principal, gameIdentifier))
-            throw new GameException(Messages.exception("game.user.ingame.not"));
+            throw new GameException(Messages.exception(MessageIdentifiers.GAME_USER_INGAME_NOT));
 
         GameInstance<?, ?, ?, ?> gameInstance = getGameByGameIdentifier(gameIdentifier);
 
@@ -108,7 +110,7 @@ public class GameServiceImplementation extends AbstractService implements GameSe
         log.info("User {} obtaining information about Game: {}", principal.getUsername(), gameIdentifier.getToken());
 
         if (isNotInGame(principal, gameIdentifier))
-            throw new GameException(Messages.exception("game.user.ingame.not"));
+            throw new GameException(Messages.exception(MessageIdentifiers.GAME_USER_INGAME_NOT));
 
         GameInstance<?, ?, ?, ?> gameInstance = getGameByGameIdentifier(gameIdentifier);
 
@@ -133,7 +135,7 @@ public class GameServiceImplementation extends AbstractService implements GameSe
         if (gameInstanceOptional.isPresent())
             return gameInstanceOptional.get();
 
-        throw new DataConflictException(Messages.exception("game.exists.not"));
+        throw new DataConflictException(Messages.exception(MessageIdentifiers.GAME_EXISTS_NOT));
     }
 
     public Boolean isInGame(User user) {
