@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
+import org.junit.Rule;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -36,7 +37,7 @@ import java.util.Set;
 @Data
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-public abstract class Game<P extends Player<?>, RS extends RuleSet> {
+public abstract class Game<G extends Game<G, P, RS>, P extends Player<P, G>, RS extends RuleSet> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "seq_game_instance_id")
@@ -46,19 +47,14 @@ public abstract class Game<P extends Player<?>, RS extends RuleSet> {
     @Column(nullable = false)
     @Enumerated
     @NotNull
-    protected GameType gameType;
-
-    @Column(nullable = false)
-    @Enumerated
-    @NotNull
     protected GameState gameState;
 
-    @OneToMany(mappedBy = "game", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "game", targetEntity = Player.class, fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     @EqualsAndHashCode.Exclude
     @NotNull
     protected Set<P> players;
 
-    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToOne(targetEntity = RuleSet.class, cascade = CascadeType.ALL, orphanRemoval = true)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(referencedColumnName = "id")
     @EqualsAndHashCode.Exclude
@@ -73,5 +69,7 @@ public abstract class Game<P extends Player<?>, RS extends RuleSet> {
 
     @Transient
     private GameIdentifier gameIdentifier;
+
+    public abstract GameType getGameType();
 
 }

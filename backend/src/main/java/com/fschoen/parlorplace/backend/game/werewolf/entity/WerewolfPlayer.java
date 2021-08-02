@@ -20,7 +20,7 @@ import javax.persistence.OneToOne;
 @ToString(callSuper = true)
 @Data
 @Entity
-public class WerewolfPlayer extends Player<WerewolfGame> {
+public class WerewolfPlayer extends Player<WerewolfPlayer, WerewolfGame> {
 
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(referencedColumnName = "id")

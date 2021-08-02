@@ -21,11 +21,9 @@ import javax.validation.constraints.NotNull;
 @ToString(callSuper = true)
 @Data
 @Entity
-public class WerewolfGame extends Game<WerewolfPlayer, WerewolfRuleSet> {
+public class WerewolfGame extends Game<WerewolfGame, WerewolfPlayer, WerewolfRuleSet> {
 
     @Column(nullable = false)
-    @Enumerated
-    @NotNull
-    private GameType gameType = GameType.WEREWOLF;
+    private final GameType gameType = GameType.WEREWOLF;
 
 }

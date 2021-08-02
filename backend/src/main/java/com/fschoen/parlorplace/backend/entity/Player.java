@@ -30,7 +30,7 @@ import javax.validation.constraints.NotNull;
 @Data
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-public abstract class Player<G extends Game<?, ?>> {
+public abstract class Player<P extends Player<P, G>, G extends Game<G, P, ?>> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "seq_player_id")
@@ -42,7 +42,7 @@ public abstract class Player<G extends Game<?, ?>> {
     @NotNull
     protected User user;
 
-    @ManyToOne
+    @ManyToOne(targetEntity = Game.class)
     @JoinColumn
     @EqualsAndHashCode.Exclude
     @ToString.Exclude

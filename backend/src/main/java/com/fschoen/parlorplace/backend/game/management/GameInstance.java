@@ -29,7 +29,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-public abstract class GameInstance<G extends Game<P, RS>, P extends Player<G>, GR extends GameRepository<G>, RS extends RuleSet> extends AbstractService {
+public abstract class GameInstance<G extends Game<G, P, RS>, P extends Player<P, G>, GR extends GameRepository<G>, RS extends RuleSet> extends AbstractService {
 
     protected final GameCoordinationService gameCoordinationService;
     protected final GR gameRepository;
