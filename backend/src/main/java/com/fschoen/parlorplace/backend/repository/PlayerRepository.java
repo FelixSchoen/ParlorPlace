@@ -1,6 +1,6 @@
 package com.fschoen.parlorplace.backend.repository;
 
-import com.fschoen.parlorplace.backend.entity.persistance.*;
+import com.fschoen.parlorplace.backend.entity.*;
 import org.springframework.data.jpa.repository.*;
 import org.springframework.data.repository.*;
 

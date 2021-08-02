@@ -1,8 +1,8 @@
 package com.fschoen.parlorplace.backend.service.implementation;
 
-import com.fschoen.parlorplace.backend.entity.persistance.User;
-import com.fschoen.parlorplace.backend.entity.transience.*;
+import com.fschoen.parlorplace.backend.entity.User;
 import com.fschoen.parlorplace.backend.repository.*;
+import com.fschoen.parlorplace.backend.security.*;
 import com.fschoen.parlorplace.backend.utility.messaging.*;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.security.core.userdetails.*;

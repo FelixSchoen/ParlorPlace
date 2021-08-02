@@ -1,6 +1,6 @@
 package com.fschoen.parlorplace.backend.service;
 
-import com.fschoen.parlorplace.backend.entity.persistance.*;
+import com.fschoen.parlorplace.backend.entity.*;
 import com.fschoen.parlorplace.backend.exception.*;
 
 import java.util.*;

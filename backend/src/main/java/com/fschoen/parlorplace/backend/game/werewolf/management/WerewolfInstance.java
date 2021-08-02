@@ -1,9 +1,9 @@
 package com.fschoen.parlorplace.backend.game.werewolf.management;
 
-import com.fschoen.parlorplace.backend.entity.persistance.*;
+import com.fschoen.parlorplace.backend.entity.*;
 import com.fschoen.parlorplace.backend.exception.*;
 import com.fschoen.parlorplace.backend.game.management.*;
-import com.fschoen.parlorplace.backend.game.werewolf.entity.persistance.*;
+import com.fschoen.parlorplace.backend.game.werewolf.entity.*;
 import com.fschoen.parlorplace.backend.game.werewolf.repository.*;
 import com.fschoen.parlorplace.backend.repository.*;
 import com.fschoen.parlorplace.backend.service.*;

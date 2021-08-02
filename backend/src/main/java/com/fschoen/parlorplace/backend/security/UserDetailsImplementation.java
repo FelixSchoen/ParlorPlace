@@ -1,7 +1,7 @@
-package com.fschoen.parlorplace.backend.entity.transience;
+package com.fschoen.parlorplace.backend.security;
 
 import com.fasterxml.jackson.annotation.*;
-import com.fschoen.parlorplace.backend.entity.persistance.User;
+import com.fschoen.parlorplace.backend.entity.User;
 import lombok.*;
 import org.springframework.security.core.*;
 import org.springframework.security.core.authority.*;

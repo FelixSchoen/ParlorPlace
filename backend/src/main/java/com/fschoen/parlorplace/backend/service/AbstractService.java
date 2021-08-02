@@ -1,10 +1,10 @@
 package com.fschoen.parlorplace.backend.service;
 
-import com.fschoen.parlorplace.backend.entity.persistance.*;
-import com.fschoen.parlorplace.backend.entity.transience.*;
+import com.fschoen.parlorplace.backend.entity.*;
 import com.fschoen.parlorplace.backend.enumeration.*;
 import com.fschoen.parlorplace.backend.exception.*;
 import com.fschoen.parlorplace.backend.repository.*;
+import com.fschoen.parlorplace.backend.security.*;
 import com.fschoen.parlorplace.backend.utility.messaging.*;
 import org.springframework.security.core.context.*;
 

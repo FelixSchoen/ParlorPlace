@@ -1,6 +1,6 @@
 package com.fschoen.parlorplace.backend.controller.mapper;
 
-import com.fschoen.parlorplace.backend.entity.persistance.*;
+import com.fschoen.parlorplace.backend.entity.*;
 import com.fschoen.parlorplace.backend.enumeration.*;
 import org.mapstruct.*;
 

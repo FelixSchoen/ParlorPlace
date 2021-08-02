@@ -1,4 +1,4 @@
-package com.fschoen.parlorplace.backend.entity.persistance;
+package com.fschoen.parlorplace.backend.entity;
 
 import lombok.*;
 import lombok.experimental.*;

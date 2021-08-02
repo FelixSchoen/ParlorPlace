@@ -1,6 +1,6 @@
-package com.fschoen.parlorplace.backend.game.werewolf.entity.persistance;
+package com.fschoen.parlorplace.backend.game.werewolf.entity;
 
-import com.fschoen.parlorplace.backend.entity.persistance.*;
+import com.fschoen.parlorplace.backend.entity.*;
 import com.fschoen.parlorplace.backend.game.werewolf.enumeration.*;
 import lombok.*;
 import lombok.experimental.*;

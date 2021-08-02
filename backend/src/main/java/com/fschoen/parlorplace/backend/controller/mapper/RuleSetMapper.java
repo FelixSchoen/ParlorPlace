@@ -1,10 +1,10 @@
 package com.fschoen.parlorplace.backend.controller.mapper;
 
 import com.fschoen.parlorplace.backend.controller.dto.game.*;
-import com.fschoen.parlorplace.backend.entity.persistance.*;
+import com.fschoen.parlorplace.backend.entity.*;
 import com.fschoen.parlorplace.backend.exception.*;
 import com.fschoen.parlorplace.backend.game.werewolf.dto.lobby.*;
-import com.fschoen.parlorplace.backend.game.werewolf.entity.persistance.*;
+import com.fschoen.parlorplace.backend.game.werewolf.entity.*;
 import com.fschoen.parlorplace.backend.utility.messaging.*;
 import org.mapstruct.*;
 

@@ -2,8 +2,7 @@ package com.fschoen.parlorplace.backend.integration.base;
 
 import com.fschoen.parlorplace.backend.*;
 import com.fschoen.parlorplace.backend.datagenerator.*;
-import com.fschoen.parlorplace.backend.entity.persistance.*;
-import com.fschoen.parlorplace.backend.entity.transience.*;
+import com.fschoen.parlorplace.backend.entity.*;
 import com.fschoen.parlorplace.backend.integration.utility.*;
 import com.fschoen.parlorplace.backend.security.*;
 import io.restassured.*;

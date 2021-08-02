@@ -1,6 +1,6 @@
 package com.fschoen.parlorplace.backend.game.management;
 
-import com.fschoen.parlorplace.backend.entity.persistance.*;
+import com.fschoen.parlorplace.backend.entity.*;
 import com.fschoen.parlorplace.backend.enumeration.*;
 import com.fschoen.parlorplace.backend.exception.*;
 import com.fschoen.parlorplace.backend.game.werewolf.management.*;

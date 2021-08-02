@@ -1,6 +1,5 @@
 package com.fschoen.parlorplace.backend.security;
 
-import com.fschoen.parlorplace.backend.entity.transience.*;
 import com.fschoen.parlorplace.backend.utility.messaging.*;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.*;
@@ -9,9 +8,9 @@ import org.springframework.beans.factory.annotation.*;
 import org.springframework.stereotype.*;
 
 import javax.crypto.*;
+import java.lang.SecurityException;
 import java.nio.charset.*;
 import java.util.*;
-import java.lang.SecurityException;
 
 @Slf4j
 @Component

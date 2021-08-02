@@ -3,7 +3,7 @@ package com.fschoen.parlorplace.backend.controller;
 import com.fschoen.parlorplace.backend.controller.dto.authentication.*;
 import com.fschoen.parlorplace.backend.controller.dto.user.*;
 import com.fschoen.parlorplace.backend.controller.mapper.*;
-import com.fschoen.parlorplace.backend.entity.persistance.*;
+import com.fschoen.parlorplace.backend.entity.*;
 import com.fschoen.parlorplace.backend.service.*;
 import com.fschoen.parlorplace.backend.validation.implementation.*;
 import org.springframework.beans.factory.annotation.*;

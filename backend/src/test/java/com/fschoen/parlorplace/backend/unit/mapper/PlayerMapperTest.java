@@ -3,7 +3,7 @@ package com.fschoen.parlorplace.backend.unit.mapper;
 import com.fschoen.parlorplace.backend.controller.mapper.*;
 import com.fschoen.parlorplace.backend.enumeration.*;
 import com.fschoen.parlorplace.backend.game.werewolf.dto.game.*;
-import com.fschoen.parlorplace.backend.game.werewolf.entity.persistance.*;
+import com.fschoen.parlorplace.backend.game.werewolf.entity.*;
 import com.fschoen.parlorplace.backend.game.werewolf.enumeration.*;
 import org.junit.*;
 import org.junit.runner.*;

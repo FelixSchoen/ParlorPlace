@@ -1,7 +1,7 @@
 package com.fschoen.parlorplace.backend.controller.mapper;
 
 import com.fschoen.parlorplace.backend.controller.dto.user.*;
-import com.fschoen.parlorplace.backend.entity.persistance.*;
+import com.fschoen.parlorplace.backend.entity.*;
 import org.mapstruct.*;
 
 import java.util.*;

@@ -1,4 +1,4 @@
-package com.fschoen.parlorplace.backend.entity.persistance;
+package com.fschoen.parlorplace.backend.entity;
 
 import com.fschoen.parlorplace.backend.enumeration.*;
 import com.fschoen.parlorplace.backend.game.management.*;

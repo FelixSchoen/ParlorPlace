@@ -1,7 +1,7 @@
 package com.fschoen.parlorplace.backend.integration.controller;
 
 import com.fschoen.parlorplace.backend.controller.dto.game.*;
-import com.fschoen.parlorplace.backend.entity.persistance.*;
+import com.fschoen.parlorplace.backend.entity.*;
 import com.fschoen.parlorplace.backend.enumeration.*;
 import com.fschoen.parlorplace.backend.game.werewolf.dto.game.*;
 import com.fschoen.parlorplace.backend.game.werewolf.dto.lobby.*;

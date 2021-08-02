@@ -2,8 +2,7 @@ package com.fschoen.parlorplace.backend.service.implementation;
 
 import com.fschoen.parlorplace.backend.controller.dto.authentication.*;
 import com.fschoen.parlorplace.backend.controller.dto.user.*;
-import com.fschoen.parlorplace.backend.entity.persistance.*;
-import com.fschoen.parlorplace.backend.entity.transience.*;
+import com.fschoen.parlorplace.backend.entity.*;
 import com.fschoen.parlorplace.backend.enumeration.*;
 import com.fschoen.parlorplace.backend.exception.*;
 import com.fschoen.parlorplace.backend.repository.*;

@@ -1,6 +1,6 @@
 package com.fschoen.parlorplace.backend.datagenerator;
 
-import com.fschoen.parlorplace.backend.entity.persistance.*;
+import com.fschoen.parlorplace.backend.entity.*;
 import lombok.*;
 import lombok.extern.slf4j.*;
 
