@@ -1,16 +1,18 @@
 package com.fschoen.parlorplace.backend.game.werewolf.entity;
 
-import com.fschoen.parlorplace.backend.entity.*;
-import com.fschoen.parlorplace.backend.enumeration.*;
-import lombok.*;
-import lombok.experimental.*;
-import org.hibernate.annotations.*;
+import com.fschoen.parlorplace.backend.entity.Game;
+import com.fschoen.parlorplace.backend.enumeration.GameType;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
+import lombok.experimental.SuperBuilder;
 
-import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.*;
-import javax.validation.constraints.*;
-import java.util.*;
+import javax.persistence.Enumerated;
+import javax.validation.constraints.NotNull;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -19,30 +21,11 @@ import java.util.*;
 @ToString(callSuper = true)
 @Data
 @Entity
-public class WerewolfGame extends Game {
+public class WerewolfGame extends Game<WerewolfPlayer, WerewolfRuleSet> {
 
     @Column(nullable = false)
-    private final GameType gameType = GameType.WEREWOLF;
-
-    @OneToMany(mappedBy = "game", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
-    @EqualsAndHashCode.Exclude
+    @Enumerated
     @NotNull
-    private Set<WerewolfPlayer> players;
+    private GameType gameType = GameType.WEREWOLF;
 
-    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    @JoinColumn(referencedColumnName = "id")
-    @EqualsAndHashCode.Exclude
-    @NotNull
-    private WerewolfRuleSet ruleSet;
-
-    @Override
-    public <P extends Player> void setPlayers(Set<P> players) {
-        this.players = (Set<WerewolfPlayer>) players;
-    }
-
-    @Override
-    public <R extends RuleSet> void setRuleSet(R ruleSet) {
-        this.ruleSet = (WerewolfRuleSet) ruleSet;
-    }
 }

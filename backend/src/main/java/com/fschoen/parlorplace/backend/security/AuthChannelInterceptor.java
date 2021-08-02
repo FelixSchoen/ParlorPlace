@@ -1,11 +1,14 @@
 package com.fschoen.parlorplace.backend.security;
 
-import org.springframework.beans.factory.annotation.*;
-import org.springframework.messaging.*;
-import org.springframework.messaging.simp.stomp.*;
-import org.springframework.messaging.support.*;
-import org.springframework.security.core.*;
-import org.springframework.stereotype.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.Message;
+import org.springframework.messaging.MessageChannel;
+import org.springframework.messaging.simp.stomp.StompCommand;
+import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
+import org.springframework.messaging.support.ChannelInterceptor;
+import org.springframework.messaging.support.MessageHeaderAccessor;
+import org.springframework.security.core.Authentication;
+import org.springframework.stereotype.Service;
 
 @Service
 public class AuthChannelInterceptor implements ChannelInterceptor {

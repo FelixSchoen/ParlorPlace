@@ -1,16 +1,17 @@
 package com.fschoen.parlorplace.backend.unit.mapper;
 
-import com.fschoen.parlorplace.backend.controller.mapper.*;
-import com.fschoen.parlorplace.backend.game.werewolf.dto.role.*;
-import com.fschoen.parlorplace.backend.game.werewolf.entity.*;
-import com.fschoen.parlorplace.backend.game.werewolf.enumeration.*;
-import org.junit.*;
-import org.junit.runner.*;
-import org.springframework.beans.factory.annotation.*;
-import org.springframework.boot.test.context.*;
-import org.springframework.test.context.junit4.*;
+import com.fschoen.parlorplace.backend.controller.mapper.GameRoleMapper;
+import com.fschoen.parlorplace.backend.controller.mapper.GameRoleMapperImpl;
+import com.fschoen.parlorplace.backend.game.werewolf.dto.role.WerewolfRoleDTO;
+import com.fschoen.parlorplace.backend.game.werewolf.entity.WerewolfRole;
+import com.fschoen.parlorplace.backend.game.werewolf.enumeration.WerewolfRoleType;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit4.SpringRunner;
 
-import static org.assertj.core.api.AssertionsForClassTypes.*;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = {GameRoleMapperImpl.class})

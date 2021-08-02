@@ -1,9 +1,10 @@
 package com.fschoen.parlorplace.backend.repository;
 
-import com.fschoen.parlorplace.backend.entity.*;
-import org.springframework.data.jpa.repository.*;
+import com.fschoen.parlorplace.backend.entity.RefreshToken;
+import com.fschoen.parlorplace.backend.entity.User;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.util.*;
+import java.util.Optional;
 
 public interface RefreshTokenRepository extends JpaRepository<RefreshToken, Long> {
 

@@ -1,11 +1,28 @@
 package com.fschoen.parlorplace.backend.entity;
 
-import com.fschoen.parlorplace.backend.enumeration.*;
-import lombok.*;
-import lombok.experimental.*;
+import com.fschoen.parlorplace.backend.enumeration.LobbyRole;
+import com.fschoen.parlorplace.backend.enumeration.PlayerState;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
+import lombok.experimental.SuperBuilder;
 
-import javax.persistence.*;
-import javax.validation.constraints.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
+import javax.persistence.SequenceGenerator;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -13,10 +30,7 @@ import javax.validation.constraints.*;
 @Data
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-/**
- * Entity representing a player, for the DTO look for {@link com.fschoen.parlorplace.backend.controller.dto.game.PlayerDTO}
- */
-public abstract class Player {
+public abstract class Player<G extends Game<?, ?>> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "seq_player_id")
@@ -27,6 +41,13 @@ public abstract class Player {
     @JoinColumn(name = "user_id")
     @NotNull
     protected User user;
+
+    @ManyToOne
+    @JoinColumn
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
+    @NotNull
+    protected G game;
 
     @Column(nullable = false)
     @NotNull
@@ -45,7 +66,5 @@ public abstract class Player {
     @NotNull
     @Min(0)
     protected Integer position;
-
-    public abstract <G extends Game> void setGame(G game);
 
 }

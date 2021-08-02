@@ -1,17 +1,30 @@
 package com.fschoen.parlorplace.backend.controller;
 
-import com.fschoen.parlorplace.backend.controller.dto.authentication.*;
-import com.fschoen.parlorplace.backend.controller.dto.user.*;
-import com.fschoen.parlorplace.backend.controller.mapper.*;
-import com.fschoen.parlorplace.backend.entity.*;
-import com.fschoen.parlorplace.backend.service.*;
-import com.fschoen.parlorplace.backend.validation.implementation.*;
-import org.springframework.beans.factory.annotation.*;
-import org.springframework.http.*;
-import org.springframework.security.access.prepost.*;
-import org.springframework.web.bind.annotation.*;
+import com.fschoen.parlorplace.backend.controller.dto.authentication.TokenRefreshRequestDTO;
+import com.fschoen.parlorplace.backend.controller.dto.authentication.TokenRefreshResponseDTO;
+import com.fschoen.parlorplace.backend.controller.dto.user.UserDTO;
+import com.fschoen.parlorplace.backend.controller.dto.user.UserLoginRequestDTO;
+import com.fschoen.parlorplace.backend.controller.dto.user.UserLoginResponseDTO;
+import com.fschoen.parlorplace.backend.controller.dto.user.UserRegisterRequestDTO;
+import com.fschoen.parlorplace.backend.controller.dto.user.UserUpdateRequestDTO;
+import com.fschoen.parlorplace.backend.controller.mapper.UserMapper;
+import com.fschoen.parlorplace.backend.entity.User;
+import com.fschoen.parlorplace.backend.service.UserService;
+import com.fschoen.parlorplace.backend.validation.implementation.UserValidator;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
-import java.util.*;
+import java.util.Set;
 
 @RequestMapping("/user")
 @RestController

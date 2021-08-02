@@ -1,6 +1,7 @@
 package com.fschoen.parlorplace.backend.experimental;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
 
 @AllArgsConstructor
 @Data

@@ -1,27 +1,30 @@
 package com.fschoen.parlorplace.backend.integration.base;
 
-import com.fschoen.parlorplace.backend.*;
-import com.fschoen.parlorplace.backend.datagenerator.*;
-import com.fschoen.parlorplace.backend.entity.*;
-import com.fschoen.parlorplace.backend.integration.utility.*;
-import com.fschoen.parlorplace.backend.security.*;
-import io.restassured.*;
-import io.restassured.http.*;
-import io.restassured.response.*;
-import io.restassured.specification.*;
-import lombok.extern.slf4j.*;
-import org.assertj.core.util.*;
-import org.junit.jupiter.api.*;
-import org.junit.jupiter.api.extension.*;
-import org.springframework.beans.factory.annotation.*;
-import org.springframework.boot.test.context.*;
-import org.springframework.boot.web.server.*;
-import org.springframework.http.*;
-import org.springframework.security.authentication.*;
-import org.springframework.security.core.*;
-import org.springframework.security.core.context.*;
-import org.springframework.test.context.*;
-import org.springframework.test.context.junit.jupiter.*;
+import com.fschoen.parlorplace.backend.ParlorPlaceApplication;
+import com.fschoen.parlorplace.backend.datagenerator.DatabasePopulator;
+import com.fschoen.parlorplace.backend.datagenerator.GeneratedData;
+import com.fschoen.parlorplace.backend.entity.User;
+import com.fschoen.parlorplace.backend.integration.utility.TestIsolationService;
+import com.fschoen.parlorplace.backend.security.JwtUtils;
+import com.fschoen.parlorplace.backend.security.UserDetailsImplementation;
+import io.restassured.RestAssured;
+import io.restassured.http.ContentType;
+import io.restassured.response.Response;
+import io.restassured.specification.RequestSpecification;
+import lombok.extern.slf4j.Slf4j;
+import org.assertj.core.util.Strings;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.web.server.LocalServerPort;
+import org.springframework.http.HttpHeaders;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(classes = ParlorPlaceApplication.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)

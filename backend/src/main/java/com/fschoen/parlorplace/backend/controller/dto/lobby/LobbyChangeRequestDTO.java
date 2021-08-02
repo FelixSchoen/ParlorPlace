@@ -1,12 +1,15 @@
 package com.fschoen.parlorplace.backend.controller.dto.lobby;
 
-import com.fasterxml.jackson.annotation.*;
-import com.fschoen.parlorplace.backend.controller.dto.game.*;
-import com.fschoen.parlorplace.backend.game.werewolf.dto.lobby.*;
-import lombok.*;
-import lombok.experimental.*;
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.fschoen.parlorplace.backend.controller.dto.game.PlayerDTO;
+import com.fschoen.parlorplace.backend.controller.dto.game.RuleSetDTO;
+import com.fschoen.parlorplace.backend.game.werewolf.dto.lobby.WerewolfLobbyChangeRequestDTO;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
-import java.util.*;
+import java.util.Set;
 
 @NoArgsConstructor
 //@AllArgsConstructor

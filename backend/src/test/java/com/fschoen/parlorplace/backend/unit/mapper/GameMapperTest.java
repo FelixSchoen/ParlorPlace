@@ -1,19 +1,28 @@
 package com.fschoen.parlorplace.backend.unit.mapper;
 
-import com.fschoen.parlorplace.backend.controller.mapper.*;
-import com.fschoen.parlorplace.backend.enumeration.*;
-import com.fschoen.parlorplace.backend.game.werewolf.dto.game.*;
-import com.fschoen.parlorplace.backend.game.werewolf.entity.*;
-import com.fschoen.parlorplace.backend.game.werewolf.enumeration.*;
-import org.junit.*;
-import org.junit.runner.*;
-import org.springframework.beans.factory.annotation.*;
-import org.springframework.boot.test.context.*;
-import org.springframework.test.context.junit4.*;
+import com.fschoen.parlorplace.backend.controller.mapper.GameIdentifierMapperImpl;
+import com.fschoen.parlorplace.backend.controller.mapper.GameMapper;
+import com.fschoen.parlorplace.backend.controller.mapper.GameMapperImpl;
+import com.fschoen.parlorplace.backend.controller.mapper.PlayerMapperImpl;
+import com.fschoen.parlorplace.backend.controller.mapper.RoleMapperImpl;
+import com.fschoen.parlorplace.backend.controller.mapper.UserMapperImpl;
+import com.fschoen.parlorplace.backend.enumeration.GameType;
+import com.fschoen.parlorplace.backend.enumeration.PlayerState;
+import com.fschoen.parlorplace.backend.game.werewolf.dto.game.WerewolfGameDTO;
+import com.fschoen.parlorplace.backend.game.werewolf.entity.WerewolfGame;
+import com.fschoen.parlorplace.backend.game.werewolf.entity.WerewolfPlayer;
+import com.fschoen.parlorplace.backend.game.werewolf.entity.WerewolfRole;
+import com.fschoen.parlorplace.backend.game.werewolf.enumeration.WerewolfRoleType;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit4.SpringRunner;
 
-import java.util.*;
+import java.util.HashSet;
+import java.util.Set;
 
-import static org.assertj.core.api.AssertionsForClassTypes.*;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = {GameMapperImpl.class, PlayerMapperImpl.class, UserMapperImpl.class, RoleMapperImpl.class, GameIdentifierMapperImpl.class})

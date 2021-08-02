@@ -1,8 +1,10 @@
 package com.fschoen.parlorplace.backend.configuration;
 
-import com.fasterxml.jackson.databind.*;
-import org.springframework.context.annotation.*;
-import org.springframework.http.converter.json.*;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 
 @Configuration
 public class JacksonConfig {

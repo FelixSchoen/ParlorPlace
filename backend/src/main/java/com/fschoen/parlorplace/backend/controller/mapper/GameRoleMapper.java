@@ -1,14 +1,15 @@
 package com.fschoen.parlorplace.backend.controller.mapper;
 
-import com.fschoen.parlorplace.backend.controller.dto.game.*;
-import com.fschoen.parlorplace.backend.entity.*;
-import com.fschoen.parlorplace.backend.exception.*;
-import com.fschoen.parlorplace.backend.game.werewolf.dto.role.*;
-import com.fschoen.parlorplace.backend.game.werewolf.entity.*;
-import com.fschoen.parlorplace.backend.utility.messaging.*;
-import org.mapstruct.*;
+import com.fschoen.parlorplace.backend.controller.dto.game.GameRoleDTO;
+import com.fschoen.parlorplace.backend.entity.GameRole;
+import com.fschoen.parlorplace.backend.exception.MappingException;
+import com.fschoen.parlorplace.backend.game.werewolf.dto.role.WerewolfRoleDTO;
+import com.fschoen.parlorplace.backend.game.werewolf.entity.WerewolfRole;
+import com.fschoen.parlorplace.backend.utility.messaging.MessageIdentifiers;
+import com.fschoen.parlorplace.backend.utility.messaging.Messages;
+import org.mapstruct.Mapper;
 
-import java.util.*;
+import java.util.Set;
 
 @Mapper(componentModel = "spring")
 public interface GameRoleMapper {

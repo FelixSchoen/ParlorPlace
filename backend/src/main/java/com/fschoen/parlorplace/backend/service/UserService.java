@@ -1,11 +1,12 @@
 package com.fschoen.parlorplace.backend.service;
 
-import com.fschoen.parlorplace.backend.controller.dto.authentication.*;
-import com.fschoen.parlorplace.backend.controller.dto.user.*;
-import com.fschoen.parlorplace.backend.entity.*;
-import com.fschoen.parlorplace.backend.exception.*;
+import com.fschoen.parlorplace.backend.controller.dto.authentication.TokenRefreshResponseDTO;
+import com.fschoen.parlorplace.backend.controller.dto.user.UserLoginResponseDTO;
+import com.fschoen.parlorplace.backend.entity.User;
+import com.fschoen.parlorplace.backend.exception.AuthorizationException;
+import com.fschoen.parlorplace.backend.exception.DataConflictException;
 
-import java.util.*;
+import java.util.Set;
 
 public interface UserService {
 

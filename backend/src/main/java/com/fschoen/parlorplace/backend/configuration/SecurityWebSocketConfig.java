@@ -1,9 +1,9 @@
 package com.fschoen.parlorplace.backend.configuration;
 
-import org.springframework.context.annotation.*;
-import org.springframework.messaging.simp.*;
-import org.springframework.security.config.annotation.web.messaging.*;
-import org.springframework.security.config.annotation.web.socket.*;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.messaging.simp.SimpMessageType;
+import org.springframework.security.config.annotation.web.messaging.MessageSecurityMetadataSourceRegistry;
+import org.springframework.security.config.annotation.web.socket.AbstractSecurityWebSocketMessageBrokerConfigurer;
 
 @Configuration
 public class SecurityWebSocketConfig extends AbstractSecurityWebSocketMessageBrokerConfigurer {

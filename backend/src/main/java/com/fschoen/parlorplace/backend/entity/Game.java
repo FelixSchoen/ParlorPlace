@@ -1,13 +1,34 @@
 package com.fschoen.parlorplace.backend.entity;
 
-import com.fschoen.parlorplace.backend.enumeration.*;
-import com.fschoen.parlorplace.backend.game.management.*;
-import lombok.*;
-import lombok.experimental.*;
+import com.fschoen.parlorplace.backend.enumeration.GameState;
+import com.fschoen.parlorplace.backend.enumeration.GameType;
+import com.fschoen.parlorplace.backend.game.management.GameIdentifier;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
-import javax.persistence.*;
-import javax.validation.constraints.*;
-import java.util.*;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Transient;
+import javax.validation.constraints.NotNull;
+import java.util.Date;
+import java.util.Set;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -15,7 +36,7 @@ import java.util.*;
 @Data
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-public abstract class Game {
+public abstract class Game<P extends Player<?>, RS extends RuleSet> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "seq_game_instance_id")
@@ -25,7 +46,24 @@ public abstract class Game {
     @Column(nullable = false)
     @Enumerated
     @NotNull
+    protected GameType gameType;
+
+    @Column(nullable = false)
+    @Enumerated
+    @NotNull
     protected GameState gameState;
+
+    @OneToMany(mappedBy = "game", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+    @EqualsAndHashCode.Exclude
+    @NotNull
+    protected Set<P> players;
+
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    @JoinColumn(referencedColumnName = "id")
+    @EqualsAndHashCode.Exclude
+    @NotNull
+    protected RS ruleSet;
 
     @Column(nullable = false)
     protected Date startedAt;
@@ -35,15 +73,5 @@ public abstract class Game {
 
     @Transient
     private GameIdentifier gameIdentifier;
-
-    public abstract GameType getGameType();
-
-    public abstract <P extends Player> Set<P> getPlayers();
-
-    public abstract <P extends Player> void setPlayers(Set<P> players);
-
-    public abstract <R extends RuleSet> R getRuleSet();
-
-    public abstract <R extends RuleSet> void setRuleSet(R ruleSet);
 
 }

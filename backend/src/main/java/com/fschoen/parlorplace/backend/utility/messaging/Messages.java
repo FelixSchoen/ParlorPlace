@@ -1,6 +1,6 @@
 package com.fschoen.parlorplace.backend.utility.messaging;
 
-import java.util.*;
+import java.util.ResourceBundle;
 
 public class Messages {
 

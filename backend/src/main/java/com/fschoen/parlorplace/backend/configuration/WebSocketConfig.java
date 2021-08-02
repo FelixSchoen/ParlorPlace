@@ -1,12 +1,16 @@
 package com.fschoen.parlorplace.backend.configuration;
 
-import com.fschoen.parlorplace.backend.security.*;
-import org.springframework.beans.factory.annotation.*;
-import org.springframework.context.annotation.*;
-import org.springframework.core.*;
-import org.springframework.core.annotation.*;
-import org.springframework.messaging.simp.config.*;
-import org.springframework.web.socket.config.annotation.*;
+import com.fschoen.parlorplace.backend.security.AuthChannelInterceptor;
+import com.fschoen.parlorplace.backend.security.WebSocketErrorHandler;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
+import org.springframework.messaging.simp.config.ChannelRegistration;
+import org.springframework.messaging.simp.config.MessageBrokerRegistry;
+import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBroker;
+import org.springframework.web.socket.config.annotation.StompEndpointRegistry;
+import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerConfigurer;
 
 @Configuration
 @EnableWebSocketMessageBroker

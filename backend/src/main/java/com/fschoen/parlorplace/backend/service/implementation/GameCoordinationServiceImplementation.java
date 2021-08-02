@@ -1,19 +1,33 @@
 package com.fschoen.parlorplace.backend.service.implementation;
 
-import com.fschoen.parlorplace.backend.entity.*;
-import com.fschoen.parlorplace.backend.enumeration.*;
-import com.fschoen.parlorplace.backend.exception.*;
-import com.fschoen.parlorplace.backend.game.management.*;
-import com.fschoen.parlorplace.backend.game.werewolf.management.*;
-import com.fschoen.parlorplace.backend.repository.*;
-import com.fschoen.parlorplace.backend.service.*;
-import com.fschoen.parlorplace.backend.utility.messaging.*;
-import lombok.extern.slf4j.*;
-import org.springframework.beans.factory.annotation.*;
-import org.springframework.context.*;
-import org.springframework.stereotype.*;
+import com.fschoen.parlorplace.backend.entity.Game;
+import com.fschoen.parlorplace.backend.entity.Player;
+import com.fschoen.parlorplace.backend.entity.RuleSet;
+import com.fschoen.parlorplace.backend.entity.User;
+import com.fschoen.parlorplace.backend.enumeration.GameType;
+import com.fschoen.parlorplace.backend.exception.DataConflictException;
+import com.fschoen.parlorplace.backend.exception.GameException;
+import com.fschoen.parlorplace.backend.exception.NotImplementedException;
+import com.fschoen.parlorplace.backend.game.management.GameIdentifier;
+import com.fschoen.parlorplace.backend.game.management.GameInstance;
+import com.fschoen.parlorplace.backend.game.werewolf.management.WerewolfInstance;
+import com.fschoen.parlorplace.backend.repository.UserRepository;
+import com.fschoen.parlorplace.backend.service.AbstractService;
+import com.fschoen.parlorplace.backend.service.GameCoordinationService;
+import com.fschoen.parlorplace.backend.utility.messaging.MessageIdentifiers;
+import com.fschoen.parlorplace.backend.utility.messaging.Messages;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
 
 @Slf4j
 @Service

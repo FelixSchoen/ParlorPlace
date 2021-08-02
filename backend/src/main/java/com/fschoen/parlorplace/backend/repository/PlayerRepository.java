@@ -1,10 +1,10 @@
 package com.fschoen.parlorplace.backend.repository;
 
-import com.fschoen.parlorplace.backend.entity.*;
-import org.springframework.data.jpa.repository.*;
-import org.springframework.data.repository.*;
+import com.fschoen.parlorplace.backend.entity.Player;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.repository.NoRepositoryBean;
 
-import java.util.*;
+import java.util.Optional;
 
 @NoRepositoryBean
 public interface PlayerRepository<T extends Player> extends JpaRepository<T, Long> {

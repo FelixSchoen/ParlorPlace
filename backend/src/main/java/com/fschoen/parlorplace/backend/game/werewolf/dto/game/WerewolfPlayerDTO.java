@@ -1,9 +1,13 @@
 package com.fschoen.parlorplace.backend.game.werewolf.dto.game;
 
-import com.fschoen.parlorplace.backend.controller.dto.game.*;
-import com.fschoen.parlorplace.backend.game.werewolf.dto.role.*;
-import lombok.*;
-import lombok.experimental.*;
+import com.fschoen.parlorplace.backend.controller.dto.game.PlayerDTO;
+import com.fschoen.parlorplace.backend.game.werewolf.dto.role.WerewolfRoleDTO;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
+import lombok.experimental.SuperBuilder;
 
 @NoArgsConstructor
 @AllArgsConstructor

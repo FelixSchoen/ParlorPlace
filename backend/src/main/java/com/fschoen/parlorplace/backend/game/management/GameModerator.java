@@ -1,6 +1,7 @@
 package com.fschoen.parlorplace.backend.game.management;
 
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.Setter;
 
 public abstract class GameModerator {
 

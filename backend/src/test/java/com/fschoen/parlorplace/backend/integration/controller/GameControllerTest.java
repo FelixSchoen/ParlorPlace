@@ -1,20 +1,24 @@
 package com.fschoen.parlorplace.backend.integration.controller;
 
-import com.fschoen.parlorplace.backend.controller.dto.game.*;
-import com.fschoen.parlorplace.backend.entity.*;
-import com.fschoen.parlorplace.backend.enumeration.*;
-import com.fschoen.parlorplace.backend.game.werewolf.dto.game.*;
-import com.fschoen.parlorplace.backend.game.werewolf.dto.lobby.*;
-import com.fschoen.parlorplace.backend.game.werewolf.enumeration.*;
-import com.fschoen.parlorplace.backend.integration.base.*;
-import io.restassured.response.*;
-import org.junit.jupiter.api.*;
-import org.springframework.http.*;
-import org.springframework.test.annotation.*;
+import com.fschoen.parlorplace.backend.controller.dto.game.GameDTO;
+import com.fschoen.parlorplace.backend.controller.dto.game.GameStartRequestDTO;
+import com.fschoen.parlorplace.backend.entity.User;
+import com.fschoen.parlorplace.backend.enumeration.GameType;
+import com.fschoen.parlorplace.backend.enumeration.LobbyRole;
+import com.fschoen.parlorplace.backend.game.werewolf.dto.game.WerewolfGameDTO;
+import com.fschoen.parlorplace.backend.game.werewolf.dto.game.WerewolfPlayerDTO;
+import com.fschoen.parlorplace.backend.game.werewolf.dto.lobby.WerewolfLobbyChangeRequestDTO;
+import com.fschoen.parlorplace.backend.game.werewolf.dto.lobby.WerewolfRuleSetDTO;
+import com.fschoen.parlorplace.backend.game.werewolf.enumeration.WerewolfRoleType;
+import com.fschoen.parlorplace.backend.integration.base.BaseIntegrationTest;
+import io.restassured.response.Response;
+import org.junit.jupiter.api.Test;
+import org.springframework.http.HttpStatus;
+import org.springframework.test.annotation.DirtiesContext;
 
-import java.util.*;
+import java.util.Set;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 public class GameControllerTest extends BaseIntegrationTest {

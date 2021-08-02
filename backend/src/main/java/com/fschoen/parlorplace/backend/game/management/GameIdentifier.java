@@ -1,9 +1,13 @@
 package com.fschoen.parlorplace.backend.game.management;
 
-import lombok.*;
+import lombok.Builder;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
-import javax.validation.constraints.*;
-import java.util.*;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+import java.util.Random;
 
 @NoArgsConstructor
 @EqualsAndHashCode

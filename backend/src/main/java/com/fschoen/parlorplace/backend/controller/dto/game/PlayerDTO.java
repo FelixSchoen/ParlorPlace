@@ -1,12 +1,16 @@
 ﻿package com.fschoen.parlorplace.backend.controller.dto.game;
 
-import com.fschoen.parlorplace.backend.controller.dto.user.*;
-import com.fschoen.parlorplace.backend.enumeration.*;
-import lombok.*;
-import lombok.experimental.*;
+import com.fschoen.parlorplace.backend.controller.dto.user.UserDTO;
+import com.fschoen.parlorplace.backend.enumeration.LobbyRole;
+import com.fschoen.parlorplace.backend.enumeration.PlayerState;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
-import javax.validation.*;
-import javax.validation.constraints.*;
+import javax.validation.Valid;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 
 @NoArgsConstructor
 @AllArgsConstructor

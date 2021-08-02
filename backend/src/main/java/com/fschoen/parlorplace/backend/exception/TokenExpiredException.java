@@ -1,6 +1,7 @@
 package com.fschoen.parlorplace.backend.exception;
 
-import com.fschoen.parlorplace.backend.utility.messaging.*;
+import com.fschoen.parlorplace.backend.utility.messaging.MessageIdentifiers;
+import com.fschoen.parlorplace.backend.utility.messaging.Messages;
 
 public class TokenExpiredException extends RuntimeException {
 

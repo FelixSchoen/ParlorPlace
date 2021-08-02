@@ -1,18 +1,26 @@
 package com.fschoen.parlorplace.backend.integration.controller;
 
-import com.fschoen.parlorplace.backend.controller.dto.authentication.*;
-import com.fschoen.parlorplace.backend.controller.dto.user.*;
-import com.fschoen.parlorplace.backend.entity.*;
-import com.fschoen.parlorplace.backend.enumeration.*;
-import com.fschoen.parlorplace.backend.integration.base.*;
-import io.restassured.response.*;
-import org.junit.jupiter.api.*;
-import org.springframework.http.*;
+import com.fschoen.parlorplace.backend.controller.dto.authentication.TokenRefreshRequestDTO;
+import com.fschoen.parlorplace.backend.controller.dto.authentication.TokenRefreshResponseDTO;
+import com.fschoen.parlorplace.backend.controller.dto.user.UserDTO;
+import com.fschoen.parlorplace.backend.controller.dto.user.UserLoginRequestDTO;
+import com.fschoen.parlorplace.backend.controller.dto.user.UserLoginResponseDTO;
+import com.fschoen.parlorplace.backend.controller.dto.user.UserRegisterRequestDTO;
+import com.fschoen.parlorplace.backend.controller.dto.user.UserUpdateRequestDTO;
+import com.fschoen.parlorplace.backend.entity.User;
+import com.fschoen.parlorplace.backend.enumeration.UserRole;
+import com.fschoen.parlorplace.backend.integration.base.BaseIntegrationTest;
+import io.restassured.response.Response;
+import org.junit.jupiter.api.Test;
+import org.springframework.http.HttpStatus;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 
-import static org.assertj.core.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class UserControllerTest extends BaseIntegrationTest {
 

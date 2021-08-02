@@ -1,12 +1,14 @@
 package com.fschoen.parlorplace.backend.controller.mapper;
 
-import com.fschoen.parlorplace.backend.controller.dto.game.*;
-import com.fschoen.parlorplace.backend.entity.*;
-import com.fschoen.parlorplace.backend.exception.*;
-import com.fschoen.parlorplace.backend.game.werewolf.dto.game.*;
-import com.fschoen.parlorplace.backend.game.werewolf.entity.*;
-import com.fschoen.parlorplace.backend.utility.messaging.*;
-import org.mapstruct.*;
+import com.fschoen.parlorplace.backend.controller.dto.game.GameDTO;
+import com.fschoen.parlorplace.backend.entity.Game;
+import com.fschoen.parlorplace.backend.exception.MappingException;
+import com.fschoen.parlorplace.backend.game.werewolf.dto.game.WerewolfGameDTO;
+import com.fschoen.parlorplace.backend.game.werewolf.entity.WerewolfGame;
+import com.fschoen.parlorplace.backend.utility.messaging.MessageIdentifiers;
+import com.fschoen.parlorplace.backend.utility.messaging.Messages;
+import org.mapstruct.Context;
+import org.mapstruct.Mapper;
 
 @Mapper(componentModel = "spring", uses = {PlayerMapper.class, GameIdentifierMapper.class})
 public interface GameMapper {

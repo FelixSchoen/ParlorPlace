@@ -1,10 +1,12 @@
 package com.fschoen.parlorplace.backend.controller.mapper;
 
-import com.fschoen.parlorplace.backend.entity.*;
-import com.fschoen.parlorplace.backend.enumeration.*;
-import org.mapstruct.*;
+import com.fschoen.parlorplace.backend.entity.Role;
+import com.fschoen.parlorplace.backend.enumeration.UserRole;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.Mappings;
 
-import java.util.*;
+import java.util.Set;
 
 @Mapper(componentModel = "spring")
 public interface RoleMapper {

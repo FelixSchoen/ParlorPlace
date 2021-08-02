@@ -1,12 +1,14 @@
 package com.fschoen.parlorplace.backend.controller.mapper;
 
-import com.fschoen.parlorplace.backend.controller.dto.game.*;
-import com.fschoen.parlorplace.backend.entity.*;
-import com.fschoen.parlorplace.backend.exception.*;
-import com.fschoen.parlorplace.backend.game.werewolf.dto.lobby.*;
-import com.fschoen.parlorplace.backend.game.werewolf.entity.*;
-import com.fschoen.parlorplace.backend.utility.messaging.*;
-import org.mapstruct.*;
+import com.fschoen.parlorplace.backend.controller.dto.game.RuleSetDTO;
+import com.fschoen.parlorplace.backend.entity.RuleSet;
+import com.fschoen.parlorplace.backend.exception.MappingException;
+import com.fschoen.parlorplace.backend.game.werewolf.dto.lobby.WerewolfRuleSetDTO;
+import com.fschoen.parlorplace.backend.game.werewolf.entity.WerewolfRuleSet;
+import com.fschoen.parlorplace.backend.utility.messaging.MessageIdentifiers;
+import com.fschoen.parlorplace.backend.utility.messaging.Messages;
+import org.mapstruct.Context;
+import org.mapstruct.Mapper;
 
 @Mapper(componentModel = "spring")
 public interface RuleSetMapper {

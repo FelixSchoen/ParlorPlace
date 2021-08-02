@@ -1,9 +1,10 @@
 package com.fschoen.parlorplace.backend.service;
 
-import com.fschoen.parlorplace.backend.entity.*;
-import com.fschoen.parlorplace.backend.exception.*;
+import com.fschoen.parlorplace.backend.entity.RefreshToken;
+import com.fschoen.parlorplace.backend.exception.DataConflictException;
+import com.fschoen.parlorplace.backend.exception.TokenExpiredException;
 
-import java.util.*;
+import java.util.Optional;
 
 public interface RefreshTokenService {
 

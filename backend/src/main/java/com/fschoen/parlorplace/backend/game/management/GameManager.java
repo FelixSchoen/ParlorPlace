@@ -1,6 +1,6 @@
 package com.fschoen.parlorplace.backend.game.management;
 
-import javax.annotation.*;
+import javax.annotation.PostConstruct;
 
 public abstract class GameManager {
 

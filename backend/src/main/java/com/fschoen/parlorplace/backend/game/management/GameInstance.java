@@ -1,21 +1,35 @@
 package com.fschoen.parlorplace.backend.game.management;
 
-import com.fschoen.parlorplace.backend.entity.*;
-import com.fschoen.parlorplace.backend.enumeration.*;
-import com.fschoen.parlorplace.backend.exception.*;
-import com.fschoen.parlorplace.backend.game.werewolf.management.*;
-import com.fschoen.parlorplace.backend.repository.*;
-import com.fschoen.parlorplace.backend.service.*;
-import com.fschoen.parlorplace.backend.utility.messaging.*;
-import lombok.*;
-import org.slf4j.*;
+import com.fschoen.parlorplace.backend.entity.Game;
+import com.fschoen.parlorplace.backend.entity.Player;
+import com.fschoen.parlorplace.backend.entity.RuleSet;
+import com.fschoen.parlorplace.backend.entity.User;
+import com.fschoen.parlorplace.backend.enumeration.GameState;
+import com.fschoen.parlorplace.backend.enumeration.LobbyRole;
+import com.fschoen.parlorplace.backend.enumeration.PlayerState;
+import com.fschoen.parlorplace.backend.exception.DataConflictException;
+import com.fschoen.parlorplace.backend.exception.GameException;
+import com.fschoen.parlorplace.backend.game.werewolf.management.WerewolfManager;
+import com.fschoen.parlorplace.backend.repository.GameRepository;
+import com.fschoen.parlorplace.backend.repository.UserRepository;
+import com.fschoen.parlorplace.backend.service.AbstractService;
+import com.fschoen.parlorplace.backend.service.GameCoordinationService;
+import com.fschoen.parlorplace.backend.utility.messaging.MessageIdentifiers;
+import com.fschoen.parlorplace.backend.utility.messaging.Messages;
+import lombok.AccessLevel;
+import lombok.Getter;
+import org.slf4j.Logger;
 
-import javax.annotation.*;
-import java.lang.reflect.*;
-import java.util.*;
-import java.util.stream.*;
+import javax.annotation.PostConstruct;
+import java.lang.reflect.InvocationTargetException;
+import java.util.Comparator;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
-public abstract class GameInstance<G extends Game, P extends Player, GR extends GameRepository<G>, RS extends RuleSet> extends AbstractService {
+public abstract class GameInstance<G extends Game<P, RS>, P extends Player<G>, GR extends GameRepository<G>, RS extends RuleSet> extends AbstractService {
 
     protected final GameCoordinationService gameCoordinationService;
     protected final GR gameRepository;

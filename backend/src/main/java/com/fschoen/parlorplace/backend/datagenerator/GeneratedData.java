@@ -1,10 +1,10 @@
 package com.fschoen.parlorplace.backend.datagenerator;
 
-import com.fschoen.parlorplace.backend.entity.*;
-import lombok.*;
-import lombok.extern.slf4j.*;
+import com.fschoen.parlorplace.backend.entity.User;
+import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
 
-import java.util.*;
+import java.util.Map;
 
 @Slf4j
 @Data
