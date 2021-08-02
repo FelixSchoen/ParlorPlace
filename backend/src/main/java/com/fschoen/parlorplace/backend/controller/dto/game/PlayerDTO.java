@@ -3,7 +3,6 @@
 import com.fschoen.parlorplace.backend.controller.dto.user.UserDTO;
 import com.fschoen.parlorplace.backend.enumeration.LobbyRole;
 import com.fschoen.parlorplace.backend.enumeration.PlayerState;
-import com.fschoen.parlorplace.backend.game.werewolf.dto.role.WerewolfGameRoleDTO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -17,7 +16,7 @@ import javax.validation.constraints.NotNull;
 @AllArgsConstructor
 @SuperBuilder(toBuilder = true)
 @Data
-public abstract class PlayerDTO {
+public abstract class PlayerDTO<GRDTO extends GameRoleDTO> {
 
     @NotNull
     protected Long id;
@@ -34,6 +33,8 @@ public abstract class PlayerDTO {
 
     @NotNull
     protected PlayerState playerState;
+
+    protected GRDTO gameRole;
 
     @NotNull
     @Min(0)

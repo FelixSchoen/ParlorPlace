@@ -10,12 +10,13 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.constraints.NotNull;
 import java.util.Date;
+import java.util.Set;
 
 @NoArgsConstructor
 @AllArgsConstructor
 @SuperBuilder(toBuilder = true)
 @Data
-public abstract class GameDTO {
+public abstract class GameDTO<PDTO extends PlayerDTO<?>, RSDTO extends RuleSetDTO> {
 
     @NotNull
     protected Long id;
@@ -25,6 +26,12 @@ public abstract class GameDTO {
 
     @NotNull
     protected GameState gameState;
+
+    @NotNull
+    protected Set<PDTO> players;
+
+    @NotNull
+    protected RSDTO ruleSet;
 
     @NotNull
     @DateTimeFormat

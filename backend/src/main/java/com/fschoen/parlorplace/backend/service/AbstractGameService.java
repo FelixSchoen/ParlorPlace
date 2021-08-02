@@ -69,7 +69,7 @@ public abstract class AbstractGameService<
             game.setGameIdentifier(this.gameIdentifierService.generateValidGameIdentifier());
             game = this.gameRepository.save(game);
 
-            log.info("Created new {} instance: {}", this.gameClass, game.getGameIdentifier().getToken());
+            log.info("Created new {} instance: {}", this.gameClass.getName(), game.getGameIdentifier().getToken());
 
             return game;
         } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
@@ -107,7 +107,7 @@ public abstract class AbstractGameService<
         try {
             player = this.playerClass.getDeclaredConstructor().newInstance();
             player.setUser(user);
-            player.setDisconnected(false);
+            player.setGame(game);
 
             if (game.getPlayers().size() == 0)
                 player.setLobbyRole(LobbyRole.ROLE_ADMIN);
@@ -116,13 +116,14 @@ public abstract class AbstractGameService<
 
             player.setPlayerState(PlayerState.ALIVE);
             player.setPosition(game.getPlayers().size());
+            player.setDisconnected(false);
         } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
             throw new DataConflictException(Messages.exception(MessageIdentifiers.GAME_TYPE_MISMATCH));
         }
 
         game.getPlayers().add(player);
-        game = this.gameRepository.save(game);
 
+        game = this.gameRepository.save(game);
         return game;
     }
 
@@ -243,8 +244,12 @@ public abstract class AbstractGameService<
 
     // Utility
 
+    protected List<G> getActiveGames(GameIdentifier gameIdentifier) {
+        return this.gameRepository.findAllByGameIdentifier_TokenAndEndedAt(gameIdentifier.getToken(), null);
+    }
+
     protected G getActiveGame(GameIdentifier gameIdentifier) {
-        List<G> games = this.gameRepository.findAllByGameIdentifierAndEndedAt(gameIdentifier, null);
+        List<G> games = this.getActiveGames(gameIdentifier);
         Game<?, ?> game = games.get(0);
         if (!(this.gameClass.isInstance(game)))
             throw new DataConflictException(Messages.exception(MessageIdentifiers.GAME_TYPE_MISMATCH));
@@ -262,7 +267,7 @@ public abstract class AbstractGameService<
     // Validation
 
     protected void validateActiveGameExists(GameIdentifier gameIdentifier) throws GameException, DataConflictException {
-        List<G> games = this.gameRepository.findAllByGameIdentifierAndEndedAt(gameIdentifier, null);
+        List<G> games = this.getActiveGames(gameIdentifier);
 
         if (games.size() == 0)
             throw new GameException(Messages.exception(MessageIdentifiers.GAME_EXISTS_NOT));
@@ -271,21 +276,21 @@ public abstract class AbstractGameService<
     }
 
     protected void validateActiveGameInLobby(GameIdentifier gameIdentifier) {
-        G game = this.gameRepository.findAllByGameIdentifierAndEndedAt(gameIdentifier, null).get(0);
+        G game = this.getActiveGame(gameIdentifier);
 
         if (!game.getGameState().equals(GameState.LOBBY))
             throw new GameException(Messages.exception(MessageIdentifiers.GAME_STATE_STARTED));
     }
 
     protected void validateUserInActiveGame(GameIdentifier gameIdentifier, User user) throws GameException {
-        G game = this.gameRepository.findAllByGameIdentifierAndEndedAt(gameIdentifier, null).get(0);
+        G game = this.getActiveGame(gameIdentifier);
 
         if (game.getPlayers().stream().noneMatch(player -> player.getUser().equals(user)))
             throw new GameException(Messages.exception(MessageIdentifiers.GAME_USER_INGAME));
     }
 
     protected void validateUserNotInActiveGame(GameIdentifier gameIdentifier, User user) throws GameException {
-        G game = this.gameRepository.findAllByGameIdentifierAndEndedAt(gameIdentifier, null).get(0);
+        G game = this.getActiveGame(gameIdentifier);
 
         if (game.getPlayers().stream().anyMatch(player -> player.getUser().equals(user)))
             throw new GameException(Messages.exception(MessageIdentifiers.GAME_USER_INGAME));

@@ -19,15 +19,9 @@ import java.util.Set;
 @SuperBuilder(toBuilder = true)
 @ToString(callSuper = true)
 @Data
-public class WerewolfGameDTO extends GameDTO {
+public class WerewolfGameDTO extends GameDTO<WerewolfPlayerDTO, WerewolfRuleSetDTO> {
 
     @NotNull
     private GameType gameType = GameType.WEREWOLF;
-
-    @NotNull
-    private Set<WerewolfPlayerDTO> players;
-
-    @NotNull
-    private WerewolfRuleSetDTO ruleSet;
 
 }

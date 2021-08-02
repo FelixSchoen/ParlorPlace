@@ -31,15 +31,14 @@ public abstract class AbstractGameController<
         P extends Player<GR>,
         RS extends RuleSet,
         GR extends GameRole,
-        GDTO extends GameDTO,
-        PDTO extends PlayerDTO,
+        GDTO extends GameDTO<?, ?>,
+        PDTO extends PlayerDTO<?>,
         RSDTO extends RuleSetDTO,
-        LDTO extends LobbyChangeRequestDTO<PDTO, RSDTO>
+        LCRDTO extends LobbyChangeRequestDTO<PDTO, RSDTO>
         > {
 
     private final AbstractGameService<G, P, RS, GR, ? extends GameRepository<G>> gameService;
 
-    private final UserMapper userMapper;
     private final GameMapper<G, GDTO> gameMapper;
     private final PlayerMapper<P, PDTO> playerMapper;
     private final RuleSetMapper<RS, RSDTO> ruleSetMapper;
@@ -48,7 +47,6 @@ public abstract class AbstractGameController<
 
     public AbstractGameController(AbstractGameService<G, P, RS, GR, ? extends GameRepository<G>> gameService, UserMapper userMapper, GameMapper<G, GDTO> gameMapper, PlayerMapper<P, PDTO> playerMapper, RuleSetMapper<RS, RSDTO> ruleSetMapper) {
         this.gameService = gameService;
-        this.userMapper = userMapper;
         this.gameMapper = gameMapper;
         this.playerMapper = playerMapper;
         this.ruleSetMapper = ruleSetMapper;
@@ -86,7 +84,7 @@ public abstract class AbstractGameController<
     }
 
     @PostMapping("/lobby/change/{identifier}")
-    public ResponseEntity<GDTO> changeLobby(@PathVariable("identifier") String identifier, @RequestBody LDTO lobbyChangeRequestDTO) {
+    public ResponseEntity<GDTO> changeLobby(@PathVariable("identifier") String identifier, @RequestBody LCRDTO lobbyChangeRequestDTO) {
         validator.validate(lobbyChangeRequestDTO).throwIfInvalid();
 
         GameIdentifier gameIdentifier = new GameIdentifier(identifier);

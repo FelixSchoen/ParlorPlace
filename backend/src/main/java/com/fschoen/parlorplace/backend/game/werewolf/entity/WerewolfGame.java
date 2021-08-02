@@ -2,7 +2,6 @@ package com.fschoen.parlorplace.backend.game.werewolf.entity;
 
 import com.fschoen.parlorplace.backend.entity.Game;
 import com.fschoen.parlorplace.backend.enumeration.GameType;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;

@@ -10,13 +10,11 @@ import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 
 @NoArgsConstructor
-@AllArgsConstructor
+//@AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 @SuperBuilder(toBuilder = true)
 @ToString(callSuper = true)
 @Data
-public class WerewolfPlayerDTO extends PlayerDTO {
-
-    private WerewolfGameRoleDTO gameRoleDTO;
+public class WerewolfPlayerDTO extends PlayerDTO<WerewolfGameRoleDTO> {
 
 }

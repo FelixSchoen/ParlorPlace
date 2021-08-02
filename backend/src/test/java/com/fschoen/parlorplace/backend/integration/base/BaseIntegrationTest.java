@@ -46,6 +46,7 @@ public abstract class BaseIntegrationTest {
     protected String BASE_URI = "/";
     protected String USER_BASE_URI = BASE_URI + "user/";
     protected String GAME_BASE_URI = BASE_URI + "game/";
+    protected String WEREWOLF_BASE_URI = GAME_BASE_URI + "werewolf/";
 
     @LocalServerPort
     protected int port;

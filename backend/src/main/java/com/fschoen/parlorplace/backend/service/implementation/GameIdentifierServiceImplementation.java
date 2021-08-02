@@ -28,7 +28,7 @@ public class GameIdentifierServiceImplementation implements GameIdentifierServic
 
         while (true) {
             GameIdentifier gameIdentifier = generateToken(standardLength);
-            if (this.gameRepository.findAllByGameIdentifierAndEndedAt(gameIdentifier, null).stream().anyMatch(game -> game.getGameIdentifier().equals(gameIdentifier)))
+            if (this.gameRepository.findAllByGameIdentifier_TokenAndEndedAt(gameIdentifier.getToken(), null).stream().anyMatch(game -> game.getGameIdentifier().equals(gameIdentifier)))
                 standardLength++;
             else
                 return gameIdentifier;

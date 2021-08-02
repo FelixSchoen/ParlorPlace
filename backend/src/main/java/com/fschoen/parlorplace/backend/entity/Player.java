@@ -45,9 +45,13 @@ public abstract class Player<GR extends GameRole> {
     @NotNull
     protected User user;
 
-    @Column(nullable = false)
+    @ManyToOne(targetEntity = Game.class)
+    @JoinColumn
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
     @NotNull
-    protected Boolean disconnected;
+    //TODO I don't need this, but I can't get @OneToMany to work without this - always throws exceptions "Batch Update Returned Unexpected Row Count"
+    protected Game<?, ?> game;
 
     @Column(nullable = false)
     @Enumerated
@@ -62,12 +66,15 @@ public abstract class Player<GR extends GameRole> {
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(referencedColumnName = "id")
     @EqualsAndHashCode.Exclude
-    @NotNull
     protected GR gameRole;
 
     @Column(nullable = false)
     @NotNull
     @Min(0)
     protected Integer position;
+
+    @Column(nullable = false)
+    @NotNull
+    protected Boolean disconnected;
 
 }

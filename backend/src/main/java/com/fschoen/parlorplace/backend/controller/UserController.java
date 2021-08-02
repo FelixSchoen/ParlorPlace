@@ -49,7 +49,7 @@ public class UserController {
 
         User proposedUser = userMapper.fromDTO(userRegisterRequestDTO);
         User createdUser = userService.register(proposedUser);
-        UserDTO userDTO = userMapper.toDTO(createdUser, false);
+        UserDTO userDTO = userMapper.toDTO(createdUser);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(userDTO);
     }
@@ -79,7 +79,7 @@ public class UserController {
 
         User proposedUser = userMapper.fromDTO(userUpdateRequestDTO);
         User updatedUser = userService.update(id, proposedUser);
-        UserDTO userDTO = userMapper.toDTO(updatedUser, false);
+        UserDTO userDTO = userMapper.toDTO(updatedUser);
 
         return ResponseEntity.status(HttpStatus.OK).body(userDTO);
     }
@@ -87,7 +87,7 @@ public class UserController {
     @GetMapping("/individual")
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     public ResponseEntity<UserDTO> getCurrentUser() {
-        UserDTO userDTO = userMapper.toDTO(userService.getCurrentUser(), false);
+        UserDTO userDTO = userMapper.toDTO(userService.getCurrentUser());
 
         return ResponseEntity.status(HttpStatus.OK).body(userDTO);
     }
@@ -95,7 +95,7 @@ public class UserController {
     @GetMapping("/individual/{id}")
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     public ResponseEntity<UserDTO> getUser(@PathVariable("id") Long id) {
-        UserDTO userDTO = userMapper.toDTO(userService.getUser(id), true);
+        UserDTO userDTO = userMapper.toDTO(userService.getUser(id)); //TODO Mail
 
         return ResponseEntity.status(HttpStatus.OK).body(userDTO);
     }
@@ -103,7 +103,7 @@ public class UserController {
     @GetMapping("/individual/username/{username}")
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     public ResponseEntity<UserDTO> getUser(@PathVariable("username") String username) {
-        UserDTO userDTO = userMapper.toDTO(userService.getUser(username), true);
+        UserDTO userDTO = userMapper.toDTO(userService.getUser(username)); //TODO Mail
 
         return ResponseEntity.status(HttpStatus.OK).body(userDTO);
     }
@@ -112,7 +112,7 @@ public class UserController {
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     public ResponseEntity<Set<UserDTO>> getAllUsersFiltered(@RequestParam(value = "username", required = false) String username,
                                                             @RequestParam(value = "nickname", required = false) String nickname) {
-        Set<UserDTO> userDTOs = userMapper.toDTO(userService.getAllUsersFiltered(username, nickname), true);
+        Set<UserDTO> userDTOs = userMapper.toDTO(userService.getAllUsersFiltered(username, nickname)); // TODO Mail
 
         return ResponseEntity.status(HttpStatus.OK).body(userDTOs);
     }

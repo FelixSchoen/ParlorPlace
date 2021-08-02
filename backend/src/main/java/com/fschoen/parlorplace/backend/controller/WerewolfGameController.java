@@ -10,6 +10,7 @@ import com.fschoen.parlorplace.backend.game.werewolf.entity.WerewolfGame;
 import com.fschoen.parlorplace.backend.game.werewolf.entity.WerewolfGameRole;
 import com.fschoen.parlorplace.backend.game.werewolf.entity.WerewolfPlayer;
 import com.fschoen.parlorplace.backend.game.werewolf.entity.WerewolfRuleSet;
+import com.fschoen.parlorplace.backend.game.werewolf.mapper.WerewolfGameMapper;
 import com.fschoen.parlorplace.backend.game.werewolf.mapper.WerewolfPlayerMapper;
 import com.fschoen.parlorplace.backend.game.werewolf.mapper.WerewolfRuleSetMapper;
 import com.fschoen.parlorplace.backend.repository.GameRepository;
@@ -32,7 +33,7 @@ public class WerewolfGameController extends AbstractGameController<
         > {
 
     @Autowired
-    public WerewolfGameController(AbstractGameService<WerewolfGame, WerewolfPlayer, WerewolfRuleSet, WerewolfGameRole, ? extends GameRepository<WerewolfGame>> gameService, UserMapper userMapper, GameMapper gameMapper, WerewolfPlayerMapper playerMapper, WerewolfRuleSetMapper ruleSetMapper) {
+    public WerewolfGameController(AbstractGameService<WerewolfGame, WerewolfPlayer, WerewolfRuleSet, WerewolfGameRole, ? extends GameRepository<WerewolfGame>> gameService, UserMapper userMapper, WerewolfGameMapper gameMapper, WerewolfPlayerMapper playerMapper, WerewolfRuleSetMapper ruleSetMapper) {
         super(gameService, userMapper, gameMapper, playerMapper, ruleSetMapper);
     }
 

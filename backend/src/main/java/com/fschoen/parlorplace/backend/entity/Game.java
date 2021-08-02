@@ -52,7 +52,14 @@ public abstract class Game<P extends Player<?>, RS extends RuleSet> {
     @NotNull
     protected GameState gameState;
 
-    @OneToMany(targetEntity = Player.class, fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+//    @OneToMany(targetEntity = Player.class, fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+//    @OnDelete(action = OnDeleteAction.CASCADE)
+//    @JoinColumn(referencedColumnName = "id")
+//    @EqualsAndHashCode.Exclude
+//    @NotNull
+//    protected Set<P> players;
+
+    @OneToMany(mappedBy = "game", targetEntity = Player.class, fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     @EqualsAndHashCode.Exclude
     @NotNull
     protected Set<P> players;

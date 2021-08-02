@@ -16,6 +16,7 @@ import javax.validation.constraints.Size;
 
 @NoArgsConstructor
 @AllArgsConstructor
+@EqualsAndHashCode
 @Builder(toBuilder = true)
 @Data
 @Entity
@@ -28,7 +29,7 @@ public class GameIdentifier {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "seq_game_identifier_id")
     @SequenceGenerator(name = "seq_game_identifier_id", sequenceName = "seq_game_identifier_id")
-    @EqualsAndHashCode.Include
+    @EqualsAndHashCode.Exclude
     private Long id;
 
     @NotNull

@@ -28,18 +28,11 @@ public interface UserMapper {
 
     User fromDTO(UserUpdateRequestDTO userUpdateRequestDTO);
 
-    @Mapping(target = "email", qualifiedByName = "obfuscateEmail")
-    UserDTO toDTO(User user, @Context Boolean obfuscate);
+    //
 
-    Set<UserDTO> toDTO(Set<User> users, @Context Boolean obfuscate);
+    @Mapping(target = "userRoles", source = "roles")
+    UserDTO toDTO(User user);
 
-    // Default implementation
-
-    @Named("obfuscateEmail")
-    default String obfuscateEmail(String email, @Context Boolean obfuscate) {
-        if (obfuscate)
-            return null;
-        return email;
-    }
+    Set<UserDTO> toDTO(Set<User> users);
 
 }

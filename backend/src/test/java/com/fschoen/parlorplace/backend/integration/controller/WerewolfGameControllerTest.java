@@ -1,6 +1,5 @@
 package com.fschoen.parlorplace.backend.integration.controller;
 
-import com.fschoen.parlorplace.backend.controller.dto.game.GameDTO;
 import com.fschoen.parlorplace.backend.controller.dto.game.GameStartRequestDTO;
 import com.fschoen.parlorplace.backend.entity.User;
 import com.fschoen.parlorplace.backend.enumeration.GameType;
@@ -21,17 +20,17 @@ import java.util.Set;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
-public class GameControllerTest extends BaseIntegrationTest {
+public class WerewolfGameControllerTest extends BaseIntegrationTest {
 
     @Test
     public void startNewGame_resultsInNewGameCreated() {
         User existingUser = this.generatedData.getUserCollection().getUser1();
         GameStartRequestDTO gameStartRequestDTO = GameStartRequestDTO.builder().gameType(GameType.WEREWOLF).build();
 
-        Response response = post(gameStartRequestDTO, GAME_BASE_URI + "start", getToken(existingUser));
+        Response response = post(gameStartRequestDTO, WEREWOLF_BASE_URI + "host", getToken(existingUser));
         assertThat(response.statusCode()).isEqualTo(HttpStatus.CREATED.value());
 
-        GameDTO game = response.getBody().as(WerewolfGameDTO.class);
+        WerewolfGameDTO game = response.getBody().as(WerewolfGameDTO.class);
         assertThat(game.getGameIdentifier().getToken().length()).isGreaterThan(0);
     }
 
@@ -43,13 +42,13 @@ public class GameControllerTest extends BaseIntegrationTest {
 
         GameStartRequestDTO gameStartRequestDTO = GameStartRequestDTO.builder().gameType(GameType.WEREWOLF).build();
 
-        Response response1 = post(gameStartRequestDTO, GAME_BASE_URI + "start", getToken(existingUser1));
-        Response response2 = post(gameStartRequestDTO, GAME_BASE_URI + "start", getToken(existingUser2));
-        Response response3 = post(gameStartRequestDTO, GAME_BASE_URI + "start", getToken(existingUser3));
+        Response response1 = post(gameStartRequestDTO, WEREWOLF_BASE_URI + "host", getToken(existingUser1));
+        Response response2 = post(gameStartRequestDTO, WEREWOLF_BASE_URI + "host", getToken(existingUser2));
+        Response response3 = post(gameStartRequestDTO, WEREWOLF_BASE_URI + "host", getToken(existingUser3));
 
-        GameDTO game1 = response1.getBody().as(WerewolfGameDTO.class);
-        GameDTO game2 = response2.getBody().as(WerewolfGameDTO.class);
-        GameDTO game3 = response3.getBody().as(WerewolfGameDTO.class);
+        WerewolfGameDTO game1 = response1.getBody().as(WerewolfGameDTO.class);
+        WerewolfGameDTO game2 = response2.getBody().as(WerewolfGameDTO.class);
+        WerewolfGameDTO game3 = response3.getBody().as(WerewolfGameDTO.class);
 
         assertThat(game1.getGameIdentifier()).isNotEqualTo(game2.getGameIdentifier());
         assertThat(game1.getGameIdentifier()).isNotEqualTo(game3.getGameIdentifier());
@@ -59,9 +58,9 @@ public class GameControllerTest extends BaseIntegrationTest {
     @Test
     public void joinGame_withInvalidIdentifier_resultsInDataConflictException() {
         User existingUser = this.generatedData.getUserCollection().getUser1();
-        String identifier = "NOTEXIST";
+        String identifier = "NOT";
 
-        Response response = payload("", getToken(existingUser)).pathParam("identifier", identifier).post(GAME_BASE_URI + "join/{identifier}").then().extract().response();
+        Response response = payload("", getToken(existingUser)).pathParam("identifier", identifier).post(WEREWOLF_BASE_URI + "join/{identifier}").then().extract().response();
         assertThat(response.statusCode()).isEqualTo(HttpStatus.CONFLICT.value());
     }
 
@@ -70,13 +69,14 @@ public class GameControllerTest extends BaseIntegrationTest {
         User existingUser = this.generatedData.getUserCollection().getUser1();
         GameStartRequestDTO gameStartRequestDTO = GameStartRequestDTO.builder().gameType(GameType.WEREWOLF).build();
 
-        Response response1 = post(gameStartRequestDTO, GAME_BASE_URI + "start", getToken(existingUser));
+        Response response1 = post(gameStartRequestDTO, WEREWOLF_BASE_URI + "host", getToken(existingUser));
         assertThat(response1.statusCode()).isEqualTo(HttpStatus.CREATED.value());
-        GameDTO game1 = response1.getBody().as(WerewolfGameDTO.class);
+        WerewolfGameDTO game1 = response1.getBody().as(WerewolfGameDTO.class);
 
-        Response response2 = payload("", getToken(existingUser)).pathParam("identifier", game1.getGameIdentifier().getToken()).post(GAME_BASE_URI + "join/{identifier}").then().extract().response();
+        Response response2 = payload("", getToken(existingUser)).pathParam("identifier", game1.getGameIdentifier().getToken()).post(WEREWOLF_BASE_URI + "join/{identifier}").then().extract().response();
         assertThat(response2.statusCode()).isEqualTo(HttpStatus.CONFLICT.value());
     }
+
 
     @Test
     public void joinExistingGame_withValidIdentifier_resultsInGameJoined() {
@@ -84,14 +84,14 @@ public class GameControllerTest extends BaseIntegrationTest {
         User existingUser2 = this.generatedData.getUserCollection().getUser2();
         GameStartRequestDTO gameStartRequestDTO = GameStartRequestDTO.builder().gameType(GameType.WEREWOLF).build();
 
-        Response response1 = post(gameStartRequestDTO, GAME_BASE_URI + "start", getToken(existingUser1));
+        Response response1 = post(gameStartRequestDTO, WEREWOLF_BASE_URI + "host", getToken(existingUser1));
         assertThat(response1.statusCode()).isEqualTo(HttpStatus.CREATED.value());
-        GameDTO game1 = response1.getBody().as(WerewolfGameDTO.class);
+        WerewolfGameDTO game1 = response1.getBody().as(WerewolfGameDTO.class);
 
         Response response2 = payload("", getToken(existingUser2)).pathParam("identifier", game1.getGameIdentifier().getToken())
-                .post(GAME_BASE_URI + "join/{identifier}").then().extract().response();
+                .post(WEREWOLF_BASE_URI + "join/{identifier}").then().extract().response();
         assertThat(response2.statusCode()).isEqualTo(HttpStatus.OK.value());
-        GameDTO game2 = response2.getBody().as(WerewolfGameDTO.class);
+        WerewolfGameDTO game2 = response2.getBody().as(WerewolfGameDTO.class);
         assertThat(game2.getGameIdentifier()).isEqualTo(game1.getGameIdentifier());
     }
 
@@ -107,14 +107,14 @@ public class GameControllerTest extends BaseIntegrationTest {
         WerewolfLobbyChangeRequestDTO werewolfLobbyChangeRequestDTO = WerewolfLobbyChangeRequestDTO.builder().players(werewolfPlayerDTOS).ruleSet(werewolfGameDTO.getRuleSet()).build();
 
         Response response = payload(werewolfLobbyChangeRequestDTO, getToken(existingUser1)).pathParam("identifier", werewolfGameDTO.getGameIdentifier().getToken())
-                .post(GAME_BASE_URI + "lobby/change/{identifier}").then().extract().response();
+                .post(WEREWOLF_BASE_URI + "lobby/change/{identifier}").then().extract().response();
         assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
 
         werewolfGameDTO = response.getBody().as(WerewolfGameDTO.class);
         assertThat(werewolfGameDTO.getPlayers().stream()
-                .filter(playerDTO -> playerDTO.getUser().getId().equals(existingUser1.getId())).findFirst().get().getPosition()).isEqualTo(1);
+                .filter(playerDTO -> playerDTO.getUser().getId().equals(existingUser1.getId())).findFirst().orElseThrow().getPosition()).isEqualTo(1);
         assertThat(werewolfGameDTO.getPlayers().stream()
-                .filter(playerDTO -> playerDTO.getUser().getId().equals(existingUser2.getId())).findFirst().get().getPosition()).isEqualTo(0);
+                .filter(playerDTO -> playerDTO.getUser().getId().equals(existingUser2.getId())).findFirst().orElseThrow().getPosition()).isEqualTo(0);
     }
 
     @Test
@@ -128,7 +128,7 @@ public class GameControllerTest extends BaseIntegrationTest {
         WerewolfLobbyChangeRequestDTO werewolfLobbyChangeRequestDTO = WerewolfLobbyChangeRequestDTO.builder().players(werewolfPlayerDTOS).ruleSet(werewolfGameDTO.getRuleSet()).build();
 
         Response response = payload(werewolfLobbyChangeRequestDTO, getToken(existingUser1)).pathParam("identifier", "NOT")
-                .post(GAME_BASE_URI + "lobby/change/{identifier}").then().extract().response();
+                .post(WEREWOLF_BASE_URI + "lobby/change/{identifier}").then().extract().response();
         assertThat(response.statusCode()).isEqualTo(HttpStatus.CONFLICT.value());
     }
 
@@ -144,7 +144,7 @@ public class GameControllerTest extends BaseIntegrationTest {
         WerewolfLobbyChangeRequestDTO werewolfLobbyChangeRequestDTO = WerewolfLobbyChangeRequestDTO.builder().players(werewolfPlayerDTOS).ruleSet(werewolfGameDTO.getRuleSet()).build();
 
         Response response = payload(werewolfLobbyChangeRequestDTO, getToken(existingUser1)).pathParam("identifier", werewolfGameDTO.getGameIdentifier().getToken())
-                .post(GAME_BASE_URI + "lobby/change/{identifier}").then().extract().response();
+                .post(WEREWOLF_BASE_URI + "lobby/change/{identifier}").then().extract().response();
         assertThat(response.statusCode()).isEqualTo(HttpStatus.CONFLICT.value());
     }
 
@@ -161,7 +161,7 @@ public class GameControllerTest extends BaseIntegrationTest {
         WerewolfLobbyChangeRequestDTO werewolfLobbyChangeRequestDTO = WerewolfLobbyChangeRequestDTO.builder().players(werewolfGameDTO.getPlayers()).ruleSet(werewolfRuleSetDTO).build();
 
         Response response = payload(werewolfLobbyChangeRequestDTO, getToken(existingUser1)).pathParam("identifier", werewolfGameDTO.getGameIdentifier().getToken())
-                .log().body().post(GAME_BASE_URI + "lobby/change/{identifier}").then().extract().response();
+                .post(WEREWOLF_BASE_URI + "lobby/change/{identifier}").then().extract().response();
         assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
 
         werewolfGameDTO = response.getBody().as(WerewolfGameDTO.class);
@@ -177,7 +177,7 @@ public class GameControllerTest extends BaseIntegrationTest {
         WerewolfGameDTO werewolfGameDTO = withWerewolfGame(existingUser1, existingUser2);
 
         Response response = payload("", getToken(existingUser1)).pathParam("identifier", werewolfGameDTO.getGameIdentifier().getToken())
-                .get(GAME_BASE_URI + "state/game/{identifier}").then().extract().response();
+                .get(WEREWOLF_BASE_URI + "state/game/{identifier}").then().extract().response();
         assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
 
         WerewolfGameDTO gameDTOResponse = response.getBody().as(WerewolfGameDTO.class);
@@ -189,7 +189,7 @@ public class GameControllerTest extends BaseIntegrationTest {
         User existingUser1 = this.generatedData.getUserCollection().getUser1();
 
         Response response = payload("", getToken(existingUser1)).pathParam("identifier", "NOT")
-                .get(GAME_BASE_URI + "state/game/{identifier}").then().extract().response();
+                .get(WEREWOLF_BASE_URI + "state/game/{identifier}").then().extract().response();
         assertThat(response.statusCode()).isEqualTo(HttpStatus.CONFLICT.value());
     }
 
@@ -197,15 +197,15 @@ public class GameControllerTest extends BaseIntegrationTest {
     public void quitExistingGame_resultsInGameRemoved() {
         User existingUser = this.generatedData.getUserCollection().getUser1();
         GameStartRequestDTO gameStartRequestDTO = GameStartRequestDTO.builder().gameType(GameType.WEREWOLF).build();
-        Response responseCreate = post(gameStartRequestDTO, GAME_BASE_URI + "start", getToken(existingUser));
-        GameDTO game = responseCreate.getBody().as(WerewolfGameDTO.class);
+        Response responseCreate = post(gameStartRequestDTO, WEREWOLF_BASE_URI + "host", getToken(existingUser));
+        WerewolfGameDTO game = responseCreate.getBody().as(WerewolfGameDTO.class);
 
         Response responseQuit = payload("", getToken(existingUser)).pathParam("identifier", game.getGameIdentifier().getToken())
-                .post(GAME_BASE_URI + "quit/{identifier}").then().extract().response();
+                .post(WEREWOLF_BASE_URI + "quit/{identifier}").then().extract().response();
         assertThat(responseQuit.statusCode()).isEqualTo(HttpStatus.OK.value());
 
         Response responseRejoin = payload("", getToken(existingUser)).pathParam("identifier", game.getGameIdentifier().getToken())
-                .post(GAME_BASE_URI + "join/{identifier}").then().extract().response();
+                .post(WEREWOLF_BASE_URI + "join/{identifier}").then().extract().response();
         assertThat(responseRejoin.statusCode()).isEqualTo(HttpStatus.CONFLICT.value());
     }
 
@@ -213,7 +213,7 @@ public class GameControllerTest extends BaseIntegrationTest {
     public void quitNonExistingGame_resultsInDataConflictException() {
         User existingUser = this.generatedData.getUserCollection().getUser1();
         Response responseQuit = payload("", getToken(existingUser)).pathParam("identifier", "NOT")
-                .post(GAME_BASE_URI + "quit/{identifier}").then().extract().response();
+                .post(WEREWOLF_BASE_URI + "quit/{identifier}").then().extract().response();
         assertThat(responseQuit.statusCode()).isEqualTo(HttpStatus.CONFLICT.value());
     }
 
@@ -222,11 +222,11 @@ public class GameControllerTest extends BaseIntegrationTest {
         User existingUser1 = this.generatedData.getUserCollection().getUser1();
         User existingUser2 = this.generatedData.getUserCollection().getUser2();
         GameStartRequestDTO gameStartRequestDTO = GameStartRequestDTO.builder().gameType(GameType.WEREWOLF).build();
-        Response responseCreate = post(gameStartRequestDTO, GAME_BASE_URI + "start", getToken(existingUser1));
-        GameDTO game = responseCreate.getBody().as(WerewolfGameDTO.class);
+        Response responseCreate = post(gameStartRequestDTO, WEREWOLF_BASE_URI + "host", getToken(existingUser1));
+        WerewolfGameDTO game = responseCreate.getBody().as(WerewolfGameDTO.class);
 
         Response responseQuit = payload("", getToken(existingUser2)).pathParam("identifier", game.getGameIdentifier().getToken())
-                .post(GAME_BASE_URI + "quit/{identifier}").then().extract().response();
+                .post(WEREWOLF_BASE_URI + "quit/{identifier}").then().extract().response();
         assertThat(responseQuit.statusCode()).isEqualTo(HttpStatus.CONFLICT.value());
     }
 
@@ -235,19 +235,19 @@ public class GameControllerTest extends BaseIntegrationTest {
         User existingUser1 = this.generatedData.getUserCollection().getUser1();
         User existingUser2 = this.generatedData.getUserCollection().getUser2();
         GameStartRequestDTO gameStartRequestDTO = GameStartRequestDTO.builder().gameType(GameType.WEREWOLF).build();
-        Response responseCreate = post(gameStartRequestDTO, GAME_BASE_URI + "start", getToken(existingUser1));
-        GameDTO game = responseCreate.getBody().as(WerewolfGameDTO.class);
+        Response responseCreate = post(gameStartRequestDTO, WEREWOLF_BASE_URI + "host", getToken(existingUser1));
+        WerewolfGameDTO game = responseCreate.getBody().as(WerewolfGameDTO.class);
 
         Response responseJoin = payload("", getToken(existingUser2)).pathParam("identifier", game.getGameIdentifier().getToken())
-                .post(GAME_BASE_URI + "join/{identifier}").then().extract().response();
+                .post(WEREWOLF_BASE_URI + "join/{identifier}").then().extract().response();
         assertThat(responseJoin.statusCode()).isEqualTo(HttpStatus.OK.value());
 
         Response responseQuit = payload("", getToken(existingUser1)).pathParam("identifier", game.getGameIdentifier().getToken())
-                .post(GAME_BASE_URI + "quit/{identifier}").then().extract().response();
+                .post(WEREWOLF_BASE_URI + "quit/{identifier}").then().extract().response();
         assertThat(responseQuit.statusCode()).isEqualTo(HttpStatus.OK.value());
 
         Response responseGet = payload("", getToken(existingUser2)).pathParam("identifier", game.getGameIdentifier().getToken())
-                .get(GAME_BASE_URI + "state/game/{identifier}").then().extract().response();
+                .get(WEREWOLF_BASE_URI + "state/game/{identifier}").then().extract().response();
         assertThat(responseGet.statusCode()).isEqualTo(HttpStatus.OK.value());
 
         WerewolfGameDTO gameAfterQuit = responseGet.getBody().as(WerewolfGameDTO.class);
@@ -258,11 +258,11 @@ public class GameControllerTest extends BaseIntegrationTest {
 
     private WerewolfGameDTO withWerewolfGame(User initiator, User... participants) {
         GameStartRequestDTO gameStartRequestDTO = GameStartRequestDTO.builder().gameType(GameType.WEREWOLF).build();
-        Response responseStart = post(gameStartRequestDTO, GAME_BASE_URI + "start", getToken(initiator));
+        Response responseStart = post(gameStartRequestDTO, WEREWOLF_BASE_URI + "host", getToken(initiator));
         WerewolfGameDTO gameDTO = responseStart.getBody().as(WerewolfGameDTO.class);
 
         for (User participant : participants) {
-            Response responseJoin = payload("", getToken(participant)).pathParam("identifier", gameDTO.getGameIdentifier().getToken()).post(GAME_BASE_URI + "join/{identifier}").then().extract().response();
+            Response responseJoin = payload("", getToken(participant)).pathParam("identifier", gameDTO.getGameIdentifier().getToken()).post(WEREWOLF_BASE_URI + "join/{identifier}").then().extract().response();
             gameDTO = responseJoin.getBody().as(WerewolfGameDTO.class);
         }
 

@@ -6,9 +6,9 @@ import org.mapstruct.Mapping;
 
 import java.util.Set;
 
-public interface PlayerMapper<P extends Player<?>, PDTO extends PlayerDTO> {
+public interface PlayerMapper<P extends Player<?>, PDTO extends PlayerDTO<?>> {
 
-    @Mapping(target = "gameRoleDTO", source = "gameRole")
+    @Mapping(target = "gameRole", source = "gameRole")
     PDTO toDTO(P player);
 
     Set<PDTO> toDTO(Set<P> players);

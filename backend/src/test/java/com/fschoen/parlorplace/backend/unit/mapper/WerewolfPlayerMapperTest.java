@@ -26,13 +26,14 @@ public class WerewolfPlayerMapperTest {
     private WerewolfPlayerMapper sut;
 
     @Test
-    public void mapWerewolfPlayer_withNoObfuscation_toWerewolfPlayerDTO() {
+    public void mapWerewolfPlayer_toWerewolfPlayerDTO() {
         WerewolfGameRole gameRole = WerewolfGameRole.builder().id(0L).werewolfRoleType(WerewolfRoleType.VILLAGER).build();
         WerewolfPlayer player = WerewolfPlayer.builder().id(0L).playerState(PlayerState.ALIVE).position(0).gameRole(gameRole).build();
         WerewolfPlayerDTO dto = sut.toDTO(player);
 
         assertThat(dto.getId()).isEqualTo(0);
-        assertThat(dto.getGameRoleDTO().getWerewolfRoleType()).isEqualTo(WerewolfRoleType.VILLAGER);
+        assertThat(dto.getPosition()).isEqualTo(0);
+        assertThat(dto.getGameRole().getWerewolfRoleType()).isEqualTo(WerewolfRoleType.VILLAGER);
     }
 
 }
