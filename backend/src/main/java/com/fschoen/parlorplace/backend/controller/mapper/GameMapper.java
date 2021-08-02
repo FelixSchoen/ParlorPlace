@@ -10,17 +10,12 @@ import com.fschoen.parlorplace.backend.utility.messaging.Messages;
 import org.mapstruct.Context;
 import org.mapstruct.Mapper;
 
-@Mapper(componentModel = "spring", uses = {PlayerMapper.class, GameIdentifierMapper.class})
-public interface GameMapper {
+import java.util.Set;
 
-    WerewolfGameDTO toDTO(WerewolfGame game, @Context Boolean obfuscate);
+public interface GameMapper<G extends Game<?, ?>, GDTO extends GameDTO> {
 
-    default GameDTO toDTO(Game game, @Context Boolean obfuscate) {
-        if (game instanceof WerewolfGame) {
-            return toDTO((WerewolfGame) game, obfuscate);
-        }
+    GDTO toDTO(G game);
 
-        throw new MappingException(Messages.exception(MessageIdentifiers.MAPPING_TYPE));
-    }
+    G fromDTO(GDTO gameDTO);
 
 }

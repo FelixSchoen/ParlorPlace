@@ -1,7 +1,7 @@
 package com.fschoen.parlorplace.backend.game.werewolf.dto.game;
 
 import com.fschoen.parlorplace.backend.controller.dto.game.PlayerDTO;
-import com.fschoen.parlorplace.backend.game.werewolf.dto.role.WerewolfRoleDTO;
+import com.fschoen.parlorplace.backend.game.werewolf.dto.role.WerewolfGameRoleDTO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -17,6 +17,6 @@ import lombok.experimental.SuperBuilder;
 @Data
 public class WerewolfPlayerDTO extends PlayerDTO {
 
-    private WerewolfRoleDTO werewolfRoleDTO;
+    private WerewolfGameRoleDTO gameRoleDTO;
 
 }

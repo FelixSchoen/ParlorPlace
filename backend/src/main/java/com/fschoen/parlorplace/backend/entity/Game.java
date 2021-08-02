@@ -2,7 +2,6 @@ package com.fschoen.parlorplace.backend.entity;
 
 import com.fschoen.parlorplace.backend.enumeration.GameState;
 import com.fschoen.parlorplace.backend.enumeration.GameType;
-import com.fschoen.parlorplace.backend.game.management.GameIdentifier;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -10,7 +9,6 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
-import org.junit.Rule;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -26,7 +24,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
-import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
 import java.util.Set;
@@ -37,19 +34,25 @@ import java.util.Set;
 @Data
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-public abstract class Game<G extends Game<G, P, RS>, P extends Player<P, G>, RS extends RuleSet> {
+public abstract class Game<P extends Player<?>, RS extends RuleSet> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "seq_game_instance_id")
     @SequenceGenerator(name = "seq_game_instance_id", sequenceName = "seq_game_instance_id")
     protected Long id;
 
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    @JoinColumn(referencedColumnName = "id")
+    @NotNull
+    protected GameIdentifier gameIdentifier;
+
     @Column(nullable = false)
     @Enumerated
     @NotNull
     protected GameState gameState;
 
-    @OneToMany(mappedBy = "game", targetEntity = Player.class, fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(targetEntity = Player.class, fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     @EqualsAndHashCode.Exclude
     @NotNull
     protected Set<P> players;
@@ -66,9 +69,6 @@ public abstract class Game<G extends Game<G, P, RS>, P extends Player<P, G>, RS 
 
     @Column
     protected Date endedAt;
-
-    @Transient
-    private GameIdentifier gameIdentifier;
 
     public abstract GameType getGameType();
 

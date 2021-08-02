@@ -17,7 +17,7 @@ import javax.validation.constraints.NotNull;
 @SuperBuilder(toBuilder = true)
 @ToString(callSuper = true)
 @Data
-public class WerewolfRoleDTO extends GameRoleDTO {
+public class WerewolfGameRoleDTO extends GameRoleDTO {
 
     @NotNull
     private WerewolfRoleType werewolfRoleType;

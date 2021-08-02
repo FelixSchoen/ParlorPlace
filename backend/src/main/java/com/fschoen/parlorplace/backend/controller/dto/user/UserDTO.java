@@ -35,6 +35,6 @@ public class UserDTO {
     private String email;
 
     @NotNull
-    private Set<UserRole> roles;
+    private Set<UserRole> userRoles;
 
 }

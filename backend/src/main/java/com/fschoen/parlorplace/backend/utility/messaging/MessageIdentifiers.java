@@ -20,6 +20,7 @@ public class MessageIdentifiers {
     public static final String DATA_MISMATCHED_ID = "data.mismatched.id";
     public static final String PLAYER_TYPE_MISMATCH = "player.type.mismatch";
     public static final String GAME_EXISTS_NOT = "game.exists.not";
+    public static final String GAME_UNIQUE_NOT = "game.unique.not";
     public static final String GAME_TYPE_MISMATCH = "game.type.mismatch";
     public static final String GAME_TYPE_UNKNOWN = "game.type.unknown";
     public static final String GAME_USER_INGAME = "game.user.ingame";

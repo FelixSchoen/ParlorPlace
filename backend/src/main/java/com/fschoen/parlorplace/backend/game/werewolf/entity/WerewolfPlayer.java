@@ -14,16 +14,12 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 
 @NoArgsConstructor
-@AllArgsConstructor
+//@AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 @SuperBuilder(toBuilder = true)
 @ToString(callSuper = true)
 @Data
 @Entity
-public class WerewolfPlayer extends Player<WerewolfPlayer, WerewolfGame> {
-
-    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(referencedColumnName = "id")
-    private WerewolfRole werewolfRole;
+public class WerewolfPlayer extends Player<WerewolfGameRole> {
 
 }

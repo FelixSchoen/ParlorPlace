@@ -155,7 +155,7 @@ public class UserControllerTest extends BaseIntegrationTest {
 
         UserDTO returnedUser = response.getBody().as(UserDTO.class);
         assertEquals("new" + existingUser.getNickname(), returnedUser.getNickname());
-        assertThat(returnedUser.getRoles().size()).isEqualTo(1);
+        assertThat(returnedUser.getUserRoles().size()).isEqualTo(1);
     }
 
     @Test
@@ -178,7 +178,7 @@ public class UserControllerTest extends BaseIntegrationTest {
 
         UserDTO returnedUser = response.getBody().as(UserDTO.class);
         assertEquals("new" + existingUser.getNickname(), returnedUser.getNickname());
-        assertThat(returnedUser.getRoles().size()).isEqualTo(1);
+        assertThat(returnedUser.getUserRoles().size()).isEqualTo(1);
     }
 
     @Test

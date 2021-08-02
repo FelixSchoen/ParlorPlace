@@ -20,7 +20,7 @@ import javax.validation.constraints.NotNull;
 @ToString(callSuper = true)
 @Data
 @Entity
-public class WerewolfRole extends GameRole {
+public class WerewolfGameRole extends GameRole {
 
     @Column(nullable = false)
     @NotNull

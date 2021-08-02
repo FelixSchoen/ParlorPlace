@@ -20,10 +20,10 @@ import java.util.Set;
         @JsonSubTypes.Type(value = WerewolfLobbyChangeRequestDTO.class, name = "WerewolfLobbyChangeRequestDTO")}
 )
 @Data
-public abstract class LobbyChangeRequestDTO {
+public abstract class LobbyChangeRequestDTO<PDTO extends PlayerDTO, RSDTO extends RuleSetDTO> {
 
-    public abstract Set<? extends PlayerDTO> getPlayers();
+    public abstract Set<PDTO> getPlayers();
 
-    public abstract RuleSetDTO getRuleSet();
+    public abstract RSDTO getRuleSet();
 
 }

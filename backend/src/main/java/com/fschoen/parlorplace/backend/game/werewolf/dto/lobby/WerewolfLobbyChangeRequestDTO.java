@@ -19,7 +19,7 @@ import java.util.Set;
 @SuperBuilder(toBuilder = true)
 @ToString(callSuper = true)
 @Data
-public class WerewolfLobbyChangeRequestDTO extends LobbyChangeRequestDTO {
+public class WerewolfLobbyChangeRequestDTO extends LobbyChangeRequestDTO<WerewolfPlayerDTO, WerewolfRuleSetDTO> {
 
     @Valid
     @NotNull

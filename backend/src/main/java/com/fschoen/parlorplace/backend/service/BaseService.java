@@ -12,11 +12,11 @@ import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.util.Optional;
 
-public abstract class AbstractService {
+public abstract class BaseService {
 
     private final UserRepository userRepository;
 
-    public AbstractService(UserRepository userRepository) {
+    public BaseService(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 

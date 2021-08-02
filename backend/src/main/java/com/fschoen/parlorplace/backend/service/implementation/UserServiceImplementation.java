@@ -11,7 +11,7 @@ import com.fschoen.parlorplace.backend.exception.DataConflictException;
 import com.fschoen.parlorplace.backend.repository.UserRepository;
 import com.fschoen.parlorplace.backend.security.JwtUtils;
 import com.fschoen.parlorplace.backend.security.UserDetailsImplementation;
-import com.fschoen.parlorplace.backend.service.AbstractService;
+import com.fschoen.parlorplace.backend.service.BaseService;
 import com.fschoen.parlorplace.backend.service.RefreshTokenService;
 import com.fschoen.parlorplace.backend.service.UserService;
 import com.fschoen.parlorplace.backend.utility.messaging.MessageIdentifiers;
@@ -31,7 +31,7 @@ import java.util.stream.Collectors;
 
 @Slf4j
 @Service
-public class UserServiceImplementation extends AbstractService implements UserService {
+public class UserServiceImplementation extends BaseService implements UserService {
 
     private final RefreshTokenService refreshTokenService;
     private final UserRepository userRepository;
