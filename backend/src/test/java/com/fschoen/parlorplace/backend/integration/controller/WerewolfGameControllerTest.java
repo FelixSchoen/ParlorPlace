@@ -13,13 +13,11 @@ import com.fschoen.parlorplace.backend.integration.base.BaseIntegrationTest;
 import io.restassured.response.Response;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
-import org.springframework.test.annotation.DirtiesContext;
 
 import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 public class WerewolfGameControllerTest extends BaseIntegrationTest {
 
     @Test
@@ -177,7 +175,7 @@ public class WerewolfGameControllerTest extends BaseIntegrationTest {
         WerewolfGameDTO werewolfGameDTO = withWerewolfGame(existingUser1, existingUser2);
 
         Response response = payload("", getToken(existingUser1)).pathParam("identifier", werewolfGameDTO.getGameIdentifier().getToken())
-                .get(WEREWOLF_BASE_URI + "state/game/{identifier}").then().extract().response();
+                .get(WEREWOLF_BASE_URI + "{identifier}").then().extract().response();
         assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
 
         WerewolfGameDTO gameDTOResponse = response.getBody().as(WerewolfGameDTO.class);
@@ -189,7 +187,7 @@ public class WerewolfGameControllerTest extends BaseIntegrationTest {
         User existingUser1 = this.generatedData.getUserCollection().getUser1();
 
         Response response = payload("", getToken(existingUser1)).pathParam("identifier", "NOT")
-                .get(WEREWOLF_BASE_URI + "state/game/{identifier}").then().extract().response();
+                .get(WEREWOLF_BASE_URI + "{identifier}").then().extract().response();
         assertThat(response.statusCode()).isEqualTo(HttpStatus.CONFLICT.value());
     }
 
@@ -247,26 +245,13 @@ public class WerewolfGameControllerTest extends BaseIntegrationTest {
         assertThat(responseQuit.statusCode()).isEqualTo(HttpStatus.OK.value());
 
         Response responseGet = payload("", getToken(existingUser2)).pathParam("identifier", game.getGameIdentifier().getToken())
-                .get(WEREWOLF_BASE_URI + "state/game/{identifier}").then().extract().response();
+                .get(WEREWOLF_BASE_URI + "{identifier}").then().extract().response();
         assertThat(responseGet.statusCode()).isEqualTo(HttpStatus.OK.value());
 
         WerewolfGameDTO gameAfterQuit = responseGet.getBody().as(WerewolfGameDTO.class);
         assertThat(gameAfterQuit.getPlayers().size()).isEqualTo(1);
         assertThat(gameAfterQuit.getPlayers().stream().findFirst().orElseThrow().getUser().getId()).isEqualTo(existingUser2.getId());
         assertThat(gameAfterQuit.getPlayers().stream().findFirst().orElseThrow().getLobbyRole()).isEqualTo(LobbyRole.ROLE_ADMIN);
-    }
-
-    private WerewolfGameDTO withWerewolfGame(User initiator, User... participants) {
-        GameStartRequestDTO gameStartRequestDTO = GameStartRequestDTO.builder().gameType(GameType.WEREWOLF).build();
-        Response responseStart = post(gameStartRequestDTO, WEREWOLF_BASE_URI + "host", getToken(initiator));
-        WerewolfGameDTO gameDTO = responseStart.getBody().as(WerewolfGameDTO.class);
-
-        for (User participant : participants) {
-            Response responseJoin = payload("", getToken(participant)).pathParam("identifier", gameDTO.getGameIdentifier().getToken()).post(WEREWOLF_BASE_URI + "join/{identifier}").then().extract().response();
-            gameDTO = responseJoin.getBody().as(WerewolfGameDTO.class);
-        }
-
-        return gameDTO;
     }
 
 }

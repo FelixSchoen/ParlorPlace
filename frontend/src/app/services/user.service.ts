@@ -53,8 +53,8 @@ export class UserService {
   public isAdmin(
     user: User
   ): boolean {
-    if (user.roles == null) return false;
-    return user.roles.includes(UserRole.ADMIN);
+    if (user.userRoles == null) return false;
+    return user.userRoles.includes(UserRole.ADMIN);
   }
 
 }

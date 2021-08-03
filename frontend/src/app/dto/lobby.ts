@@ -7,9 +7,10 @@ export abstract class LobbyChangeRequest {
   }
 }
 
-export class WerewolfLobbyChangeRequest {
+export class WerewolfLobbyChangeRequest extends LobbyChangeRequest {
   constructor(public players: Set<WerewolfPlayer>,
               public ruleSet: WerewolfRuleSet) {
+    super(players, ruleSet);
   }
 
   public toJSON(): WerewolfLobbyChangeRequest {

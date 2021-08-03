@@ -99,7 +99,7 @@ public abstract class AbstractGameService<
 
         validateActiveGameExists(gameIdentifier);
         validateActiveGameInLobby(gameIdentifier);
-        validateUserNotInActiveGame(gameIdentifier, user);
+        validateUserNotInSpecificActiveGame(gameIdentifier, user);
 
         G game = getActiveGame(gameIdentifier);
         P player;
@@ -220,14 +220,13 @@ public abstract class AbstractGameService<
     }
 
     /**
-     * Returns the active game that the principal is part of.
+     * Returns the active game.
      *
      * @param gameIdentifier The game identifier of the game to look for
      * @return The found game
      */
     public G getGame(GameIdentifier gameIdentifier) {
         validateActiveGameExists(gameIdentifier);
-        validateUserInActiveGame(gameIdentifier, getPrincipal());
 
         return this.getActiveGame(gameIdentifier);
     }
@@ -286,14 +285,14 @@ public abstract class AbstractGameService<
         G game = this.getActiveGame(gameIdentifier);
 
         if (game.getPlayers().stream().noneMatch(player -> player.getUser().equals(user)))
-            throw new GameException(Messages.exception(MessageIdentifiers.GAME_USER_INGAME));
+            throw new GameException(Messages.exception(MessageIdentifiers.GAME_USER_INGAME_NOT));
     }
 
-    protected void validateUserNotInActiveGame(GameIdentifier gameIdentifier, User user) throws GameException {
+    protected void validateUserNotInSpecificActiveGame(GameIdentifier gameIdentifier, User user) throws GameException {
         G game = this.getActiveGame(gameIdentifier);
 
         if (game.getPlayers().stream().anyMatch(player -> player.getUser().equals(user)))
-            throw new GameException(Messages.exception(MessageIdentifiers.GAME_USER_INGAME));
+            throw new GameException(Messages.exception(MessageIdentifiers.GAME_USER_INGAME_THIS));
     }
 
     protected void validateUserLobbyAdmin(GameIdentifier gameIdentifier, User user) throws GameException {

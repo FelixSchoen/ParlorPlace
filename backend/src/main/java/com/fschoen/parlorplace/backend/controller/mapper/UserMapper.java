@@ -5,11 +5,9 @@ import com.fschoen.parlorplace.backend.controller.dto.user.UserLoginRequestDTO;
 import com.fschoen.parlorplace.backend.controller.dto.user.UserRegisterRequestDTO;
 import com.fschoen.parlorplace.backend.controller.dto.user.UserUpdateRequestDTO;
 import com.fschoen.parlorplace.backend.entity.User;
-import org.mapstruct.Context;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;
-import org.mapstruct.Named;
 
 import java.util.Set;
 

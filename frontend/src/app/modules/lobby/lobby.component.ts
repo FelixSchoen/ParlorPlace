@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from "@angular/router";
-import {GameService} from "../../services/game.service";
+import {AbstractGameService} from "../../services/abstract-game.service";
 import {Game, GameIdentifier} from "../../dto/game";
 import {NotificationService} from "../../services/notification.service";
 import {Player} from "../../dto/player";
@@ -23,7 +23,7 @@ export class LobbyComponent<G extends Game, P extends Player> implements OnInit 
   public currentPlayer: P;
   public game: G;
 
-  constructor(public userService: UserService, public gameService: GameService<G>, public notificationService: NotificationService, public activatedRoute: ActivatedRoute, public router: Router) {
+  constructor(public userService: UserService, public gameService: AbstractGameService<G>, public notificationService: NotificationService, public activatedRoute: ActivatedRoute, public router: Router) {
   }
 
   ngOnInit(): void {
@@ -56,7 +56,7 @@ export class LobbyComponent<G extends Game, P extends Player> implements OnInit 
 
   protected refresh(): void {
     this.refreshLoading = true;
-    this.gameService.getGameState(this.gameIdentifier).subscribe(
+    this.gameService.getGame(this.gameIdentifier).subscribe(
       {
         next: (result: G) => {
           this.game = result

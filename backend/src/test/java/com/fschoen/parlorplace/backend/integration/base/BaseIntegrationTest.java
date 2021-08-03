@@ -1,9 +1,12 @@
 package com.fschoen.parlorplace.backend.integration.base;
 
 import com.fschoen.parlorplace.backend.ParlorPlaceApplication;
+import com.fschoen.parlorplace.backend.controller.dto.game.GameStartRequestDTO;
 import com.fschoen.parlorplace.backend.datagenerator.DatabasePopulator;
 import com.fschoen.parlorplace.backend.datagenerator.GeneratedData;
 import com.fschoen.parlorplace.backend.entity.User;
+import com.fschoen.parlorplace.backend.enumeration.GameType;
+import com.fschoen.parlorplace.backend.game.werewolf.dto.game.WerewolfGameDTO;
 import com.fschoen.parlorplace.backend.integration.utility.TestIsolationService;
 import com.fschoen.parlorplace.backend.security.JwtUtils;
 import com.fschoen.parlorplace.backend.security.UserDetailsImplementation;
@@ -46,6 +49,7 @@ public abstract class BaseIntegrationTest {
     protected String BASE_URI = "/";
     protected String USER_BASE_URI = BASE_URI + "user/";
     protected String GAME_BASE_URI = BASE_URI + "game/";
+    protected String GENERAL_BASE_URI = GAME_BASE_URI + "general/";
     protected String WEREWOLF_BASE_URI = GAME_BASE_URI + "werewolf/";
 
     @LocalServerPort
@@ -59,6 +63,8 @@ public abstract class BaseIntegrationTest {
         RestAssured.port = port;
     }
 
+    // Authentication
+
     protected String getToken(User userInTestdata) {
         return getToken(userInTestdata.getUsername(), generatedData.getPasswordCollection().get(userInTestdata));
     }
@@ -70,6 +76,23 @@ public abstract class BaseIntegrationTest {
         String accessToken = jwtUtils.generateJwtToken(userDetails);
         return Strings.join("Bearer ", accessToken).with("");
     }
+
+    // Games
+
+    protected WerewolfGameDTO withWerewolfGame(User initiator, User... participants) {
+        GameStartRequestDTO gameStartRequestDTO = GameStartRequestDTO.builder().gameType(GameType.WEREWOLF).build();
+        Response responseStart = post(gameStartRequestDTO, WEREWOLF_BASE_URI + "host", getToken(initiator));
+        WerewolfGameDTO gameDTO = responseStart.getBody().as(WerewolfGameDTO.class);
+
+        for (User participant : participants) {
+            Response responseJoin = payload("", getToken(participant)).pathParam("identifier", gameDTO.getGameIdentifier().getToken()).post(WEREWOLF_BASE_URI + "join/{identifier}").then().extract().response();
+            gameDTO = responseJoin.getBody().as(WerewolfGameDTO.class);
+        }
+
+        return gameDTO;
+    }
+
+    // REST
 
     protected Response post(Object o, String URI) {
         return post(o, URI, "");

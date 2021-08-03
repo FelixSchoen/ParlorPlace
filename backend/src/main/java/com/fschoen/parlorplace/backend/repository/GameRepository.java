@@ -1,7 +1,6 @@
 package com.fschoen.parlorplace.backend.repository;
 
 import com.fschoen.parlorplace.backend.entity.Game;
-import com.fschoen.parlorplace.backend.entity.GameIdentifier;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.repository.NoRepositoryBean;
 

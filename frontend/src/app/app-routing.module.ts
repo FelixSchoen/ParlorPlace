@@ -8,7 +8,7 @@ const routes: Routes = [
   {path: 'profile', loadChildren: () => import("./modules/profile/profile.module").then(m => m.ProfileModule), canActivate: [AuthGuard]},
   {path: 'game', loadChildren: () => import("./modules/game/game.module").then(m => m.GameModule), canActivate: [AuthGuard]},
   {path: 'experimental', loadChildren: () => import("./modules/experimental/experimental.module").then(m => m.ExperimentalModule)},
-  {path: '**', redirectTo: 'entry', pathMatch: 'full'},
+  {path: '**', redirectTo: 'profile', pathMatch: 'full'},
 ];
 
 @NgModule({

@@ -36,3 +36,10 @@ export class GameStartRequest {
   constructor(public gameType: GameType) {
   }
 }
+
+export class GameBaseInformation {
+  constructor(public gameIdentifier: GameIdentifier,
+              public gameType: GameType,
+              public gameState: GameState) {
+  }
+}

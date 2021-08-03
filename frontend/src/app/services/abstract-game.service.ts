@@ -1,4 +1,3 @@
-import {Injectable} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {Game, GameIdentifier, GameStartRequest} from "../dto/game";
 import {Observable} from "rxjs";
@@ -8,44 +7,43 @@ import {environment} from "../../environments/environment";
 
 const GAME_URI = environment.BASE_URI + environment.general.GAME_API;
 
-@Injectable({
-  providedIn: 'root'
-})
-export class GameService<G extends Game> {
+export abstract class AbstractGameService<G extends Game> {
 
-  constructor(private httpClient: HttpClient) {
+  protected SPECIFIC_GAME_URI: string;
+
+  protected constructor(protected httpClient: HttpClient) {
   }
 
-  public startGame(
+  public hostGame(
     gameStartRequest: GameStartRequest
   ): Observable<G> {
-    return this.httpClient.post<G>(GAME_URI + "start", gameStartRequest);
+    return this.httpClient.post<G>(GAME_URI + this.SPECIFIC_GAME_URI + "host", gameStartRequest);
   }
 
   public joinGame(
     gameIdentifier: GameIdentifier
   ): Observable<G> {
-    return this.httpClient.post<G>(GAME_URI + "join/" + gameIdentifier.token, null);
+    return this.httpClient.post<G>(GAME_URI + this.SPECIFIC_GAME_URI + "join/" + gameIdentifier.token, null);
   }
 
   public quitGame(
     gameIdentifier: GameIdentifier,
     user: User | null
   ): Observable<void> {
-    return this.httpClient.post<void>(GAME_URI + "quit/" + gameIdentifier.token, user);
+    return this.httpClient.post<void>(GAME_URI + this.SPECIFIC_GAME_URI + "quit/" + gameIdentifier.token, user);
   }
 
   public changeLobby(
     gameIdentifier: GameIdentifier,
     lobbyChangeRequest: LobbyChangeRequest
   ): Observable<G> {
-    return this.httpClient.post<G>(GAME_URI + "lobby/change/" + gameIdentifier.token, lobbyChangeRequest);
+    return this.httpClient.post<G>(GAME_URI + this.SPECIFIC_GAME_URI + "lobby/change/" + gameIdentifier.token, lobbyChangeRequest);
   }
 
-  public getGameState(
+  public getGame(
     gameIdentifier: GameIdentifier
   ): Observable<G> {
-    return this.httpClient.get<G>(GAME_URI + "state/game/" + gameIdentifier.token);
+    return this.httpClient.get<G>(GAME_URI + this.SPECIFIC_GAME_URI + gameIdentifier.token);
   }
 
 

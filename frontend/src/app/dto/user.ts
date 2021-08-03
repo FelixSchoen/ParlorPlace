@@ -5,7 +5,7 @@ export class User {
               public username: string,
               public nickname: string,
               public email: string,
-              public roles: UserRole[]) {
+              public userRoles: UserRole[]) {
   }
 }
 

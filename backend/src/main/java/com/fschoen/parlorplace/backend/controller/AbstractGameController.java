@@ -15,7 +15,7 @@ import com.fschoen.parlorplace.backend.entity.GameIdentifier;
 import com.fschoen.parlorplace.backend.entity.GameRole;
 import com.fschoen.parlorplace.backend.entity.Player;
 import com.fschoen.parlorplace.backend.entity.RuleSet;
-import com.fschoen.parlorplace.backend.exception.NotImplementedException;
+import com.fschoen.parlorplace.backend.entity.User;
 import com.fschoen.parlorplace.backend.repository.GameRepository;
 import com.fschoen.parlorplace.backend.service.AbstractGameService;
 import com.fschoen.parlorplace.backend.validation.implementation.GameValidator;
@@ -39,6 +39,7 @@ public abstract class AbstractGameController<
 
     private final AbstractGameService<G, P, RS, GR, ? extends GameRepository<G>> gameService;
 
+    private final UserMapper userMapper;
     private final GameMapper<G, GDTO> gameMapper;
     private final PlayerMapper<P, PDTO> playerMapper;
     private final RuleSetMapper<RS, RSDTO> ruleSetMapper;
@@ -46,6 +47,7 @@ public abstract class AbstractGameController<
     private final GameValidator validator = new GameValidator();
 
     public AbstractGameController(AbstractGameService<G, P, RS, GR, ? extends GameRepository<G>> gameService, UserMapper userMapper, GameMapper<G, GDTO> gameMapper, PlayerMapper<P, PDTO> playerMapper, RuleSetMapper<RS, RSDTO> ruleSetMapper) {
+        this.userMapper = userMapper;
         this.gameService = gameService;
         this.gameMapper = gameMapper;
         this.playerMapper = playerMapper;
@@ -77,8 +79,11 @@ public abstract class AbstractGameController<
     public ResponseEntity<Void> quitGame(@PathVariable("identifier") String identifier, @RequestBody(required = false) UserDTO userDTO) {
         if (userDTO == null)
             this.gameService.quitGame(new GameIdentifier(identifier));
-        else
-            throw new NotImplementedException("Not implemented");
+        else {
+            User user = this.userMapper.fromDTO(userDTO);
+            this.gameService.quitGame(new GameIdentifier(identifier));
+        }
+
 
         return ResponseEntity.status(HttpStatus.OK).build();
     }
@@ -98,8 +103,8 @@ public abstract class AbstractGameController<
         return ResponseEntity.status(HttpStatus.OK).body(gameDTO);
     }
 
-    @GetMapping("/state/game/{identifier}")
-    public ResponseEntity<GDTO> getGameState(@PathVariable("identifier") String identifier) {
+    @GetMapping("/{identifier}")
+    public ResponseEntity<GDTO> getGame(@PathVariable("identifier") String identifier) {
         GameIdentifier gameIdentifier = new GameIdentifier(identifier);
         G game = this.gameService.getGame(gameIdentifier);
         GDTO gameDTO = gameMapper.toDTO(game);

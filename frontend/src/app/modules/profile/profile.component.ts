@@ -1,4 +1,4 @@
-import {Component, ElementRef, Inject, OnInit, ViewChild} from '@angular/core';
+import {Component, ElementRef, Inject, Injector, OnInit, ViewChild} from '@angular/core';
 import {ActivatedRoute, Router} from "@angular/router";
 import {UserService} from "../../services/user.service";
 import {User, UserUpdateRequest} from "../../dto/user";
@@ -15,10 +15,15 @@ import {MatChipInputEvent} from "@angular/material/chips";
 import {ENTER} from "@angular/cdk/keycodes";
 import {MatAutocompleteSelectedEvent} from "@angular/material/autocomplete";
 import {GameType, GameTypeUtil} from "../../enums/gametype";
-import {GameService} from "../../services/game.service";
 import {Game, GameIdentifier, GameStartRequest} from "../../dto/game";
 import {removeFromArray} from "../../utility/utility";
 import {environment} from "../../../environments/environment";
+import {WerewolfGameService} from "../../services/werewolf-game.service";
+import {GeneralGameService} from "../../services/general-game.service";
+
+export const GameServiceMap = {
+  WEREWOLF: WerewolfGameService
+}
 
 @Component({
   selector: 'app-profile',
@@ -39,8 +44,20 @@ export class ProfileComponent implements OnInit {
 
   public userRoleToString = UserRoleUtil.toStringRepresentation;
 
-  constructor(public userService: UserService, public gameService: GameService<Game>, private tokenService: TokenService, private notificationService: NotificationService,
-              private dialog: MatDialog, private activatedRoute: ActivatedRoute, private router: Router) {
+  private gameServiceMap = new Map<GameType, any>([
+    [GameType.WEREWOLF, WerewolfGameService],
+  ]);
+
+  constructor(
+    public userService: UserService,
+    private generalGameService: GeneralGameService,
+    private tokenService: TokenService,
+    private notificationService: NotificationService,
+    private dialog: MatDialog,
+    private injector: Injector,
+    private activatedRoute: ActivatedRoute,
+    private router: Router,
+  ) {
   }
 
   ngOnInit(): void {
@@ -105,7 +122,7 @@ export class ProfileComponent implements OnInit {
           password: "",
           nickname: "",
           email: "",
-          roles: [...this.profileUser.roles]
+          roles: [...this.profileUser.userRoles]
         }
       }
     });
@@ -146,21 +163,40 @@ export class ProfileComponent implements OnInit {
     dialogRef.afterClosed().subscribe({
         next: result => {
           if (result.host) {
-            this.gameService.startGame(new GameStartRequest(result.game)).subscribe({
-                next: result => {
+            let gameServiceType = this.gameServiceMap.get(result.gameType);
+            if (gameServiceType == undefined) {
+              console.error("Game service could not be found");
+              return;
+            }
+
+            let gameService = this.injector.get(gameServiceType);
+
+            gameService.hostGame(new GameStartRequest(result.gameType)).subscribe({
+                next: (result: Game) => {
                   this.router.navigate([environment.general.GAME_URI + result.gameIdentifier.token]).then();
                 },
-                error: error => this.notificationService.showError(error.error)
+                error: (error: { error: string; }) => this.notificationService.showError(error.error)
               }
             )
           } else if (result.submitted) {
-            this.gameService.joinGame(new GameIdentifier(result.identifier)).subscribe({
-                next: result => {
-                  this.router.navigate([environment.general.GAME_URI + result.gameIdentifier.token]).then();
-                },
-                error: error => this.notificationService.showError(error.error)
+            this.generalGameService.getBaseInformation(new GameIdentifier(result.identifier)).subscribe({
+              next: (result) => {
+                let gameServiceType = this.gameServiceMap.get(result.gameType);
+                if (gameServiceType == undefined) {
+                  console.error("Game service could not be found");
+                  return;
+                }
+                let gameService = this.injector.get(gameServiceType);
+
+                gameService.joinGame(new GameIdentifier(result.gameIdentifier.token)).subscribe({
+                  next: (result: Game) => {
+                    this.router.navigate([environment.general.GAME_URI + result.gameIdentifier.token]).then();
+                  },
+                  error: (error: { error: string; }) => this.notificationService.showError(error.error)
+                });
+
               }
-            )
+            })
           }
         }
       }
@@ -210,7 +246,7 @@ export interface EnterGameDialogOutputData {
   submitted: boolean;
   host: boolean;
   identifier: string;
-  game: GameType | null;
+  gameType: GameType | null;
 }
 
 @Component({
@@ -352,7 +388,7 @@ export class DialogContentProfileEnterGameDialog implements OnInit {
 
   onHost(game: GameType) {
     this.data.outputData.host = true;
-    this.data.outputData.game = game;
+    this.data.outputData.gameType = game;
     this.dialogRef.close(this.data.outputData);
   }
 

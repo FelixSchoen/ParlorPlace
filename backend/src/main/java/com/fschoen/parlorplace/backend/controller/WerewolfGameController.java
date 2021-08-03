@@ -1,6 +1,5 @@
 package com.fschoen.parlorplace.backend.controller;
 
-import com.fschoen.parlorplace.backend.controller.mapper.GameMapper;
 import com.fschoen.parlorplace.backend.controller.mapper.UserMapper;
 import com.fschoen.parlorplace.backend.game.werewolf.dto.game.WerewolfGameDTO;
 import com.fschoen.parlorplace.backend.game.werewolf.dto.game.WerewolfPlayerDTO;

@@ -1,7 +1,6 @@
 package com.fschoen.parlorplace.backend.unit.mapper;
 
 import com.fschoen.parlorplace.backend.controller.mapper.GameIdentifierMapperImpl;
-import com.fschoen.parlorplace.backend.controller.mapper.GameMapper;
 import com.fschoen.parlorplace.backend.controller.mapper.RoleMapperImpl;
 import com.fschoen.parlorplace.backend.controller.mapper.UserMapperImpl;
 import com.fschoen.parlorplace.backend.entity.Role;

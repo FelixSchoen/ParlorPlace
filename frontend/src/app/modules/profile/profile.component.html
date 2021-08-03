@@ -33,7 +33,7 @@
         <mat-card-subtitle>
           <mat-chip-list class="pp-center">
             <mat-chip
-              *ngFor="let role of this.profileUser.roles"
+              *ngFor="let role of this.profileUser.userRoles"
               [selectable]="false"
               [removable]="false">
               {{userRoleToString(role)}}

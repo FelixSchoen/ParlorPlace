@@ -2,11 +2,11 @@ import {Component, ComponentFactoryResolver, OnInit, ViewChild} from '@angular/c
 import {GameDirective} from "./game.directive";
 import {WerewolfLobbyComponent} from "../lobby/werewolf-lobby/werewolf-lobby.component";
 import {ActivatedRoute, Router} from "@angular/router";
-import {GameService} from "../../services/game.service";
-import {Game, GameIdentifier} from "../../dto/game";
+import {GameBaseInformation, GameIdentifier} from "../../dto/game";
 import {GameType} from "../../enums/gametype";
 import {NotificationService} from "../../services/notification.service";
 import {environment} from "../../../environments/environment";
+import {GeneralGameService} from "../../services/general-game.service";
 
 export interface GameComponents {
   mainComponent?: any,
@@ -30,7 +30,7 @@ export class GameComponent implements OnInit {
   ]); //TODO Add main component
 
   constructor(
-    private gameService: GameService<Game>,
+    private generalGameService: GeneralGameService,
     private notificationService: NotificationService,
     private activatedRoute: ActivatedRoute,
     private componentFactoryResolver: ComponentFactoryResolver,
@@ -41,22 +41,18 @@ export class GameComponent implements OnInit {
   ngOnInit(): void {
     const queryIdentifier: string = this.activatedRoute.snapshot.params["identifier"];
 
-    // if (queryIdentifier != undefined && queryIdentifier.length > 0) {
-    //   this.loadComponent(queryIdentifier);
-    //   console.log(queryIdentifier)
-    // }
-
-    console.log(queryIdentifier)
-
+    if (queryIdentifier != undefined && queryIdentifier.length > 0) {
+      this.loadComponent(queryIdentifier);
+    }
 
   }
 
   private loadComponent(componentIdentifier: string) {
     this.loading = true;
 
-    this.gameService.getGameState(new GameIdentifier(componentIdentifier)).subscribe({
-      next: (game: Game) => {
-        let gameComponent = this.gameComponentMap.get(game.gameType);
+    this.generalGameService.getBaseInformation(new GameIdentifier(componentIdentifier)).subscribe({
+      next: (gameBaseInformation: GameBaseInformation) => {
+        let gameComponent = this.gameComponentMap.get(gameBaseInformation.gameType);
 
         if (gameComponent == undefined) {
           console.error("Unknown game type");
@@ -75,7 +71,7 @@ export class GameComponent implements OnInit {
         const viewContainerRef = this.gameHost.viewContainerRef;
         viewContainerRef.clear();
 
-        const componentRef = viewContainerRef.createComponent(componentFactory);
+        viewContainerRef.createComponent(componentFactory);
 
         this.loading = false;
       },
