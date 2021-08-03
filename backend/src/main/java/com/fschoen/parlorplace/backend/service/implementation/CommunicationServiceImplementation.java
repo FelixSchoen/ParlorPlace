@@ -29,7 +29,7 @@ public class CommunicationServiceImplementation implements CommunicationService 
     public void sendGameStaleNotification(GameIdentifier gameIdentifier, Set<User> recipients) {
         for (User user : recipients) {
             try {
-                messagingTemplate.convertAndSendToUser(user.getUsername(), DESTINATION_URI + gameIdentifier.getToken(), ClientNotification.builder().staleType(StaleType.GAME).test("Test").build());
+                messagingTemplate.convertAndSendToUser(user.getUsername(), DESTINATION_URI + gameIdentifier.getToken(), ClientNotification.builder().staleType(StaleType.GAME).build());
             } catch (MessagingException e) {
                 log.error("Could not send Game Stale Notification for User {}", user.getUsername());
             }

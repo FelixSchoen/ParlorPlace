@@ -19,6 +19,4 @@ public class ClientNotification {
     @NotNull
     StaleType staleType;
 
-    String test;
-
 }

@@ -61,7 +61,6 @@ public class CommunicationServiceTest extends BaseIntegrationTest {
         }});
 
         ClientNotification clientNotification = readSocket(stompSession, new GameIdentifier("TEST"));
-        System.out.println(clientNotification);
         assertThat(clientNotification.getStaleType()).isEqualTo(StaleType.GAME);
     }
 

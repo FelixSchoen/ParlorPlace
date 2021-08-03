@@ -239,11 +239,10 @@ public abstract class BaseIntegrationTest {
 
         @Override
         public void handleFrame(StompHeaders headers, Object payload) {
-            System.out.println("TEST: "+payload);
-            log.info(new String((byte[]) payload));
+            // TODO After hours of research deserialization still does not work - The socket receives the correct representation of a ClientNotification, but in deserialization all the fields are discarded and set to null
             ClientNotification clientNotification = (ClientNotification) payload;
-            log.info("Received Client Notification: {}", clientNotification);
-            notificationFuture.complete((ClientNotification) payload);
+            log.debug("Received Client Notification: {}", clientNotification);
+            notificationFuture.complete(clientNotification);
         }
 
     }
