@@ -20,10 +20,7 @@ import {removeFromArray} from "../../utility/utility";
 import {environment} from "../../../environments/environment";
 import {WerewolfGameService} from "../../services/werewolf-game.service";
 import {GeneralGameService} from "../../services/general-game.service";
-
-export const GameServiceMap = {
-  WEREWOLF: WerewolfGameService
-}
+import {AbstractGameService} from "../../services/abstract-game.service";
 
 @Component({
   selector: 'app-profile',
@@ -41,6 +38,8 @@ export class ProfileComponent implements OnInit {
 
   public userSearchControl: FormControl = new FormControl();
   public filteredOptions: Observable<User[]>;
+
+  public activeGamesMap = new Map<GameType, Game[]>();
 
   public userRoleToString = UserRoleUtil.toStringRepresentation;
 
@@ -84,25 +83,34 @@ export class ProfileComponent implements OnInit {
     )
 
     this.userService.getCurrentUser().subscribe({
-        next: (user) => {
-          this.currentUser = user;
-          if (queryName == undefined) {
-            this.router.navigate([environment.general.PROFILE_URI + user.username]).then();
-          } else {
-            this.userService.getUserByUsername(queryName).subscribe({
-              next: (user: User) => {
-                this.profileUser = user
-                this.error = false;
-              },
-              error: (error) => {
-                this.errorMessage = error.error;
-                this.error = true;
-              }
-            }).add(() => this.loading = false)
-          }
+      next: (user) => {
+        this.currentUser = user;
+        if (queryName == undefined) {
+          this.router.navigate([environment.general.PROFILE_URI + user.username]).then();
+        } else {
+          this.userService.getUserByUsername(queryName).subscribe({
+            next: (user: User) => {
+              this.profileUser = user
+              this.error = false;
+            },
+            error: (error) => {
+              this.errorMessage = error.error;
+              this.error = true;
+            }
+          }).add(() => this.loading = false)
         }
       }
-    );
+    });
+
+    this.gameServiceMap.forEach((value: any, key:GameType) => {
+      let gameService: AbstractGameService<any> = this.injector.get(value);
+      gameService.getUserActiveGames().subscribe({
+        next: (next) => {
+          this.activeGamesMap.set(key, next);
+          console.log(this.activeGamesMap.get(key))
+        }
+      });
+    })
   }
 
   onSelect($event: any) {
@@ -215,6 +223,10 @@ export class ProfileComponent implements OnInit {
 
   displayUser(user: User): string {
     return user ? user.nickname + " (" + user.username + ")" : "";
+  }
+
+  joinGameFromList(item: Game) {
+    this.router.navigate([environment.general.GAME_URI + item.gameIdentifier.token]).then();
   }
 
 }

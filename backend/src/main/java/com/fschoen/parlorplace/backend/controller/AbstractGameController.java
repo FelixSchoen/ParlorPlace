@@ -26,6 +26,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import java.util.List;
+
 public abstract class AbstractGameController<
         G extends Game<P, RS>,
         P extends Player<GR>,
@@ -67,7 +69,7 @@ public abstract class AbstractGameController<
     }
 
     @PostMapping("/join/{identifier}")
-    public ResponseEntity<GameDTO> joinGame(@PathVariable("identifier") String identifier) {
+    public ResponseEntity<GDTO> joinGame(@PathVariable("identifier") String identifier) {
         G game = this.gameService.joinGame(new GameIdentifier(identifier));
 
         GDTO gameDTO = gameMapper.toDTO(game);
@@ -81,9 +83,8 @@ public abstract class AbstractGameController<
             this.gameService.quitGame(new GameIdentifier(identifier));
         else {
             User user = this.userMapper.fromDTO(userDTO);
-            this.gameService.quitGame(new GameIdentifier(identifier));
+            this.gameService.quitGame(new GameIdentifier(identifier), user);
         }
-
 
         return ResponseEntity.status(HttpStatus.OK).build();
     }
@@ -110,6 +111,14 @@ public abstract class AbstractGameController<
         GDTO gameDTO = gameMapper.toDTO(game);
 
         return ResponseEntity.status(HttpStatus.OK).body(gameDTO);
+    }
+
+    @GetMapping("/active")
+    public ResponseEntity<List<GDTO>> getUserActiveGames() {
+        List<G> games = this.gameService.getUserActiveGames();
+        List<GDTO> gameDTOS = gameMapper.toDTO(games);
+
+        return ResponseEntity.status(HttpStatus.OK).body(gameDTOS);
     }
 
 }
