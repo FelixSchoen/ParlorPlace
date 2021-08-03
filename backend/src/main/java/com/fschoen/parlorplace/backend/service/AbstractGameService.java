@@ -271,6 +271,8 @@ public abstract class AbstractGameService<
     }
 
     protected G getActiveGame(GameIdentifier gameIdentifier) {
+        validateUserInActiveGame(gameIdentifier, getPrincipal());
+
         List<G> games = this.getActiveGames(gameIdentifier);
         Game<?, ?> game = games.get(0);
         if (!(this.gameClass.isInstance(game)))

@@ -4,7 +4,6 @@ import com.fschoen.parlorplace.backend.controller.dto.game.GameBaseInformationDT
 import com.fschoen.parlorplace.backend.controller.mapper.GameIdentifierMapper;
 import com.fschoen.parlorplace.backend.entity.Game;
 import com.fschoen.parlorplace.backend.entity.GameIdentifier;
-import com.fschoen.parlorplace.backend.service.AbstractGameService;
 import com.fschoen.parlorplace.backend.service.GeneralGameService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,21 +18,19 @@ import org.springframework.web.bind.annotation.RestController;
 public class GeneralGameController {
 
     private final GeneralGameService gameService;
-    private final AbstractGameService<?, ?, ?, ?, ?> abstractService;
 
     private final GameIdentifierMapper gameIdentifierMapper;
 
     @Autowired
-    public GeneralGameController(GeneralGameService gameService, AbstractGameService<?, ?, ?, ?, ?> abstractService, GameIdentifierMapper gameIdentifierMapper) {
+    public GeneralGameController(GeneralGameService gameService, GameIdentifierMapper gameIdentifierMapper) {
         this.gameService = gameService;
-        this.abstractService = abstractService;
         this.gameIdentifierMapper = gameIdentifierMapper;
     }
 
     @GetMapping("/base_info/{identifier}")
-    public ResponseEntity<GameBaseInformationDTO> getGame(@PathVariable("identifier") String identifier) {
+    public ResponseEntity<GameBaseInformationDTO> getGameBaseInformation(@PathVariable("identifier") String identifier) {
         GameIdentifier gameIdentifier = new GameIdentifier(identifier);
-        Game<?, ?> game = this.abstractService.getGame(gameIdentifier);
+        Game<?, ?> game = this.gameService.getGameBaseInformation(gameIdentifier);
         GameBaseInformationDTO gameBaseInformationDTO = GameBaseInformationDTO.builder()
                 .gameIdentifier(this.gameIdentifierMapper.toDTO(game.getGameIdentifier()))
                 .gameType(game.getGameType())
