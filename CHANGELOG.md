@@ -11,9 +11,23 @@
 
 ## Added
 
+- **Incorporated feedback**
+- Deletion of games in lobby state on restart
+
 ## Changed
 
+- Renamed sign-in to login and sign-up to register
+- Deleted promise
+- **Made entities generic, extend approach to services**
+- Changed database folder
+- **In-memory approach to persistence one**
+- Optimized imports
+- Route nesting
+
 ## Fixed
+
+- Persistence typos
+- Game Service Prototype annotation
 
 ---
 

@@ -1,9 +1,12 @@
 package com.fschoen.parlorplace.backend.repository;
 
 import com.fschoen.parlorplace.backend.entity.Game;
+import com.fschoen.parlorplace.backend.entity.User;
 import com.fschoen.parlorplace.backend.enumeration.GameState;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.NoRepositoryBean;
+import org.springframework.data.repository.query.Param;
 
 import java.util.Date;
 import java.util.List;
@@ -36,5 +39,8 @@ public interface GameRepository<T extends Game<?, ?>> extends JpaRepository<T, L
      * @return A list of all the found games
      */
     List<T> findAllByGameState(GameState gameState);
+
+    @Query("SELECT DISTINCT g FROM Game g JOIN g.players p WHERE p.user = :user")
+    List<T> findAllByUserMember(@Param("user") User user);
 
 }

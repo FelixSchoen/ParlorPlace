@@ -14,6 +14,8 @@ import io.restassured.response.Response;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -252,6 +254,18 @@ public class WerewolfGameControllerTest extends BaseIntegrationTest {
         assertThat(gameAfterQuit.getPlayers().size()).isEqualTo(1);
         assertThat(gameAfterQuit.getPlayers().stream().findFirst().orElseThrow().getUser().getId()).isEqualTo(existingUser2.getId());
         assertThat(gameAfterQuit.getPlayers().stream().findFirst().orElseThrow().getLobbyRole()).isEqualTo(LobbyRole.ROLE_ADMIN);
+    }
+
+    @Test
+    public void getActiveGamesOfUser() {
+        User existingUser1 = this.generatedData.getUserCollection().getUser1();
+        WerewolfGameDTO werewolfGameDTO = withWerewolfGame(existingUser1);
+
+        Response responseGetActiveGames = get("", WEREWOLF_BASE_URI + "active", getToken(existingUser1));
+        assertThat(responseGetActiveGames.statusCode()).isEqualTo(HttpStatus.OK.value());
+
+        List<WerewolfGameDTO> werewolfGameDTOList = Arrays.asList(responseGetActiveGames.getBody().as(WerewolfGameDTO[].class));
+        assertThat(werewolfGameDTOList.get(0).getGameIdentifier()).isEqualTo(werewolfGameDTO.getGameIdentifier());
     }
 
 }

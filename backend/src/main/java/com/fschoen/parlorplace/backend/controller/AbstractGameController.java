@@ -26,6 +26,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import java.util.List;
+
 public abstract class AbstractGameController<
         G extends Game<P, RS>,
         P extends Player<GR>,
@@ -110,6 +112,14 @@ public abstract class AbstractGameController<
         GDTO gameDTO = gameMapper.toDTO(game);
 
         return ResponseEntity.status(HttpStatus.OK).body(gameDTO);
+    }
+
+    @GetMapping("/active")
+    public ResponseEntity<List<GDTO>> getUserActiveGames() {
+        List<G> games = this.gameService.getUserActiveGames();
+        List<GDTO> gameDTOS = gameMapper.toDTO(games);
+
+        return ResponseEntity.status(HttpStatus.OK).body(gameDTOS);
     }
 
 }

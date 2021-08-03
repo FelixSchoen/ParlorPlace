@@ -231,6 +231,29 @@ public abstract class AbstractGameService<
         return this.getActiveGame(gameIdentifier);
     }
 
+
+    /**
+     * Calls {@link AbstractGameService#getUserActiveGames(User)} with the current principal.
+     *
+     * @return The active games of the user
+     */
+    public List<G> getUserActiveGames() {
+        return this.getUserActiveGames(getPrincipal());
+    }
+
+    /**
+     * Returns all active games that the given user is a part of.
+     *
+     * @param user The user that has to be in the active game to return it
+     * @return The found games
+     */
+    public List<G> getUserActiveGames(User user) {
+        User principal = getPrincipal();
+        log.info("User {} obtaining active games of User {} of type {}", principal.getUsername(), user.getUsername(), this.gameClass.getName());
+
+        return this.gameRepository.findAllByUserMember(user);
+    }
+
     // Interfaces
 
     /**
