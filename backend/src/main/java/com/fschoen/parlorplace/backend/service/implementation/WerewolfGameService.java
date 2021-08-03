@@ -14,7 +14,13 @@ import org.springframework.stereotype.Service;
 
 @Service
 @Slf4j
-public class WerewolfGameService extends AbstractGameService<WerewolfGame, WerewolfPlayer, WerewolfRuleSet, WerewolfGameRole, WerewolfGameRepository> {
+public class WerewolfGameService extends AbstractGameService<
+        WerewolfGame,
+        WerewolfPlayer,
+        WerewolfRuleSet,
+        WerewolfGameRole,
+        WerewolfGameRepository
+        > {
 
     @Autowired
     public WerewolfGameService(UserRepository userRepository, GameIdentifierService gameIdentifierService, WerewolfGameRepository gameRepository) {
