@@ -1,7 +1,6 @@
 import {Component, OnInit} from '@angular/core';
-import {NotificationService} from "../../services/notification.service";
 import {AppComponent} from "../../app.component";
-import {AuthService} from "../../services/auth.service";
+import {AuthService} from "../../authentication/auth.service";
 import {Router} from "@angular/router";
 
 @Component({
@@ -15,7 +14,7 @@ export class EntryComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    if (this.authService.isSignedIn()) {
+    if (this.authService.isLoggedIn()) {
       this.router.navigate(["/profile"]).then();
     }
   }

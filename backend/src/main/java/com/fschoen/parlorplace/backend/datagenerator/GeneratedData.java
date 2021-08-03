@@ -1,10 +1,6 @@
 package com.fschoen.parlorplace.backend.datagenerator;
 
-import com.fschoen.parlorplace.backend.entity.persistance.User;
-import com.fschoen.parlorplace.backend.game.werewolf.dto.game.WerewolfGameDTO;
-import com.fschoen.parlorplace.backend.game.werewolf.dto.game.WerewolfPlayerDTO;
-import com.fschoen.parlorplace.backend.game.werewolf.entity.persistance.WerewolfGame;
-import com.fschoen.parlorplace.backend.game.werewolf.entity.persistance.WerewolfPlayer;
+import com.fschoen.parlorplace.backend.entity.User;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 

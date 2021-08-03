@@ -2,8 +2,12 @@ package com.fschoen.parlorplace.backend.integration.controller;
 
 import com.fschoen.parlorplace.backend.controller.dto.authentication.TokenRefreshRequestDTO;
 import com.fschoen.parlorplace.backend.controller.dto.authentication.TokenRefreshResponseDTO;
-import com.fschoen.parlorplace.backend.controller.dto.user.*;
-import com.fschoen.parlorplace.backend.entity.persistance.User;
+import com.fschoen.parlorplace.backend.controller.dto.user.UserDTO;
+import com.fschoen.parlorplace.backend.controller.dto.user.UserLoginRequestDTO;
+import com.fschoen.parlorplace.backend.controller.dto.user.UserLoginResponseDTO;
+import com.fschoen.parlorplace.backend.controller.dto.user.UserRegisterRequestDTO;
+import com.fschoen.parlorplace.backend.controller.dto.user.UserUpdateRequestDTO;
+import com.fschoen.parlorplace.backend.entity.User;
 import com.fschoen.parlorplace.backend.enumeration.UserRole;
 import com.fschoen.parlorplace.backend.integration.base.BaseIntegrationTest;
 import io.restassured.response.Response;
@@ -21,93 +25,93 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 public class UserControllerTest extends BaseIntegrationTest {
 
     @Test
-    public void signupNonExistingUser_resultsInNewUserCreated() {
-        UserSignupRequestDTO userSignupRequestDTO = UserSignupRequestDTO.builder()
+    public void registerNonExistingUser_resultsInNewUserCreated() {
+        UserRegisterRequestDTO userRegisterRequestDTO = UserRegisterRequestDTO.builder()
                 .username("ne_user")
                 .nickname("ne_user")
                 .password("password")
                 .email("ne_user@mail.com")
                 .build();
 
-        Response response = post(userSignupRequestDTO, USER_BASE_URI + "signup");
+        Response response = post(userRegisterRequestDTO, USER_BASE_URI + "register");
         assertThat(response.statusCode()).isEqualTo(HttpStatus.CREATED.value());
     }
 
     @Test
-    public void signupExistingUser_resultsInDataConflictException() {
+    public void registerExistingUser_resultsInDataConflictException() {
         User existingUser = this.generatedData.getUserCollection().getUser1();
-        UserSignupRequestDTO userSignupRequestDTO = UserSignupRequestDTO.builder()
+        UserRegisterRequestDTO userRegisterRequestDTO = UserRegisterRequestDTO.builder()
                 .username(existingUser.getUsername())
                 .nickname(existingUser.getUsername())
                 .password(generatedData.getPasswordCollection().get(existingUser))
                 .email(existingUser.getEmail())
                 .build();
 
-        Response response = post(userSignupRequestDTO, USER_BASE_URI + "signup");
+        Response response = post(userRegisterRequestDTO, USER_BASE_URI + "register");
         assertThat(response.statusCode()).isEqualTo(HttpStatus.CONFLICT.value());
     }
 
     @Test
-    public void signupUser_withInvalidData_resultsInValidationException() {
-        UserSignupRequestDTO userSignupRequestDTO = UserSignupRequestDTO.builder()
+    public void registerUser_withInvalidData_resultsInValidationException() {
+        UserRegisterRequestDTO userRegisterRequestDTO = UserRegisterRequestDTO.builder()
                 .username("ne_user")
                 .password("password")
                 .build();
 
-        Response response = post(userSignupRequestDTO, USER_BASE_URI + "signup");
+        Response response = post(userRegisterRequestDTO, USER_BASE_URI + "register");
         assertThat(response.statusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
     }
 
     @Test
-    public void signinNonExistingUser_resultsInUnauthorizedError() {
-        UserSigninRequestDTO userSigninRequestDTO = UserSigninRequestDTO.builder()
+    public void loginNonExistingUser_resultsInUnauthorizedError() {
+        UserLoginRequestDTO userLoginRequestDTO = UserLoginRequestDTO.builder()
                 .username("ne_user")
                 .password("password")
                 .build();
 
-        Response response = post(userSigninRequestDTO, USER_BASE_URI + "signin");
+        Response response = post(userLoginRequestDTO, USER_BASE_URI + "login");
         assertThat(response.statusCode()).isEqualTo(HttpStatus.UNAUTHORIZED.value());
     }
 
     @Test
-    public void signinExistingUser_resultsInTokenReturned() {
+    public void loginExistingUser_resultsInTokenReturned() {
         User existingUser = this.generatedData.getUserCollection().getUser1();
-        UserSigninRequestDTO userSigninRequestDTO = UserSigninRequestDTO.builder()
+        UserLoginRequestDTO userLoginRequestDTO = UserLoginRequestDTO.builder()
                 .username(existingUser.getUsername())
                 .password(generatedData.getPasswordCollection().get(existingUser))
                 .build();
 
-        Response response = post(userSigninRequestDTO, USER_BASE_URI + "signin");
+        Response response = post(userLoginRequestDTO, USER_BASE_URI + "login");
         assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
 
-        UserSigninResponseDTO userSigninResponseDTO = response.getBody().as(UserSigninResponseDTO.class);
-        assertThat(userSigninResponseDTO.getAccessToken()).isNotNull();
+        UserLoginResponseDTO userLoginResponseDTO = response.getBody().as(UserLoginResponseDTO.class);
+        assertThat(userLoginResponseDTO.getAccessToken()).isNotNull();
     }
 
     @Test
-    public void signinExistingUser_withWrongPassword_resultsInUnauthorizedError() {
+    public void loginExistingUser_withWrongPassword_resultsInUnauthorizedError() {
         User existingUser = this.generatedData.getUserCollection().getUser1();
-        UserSigninRequestDTO userSigninRequestDTO = UserSigninRequestDTO.builder()
+        UserLoginRequestDTO userLoginRequestDTO = UserLoginRequestDTO.builder()
                 .username(existingUser.getUsername())
                 .password("not" + generatedData.getPasswordCollection().get(existingUser))
                 .build();
 
-        Response response = post(userSigninRequestDTO, USER_BASE_URI + "signin");
+        Response response = post(userLoginRequestDTO, USER_BASE_URI + "login");
         assertThat(response.statusCode()).isEqualTo(HttpStatus.UNAUTHORIZED.value());
     }
 
     @Test
     public void refreshAccessToken_withValidRefreshToken_resultsInNewAccessToken() {
         User existingUser = this.generatedData.getUserCollection().getUser1();
-        UserSigninRequestDTO userSigninRequestDTO = UserSigninRequestDTO.builder()
+        UserLoginRequestDTO userLoginRequestDTO = UserLoginRequestDTO.builder()
                 .username(existingUser.getUsername())
                 .password(generatedData.getPasswordCollection().get(existingUser))
                 .build();
 
-        Response responseSignin = post(userSigninRequestDTO, USER_BASE_URI + "signin");
-        UserSigninResponseDTO userSigninResponseDTO = responseSignin.getBody().as(UserSigninResponseDTO.class);
+        Response responseSignin = post(userLoginRequestDTO, USER_BASE_URI + "login");
+        UserLoginResponseDTO userLoginResponseDTO = responseSignin.getBody().as(UserLoginResponseDTO.class);
 
-        TokenRefreshRequestDTO tokenRefreshRequestDTO = TokenRefreshRequestDTO.builder().refreshToken(userSigninResponseDTO.getRefreshToken()).build();
+        TokenRefreshRequestDTO tokenRefreshRequestDTO = TokenRefreshRequestDTO.builder().refreshToken(userLoginResponseDTO.getRefreshToken()).build();
 
         Response responseRefresh = post(tokenRefreshRequestDTO, USER_BASE_URI + "refresh");
         assertThat(responseRefresh.statusCode()).isEqualTo(HttpStatus.OK.value());
@@ -151,7 +155,7 @@ public class UserControllerTest extends BaseIntegrationTest {
 
         UserDTO returnedUser = response.getBody().as(UserDTO.class);
         assertEquals("new" + existingUser.getNickname(), returnedUser.getNickname());
-        assertThat(returnedUser.getRoles().size()).isEqualTo(1);
+        assertThat(returnedUser.getUserRoles().size()).isEqualTo(1);
     }
 
     @Test
@@ -174,7 +178,7 @@ public class UserControllerTest extends BaseIntegrationTest {
 
         UserDTO returnedUser = response.getBody().as(UserDTO.class);
         assertEquals("new" + existingUser.getNickname(), returnedUser.getNickname());
-        assertThat(returnedUser.getRoles().size()).isEqualTo(1);
+        assertThat(returnedUser.getUserRoles().size()).isEqualTo(1);
     }
 
     @Test

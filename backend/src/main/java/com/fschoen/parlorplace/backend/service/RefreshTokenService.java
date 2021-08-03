@@ -1,6 +1,6 @@
 package com.fschoen.parlorplace.backend.service;
 
-import com.fschoen.parlorplace.backend.entity.persistance.RefreshToken;
+import com.fschoen.parlorplace.backend.entity.RefreshToken;
 import com.fschoen.parlorplace.backend.exception.DataConflictException;
 import com.fschoen.parlorplace.backend.exception.TokenExpiredException;
 

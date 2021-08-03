@@ -2,7 +2,7 @@ package com.fschoen.parlorplace.backend.unit.mapper;
 
 import com.fschoen.parlorplace.backend.controller.mapper.RoleMapper;
 import com.fschoen.parlorplace.backend.controller.mapper.RoleMapperImpl;
-import com.fschoen.parlorplace.backend.entity.persistance.Role;
+import com.fschoen.parlorplace.backend.entity.Role;
 import com.fschoen.parlorplace.backend.enumeration.UserRole;
 import com.fschoen.parlorplace.backend.unit.base.BaseUnitTest;
 import org.junit.Test;

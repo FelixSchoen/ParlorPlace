@@ -1,11 +1,13 @@
 package com.fschoen.parlorplace.backend.controller.mapper;
 
 import com.fschoen.parlorplace.backend.controller.dto.user.UserDTO;
-import com.fschoen.parlorplace.backend.controller.dto.user.UserSigninRequestDTO;
-import com.fschoen.parlorplace.backend.controller.dto.user.UserSignupRequestDTO;
+import com.fschoen.parlorplace.backend.controller.dto.user.UserLoginRequestDTO;
+import com.fschoen.parlorplace.backend.controller.dto.user.UserRegisterRequestDTO;
 import com.fschoen.parlorplace.backend.controller.dto.user.UserUpdateRequestDTO;
-import com.fschoen.parlorplace.backend.entity.persistance.User;
-import org.mapstruct.*;
+import com.fschoen.parlorplace.backend.entity.User;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.Mappings;
 
 import java.util.Set;
 
@@ -14,28 +16,21 @@ public interface UserMapper {
 
     User fromDTO(UserDTO userDTO);
 
-    User fromDTO(UserSignupRequestDTO userSignupRequestDTO);
+    User fromDTO(UserRegisterRequestDTO userRegisterRequestDTO);
 
     @Mappings({
             @Mapping(target = "nickname", ignore = true),
             @Mapping(target = "email", ignore = true)
     })
-    User fromDTO(UserSigninRequestDTO userSigninRequestDTO);
+    User fromDTO(UserLoginRequestDTO userLoginRequestDTO);
 
     User fromDTO(UserUpdateRequestDTO userUpdateRequestDTO);
 
-    @Mapping(target = "email", qualifiedByName = "obfuscateEmail")
-    UserDTO toDTO(User user, @Context Boolean obfuscate);
+    //
 
-    Set<UserDTO> toDTO(Set<User> users, @Context Boolean obfuscate);
+    @Mapping(target = "userRoles", source = "roles")
+    UserDTO toDTO(User user);
 
-    // Default implementation
-
-    @Named("obfuscateEmail")
-    default String obfuscateEmail(String email, @Context Boolean obfuscate) {
-        if (obfuscate)
-            return null;
-        return email;
-    }
+    Set<UserDTO> toDTO(Set<User> users);
 
 }

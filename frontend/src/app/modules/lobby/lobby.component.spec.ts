@@ -1,6 +1,6 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import {ComponentFixture, TestBed} from '@angular/core/testing';
 
-import { LobbyComponent } from './lobby.component';
+import {LobbyComponent} from './lobby.component';
 import {Player} from "../../dto/player";
 import {Game} from "../../dto/game";
 

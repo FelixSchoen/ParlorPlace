@@ -15,7 +15,7 @@
   </mat-form-field>
 
   <!-- Profile Section -->
-  <div *ngIf="!loading">
+  <div *ngIf="!loading && !error">
     <!-- Floating Action Button -->
     <button mat-fab color="accent" class="btn-fab" (click)="openEnterGameDialog()">
       <mat-icon>games</mat-icon>
@@ -33,7 +33,7 @@
         <mat-card-subtitle>
           <mat-chip-list class="pp-center">
             <mat-chip
-              *ngFor="let role of this.profileUser.roles"
+              *ngFor="let role of this.profileUser.userRoles"
               [selectable]="false"
               [removable]="false">
               {{userRoleToString(role)}}
@@ -41,10 +41,6 @@
           </mat-chip-list>
         </mat-card-subtitle>
       </mat-card-header>
-
-      <mat-card-content>
-        Placeholder
-      </mat-card-content>
 
       <mat-card-actions *ngIf="currentUser.id == profileUser.id || this.userService.isAdmin(currentUser)">
         <button mat-button (click)="signOut()" *ngIf="currentUser.id == profileUser.id">SIGN OUT</button>
@@ -60,7 +56,7 @@
   </div>
 
   <!-- Loading Indicator -->
-  <div class="d-flex justify-content-center align-items-center h-100" *ngIf="loading">
+  <div class="d-flex justify-content-center align-items-center h-100">
     <app-loading-indicator [loading]="loading" [errorMessage]="errorMessage"></app-loading-indicator>
   </div>
 

@@ -1,25 +1,12 @@
 package com.fschoen.parlorplace.backend.controller.mapper;
 
 import com.fschoen.parlorplace.backend.controller.dto.game.GameDTO;
-import com.fschoen.parlorplace.backend.entity.persistance.Game;
-import com.fschoen.parlorplace.backend.exception.MappingException;
-import com.fschoen.parlorplace.backend.game.werewolf.dto.game.WerewolfGameDTO;
-import com.fschoen.parlorplace.backend.game.werewolf.entity.persistance.WerewolfGame;
-import com.fschoen.parlorplace.backend.utility.messaging.Messages;
-import org.mapstruct.Context;
-import org.mapstruct.Mapper;
+import com.fschoen.parlorplace.backend.entity.Game;
 
-@Mapper(componentModel = "spring", uses = {PlayerMapper.class, GameIdentifierMapper.class})
-public interface GameMapper {
+public interface GameMapper<G extends Game<?, ?>, GDTO extends GameDTO<?, ?>> {
 
-    WerewolfGameDTO toDTO(WerewolfGame game, @Context Boolean obfuscate);
+    GDTO toDTO(G game);
 
-    default GameDTO toDTO(Game game, @Context Boolean obfuscate) {
-        if (game instanceof WerewolfGame) {
-            return toDTO((WerewolfGame) game, obfuscate);
-        }
-
-        throw new MappingException(Messages.exception("mapping.type"));
-    }
+    G fromDTO(GDTO gameDTO);
 
 }

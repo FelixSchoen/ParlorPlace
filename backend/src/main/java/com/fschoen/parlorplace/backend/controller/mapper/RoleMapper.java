@@ -1,6 +1,6 @@
 package com.fschoen.parlorplace.backend.controller.mapper;
 
-import com.fschoen.parlorplace.backend.entity.persistance.Role;
+import com.fschoen.parlorplace.backend.entity.Role;
 import com.fschoen.parlorplace.backend.enumeration.UserRole;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

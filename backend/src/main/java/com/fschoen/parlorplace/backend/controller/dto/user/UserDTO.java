@@ -1,8 +1,10 @@
 package com.fschoen.parlorplace.backend.controller.dto.user;
 
 import com.fschoen.parlorplace.backend.enumeration.UserRole;
-import com.fschoen.parlorplace.backend.utility.obfuscation.Obfuscateable;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
@@ -33,6 +35,6 @@ public class UserDTO {
     private String email;
 
     @NotNull
-    private Set<UserRole> roles;
+    private Set<UserRole> userRoles;
 
 }

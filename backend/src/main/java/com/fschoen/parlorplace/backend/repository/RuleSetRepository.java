@@ -1,6 +1,6 @@
 package com.fschoen.parlorplace.backend.repository;
 
-import com.fschoen.parlorplace.backend.entity.persistance.RuleSet;
+import com.fschoen.parlorplace.backend.entity.RuleSet;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.repository.NoRepositoryBean;
 

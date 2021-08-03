@@ -1,11 +1,14 @@
 package com.fschoen.parlorplace.backend.service.implementation;
 
-import com.fschoen.parlorplace.backend.entity.persistance.User;
-import com.fschoen.parlorplace.backend.entity.transience.UserDetailsImplementation;
+import com.fschoen.parlorplace.backend.entity.User;
 import com.fschoen.parlorplace.backend.repository.UserRepository;
+import com.fschoen.parlorplace.backend.security.UserDetailsImplementation;
+import com.fschoen.parlorplace.backend.utility.messaging.MessageIdentifiers;
 import com.fschoen.parlorplace.backend.utility.messaging.Messages;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.*;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -25,7 +28,7 @@ public class UserDetailsServiceImplementation implements UserDetailsService {
         Optional<User> potentialUser = userRepository.findOneByUsername(s);
 
         if (potentialUser.isEmpty()) {
-            throw new UsernameNotFoundException(Messages.exception("user.username.exists.not"));
+            throw new UsernameNotFoundException(Messages.exception(MessageIdentifiers.USER_USERNAME_EXISTS_NOT));
         }
 
         return UserDetailsImplementation.fromUser(potentialUser.get());

@@ -1,14 +1,12 @@
 import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from "@angular/router";
-import {GameService} from "../../services/game.service";
+import {AbstractGameService} from "../../services/abstract-game.service";
 import {Game, GameIdentifier} from "../../dto/game";
-import {GameTypeUtil} from "../../enums/gametype";
 import {NotificationService} from "../../services/notification.service";
-import {GameState} from "../../enums/gamestate";
 import {Player} from "../../dto/player";
 import {UserService} from "../../services/user.service";
 import {User} from "../../dto/user";
-import {GlobalValues} from "../../globals/global-values.service";
+import {environment} from "../../../environments/environment";
 
 @Component({
   selector: 'app-lobby',
@@ -25,30 +23,30 @@ export class LobbyComponent<G extends Game, P extends Player> implements OnInit 
   public currentPlayer: P;
   public game: G;
 
-  constructor(public userService: UserService, public gameService: GameService<G>, public notificationService: NotificationService, public activatedRoute: ActivatedRoute, public router: Router) {
+  constructor(public userService: UserService, public gameService: AbstractGameService<G>, public notificationService: NotificationService, public activatedRoute: ActivatedRoute, public router: Router) {
   }
 
   ngOnInit(): void {
-    const queryIdentifier: string = this.activatedRoute.snapshot.params["identifier"];
-    let redirectString = GlobalValues.GAME_URI;
-
-    this.gameService.getGameState(new GameIdentifier(queryIdentifier)).subscribe(
-      (result: Game) => {
-        console.debug(result);
-
-        redirectString += GameTypeUtil.toStringRepresentation(result.gameType).toLowerCase() + "/" + result.gameIdentifier.token
-
-        if (result.gameState == GameState.LOBBY)
-          redirectString += "/lobby"
-        else if (!(result.gameState == GameState.ONGOING)) {
-          this.notificationService.showError("Unknown game state");
-          return
-        }
-
-        this.router.navigate([redirectString]).then();
-      },
-      () => this.router.navigate([GlobalValues.ENTRY_URI]).then()
-    )
+    // const queryIdentifier: string = this.activatedRoute.snapshot.params["identifier"];
+    // let redirectString = GlobalValues.GAME_URI;
+    //
+    // this.gameService.getGameState(new GameIdentifier(queryIdentifier)).subscribe(
+    //   (result: Game) => {
+    //     console.debug(result);
+    //
+    //     redirectString += GameTypeUtil.toStringRepresentation(result.gameType).toLowerCase() + "/" + result.gameIdentifier.token
+    //
+    //     if (result.gameState == GameState.LOBBY)
+    //       redirectString += "/lobby"
+    //     else if (!(result.gameState == GameState.ONGOING)) {
+    //       this.notificationService.showError("Unknown game state");
+    //       return
+    //     }
+    //
+    //     this.router.navigate([redirectString]).then();
+    //   },
+    //   () => this.router.navigate([GlobalValues.ENTRY_URI]).then()
+    // )
   }
 
   protected initialize(): void {
@@ -58,19 +56,23 @@ export class LobbyComponent<G extends Game, P extends Player> implements OnInit 
 
   protected refresh(): void {
     this.refreshLoading = true;
-    this.gameService.getGameState(this.gameIdentifier).subscribe(
-      (result: G) => {
-        this.game = result
-        this.userService.getCurrentUser().subscribe(
-          (user: User) => {
-            this.currentPlayer = <P>[...this.game.players].filter(function (player) {
-              return player.user.id == user.id;
-            })[0];
-            this.refreshLoading = false;
-          }
-        )
-      },
-      () => this.router.navigate([GlobalValues.PROFILE_URI]).then()
+    this.gameService.getGame(this.gameIdentifier).subscribe(
+      {
+        next: (result: G) => {
+          this.game = result
+          this.userService.getCurrentUser().subscribe(
+            {
+              next: (user: User) => {
+                this.currentPlayer = <P>[...this.game.players].filter(function (player) {
+                  return player.user.id == user.id;
+                })[0];
+                this.refreshLoading = false;
+              }
+            }
+          )
+        },
+        error: () => this.router.navigate([environment.general.PROFILE_URI]).then()
+      }
     )
   }
 
@@ -79,8 +81,12 @@ export class LobbyComponent<G extends Game, P extends Player> implements OnInit 
 
   public quitLobby(user: User | null): void {
     this.gameService.quitGame(this.gameIdentifier, user).subscribe(
-      () => this.router.navigate([GlobalValues.PROFILE_URI]).then(),
-      (error => this.notificationService.showError(error.error))
+      {
+        next: () => {
+          this.router.navigate([environment.general.PROFILE_URI]).then()
+        },
+        error: error => this.notificationService.showError(error.error)
+      }
     )
   }
 

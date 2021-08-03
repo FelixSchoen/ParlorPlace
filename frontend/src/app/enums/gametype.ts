@@ -1,5 +1,4 @@
 import {Injectable} from "@angular/core";
-import {UserRole} from "./userrole";
 
 export enum GameType {
   WEREWOLF = "WEREWOLF"
