@@ -69,7 +69,7 @@ public abstract class AbstractGameController<
     }
 
     @PostMapping("/join/{identifier}")
-    public ResponseEntity<GameDTO> joinGame(@PathVariable("identifier") String identifier) {
+    public ResponseEntity<GDTO> joinGame(@PathVariable("identifier") String identifier) {
         G game = this.gameService.joinGame(new GameIdentifier(identifier));
 
         GDTO gameDTO = gameMapper.toDTO(game);
@@ -83,9 +83,8 @@ public abstract class AbstractGameController<
             this.gameService.quitGame(new GameIdentifier(identifier));
         else {
             User user = this.userMapper.fromDTO(userDTO);
-            this.gameService.quitGame(new GameIdentifier(identifier));
+            this.gameService.quitGame(new GameIdentifier(identifier), user);
         }
-
 
         return ResponseEntity.status(HttpStatus.OK).build();
     }

@@ -17,6 +17,7 @@ import {MatAutocompleteModule} from "@angular/material/autocomplete";
 import {MatIconModule} from "@angular/material/icon";
 import {MatMenuModule} from "@angular/material/menu";
 import {GeneralModule} from "../general/general.module";
+import {MatListModule} from "@angular/material/list";
 
 
 @NgModule({
@@ -39,6 +40,7 @@ import {GeneralModule} from "../general/general.module";
     MatIconModule,
     MatMenuModule,
     MatChipsModule,
+    MatListModule,
   ],
   entryComponents: [DialogContentProfileEditDialog],
 })

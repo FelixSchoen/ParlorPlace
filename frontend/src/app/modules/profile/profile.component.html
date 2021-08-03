@@ -2,6 +2,7 @@
 
   <mat-form-field appearance="outline" class="px-3 w-100">
     <mat-label>User search</mat-label>
+    <mat-icon matSuffix>person</mat-icon>
     <input matInput type="text"
            placeholder="Search for a user..."
            [formControl]="userSearchControl"
@@ -47,6 +48,36 @@
         <button mat-button (click)="openEditDialog()">EDIT</button>
       </mat-card-actions>
     </mat-card>
+
+    <!-- Active Games Card -->
+    <div *ngIf="profileUser.id == currentUser.id">
+      <mat-card class="mx-3 mt-3">
+        <mat-card-header class="pp-center">
+          <mat-card-title>
+            Active Games
+          </mat-card-title>
+        </mat-card-header>
+
+        <mat-card-content>
+          <mat-list>
+            <mat-list-item *ngFor="let gameEntry of activeGamesMap | keyvalue; last as last">
+                <mat-selection-list [multiple]="false" class="w-100">
+                  <mat-list-option *ngFor="let game of gameEntry.value" (click)="joinGameFromList(game)">
+                    <mat-icon mat-list-icon>casino</mat-icon>
+                    <h3 matLine>
+                      {{gameEntry.key | titlecase}}
+                    </h3>
+                    <p matLine>
+                      {{game.gameIdentifier.token}}
+                    </p>
+                  </mat-list-option>
+                </mat-selection-list>
+              <mat-divider [inset]="true" *ngIf="!last"></mat-divider>
+            </mat-list-item>
+          </mat-list>
+        </mat-card-content>
+      </mat-card>
+    </div>
 
     <!-- Home -->
     <div *ngIf="profileUser.id != currentUser.id" class="pp-center pt-3">
