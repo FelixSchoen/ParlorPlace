@@ -4,12 +4,14 @@ import com.fschoen.parlorplace.backend.ParlorPlaceApplication;
 import com.fschoen.parlorplace.backend.controller.dto.game.GameStartRequestDTO;
 import com.fschoen.parlorplace.backend.datagenerator.DatabasePopulator;
 import com.fschoen.parlorplace.backend.datagenerator.GeneratedData;
+import com.fschoen.parlorplace.backend.entity.GameIdentifier;
 import com.fschoen.parlorplace.backend.entity.User;
 import com.fschoen.parlorplace.backend.enumeration.GameType;
 import com.fschoen.parlorplace.backend.game.werewolf.dto.game.WerewolfGameDTO;
 import com.fschoen.parlorplace.backend.integration.utility.TestIsolationService;
 import com.fschoen.parlorplace.backend.security.JwtUtils;
 import com.fschoen.parlorplace.backend.security.UserDetailsImplementation;
+import com.fschoen.parlorplace.backend.utility.communication.ClientNotification;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
@@ -22,12 +24,36 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.http.HttpHeaders;
+import org.springframework.messaging.converter.MappingJackson2MessageConverter;
+import org.springframework.messaging.converter.SimpleMessageConverter;
+import org.springframework.messaging.simp.stomp.StompCommand;
+import org.springframework.messaging.simp.stomp.StompFrameHandler;
+import org.springframework.messaging.simp.stomp.StompHeaders;
+import org.springframework.messaging.simp.stomp.StompSession;
+import org.springframework.messaging.simp.stomp.StompSessionHandler;
+import org.springframework.messaging.simp.stomp.StompSessionHandlerAdapter;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.web.socket.WebSocketHttpHeaders;
+import org.springframework.web.socket.client.WebSocketClient;
+import org.springframework.web.socket.client.standard.StandardWebSocketClient;
+import org.springframework.web.socket.messaging.WebSocketStompClient;
+import org.springframework.web.socket.sockjs.client.SockJsClient;
+import org.springframework.web.socket.sockjs.client.Transport;
+import org.springframework.web.socket.sockjs.client.WebSocketTransport;
+
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeoutException;
+
+import static java.util.concurrent.TimeUnit.SECONDS;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(classes = ParlorPlaceApplication.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -52,6 +78,9 @@ public abstract class BaseIntegrationTest {
     protected String GENERAL_BASE_URI = GAME_BASE_URI + "general/";
     protected String WEREWOLF_BASE_URI = GAME_BASE_URI + "werewolf/";
 
+    private String WEBSOCKET_URI;
+    private CompletableFuture<ClientNotification> notificationFuture;
+
     @LocalServerPort
     protected int port;
 
@@ -61,6 +90,7 @@ public abstract class BaseIntegrationTest {
         this.generatedData = databasePopulator.generate();
 
         RestAssured.port = port;
+        WEBSOCKET_URI = "ws://localhost:" + port + "/communication/game";
     }
 
     // Authentication
@@ -143,6 +173,79 @@ public abstract class BaseIntegrationTest {
                 .contentType(ContentType.JSON)
                 .header(HttpHeaders.AUTHORIZATION, authorization)
                 .body(o);
+    }
+
+    // Websocket
+
+    protected StompSession connectSocket(User user, GameIdentifier gameIdentifier) {
+        WebSocketClient webSocketClient = new StandardWebSocketClient();
+        WebSocketStompClient stompClient = new WebSocketStompClient(webSocketClient);
+        stompClient.setMessageConverter(new MappingJackson2MessageConverter());
+
+        WebSocketHttpHeaders webSocketHttpHeaders = new WebSocketHttpHeaders();
+        webSocketHttpHeaders.add("Authorization", getToken(user));
+
+        StompSessionHandler stompSessionHandler = new NotificationStompSessionHandler();
+
+        StompSession stompSession = null;
+
+        try {
+            stompSession = stompClient.connect(WEBSOCKET_URI, webSocketHttpHeaders, stompSessionHandler).get(1, SECONDS);
+        } catch (InterruptedException | TimeoutException | ExecutionException e) {
+            e.printStackTrace();
+        }
+
+        assert stompSession != null;
+        subscribeSocket(stompSession, gameIdentifier);
+
+        return stompSession;
+    }
+
+    private void subscribeSocket(StompSession stompSession, GameIdentifier gameIdentifier) {
+        notificationFuture = new CompletableFuture<>();
+        stompSession.subscribe("/user/queue/game/" + gameIdentifier.getToken(), new NotificationStompSessionHandler());
+    }
+
+    protected ClientNotification readSocket(StompSession stompSession, GameIdentifier gameIdentifier) {
+        try {
+            ClientNotification clientNotification = this.notificationFuture.get(5, SECONDS);
+            subscribeSocket(stompSession, gameIdentifier);
+
+            return clientNotification;
+        } catch (InterruptedException | ExecutionException | TimeoutException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    @Slf4j
+    private class NotificationStompSessionHandler extends StompSessionHandlerAdapter implements StompSessionHandler {
+
+        @Override
+        public void afterConnected(StompSession session, StompHeaders connectedHeaders) {
+            log.debug("Connected to socket");
+        }
+
+        @Override
+        public void handleException(StompSession session, StompCommand command, StompHeaders
+                headers, byte[] payload, Throwable exception) {
+            log.error("Exception dealing with socket", exception);
+        }
+
+        @Override
+        public Type getPayloadType(StompHeaders headers) {
+            return ClientNotification.class;
+        }
+
+        @Override
+        public void handleFrame(StompHeaders headers, Object payload) {
+            System.out.println("TEST: "+payload);
+            log.info(new String((byte[]) payload));
+            ClientNotification clientNotification = (ClientNotification) payload;
+            log.info("Received Client Notification: {}", clientNotification);
+            notificationFuture.complete((ClientNotification) payload);
+        }
+
     }
 
 }
