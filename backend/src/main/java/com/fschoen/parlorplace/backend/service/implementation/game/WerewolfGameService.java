@@ -24,7 +24,12 @@ public class WerewolfGameService extends AbstractGameService<
         > {
 
     @Autowired
-    public WerewolfGameService(UserRepository userRepository, CommunicationService communicationService, GameIdentifierService gameIdentifierService, WerewolfGameRepository gameRepository) {
+    public WerewolfGameService(
+            UserRepository userRepository,
+            CommunicationService communicationService,
+            GameIdentifierService gameIdentifierService,
+            WerewolfGameRepository gameRepository
+    ) {
         super(userRepository, communicationService, gameIdentifierService, gameRepository, WerewolfGame.class, WerewolfPlayer.class, WerewolfRuleSet.class);
     }
 

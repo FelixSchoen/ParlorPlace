@@ -46,7 +46,7 @@ public class UserMapperTest extends BaseUnitTest {
 
     @Test
     public void user_toUserDTO() {
-        User user = User.builder().username("Name").roles(new HashSet<>(){{
+        User user = User.builder().username("Name").roles(new HashSet<>() {{
             add(Role.builder().role(UserRole.ROLE_USER).build());
         }}).build();
         UserDTO userDTO = sut.toDTO(user);

@@ -11,7 +11,6 @@ import com.fschoen.parlorplace.backend.controller.mapper.UserMapper;
 import com.fschoen.parlorplace.backend.entity.User;
 import com.fschoen.parlorplace.backend.service.ObfuscationService;
 import com.fschoen.parlorplace.backend.service.UserService;
-import com.fschoen.parlorplace.backend.service.implementation.obfuscation.UserObfuscationService;
 import com.fschoen.parlorplace.backend.validation.implementation.UserValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -28,7 +27,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.HashSet;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @RequestMapping("/user")
 @RestController
@@ -42,7 +40,11 @@ public class UserController {
     private final UserValidator validator = new UserValidator();
 
     @Autowired
-    public UserController(UserService userService, ObfuscationService<UserDTO> obfuscationService, UserMapper userMapper) {
+    public UserController(
+            UserService userService,
+            ObfuscationService<UserDTO> obfuscationService,
+            UserMapper userMapper
+    ) {
         this.userService = userService;
         this.obfuscationService = obfuscationService;
         this.userMapper = userMapper;

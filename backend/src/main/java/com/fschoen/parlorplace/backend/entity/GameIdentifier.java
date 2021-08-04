@@ -22,19 +22,18 @@ import javax.validation.constraints.Size;
 @Entity
 public class GameIdentifier {
 
-    public GameIdentifier(String token) {
-        this.token = token.toUpperCase();
-    }
-
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "seq_game_identifier_id")
     @SequenceGenerator(name = "seq_game_identifier_id", sequenceName = "seq_game_identifier_id")
     @EqualsAndHashCode.Exclude
     private Long id;
-
     @NotNull
     @Size(min = 4)
     private String token;
+
+    public GameIdentifier(String token) {
+        this.token = token.toUpperCase();
+    }
 
 
 }

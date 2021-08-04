@@ -35,13 +35,13 @@ public class RoleMapperTest extends BaseUnitTest {
     @Test
     public void mapSetOfStrings_toSetOfRoles() {
         String roleMoniker = "ROLE_USER";
-        Set<String> stringSet = new HashSet<>(){{
+        Set<String> stringSet = new HashSet<>() {{
             add(roleMoniker);
         }};
 
         Set<Role> actualSet = sut.toRole(stringSet);
         Role expectedRole = Role.builder().role(UserRole.ROLE_USER).build();
-        Set<Role> expectedSet = new HashSet<>(){{
+        Set<Role> expectedSet = new HashSet<>() {{
             add(expectedRole);
         }};
 

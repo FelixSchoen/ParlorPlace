@@ -41,7 +41,13 @@ public class UserServiceImplementation extends BaseService implements UserServic
     private final JwtUtils jwtUtils;
 
     @Autowired
-    public UserServiceImplementation(RefreshTokenService refreshTokenService, UserRepository userRepository, AuthenticationManager authenticationManager, PasswordEncoder passwordEncoder, JwtUtils jwtUtils) {
+    public UserServiceImplementation(
+            RefreshTokenService refreshTokenService,
+            UserRepository userRepository,
+            AuthenticationManager authenticationManager,
+            PasswordEncoder passwordEncoder,
+            JwtUtils jwtUtils
+    ) {
         super(userRepository);
         this.refreshTokenService = refreshTokenService;
         this.userRepository = userRepository;

@@ -12,7 +12,6 @@ public interface RefreshTokenRepository extends JpaRepository<RefreshToken, Long
      * Finds a refresh token by its id.
      *
      * @param id Id of the refresh token
-     *
      * @return The found refresh token
      */
     Optional<RefreshToken> findOneById(Long id);
@@ -21,7 +20,6 @@ public interface RefreshTokenRepository extends JpaRepository<RefreshToken, Long
      * Finds a refresh token by the token itself.
      *
      * @param refreshToken Token to look for
-     *
      * @return The found refresh token
      */
     Optional<RefreshToken> findOneByRefreshToken(String refreshToken);

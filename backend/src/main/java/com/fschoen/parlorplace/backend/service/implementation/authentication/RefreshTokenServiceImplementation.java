@@ -28,7 +28,10 @@ public class RefreshTokenServiceImplementation implements RefreshTokenService {
     private Long refreshTokenDurationMs;
 
     @Autowired
-    public RefreshTokenServiceImplementation(RefreshTokenRepository refreshTokenRepository, UserRepository userRepository) {
+    public RefreshTokenServiceImplementation(
+            RefreshTokenRepository refreshTokenRepository,
+            UserRepository userRepository
+    ) {
         this.refreshTokenRepository = refreshTokenRepository;
         this.userRepository = userRepository;
     }

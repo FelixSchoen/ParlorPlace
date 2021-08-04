@@ -264,7 +264,7 @@ public class UserControllerTest extends BaseIntegrationTest {
     public void getAllUsersFiltered_withQueryStringTooShort_returnsEmptySet() {
         User existingUser = this.generatedData.getUserCollection().getUser1();
 
-        Response response = payload("", getToken(existingUser)).param("username", existingUser.getUsername().substring(0,1)).get(USER_BASE_URI + "").then().extract().response();
+        Response response = payload("", getToken(existingUser)).param("username", existingUser.getUsername().substring(0, 1)).get(USER_BASE_URI + "").then().extract().response();
         assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
 
         Set<UserDTO> userSet = new HashSet<>(Arrays.asList(response.getBody().as(UserDTO[].class)));

@@ -11,7 +11,6 @@ public interface RoleRepository extends JpaRepository<Role, Long> {
      * Finds a role by its id.
      *
      * @param id Id of the role
-     *
      * @return The found role
      */
     Optional<Role> findOneById(Long id);
