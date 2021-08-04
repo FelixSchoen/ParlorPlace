@@ -1,6 +1,7 @@
 package com.fschoen.parlorplace.backend.integration.base;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fschoen.parlorplace.backend.ParlorPlaceApplication;
 import com.fschoen.parlorplace.backend.controller.dto.game.GameStartRequestDTO;
 import com.fschoen.parlorplace.backend.datagenerator.DatabasePopulator;
@@ -17,7 +18,7 @@ import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
-import lombok.SneakyThrows;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.assertj.core.util.Strings;
 import org.junit.jupiter.api.BeforeEach;
@@ -26,8 +27,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
-import org.springframework.messaging.converter.MappingJackson2MessageConverter;
 import org.springframework.messaging.simp.stomp.StompCommand;
 import org.springframework.messaging.simp.stomp.StompHeaders;
 import org.springframework.messaging.simp.stomp.StompSession;
@@ -43,9 +42,10 @@ import org.springframework.web.socket.WebSocketHttpHeaders;
 import org.springframework.web.socket.client.WebSocketClient;
 import org.springframework.web.socket.client.standard.StandardWebSocketClient;
 import org.springframework.web.socket.messaging.WebSocketStompClient;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.lang.reflect.Type;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeoutException;
@@ -77,7 +77,7 @@ public abstract class BaseIntegrationTest {
     protected static final String WEBSOCKET_QUEUE_PRIMARY_URI = "/user/queue/game/primary/";
 
     protected String WEBSOCKET_GAME_URI;
-    protected CompletableFuture<Object> notificationFuture;
+    protected Map<User, CompletableFuture<ClientNotification>> futureMap = new HashMap<>();
 
     @LocalServerPort
     protected int port;
@@ -175,15 +175,14 @@ public abstract class BaseIntegrationTest {
 
     // Websocket
 
-    protected StompSession connectSocket(User user, GameIdentifier gameIdentifier) {
+    protected StompSession connectNotification(User user, GameIdentifier gameIdentifier) {
         WebSocketClient webSocketClient = new StandardWebSocketClient();
         WebSocketStompClient stompClient = new WebSocketStompClient(webSocketClient);
-        //stompClient.setMessageConverter(new MappingJackson2MessageConverter());
 
         WebSocketHttpHeaders webSocketHttpHeaders = new WebSocketHttpHeaders();
         webSocketHttpHeaders.add("Authorization", getToken(user));
 
-        StompSessionHandler stompSessionHandler = new NotificationStompSessionHandler();
+        StompSessionHandler stompSessionHandler = new NotificationStompSessionHandler(user);
 
         StompSession stompSession = null;
 
@@ -194,20 +193,20 @@ public abstract class BaseIntegrationTest {
         }
 
         assert stompSession != null;
-        subscribeSocket(stompSession, gameIdentifier);
+        subscribeSocket(user, stompSession, gameIdentifier);
 
         return stompSession;
     }
 
-    private void subscribeSocket(StompSession stompSession, GameIdentifier gameIdentifier) {
-        this.notificationFuture = new CompletableFuture<>();
-        stompSession.subscribe(WEBSOCKET_QUEUE_PRIMARY_URI + gameIdentifier.getToken(), new NotificationStompSessionHandler());
+    private void subscribeSocket(User user, StompSession stompSession, GameIdentifier gameIdentifier) {
+        this.futureMap.put(user, new CompletableFuture<>());
+        stompSession.subscribe(WEBSOCKET_QUEUE_PRIMARY_URI + gameIdentifier.getToken(), new NotificationStompSessionHandler(user));
     }
 
-    protected ClientNotification readSocket(StompSession stompSession, GameIdentifier gameIdentifier) {
+    protected ClientNotification waitNotification(User user, StompSession stompSession, GameIdentifier gameIdentifier) {
         try {
-            ClientNotification clientNotification = (ClientNotification) this.notificationFuture.get(5, SECONDS);
-            subscribeSocket(stompSession, gameIdentifier);
+            ClientNotification clientNotification = this.futureMap.get(user).get(5, SECONDS);
+            subscribeSocket(user, stompSession, gameIdentifier);
 
             return clientNotification;
         } catch (InterruptedException | ExecutionException | TimeoutException e) {
@@ -221,7 +220,10 @@ public abstract class BaseIntegrationTest {
     }
 
     @Slf4j
+    @AllArgsConstructor
     private class NotificationStompSessionHandler extends StompSessionHandlerAdapter implements StompSessionHandler {
+
+        private final User user;
 
         @Override
         public void afterConnected(StompSession session, StompHeaders connectedHeaders) {
@@ -249,7 +251,7 @@ public abstract class BaseIntegrationTest {
             } catch (JsonProcessingException e) {
                 log.error("Error deserializing payload", e);
             }
-            notificationFuture.complete(clientNotification);
+            futureMap.get(user).complete(clientNotification);
         }
 
     }
