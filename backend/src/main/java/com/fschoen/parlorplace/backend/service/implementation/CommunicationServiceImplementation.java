@@ -1,5 +1,7 @@
 package com.fschoen.parlorplace.backend.service.implementation;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fschoen.parlorplace.backend.entity.GameIdentifier;
 import com.fschoen.parlorplace.backend.entity.User;
 import com.fschoen.parlorplace.backend.enumeration.NotificationType;
@@ -28,11 +30,13 @@ public class CommunicationServiceImplementation implements CommunicationService 
     }
 
     public void sendGameStaleNotification(GameIdentifier gameIdentifier, Set<User> recipients) {
+        ClientNotification notification = ClientNotification.builder().notificationType(NotificationType.STALE_GAME_INFORMATION).build();
         for (User user : recipients) {
             try {
-                messagingTemplate.convertAndSendToUser(user.getUsername(), PRIMARY_DESTINATION_URI + gameIdentifier.getToken(), ClientNotification.builder().notificationType(NotificationType.STALE_GAME_INFORMATION).build());
+                ObjectMapper objectMapper = new ObjectMapper();
+                messagingTemplate.convertAndSendToUser(user.getUsername(), PRIMARY_DESTINATION_URI + gameIdentifier.getToken(), objectMapper.writeValueAsString(notification));
                 log.info("Sent Game Stale Notification to User {} at {}", user.getUsername(), PRIMARY_DESTINATION_URI + gameIdentifier.getToken());
-            } catch (MessagingException e) {
+            } catch (MessagingException | JsonProcessingException e) {
                 log.error("Could not send Game Stale Notification for User {}", user.getUsername());
             }
         }

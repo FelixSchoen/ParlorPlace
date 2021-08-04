@@ -1,5 +1,6 @@
 package com.fschoen.parlorplace.backend.integration.base;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fschoen.parlorplace.backend.ParlorPlaceApplication;
 import com.fschoen.parlorplace.backend.controller.dto.game.GameStartRequestDTO;
 import com.fschoen.parlorplace.backend.datagenerator.DatabasePopulator;
@@ -16,6 +17,7 @@ import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.assertj.core.util.Strings;
 import org.junit.jupiter.api.BeforeEach;
@@ -24,6 +26,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 import org.springframework.messaging.converter.MappingJackson2MessageConverter;
 import org.springframework.messaging.simp.stomp.StompCommand;
 import org.springframework.messaging.simp.stomp.StompHeaders;
@@ -40,6 +43,7 @@ import org.springframework.web.socket.WebSocketHttpHeaders;
 import org.springframework.web.socket.client.WebSocketClient;
 import org.springframework.web.socket.client.standard.StandardWebSocketClient;
 import org.springframework.web.socket.messaging.WebSocketStompClient;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.lang.reflect.Type;
 import java.util.concurrent.CompletableFuture;
@@ -65,16 +69,15 @@ public abstract class BaseIntegrationTest {
     @Autowired
     private JwtUtils jwtUtils;
 
-    protected static final  String BASE_URI = "/";
-    protected static final  String USER_BASE_URI = BASE_URI + "user/";
-    protected static final  String GAME_BASE_URI = BASE_URI + "game/";
-    protected static final  String GENERAL_BASE_URI = GAME_BASE_URI + "general/";
-    protected static final  String WEREWOLF_BASE_URI = GAME_BASE_URI + "werewolf/";
+    protected static final String BASE_URI = "/";
+    protected static final String USER_BASE_URI = BASE_URI + "user/";
+    protected static final String GAME_BASE_URI = BASE_URI + "game/";
+    protected static final String GENERAL_BASE_URI = GAME_BASE_URI + "general/";
+    protected static final String WEREWOLF_BASE_URI = GAME_BASE_URI + "werewolf/";
+    protected static final String WEBSOCKET_QUEUE_PRIMARY_URI = "/user/queue/game/primary/";
 
-    private static final String WEBSOCKET_QUEUE_PRIMARY_URI = "/user/queue/game/primary/";
-
-    private String WEBSOCKET_GAME_URI;
-    private CompletableFuture<ClientNotification> notificationFuture;
+    protected String WEBSOCKET_GAME_URI;
+    protected CompletableFuture<Object> notificationFuture;
 
     @LocalServerPort
     protected int port;
@@ -175,7 +178,7 @@ public abstract class BaseIntegrationTest {
     protected StompSession connectSocket(User user, GameIdentifier gameIdentifier) {
         WebSocketClient webSocketClient = new StandardWebSocketClient();
         WebSocketStompClient stompClient = new WebSocketStompClient(webSocketClient);
-        stompClient.setMessageConverter(new MappingJackson2MessageConverter());
+        //stompClient.setMessageConverter(new MappingJackson2MessageConverter());
 
         WebSocketHttpHeaders webSocketHttpHeaders = new WebSocketHttpHeaders();
         webSocketHttpHeaders.add("Authorization", getToken(user));
@@ -197,13 +200,13 @@ public abstract class BaseIntegrationTest {
     }
 
     private void subscribeSocket(StompSession stompSession, GameIdentifier gameIdentifier) {
-        notificationFuture = new CompletableFuture<>();
+        this.notificationFuture = new CompletableFuture<>();
         stompSession.subscribe(WEBSOCKET_QUEUE_PRIMARY_URI + gameIdentifier.getToken(), new NotificationStompSessionHandler());
     }
 
     protected ClientNotification readSocket(StompSession stompSession, GameIdentifier gameIdentifier) {
         try {
-            ClientNotification clientNotification = this.notificationFuture.get(5, SECONDS);
+            ClientNotification clientNotification = (ClientNotification) this.notificationFuture.get(5, SECONDS);
             subscribeSocket(stompSession, gameIdentifier);
 
             return clientNotification;
@@ -211,6 +214,10 @@ public abstract class BaseIntegrationTest {
             e.printStackTrace();
         }
         return null;
+    }
+
+    protected void closeSocket(StompSession stompSession) {
+        stompSession.disconnect();
     }
 
     @Slf4j
@@ -229,14 +236,19 @@ public abstract class BaseIntegrationTest {
 
         @Override
         public Type getPayloadType(StompHeaders headers) {
-            return ClientNotification.class;
+            log.debug("Received Message");
+            return byte[].class;
         }
 
         @Override
         public void handleFrame(StompHeaders headers, Object payload) {
-            // TODO After hours of research deserialization still does not work - The socket receives the correct representation of a ClientNotification, but in deserialization all the fields are discarded and set to null, only affects the backend testing aspect though, everything works fine in the frontend, so this fix would only be cosmetic
-            ClientNotification clientNotification = (ClientNotification) payload;
-            log.debug("Received Client Notification: {}", clientNotification);
+            ObjectMapper objectMapper = new ObjectMapper();
+            ClientNotification clientNotification = null;
+            try {
+                clientNotification = objectMapper.readValue(new String((byte[]) payload), ClientNotification.class);
+            } catch (JsonProcessingException e) {
+                log.error("Error deserializing payload", e);
+            }
             notificationFuture.complete(clientNotification);
         }
 

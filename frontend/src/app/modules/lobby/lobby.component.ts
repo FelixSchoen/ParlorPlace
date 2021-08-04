@@ -98,7 +98,7 @@ export class LobbyComponent<G extends Game, P extends Player> implements OnDestr
   }
 
   private subscribeCallback(payload: any) {
-    let notification: ClientNotification = JSON.parse(payload.body).ClientNotification;
+    let notification: ClientNotification = JSON.parse(payload.body);
 
     if (notification.notificationType == NotificationType.STALE_GAME_INFORMATION) {
       this.refresh();
