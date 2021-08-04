@@ -7,6 +7,7 @@ import com.fschoen.parlorplace.backend.game.werewolf.entity.WerewolfRuleSet;
 import com.fschoen.parlorplace.backend.game.werewolf.repository.WerewolfGameRepository;
 import com.fschoen.parlorplace.backend.repository.UserRepository;
 import com.fschoen.parlorplace.backend.service.AbstractGameService;
+import com.fschoen.parlorplace.backend.service.CommunicationService;
 import com.fschoen.parlorplace.backend.service.GameIdentifierService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,8 +24,8 @@ public class WerewolfGameService extends AbstractGameService<
         > {
 
     @Autowired
-    public WerewolfGameService(UserRepository userRepository, GameIdentifierService gameIdentifierService, WerewolfGameRepository gameRepository) {
-        super(userRepository, gameIdentifierService, gameRepository, WerewolfGame.class, WerewolfPlayer.class, WerewolfRuleSet.class);
+    public WerewolfGameService(UserRepository userRepository, CommunicationService communicationService, GameIdentifierService gameIdentifierService, WerewolfGameRepository gameRepository) {
+        super(userRepository, communicationService, gameIdentifierService, gameRepository, WerewolfGame.class, WerewolfPlayer.class, WerewolfRuleSet.class);
     }
 
 }

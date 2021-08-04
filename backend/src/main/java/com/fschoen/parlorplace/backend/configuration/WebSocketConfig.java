@@ -33,10 +33,11 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
-        registry.addEndpoint("/websoc/game")
-                .setAllowedOrigins("*");
-
         registry.setErrorHandler(new WebSocketErrorHandler());
+        registry.addEndpoint("/communication/game")
+                .setAllowedOrigins("*").withSockJS();
+        registry.addEndpoint("/communication/game")
+                .setAllowedOrigins("*");
     }
 
     @Override

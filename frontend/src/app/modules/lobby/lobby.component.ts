@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnDestroy} from '@angular/core';
 import {ActivatedRoute, Router} from "@angular/router";
 import {AbstractGameService} from "../../services/abstract-game.service";
 import {Game, GameIdentifier} from "../../dto/game";
@@ -7,55 +7,53 @@ import {Player} from "../../dto/player";
 import {UserService} from "../../services/user.service";
 import {User} from "../../dto/user";
 import {environment} from "../../../environments/environment";
+import {CommunicationService} from "../../services/communication.service";
+import {CompatClient} from "@stomp/stompjs/esm6/compatibility/compat-client";
+import {ClientNotification} from "../../dto/communication";
+import {NotificationType} from "../../enums/notificationtype";
+
+const WEBSOCKET_URI = environment.WEBSOCKET_BASE_URI + environment.general.WEBSOCKET_GAME_URI;
+const WEBSOCKET_QUEUE_URI = environment.general.WEBSOCKET_QUEUE_PRIMARY_URI;
 
 @Component({
   selector: 'app-lobby',
   templateUrl: './lobby.component.html',
   styleUrls: ['./lobby.component.css']
 })
-export class LobbyComponent<G extends Game, P extends Player> implements OnInit {
+export class LobbyComponent<G extends Game, P extends Player> implements OnDestroy {
 
-  public initialLoading: boolean;
-  public refreshLoading: boolean;
+  public loading: boolean = true;
   public errorMessage: string;
 
   public gameIdentifier: GameIdentifier;
   public currentPlayer: P;
   public game: G;
 
-  constructor(public userService: UserService, public gameService: AbstractGameService<G>, public notificationService: NotificationService, public activatedRoute: ActivatedRoute, public router: Router) {
+  private client: CompatClient;
+
+  constructor(
+    public userService: UserService,
+    public gameService: AbstractGameService<G>,
+    public communicationService: CommunicationService,
+    public notificationService: NotificationService,
+    public activatedRoute: ActivatedRoute,
+    public router: Router,
+  ) {
   }
 
-  ngOnInit(): void {
-    // const queryIdentifier: string = this.activatedRoute.snapshot.params["identifier"];
-    // let redirectString = GlobalValues.GAME_URI;
-    //
-    // this.gameService.getGameState(new GameIdentifier(queryIdentifier)).subscribe(
-    //   (result: Game) => {
-    //     console.debug(result);
-    //
-    //     redirectString += GameTypeUtil.toStringRepresentation(result.gameType).toLowerCase() + "/" + result.gameIdentifier.token
-    //
-    //     if (result.gameState == GameState.LOBBY)
-    //       redirectString += "/lobby"
-    //     else if (!(result.gameState == GameState.ONGOING)) {
-    //       this.notificationService.showError("Unknown game state");
-    //       return
-    //     }
-    //
-    //     this.router.navigate([redirectString]).then();
-    //   },
-    //   () => this.router.navigate([GlobalValues.ENTRY_URI]).then()
-    // )
+  ngOnDestroy(): void {
+    this.communicationService.disconnectSocket(this.client);
   }
+
 
   protected initialize(): void {
     const queryIdentifier: string = this.activatedRoute.snapshot.params["identifier"];
     this.gameIdentifier = new GameIdentifier(queryIdentifier);
+
+    this.client = this.communicationService.connectSocket(WEBSOCKET_URI, WEBSOCKET_QUEUE_URI + this.gameIdentifier.token, this.subscribeCallback.bind(this));
   }
 
   protected refresh(): void {
-    this.refreshLoading = true;
     this.gameService.getGame(this.gameIdentifier).subscribe(
       {
         next: (result: G) => {
@@ -66,7 +64,7 @@ export class LobbyComponent<G extends Game, P extends Player> implements OnInit 
                 this.currentPlayer = <P>[...this.game.players].filter(function (player) {
                   return player.user.id == user.id;
                 })[0];
-                this.refreshLoading = false;
+                this.loading = false;
               }
             }
           )
@@ -90,13 +88,22 @@ export class LobbyComponent<G extends Game, P extends Player> implements OnInit 
     )
   }
 
-  changePlayers(players: Set<P>): void {
+  public changePlayers(players: Set<P>): void {
     this.game.players = players;
     this.changeLobby();
   }
 
   public isLobbyAdmin(player: P) {
     return player.lobbyRole == "ROLE_ADMIN"
+  }
+
+  private subscribeCallback(payload: any) {
+    let notification: ClientNotification = JSON.parse(payload.body);
+
+    if (notification.notificationType == NotificationType.STALE_GAME_INFORMATION) {
+      this.refresh();
+    }
+
   }
 
 }

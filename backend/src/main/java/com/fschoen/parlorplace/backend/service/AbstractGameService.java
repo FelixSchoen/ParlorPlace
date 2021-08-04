@@ -34,6 +34,7 @@ public abstract class AbstractGameService<
         GRepo extends GameRepository<G>
         > extends BaseService {
 
+    protected final CommunicationService communicationService;
     protected final GameIdentifierService gameIdentifierService;
 
     protected final GRepo gameRepository;
@@ -42,8 +43,9 @@ public abstract class AbstractGameService<
     protected final Class<P> playerClass;
     protected final Class<RS> ruleSetClass;
 
-    public AbstractGameService(UserRepository userRepository, GameIdentifierService gameIdentifierService, GRepo gameRepository, Class<G> gameClass, Class<P> playerClass, Class<RS> ruleSetClass) {
+    public AbstractGameService(UserRepository userRepository, CommunicationService communicationService, GameIdentifierService gameIdentifierService, GRepo gameRepository, Class<G> gameClass, Class<P> playerClass, Class<RS> ruleSetClass) {
         super(userRepository);
+        this.communicationService = communicationService;
         this.gameIdentifierService = gameIdentifierService;
         this.gameRepository = gameRepository;
         this.gameClass = gameClass;
@@ -123,8 +125,7 @@ public abstract class AbstractGameService<
 
         game.getPlayers().add(player);
 
-        game = this.gameRepository.save(game);
-        return game;
+        return saveAndBroadcast(game);
     }
 
     /**
@@ -167,10 +168,10 @@ public abstract class AbstractGameService<
                 game.getPlayers().stream().findAny().orElseThrow().setLobbyRole(LobbyRole.ROLE_ADMIN);
             }
 
-            this.gameRepository.save(game);
+            saveAndBroadcast(game);
         } else {
             player.setDisconnected(true);
-            this.gameRepository.save(game);
+            saveAndBroadcast(game);
             this.onPlayerQuit(player);
         }
 
@@ -201,8 +202,7 @@ public abstract class AbstractGameService<
             foundPlayer.setPosition(requestPlayer.getPosition());
         });
 
-        game = this.gameRepository.save(game);
-        return game;
+        return saveAndBroadcast(game);
     }
 
     public G changeGameRuleSet(GameIdentifier gameIdentifier, RS ruleSet) {
@@ -215,8 +215,7 @@ public abstract class AbstractGameService<
         G game = getActiveGame(gameIdentifier);
         game.setRuleSet(ruleSet);
 
-        game = this.gameRepository.save(game);
-        return game;
+        return saveAndBroadcast(game);
     }
 
     /**
@@ -266,13 +265,23 @@ public abstract class AbstractGameService<
 
     // Utility
 
+    protected G saveAndBroadcast(G game) {
+        G savedGame = this.gameRepository.save(game);
+        broadcastGameStaleNotification(game.getGameIdentifier());
+        return savedGame;
+    }
+
+    protected void broadcastGameStaleNotification(GameIdentifier gameIdentifier) {
+        G game = getActiveGame(gameIdentifier);
+        Set<User> usersInGame = game.getPlayers().stream().map(Player::getUser).collect(Collectors.toSet());
+        this.communicationService.sendGameStaleNotification(gameIdentifier, usersInGame);
+    }
+
     protected List<G> getActiveGames(GameIdentifier gameIdentifier) {
         return this.gameRepository.findAllByGameIdentifier_TokenAndEndedAt(gameIdentifier.getToken(), null);
     }
 
     protected G getActiveGame(GameIdentifier gameIdentifier) {
-        validateUserInActiveGame(gameIdentifier, getPrincipal());
-
         List<G> games = this.getActiveGames(gameIdentifier);
         Game<?, ?> game = games.get(0);
         if (!(this.gameClass.isInstance(game)))
@@ -281,8 +290,6 @@ public abstract class AbstractGameService<
     }
 
     protected P getPlayerFromUser(GameIdentifier gameIdentifier, User user) {
-        validateUserInActiveGame(gameIdentifier, user);
-
         G game = getActiveGame(gameIdentifier);
 
         return game.getPlayers().stream().filter(player -> player.getUser().equals(user)).findFirst().orElseThrow();
@@ -321,6 +328,7 @@ public abstract class AbstractGameService<
     }
 
     protected void validateUserLobbyAdmin(GameIdentifier gameIdentifier, User user) throws GameException {
+        validateUserInActiveGame(gameIdentifier, user);
         P player = getPlayerFromUser(gameIdentifier, user);
 
         if (!player.getLobbyRole().equals(LobbyRole.ROLE_ADMIN))

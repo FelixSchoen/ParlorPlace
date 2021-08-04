@@ -8,6 +8,7 @@ import {WerewolfPlayer} from "../../../dto/player";
 import {WerewolfLobbyChangeRequest} from "../../../dto/lobby";
 import {WerewolfRoleType, WerewolfRoleTypeUtil} from "../../../enums/games/werewolfroletype";
 import {WerewolfGameService} from "../../../services/werewolf-game.service";
+import {CommunicationService} from "../../../services/communication.service";
 
 @Component({
   selector: 'app-werewolf-lobby',
@@ -19,8 +20,15 @@ export class WerewolfLobbyComponent extends LobbyComponent<WerewolfGame, Werewol
   public werewolfRoleTypeToString = WerewolfRoleTypeUtil.toStringRepresentation;
   public werewolfRoleTypeArray: WerewolfRoleType[] = WerewolfRoleTypeUtil.getArray();
 
-  constructor(public userService: UserService, public gameService: WerewolfGameService, public notificationService: NotificationService, public activatedRoute: ActivatedRoute, public router: Router) {
-    super(userService, gameService, notificationService, activatedRoute, router)
+  constructor(
+    public userService: UserService,
+    public gameService: WerewolfGameService,
+    public communicationService: CommunicationService,
+    public notificationService: NotificationService,
+    public activatedRoute: ActivatedRoute,
+    public router: Router
+  ) {
+    super(userService, gameService, communicationService, notificationService, activatedRoute, router)
   }
 
   ngOnInit(): void {
