@@ -2,7 +2,7 @@
 
 - [v0.1 (2021-07-11)](#v0.1)
 - [v0.2 (2021-07-22)](#v0.2)
-- [v0.3 (2021-08-xx)](#v0.3)
+- [v0.3 (2021-08-05)](#v0.3)
 
 ---
 
@@ -15,6 +15,8 @@
 - Deletion of games in lobby state on restart
 - Retrieval of games a user is currently part of
   - Frontend visualization in order to be able to "re-join" a game
+- **Communication from server to client**
+  - Add Communication Service in both backend and frontend in order to update client on new information
 
 ## Changed
 
@@ -25,6 +27,7 @@
 - **In-memory approach to persistence one**
 - Optimized imports
 - Route nesting
+- Obfuscation outsourced to own service
 
 ## Fixed
 
