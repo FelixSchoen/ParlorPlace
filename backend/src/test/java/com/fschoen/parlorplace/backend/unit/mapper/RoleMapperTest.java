@@ -2,7 +2,7 @@ package com.fschoen.parlorplace.backend.unit.mapper;
 
 import com.fschoen.parlorplace.backend.controller.mapper.RoleMapper;
 import com.fschoen.parlorplace.backend.controller.mapper.RoleMapperImpl;
-import com.fschoen.parlorplace.backend.entity.persistance.Role;
+import com.fschoen.parlorplace.backend.entity.Role;
 import com.fschoen.parlorplace.backend.enumeration.UserRole;
 import com.fschoen.parlorplace.backend.unit.base.BaseUnitTest;
 import org.junit.Test;
@@ -35,13 +35,13 @@ public class RoleMapperTest extends BaseUnitTest {
     @Test
     public void mapSetOfStrings_toSetOfRoles() {
         String roleMoniker = "ROLE_USER";
-        Set<String> stringSet = new HashSet<>(){{
+        Set<String> stringSet = new HashSet<>() {{
             add(roleMoniker);
         }};
 
         Set<Role> actualSet = sut.toRole(stringSet);
         Role expectedRole = Role.builder().role(UserRole.ROLE_USER).build();
-        Set<Role> expectedSet = new HashSet<>(){{
+        Set<Role> expectedSet = new HashSet<>() {{
             add(expectedRole);
         }};
 

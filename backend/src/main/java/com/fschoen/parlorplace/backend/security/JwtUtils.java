@@ -1,12 +1,15 @@
 package com.fschoen.parlorplace.backend.security;
 
-import com.fschoen.parlorplace.backend.entity.transience.UserDetailsImplementation;
+import com.fschoen.parlorplace.backend.utility.messaging.MessageIdentifiers;
 import com.fschoen.parlorplace.backend.utility.messaging.Messages;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.MalformedJwtException;
+import io.jsonwebtoken.UnsupportedJwtException;
 import io.jsonwebtoken.security.Keys;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-import io.jsonwebtoken.*;
 
 import javax.crypto.SecretKey;
 import java.nio.charset.StandardCharsets;
@@ -21,6 +24,10 @@ public class JwtUtils {
 
     @Value("${fschoen.parlorplace.jwtExpirationMs}")
     private int jwtExpirationMs;
+
+    private static SecretKey getKey(String jwtSecret) {
+        return Keys.hmacShaKeyFor(jwtSecret.getBytes(StandardCharsets.UTF_8));
+    }
 
     public String generateJwtToken(UserDetailsImplementation userPrincipal) {
         return generateTokenFromUsername(userPrincipal.getUsername());
@@ -41,22 +48,18 @@ public class JwtUtils {
             Jwts.parserBuilder().setSigningKey(getKey(jwtSecret)).build().parseClaimsJws(authToken);
             return true;
         } catch (SecurityException e) {
-            log.error(Messages.exception("authorization.signature.invalid"), e.getMessage());
+            log.error(Messages.exception(MessageIdentifiers.AUTHORIZATION_SIGNATURE_INVALID), e);
         } catch (MalformedJwtException e) {
-            log.error(Messages.exception("authorization.token.invalid"), e.getMessage());
+            log.error(Messages.exception(MessageIdentifiers.AUTHORIZATION_TOKEN_INVALID), e);
         } catch (ExpiredJwtException e) {
-            log.error(Messages.exception("authorization.token.expired"), e.getMessage());
+            log.error(Messages.exception(MessageIdentifiers.AUTHORIZATION_TOKEN_EXPIRED), e);
         } catch (UnsupportedJwtException e) {
-            log.error(Messages.exception("authorization.token.unsupported"), e.getMessage());
+            log.error(Messages.exception(MessageIdentifiers.AUTHORIZATION_TOKEN_UNSUPPORTED), e);
         } catch (IllegalArgumentException e) {
-            log.error(Messages.exception("authorization.token.empty"), e.getMessage());
+            log.error(Messages.exception(MessageIdentifiers.AUTHORIZATION_TOKEN_EMPTY), e);
         }
 
         return false;
-    }
-
-    private static SecretKey getKey(String jwtSecret) {
-        return Keys.hmacShaKeyFor(jwtSecret.getBytes(StandardCharsets.UTF_8));
     }
 
 }

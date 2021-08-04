@@ -9,18 +9,26 @@ export class NotificationService {
   constructor(private _snackBar: MatSnackBar) {
   }
 
-  show(message: string, action: string, duration: number) {
+  show(
+    message: string,
+    action: string,
+    duration: number
+  ) {
     this._snackBar.open(message, action, {
       duration: duration,
       panelClass: ['danger-snackbar']
     });
   }
 
-  showSuccess(message: string, action: string = "Dismiss") {
+  showSuccess(message: string,
+              action: string = "Dismiss"
+  ) {
     this.show(message, action, 5000)
   }
 
-  showError(message: string, action: string = "Dismiss") {
+  showError(message: string,
+            action: string = "Dismiss"
+  ) {
     this.show(message, action, 15000)
   }
 

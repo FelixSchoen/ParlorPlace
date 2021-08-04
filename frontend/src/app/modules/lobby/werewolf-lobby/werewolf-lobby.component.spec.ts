@@ -1,6 +1,6 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import {ComponentFixture, TestBed} from '@angular/core/testing';
 
-import { WerewolfLobbyComponent } from './werewolf-lobby.component';
+import {WerewolfLobbyComponent} from './werewolf-lobby.component';
 
 describe('WerewolfLobbyComponent', () => {
   let component: WerewolfLobbyComponent;

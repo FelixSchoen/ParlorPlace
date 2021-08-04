@@ -1,19 +1,20 @@
 package com.fschoen.parlorplace.backend.service.implementation;
 
 import com.fschoen.parlorplace.backend.controller.dto.authentication.TokenRefreshResponseDTO;
-import com.fschoen.parlorplace.backend.controller.dto.user.UserSigninResponseDTO;
-import com.fschoen.parlorplace.backend.entity.persistance.RefreshToken;
-import com.fschoen.parlorplace.backend.entity.persistance.Role;
-import com.fschoen.parlorplace.backend.entity.persistance.User;
-import com.fschoen.parlorplace.backend.entity.transience.UserDetailsImplementation;
+import com.fschoen.parlorplace.backend.controller.dto.user.UserLoginResponseDTO;
+import com.fschoen.parlorplace.backend.entity.RefreshToken;
+import com.fschoen.parlorplace.backend.entity.Role;
+import com.fschoen.parlorplace.backend.entity.User;
 import com.fschoen.parlorplace.backend.enumeration.UserRole;
 import com.fschoen.parlorplace.backend.exception.AuthorizationException;
 import com.fschoen.parlorplace.backend.exception.DataConflictException;
 import com.fschoen.parlorplace.backend.repository.UserRepository;
 import com.fschoen.parlorplace.backend.security.JwtUtils;
-import com.fschoen.parlorplace.backend.service.AbstractService;
+import com.fschoen.parlorplace.backend.security.UserDetailsImplementation;
+import com.fschoen.parlorplace.backend.service.BaseService;
 import com.fschoen.parlorplace.backend.service.RefreshTokenService;
 import com.fschoen.parlorplace.backend.service.UserService;
+import com.fschoen.parlorplace.backend.utility.messaging.MessageIdentifiers;
 import com.fschoen.parlorplace.backend.utility.messaging.Messages;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +31,7 @@ import java.util.stream.Collectors;
 
 @Slf4j
 @Service
-public class UserServiceImplementation extends AbstractService implements UserService {
+public class UserServiceImplementation extends BaseService implements UserService {
 
     private final RefreshTokenService refreshTokenService;
     private final UserRepository userRepository;
@@ -40,7 +41,13 @@ public class UserServiceImplementation extends AbstractService implements UserSe
     private final JwtUtils jwtUtils;
 
     @Autowired
-    public UserServiceImplementation(RefreshTokenService refreshTokenService, UserRepository userRepository, AuthenticationManager authenticationManager, PasswordEncoder passwordEncoder, JwtUtils jwtUtils) {
+    public UserServiceImplementation(
+            RefreshTokenService refreshTokenService,
+            UserRepository userRepository,
+            AuthenticationManager authenticationManager,
+            PasswordEncoder passwordEncoder,
+            JwtUtils jwtUtils
+    ) {
         super(userRepository);
         this.refreshTokenService = refreshTokenService;
         this.userRepository = userRepository;
@@ -50,13 +57,13 @@ public class UserServiceImplementation extends AbstractService implements UserSe
     }
 
     @Override
-    public User signup(User user) throws DataConflictException {
+    public User register(User user) throws DataConflictException {
         log.info("Signing up User: {}", user.getUsername());
 
         if (userRepository.findOneByUsername(user.getUsername()).isPresent())
-            throw new DataConflictException(Messages.exception("user.username.exists"));
+            throw new DataConflictException(Messages.exception(MessageIdentifiers.USER_USERNAME_EXISTS));
         else if (userRepository.findOneByEmail(user.getEmail()).isPresent())
-            throw new DataConflictException(Messages.exception("user.email.exists"));
+            throw new DataConflictException(Messages.exception(MessageIdentifiers.USER_EMAIL_EXISTS));
 
         String hashedPassword = passwordEncoder.encode(user.getPassword());
         Set<Role> roles = new HashSet<>() {{
@@ -69,7 +76,7 @@ public class UserServiceImplementation extends AbstractService implements UserSe
         return userRepository.save(persistUser);
     }
 
-    public UserSigninResponseDTO signin(User user) {
+    public UserLoginResponseDTO login(User user) {
         log.info("Signing in User: {}", user.getUsername());
 
         Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword()));
@@ -81,7 +88,7 @@ public class UserServiceImplementation extends AbstractService implements UserSe
 
         RefreshToken refreshToken = refreshTokenService.createRefreshToken(userDetails.getId());
 
-        return UserSigninResponseDTO.builder().id(userDetails.getId()).username(userDetails.getUsername()).roles(roles).accessToken(accessToken).refreshToken(refreshToken.getRefreshToken()).build();
+        return UserLoginResponseDTO.builder().id(userDetails.getId()).username(userDetails.getUsername()).roles(roles).accessToken(accessToken).refreshToken(refreshToken.getRefreshToken()).build();
     }
 
     @Override
@@ -96,7 +103,7 @@ public class UserServiceImplementation extends AbstractService implements UserSe
                     RefreshToken newRefreshToken = refreshTokenService.createRefreshToken(user.getId());
                     return TokenRefreshResponseDTO.builder().accessToken(accessToken).refreshToken(newRefreshToken.getRefreshToken()).build();
                 })
-                .orElseThrow(() -> new AuthorizationException(Messages.exception("authorization.token.refresh.exists.not")));
+                .orElseThrow(() -> new AuthorizationException(Messages.exception(MessageIdentifiers.AUTHORIZATION_TOKEN_REFRESH_EXISTS_NOT)));
     }
 
     @Override
@@ -108,12 +115,12 @@ public class UserServiceImplementation extends AbstractService implements UserSe
         if ((!principal.getId().equals(id) && notAuthority(principal, UserRole.ROLE_ADMIN))
                 || (user.getRoles() != null && !user.getRoles().equals(principal.getRoles()) && notAuthority(principal, UserRole.ROLE_ADMIN))
                 || (user.getUsername() != null && !user.getUsername().equals("") && !user.getUsername().equals(principal.getUsername()) && notAuthority(principal, UserRole.ROLE_ADMIN)))
-            throw new AuthorizationException(Messages.exception("authorization.unauthorized"));
+            throw new AuthorizationException(Messages.exception(MessageIdentifiers.AUTHORIZATION_UNAUTHORIZED));
 
         if (user.getId() != null && !user.getId().equals(id))
-            throw new DataConflictException(Messages.exception("data.mismatched.id"));
+            throw new DataConflictException(Messages.exception(MessageIdentifiers.DATA_MISMATCHED_ID));
 
-        User existingUser = userRepository.findOneById(id).orElseThrow(() -> new DataConflictException(Messages.exception("user.id.exists.not")));
+        User existingUser = userRepository.findOneById(id).orElseThrow(() -> new DataConflictException(Messages.exception(MessageIdentifiers.USER_ID_EXISTS_NOT)));
         User.UserBuilder persistUserBuilder = existingUser.toBuilder();
 
 //        if (user.getUsername() != null)
@@ -142,7 +149,7 @@ public class UserServiceImplementation extends AbstractService implements UserSe
         User principal = getPrincipal();
 
         if (principal == null)
-            throw new DataConflictException(Messages.exception("user.exists.not"));
+            throw new DataConflictException(Messages.exception(MessageIdentifiers.USER_EXISTS_NOT));
 
         return principal;
     }
@@ -151,7 +158,7 @@ public class UserServiceImplementation extends AbstractService implements UserSe
     public User getUser(Long id) throws DataConflictException {
         log.info("Obtaining user with id: {}", id);
 
-        User existingUser = userRepository.findOneById(id).orElseThrow(() -> new DataConflictException(Messages.exception("user.id.exists.not")));
+        User existingUser = userRepository.findOneById(id).orElseThrow(() -> new DataConflictException(Messages.exception(MessageIdentifiers.USER_ID_EXISTS_NOT)));
 
         return existingUser;
     }
@@ -160,7 +167,7 @@ public class UserServiceImplementation extends AbstractService implements UserSe
     public User getUser(String username) throws DataConflictException {
         log.info("Obtaining user with username: {}", username);
 
-        User existingUser = userRepository.findOneByUsername(username).orElseThrow(() -> new DataConflictException(Messages.exception("user.username.exists.not")));
+        User existingUser = userRepository.findOneByUsername(username).orElseThrow(() -> new DataConflictException(Messages.exception(MessageIdentifiers.USER_USERNAME_EXISTS_NOT)));
 
         return existingUser;
     }

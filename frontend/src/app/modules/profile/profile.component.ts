@@ -1,9 +1,9 @@
-import {Component, ElementRef, Inject, OnInit, ViewChild} from '@angular/core';
+import {Component, ElementRef, Inject, Injector, OnInit, ViewChild} from '@angular/core';
 import {ActivatedRoute, Router} from "@angular/router";
 import {UserService} from "../../services/user.service";
 import {User, UserUpdateRequest} from "../../dto/user";
 import {NotificationService} from "../../services/notification.service";
-import {TokenService} from "../../services/token.service";
+import {TokenService} from "../../authentication/token.service";
 import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {catchError, debounceTime, distinctUntilChanged, switchMap} from "rxjs/operators";
 import {Observable, of} from "rxjs";
@@ -14,11 +14,13 @@ import Validation, {MatchingErrorStateMatcher} from "../../validators/Validation
 import {MatChipInputEvent} from "@angular/material/chips";
 import {ENTER} from "@angular/cdk/keycodes";
 import {MatAutocompleteSelectedEvent} from "@angular/material/autocomplete";
-import {Utility} from "../../utility/utility";
 import {GameType, GameTypeUtil} from "../../enums/gametype";
-import {GameService} from "../../services/game.service";
 import {Game, GameIdentifier, GameStartRequest} from "../../dto/game";
-import {GlobalValues} from "../../globals/global-values.service";
+import {removeFromArray} from "../../utility/utility";
+import {environment} from "../../../environments/environment";
+import {WerewolfGameService} from "../../services/werewolf-game.service";
+import {GeneralGameService} from "../../services/general-game.service";
+import {AbstractGameService} from "../../services/abstract-game.service";
 
 @Component({
   selector: 'app-profile',
@@ -31,15 +33,30 @@ export class ProfileComponent implements OnInit {
   public currentUser: User;
 
   public loading: boolean;
+  public error: boolean = false;
   public errorMessage: string;
 
   public userSearchControl: FormControl = new FormControl();
   public filteredOptions: Observable<User[]>;
 
+  public activeGamesMap = new Map<GameType, Game[]>();
+
   public userRoleToString = UserRoleUtil.toStringRepresentation;
 
-  constructor(public userService: UserService, public gameService: GameService<Game>, private tokenService: TokenService, private notificationService: NotificationService,
-              private dialog: MatDialog, private activatedRoute: ActivatedRoute, private router: Router) {
+  private gameServiceMap = new Map<GameType, any>([
+    [GameType.WEREWOLF, WerewolfGameService],
+  ]);
+
+  constructor(
+    public userService: UserService,
+    private generalGameService: GeneralGameService,
+    private tokenService: TokenService,
+    private notificationService: NotificationService,
+    private dialog: MatDialog,
+    private injector: Injector,
+    private activatedRoute: ActivatedRoute,
+    private router: Router,
+  ) {
   }
 
   ngOnInit(): void {
@@ -65,27 +82,39 @@ export class ProfileComponent implements OnInit {
       ))
     )
 
-    this.userService.getCurrentUser().subscribe(
-      (user) => {
+    this.userService.getCurrentUser().subscribe({
+      next: (user) => {
         this.currentUser = user;
         if (queryName == undefined) {
-          this.router.navigate([GlobalValues.PROFILE_URI + user.username]).then();
+          this.router.navigate([environment.general.PROFILE_URI + user.username]).then();
         } else {
-          this.userService.getUserByUsername(queryName).subscribe(
-            (user: User) => {
+          this.userService.getUserByUsername(queryName).subscribe({
+            next: (user: User) => {
               this.profileUser = user
+              this.error = false;
             },
-            (error) => {
+            error: (error) => {
               this.errorMessage = error.error;
-            }).add(() => this.loading = false)
+              this.error = true;
+            }
+          }).add(() => this.loading = false)
         }
       }
-    );
+    });
+
+    this.gameServiceMap.forEach((value: any, key:GameType) => {
+      let gameService: AbstractGameService<any> = this.injector.get(value);
+      gameService.getUserActiveGames().subscribe({
+        next: (next) => {
+          this.activeGamesMap.set(key, next);
+        }
+      });
+    })
   }
 
   onSelect($event: any) {
     const selectedUser: User = $event.source.value
-    this.router.navigate([GlobalValues.PROFILE_URI + selectedUser.username]).then();
+    this.router.navigate([environment.general.PROFILE_URI + selectedUser.username]).then();
   }
 
   openEditDialog(): void {
@@ -100,24 +129,27 @@ export class ProfileComponent implements OnInit {
           password: "",
           nickname: "",
           email: "",
-          roles: [...this.profileUser.roles]
+          roles: [...this.profileUser.userRoles]
         }
       }
     });
 
-    dialogRef.afterClosed().subscribe(
-      result => {
-        if (result.submitted) {
-          const userUpdateRequest: UserUpdateRequest = new UserUpdateRequest(this.profileUser.id, null, result.password,
-            result.nickname, result.email, result.roles);
+    dialogRef.afterClosed().subscribe({
+        next: result => {
+          if (result.submitted) {
+            const userUpdateRequest: UserUpdateRequest = new UserUpdateRequest(this.profileUser.id, null, result.password,
+              result.nickname, result.email, result.roles);
 
-          this.userService.updateUser(this.profileUser.id, userUpdateRequest).subscribe(
-            (updatedUser: User) => {
-              this.router.navigate(["profile/" + updatedUser.username], {queryParams: {updated: 1}}).then();
-            }, (error) => {
-              this.notificationService.showError(error.error);
-            }
-          )
+            this.userService.updateUser(this.profileUser.id, userUpdateRequest).subscribe({
+                next: (updatedUser: User) => {
+                  this.router.navigate(["profile/" + updatedUser.username], {queryParams: {updated: 1}}).then();
+                },
+                error: (error) => {
+                  this.notificationService.showError(error.error);
+                }
+              }
+            )
+          }
         }
       }
     )
@@ -135,22 +167,44 @@ export class ProfileComponent implements OnInit {
       }
     });
 
-    dialogRef.afterClosed().subscribe(
-      result => {
-        if (result.host) {
-          this.gameService.startGame(new GameStartRequest(result.game)).subscribe(
-            result => {
-              this.router.navigate([GlobalValues.LOBBY_URI + result.gameIdentifier.token]).then();
-            },
-            error => this.notificationService.showError(error.error)
-          )
-        } else if (result.submitted) {
-          this.gameService.joinGame(new GameIdentifier(result.identifier)).subscribe(
-            result => {
-              this.router.navigate([GlobalValues.LOBBY_URI + result.gameIdentifier.token]).then();
-            },
-            error => this.notificationService.showError(error.error)
-          )
+    dialogRef.afterClosed().subscribe({
+        next: result => {
+          if (result.host) {
+            let gameServiceType = this.gameServiceMap.get(result.gameType);
+            if (gameServiceType == undefined) {
+              console.error("Game service could not be found");
+              return;
+            }
+
+            let gameService = this.injector.get(gameServiceType);
+
+            gameService.hostGame(new GameStartRequest(result.gameType)).subscribe({
+                next: (result: Game) => {
+                  this.router.navigate([environment.general.GAME_URI + result.gameIdentifier.token]).then();
+                },
+                error: (error: { error: string; }) => this.notificationService.showError(error.error)
+              }
+            )
+          } else if (result.submitted) {
+            this.generalGameService.getBaseInformation(new GameIdentifier(result.identifier)).subscribe({
+              next: (result) => {
+                let gameServiceType = this.gameServiceMap.get(result.gameType);
+                if (gameServiceType == undefined) {
+                  console.error("Game service could not be found");
+                  return;
+                }
+                let gameService = this.injector.get(gameServiceType);
+
+                gameService.joinGame(new GameIdentifier(result.gameIdentifier.token)).subscribe({
+                  next: (result: Game) => {
+                    this.router.navigate([environment.general.GAME_URI + result.gameIdentifier.token]).then();
+                  },
+                  error: (error: { error: string; }) => this.notificationService.showError(error.error)
+                });
+
+              }
+            })
+          }
         }
       }
     )
@@ -168,6 +222,10 @@ export class ProfileComponent implements OnInit {
 
   displayUser(user: User): string {
     return user ? user.nickname + " (" + user.username + ")" : "";
+  }
+
+  joinGameFromList(item: Game) {
+    this.router.navigate([environment.general.GAME_URI + item.gameIdentifier.token]).then();
   }
 
 }
@@ -199,7 +257,7 @@ export interface EnterGameDialogOutputData {
   submitted: boolean;
   host: boolean;
   identifier: string;
-  game: GameType | null;
+  gameType: GameType | null;
 }
 
 @Component({
@@ -233,7 +291,9 @@ export class DialogContentProfileEditDialog implements OnInit {
   }
 
   ngOnInit(): void {
-    this.dialogRef.beforeClosed().subscribe(() => this.dialogRef.close(this.data.outputData));
+    this.dialogRef.beforeClosed().subscribe({
+      next: () => this.dialogRef.close(this.data.outputData)
+    });
     this.form = this.formBuilder.group({
       // username: this.usernameControl,
       password: this.passwordControl,
@@ -246,7 +306,7 @@ export class DialogContentProfileEditDialog implements OnInit {
 
     this.availableRoles = UserRoleUtil.getUserRoleArray();
     for (const role of this.data.outputData.roles) {
-      Utility.removeFromArray(role, this.availableRoles)
+      removeFromArray(role, this.availableRoles)
     }
   }
 
@@ -276,7 +336,7 @@ export class DialogContentProfileEditDialog implements OnInit {
   }
 
   removeChip(role: UserRole): void {
-    Utility.removeFromArray(role, this.data.outputData.roles)
+    removeFromArray(role, this.data.outputData.roles)
 
     if (!this.availableRoles.includes(role)) {
       this.availableRoles.push(role);
@@ -289,7 +349,7 @@ export class DialogContentProfileEditDialog implements OnInit {
     if (roleToAdd && !this.data.outputData.roles.includes(roleToAdd)) {
       this.data.outputData.roles.push(roleToAdd);
 
-      Utility.removeFromArray(roleToAdd, this.availableRoles);
+      removeFromArray(roleToAdd, this.availableRoles);
     }
 
     this.roleInput.nativeElement.value = "";
@@ -317,7 +377,9 @@ export class DialogContentProfileEnterGameDialog implements OnInit {
   }
 
   ngOnInit(): void {
-    this.dialogRef.beforeClosed().subscribe(() => this.dialogRef.close(this.data.outputData));
+    this.dialogRef.beforeClosed().subscribe({
+      next: () => this.dialogRef.close(this.data.outputData)
+    });
     this.form = this.formBuilder.group({
       identifier: this.identifierControl
     })
@@ -337,7 +399,7 @@ export class DialogContentProfileEnterGameDialog implements OnInit {
 
   onHost(game: GameType) {
     this.data.outputData.host = true;
-    this.data.outputData.game = game;
+    this.data.outputData.gameType = game;
     this.dialogRef.close(this.data.outputData);
   }
 

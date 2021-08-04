@@ -5,11 +5,11 @@ export class User {
               public username: string,
               public nickname: string,
               public email: string,
-              public roles: UserRole[]) {
+              public userRoles: UserRole[]) {
   }
 }
 
-export class UserSignupRequest {
+export class UserRegisterRequest {
   constructor(public username: string,
               public password: string,
               public nickname: string,
@@ -17,13 +17,13 @@ export class UserSignupRequest {
   }
 }
 
-export class UserSigninRequest {
+export class UserLoginRequest {
   constructor(public username: string,
               public password: string) {
   }
 }
 
-export class UserSigninResponse {
+export class UserLoginResponse {
   constructor(public id: number,
               public username: string,
               public roles: UserRole[],

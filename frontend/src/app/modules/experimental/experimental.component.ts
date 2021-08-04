@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {Stomp} from "@stomp/stompjs";
-import {TokenService} from "../../services/token.service";
+import {TokenService} from "../../authentication/token.service";
 
 @Component({
   selector: 'app-experimental',
@@ -11,7 +11,7 @@ export class ExperimentalComponent implements OnInit {
 
   public ws: any;
   public sessionId = "";
-  public url = "ws://localhost:8080/websoc/game";
+  public url = "ws://localhost:8080/communication/game";
 
   constructor(private tokenService: TokenService) {
     this.headers.Authentication = this.headers.Authentication + this.tokenService.getToken()?.accessToken;
@@ -31,7 +31,7 @@ export class ExperimentalComponent implements OnInit {
 
     let that = this;
     this.ws.connect(this.headers, function() {
-      that.ws.subscribe("/user/queue/messages", function(message: any) {
+      that.ws.subscribe("/user/queue/game/TEST", function(message: any) {
         console.log(message.body)
       });
 

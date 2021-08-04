@@ -1,7 +1,7 @@
 package com.fschoen.parlorplace.backend.controller.mapper;
 
 import com.fschoen.parlorplace.backend.controller.dto.game.GameIdentifierDTO;
-import com.fschoen.parlorplace.backend.game.management.GameIdentifier;
+import com.fschoen.parlorplace.backend.entity.GameIdentifier;
 import org.mapstruct.Mapper;
 
 @Mapper(componentModel = "spring")

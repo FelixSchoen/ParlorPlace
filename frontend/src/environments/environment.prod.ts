@@ -1,3 +1,7 @@
+import {environmentGeneral} from "./environment.general";
+
 export const environment = {
-  production: true
+  general: environmentGeneral,
+  production: true,
+  BASE_URI: "http://parlorplace.fschoen.com",
 };
