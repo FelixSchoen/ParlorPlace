@@ -107,7 +107,6 @@ export class ProfileComponent implements OnInit {
       gameService.getUserActiveGames().subscribe({
         next: (next) => {
           this.activeGamesMap.set(key, next);
-          console.log(this.activeGamesMap.get(key))
         }
       });
     })

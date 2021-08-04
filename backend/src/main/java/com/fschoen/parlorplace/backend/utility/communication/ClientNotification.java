@@ -1,6 +1,6 @@
 package com.fschoen.parlorplace.backend.utility.communication;
 
-import com.fschoen.parlorplace.backend.enumeration.StaleType;
+import com.fschoen.parlorplace.backend.enumeration.NotificationType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -17,6 +17,6 @@ import javax.validation.constraints.NotNull;
 public class ClientNotification {
 
     @NotNull
-    StaleType staleType;
+    NotificationType notificationType;
 
 }

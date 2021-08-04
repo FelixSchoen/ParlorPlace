@@ -4,4 +4,6 @@ export const environmentGeneral = {
   ENTRY_URI: "entry/",
   PROFILE_URI: "profile/",
   GAME_URI: "game/",
+  WEBSOCKET_GAME_URI: "communication/game",
+  WEBSOCKET_QUEUE_PRIMARY_URI: "/user/queue/game/primary/",
 }

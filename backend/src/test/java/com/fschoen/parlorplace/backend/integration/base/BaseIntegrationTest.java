@@ -25,9 +25,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.http.HttpHeaders;
 import org.springframework.messaging.converter.MappingJackson2MessageConverter;
-import org.springframework.messaging.converter.SimpleMessageConverter;
 import org.springframework.messaging.simp.stomp.StompCommand;
-import org.springframework.messaging.simp.stomp.StompFrameHandler;
 import org.springframework.messaging.simp.stomp.StompHeaders;
 import org.springframework.messaging.simp.stomp.StompSession;
 import org.springframework.messaging.simp.stomp.StompSessionHandler;
@@ -42,13 +40,8 @@ import org.springframework.web.socket.WebSocketHttpHeaders;
 import org.springframework.web.socket.client.WebSocketClient;
 import org.springframework.web.socket.client.standard.StandardWebSocketClient;
 import org.springframework.web.socket.messaging.WebSocketStompClient;
-import org.springframework.web.socket.sockjs.client.SockJsClient;
-import org.springframework.web.socket.sockjs.client.Transport;
-import org.springframework.web.socket.sockjs.client.WebSocketTransport;
 
 import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeoutException;
@@ -72,13 +65,15 @@ public abstract class BaseIntegrationTest {
     @Autowired
     private JwtUtils jwtUtils;
 
-    protected String BASE_URI = "/";
-    protected String USER_BASE_URI = BASE_URI + "user/";
-    protected String GAME_BASE_URI = BASE_URI + "game/";
-    protected String GENERAL_BASE_URI = GAME_BASE_URI + "general/";
-    protected String WEREWOLF_BASE_URI = GAME_BASE_URI + "werewolf/";
+    protected static final  String BASE_URI = "/";
+    protected static final  String USER_BASE_URI = BASE_URI + "user/";
+    protected static final  String GAME_BASE_URI = BASE_URI + "game/";
+    protected static final  String GENERAL_BASE_URI = GAME_BASE_URI + "general/";
+    protected static final  String WEREWOLF_BASE_URI = GAME_BASE_URI + "werewolf/";
 
-    private String WEBSOCKET_URI;
+    private static final String WEBSOCKET_QUEUE_PRIMARY_URI = "/user/queue/game/primary/";
+
+    private String WEBSOCKET_GAME_URI;
     private CompletableFuture<ClientNotification> notificationFuture;
 
     @LocalServerPort
@@ -90,7 +85,7 @@ public abstract class BaseIntegrationTest {
         this.generatedData = databasePopulator.generate();
 
         RestAssured.port = port;
-        WEBSOCKET_URI = "ws://localhost:" + port + "/communication/game";
+        WEBSOCKET_GAME_URI = "ws://localhost:" + port + "/communication/game";
     }
 
     // Authentication
@@ -190,7 +185,7 @@ public abstract class BaseIntegrationTest {
         StompSession stompSession = null;
 
         try {
-            stompSession = stompClient.connect(WEBSOCKET_URI, webSocketHttpHeaders, stompSessionHandler).get(1, SECONDS);
+            stompSession = stompClient.connect(WEBSOCKET_GAME_URI, webSocketHttpHeaders, stompSessionHandler).get(1, SECONDS);
         } catch (InterruptedException | TimeoutException | ExecutionException e) {
             e.printStackTrace();
         }
@@ -203,7 +198,7 @@ public abstract class BaseIntegrationTest {
 
     private void subscribeSocket(StompSession stompSession, GameIdentifier gameIdentifier) {
         notificationFuture = new CompletableFuture<>();
-        stompSession.subscribe("/user/queue/game/" + gameIdentifier.getToken(), new NotificationStompSessionHandler());
+        stompSession.subscribe(WEBSOCKET_QUEUE_PRIMARY_URI + gameIdentifier.getToken(), new NotificationStompSessionHandler());
     }
 
     protected ClientNotification readSocket(StompSession stompSession, GameIdentifier gameIdentifier) {
@@ -239,7 +234,7 @@ public abstract class BaseIntegrationTest {
 
         @Override
         public void handleFrame(StompHeaders headers, Object payload) {
-            // TODO After hours of research deserialization still does not work - The socket receives the correct representation of a ClientNotification, but in deserialization all the fields are discarded and set to null
+            // TODO After hours of research deserialization still does not work - The socket receives the correct representation of a ClientNotification, but in deserialization all the fields are discarded and set to null, only affects the backend testing aspect though, everything works fine in the frontend, so this fix would only be cosmetic
             ClientNotification clientNotification = (ClientNotification) payload;
             log.debug("Received Client Notification: {}", clientNotification);
             notificationFuture.complete(clientNotification);

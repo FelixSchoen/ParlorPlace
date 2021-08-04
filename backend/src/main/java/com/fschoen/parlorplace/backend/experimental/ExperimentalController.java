@@ -1,6 +1,6 @@
 package com.fschoen.parlorplace.backend.experimental;
 
-import com.fschoen.parlorplace.backend.enumeration.StaleType;
+import com.fschoen.parlorplace.backend.enumeration.NotificationType;
 import com.fschoen.parlorplace.backend.utility.communication.ClientNotification;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -28,7 +28,7 @@ public class ExperimentalController {
     @PostMapping("/exp/send/{username}")
     public ResponseEntity<String> sendMessage(@PathVariable("username") String username, @RequestBody String message) {
         try {
-            messagingTemplate.convertAndSendToUser(username, DESTINATION_URI + "TEST", ClientNotification.builder().staleType(StaleType.GAME).build());
+            messagingTemplate.convertAndSendToUser(username, DESTINATION_URI + "TEST", ClientNotification.builder().notificationType(NotificationType.STALE_GAME_INFORMATION).build());
         } catch (MessagingException e) {
             e.printStackTrace();
         }

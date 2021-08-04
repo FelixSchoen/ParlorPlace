@@ -14,7 +14,6 @@ import java.util.Set;
 @NoArgsConstructor
 //@AllArgsConstructor
 @SuperBuilder(toBuilder = true)
-// TODO Better way of serializing?
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "$class")
 @JsonSubTypes({
         @JsonSubTypes.Type(value = WerewolfLobbyChangeRequestDTO.class, name = "WerewolfLobbyChangeRequestDTO")}

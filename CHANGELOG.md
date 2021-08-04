@@ -13,6 +13,8 @@
 
 - **Incorporated feedback**
 - Deletion of games in lobby state on restart
+- Retrieval of games a user is currently part of
+  - Frontend visualization in order to be able to "re-join" a game
 
 ## Changed
 
