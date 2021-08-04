@@ -9,7 +9,9 @@ import com.fschoen.parlorplace.backend.controller.dto.user.UserRegisterRequestDT
 import com.fschoen.parlorplace.backend.controller.dto.user.UserUpdateRequestDTO;
 import com.fschoen.parlorplace.backend.controller.mapper.UserMapper;
 import com.fschoen.parlorplace.backend.entity.User;
+import com.fschoen.parlorplace.backend.service.ObfuscationService;
 import com.fschoen.parlorplace.backend.service.UserService;
+import com.fschoen.parlorplace.backend.service.implementation.obfuscation.UserObfuscationService;
 import com.fschoen.parlorplace.backend.validation.implementation.UserValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -24,21 +26,25 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @RequestMapping("/user")
 @RestController
 public class UserController {
 
     private final UserService userService;
+    private final ObfuscationService<UserDTO> obfuscationService;
 
     private final UserMapper userMapper;
 
     private final UserValidator validator = new UserValidator();
 
     @Autowired
-    public UserController(UserService userService, UserMapper userMapper) {
+    public UserController(UserService userService, ObfuscationService<UserDTO> obfuscationService, UserMapper userMapper) {
         this.userService = userService;
+        this.obfuscationService = obfuscationService;
         this.userMapper = userMapper;
     }
 
@@ -95,7 +101,8 @@ public class UserController {
     @GetMapping("/individual/{id}")
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     public ResponseEntity<UserDTO> getUser(@PathVariable("id") Long id) {
-        UserDTO userDTO = userMapper.toDTO(userService.getUser(id)); //TODO Mail
+        UserDTO userDTO = userMapper.toDTO(userService.getUser(id));
+        userDTO = obfuscationService.obfuscate(userDTO);
 
         return ResponseEntity.status(HttpStatus.OK).body(userDTO);
     }
@@ -103,7 +110,8 @@ public class UserController {
     @GetMapping("/individual/username/{username}")
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     public ResponseEntity<UserDTO> getUser(@PathVariable("username") String username) {
-        UserDTO userDTO = userMapper.toDTO(userService.getUser(username)); //TODO Mail
+        UserDTO userDTO = userMapper.toDTO(userService.getUser(username));
+        userDTO = obfuscationService.obfuscate(userDTO);
 
         return ResponseEntity.status(HttpStatus.OK).body(userDTO);
     }
@@ -112,7 +120,8 @@ public class UserController {
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     public ResponseEntity<Set<UserDTO>> getAllUsersFiltered(@RequestParam(value = "username", required = false) String username,
                                                             @RequestParam(value = "nickname", required = false) String nickname) {
-        Set<UserDTO> userDTOs = userMapper.toDTO(userService.getAllUsersFiltered(username, nickname)); // TODO Mail
+        Set<UserDTO> userDTOs = userMapper.toDTO(userService.getAllUsersFiltered(username, nickname));
+        userDTOs = new HashSet<>(obfuscationService.obfuscate(userDTOs.stream().toList()));
 
         return ResponseEntity.status(HttpStatus.OK).body(userDTOs);
     }

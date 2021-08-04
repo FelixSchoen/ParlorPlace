@@ -1,4 +1,4 @@
-package com.fschoen.parlorplace.backend.service.implementation;
+package com.fschoen.parlorplace.backend.service.implementation.game;
 
 import com.fschoen.parlorplace.backend.game.werewolf.entity.WerewolfGame;
 import com.fschoen.parlorplace.backend.game.werewolf.entity.WerewolfGameRole;
