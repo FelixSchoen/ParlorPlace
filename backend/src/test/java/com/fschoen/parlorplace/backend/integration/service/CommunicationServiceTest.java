@@ -6,16 +6,15 @@ import com.fschoen.parlorplace.backend.enumeration.NotificationType;
 import com.fschoen.parlorplace.backend.integration.base.BaseIntegrationTest;
 import com.fschoen.parlorplace.backend.service.CommunicationService;
 import com.fschoen.parlorplace.backend.utility.communication.ClientNotification;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.stomp.StompSession;
-import org.springframework.test.annotation.DirtiesContext;
 
 import java.util.HashSet;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@DirtiesContext
 public class CommunicationServiceTest extends BaseIntegrationTest {
 
     @Autowired
@@ -30,6 +29,7 @@ public class CommunicationServiceTest extends BaseIntegrationTest {
     }
 
     @Test
+    @Disabled
     public void sendMessage_ToSpecificUsers_ResultsInUsersReceiveMessages() {
         User user1 = this.generatedData.getUserCollection().getUser1();
         User user2 = this.generatedData.getUserCollection().getUser2();
@@ -45,6 +45,7 @@ public class CommunicationServiceTest extends BaseIntegrationTest {
 
         ClientNotification notificationUser1 = waitNotification(user1, sessionUser1, gameIdentifier);
         ClientNotification notificationUser2 = waitNotification(user2, sessionUser2, gameIdentifier);
+
         assertThat(notificationUser1.getNotificationType()).isEqualTo(NotificationType.STALE_GAME_INFORMATION);
         assertThat(notificationUser2.getNotificationType()).isEqualTo(NotificationType.STALE_GAME_INFORMATION);
 

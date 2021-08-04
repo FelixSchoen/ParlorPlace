@@ -1,4 +1,4 @@
-package com.fschoen.parlorplace.backend.service.implementation;
+package com.fschoen.parlorplace.backend.service.implementation.game;
 
 import com.fschoen.parlorplace.backend.game.werewolf.entity.WerewolfGame;
 import com.fschoen.parlorplace.backend.game.werewolf.entity.WerewolfGameRole;
@@ -24,7 +24,12 @@ public class WerewolfGameService extends AbstractGameService<
         > {
 
     @Autowired
-    public WerewolfGameService(UserRepository userRepository, CommunicationService communicationService, GameIdentifierService gameIdentifierService, WerewolfGameRepository gameRepository) {
+    public WerewolfGameService(
+            UserRepository userRepository,
+            CommunicationService communicationService,
+            GameIdentifierService gameIdentifierService,
+            WerewolfGameRepository gameRepository
+    ) {
         super(userRepository, communicationService, gameIdentifierService, gameRepository, WerewolfGame.class, WerewolfPlayer.class, WerewolfRuleSet.class);
     }
 

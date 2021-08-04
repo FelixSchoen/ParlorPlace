@@ -24,7 +24,7 @@ public class WerewolfRuleSetMapperTest {
 
     @Test
     public void mapWerewolfRuleSet_toWerewolfRuleSetDTO() {
-        WerewolfRuleSet werewolfRuleSet = WerewolfRuleSet.builder().id(0L).roles(new ArrayList<>(){{
+        WerewolfRuleSet werewolfRuleSet = WerewolfRuleSet.builder().id(0L).roles(new ArrayList<>() {{
             add(WerewolfRoleType.WEREWOLF);
             add(WerewolfRoleType.VILLAGER);
         }}).build();

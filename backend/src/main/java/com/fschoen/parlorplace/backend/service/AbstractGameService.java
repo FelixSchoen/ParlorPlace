@@ -43,7 +43,15 @@ public abstract class AbstractGameService<
     protected final Class<P> playerClass;
     protected final Class<RS> ruleSetClass;
 
-    public AbstractGameService(UserRepository userRepository, CommunicationService communicationService, GameIdentifierService gameIdentifierService, GRepo gameRepository, Class<G> gameClass, Class<P> playerClass, Class<RS> ruleSetClass) {
+    public AbstractGameService(
+            UserRepository userRepository,
+            CommunicationService communicationService,
+            GameIdentifierService gameIdentifierService,
+            GRepo gameRepository,
+            Class<G> gameClass,
+            Class<P> playerClass,
+            Class<RS> ruleSetClass
+    ) {
         super(userRepository);
         this.communicationService = communicationService;
         this.gameIdentifierService = gameIdentifierService;

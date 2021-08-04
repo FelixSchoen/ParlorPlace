@@ -1,4 +1,4 @@
-package com.fschoen.parlorplace.backend.service.implementation;
+package com.fschoen.parlorplace.backend.service.implementation.authentication;
 
 import com.fschoen.parlorplace.backend.entity.RefreshToken;
 import com.fschoen.parlorplace.backend.entity.User;
@@ -28,7 +28,10 @@ public class RefreshTokenServiceImplementation implements RefreshTokenService {
     private Long refreshTokenDurationMs;
 
     @Autowired
-    public RefreshTokenServiceImplementation(RefreshTokenRepository refreshTokenRepository, UserRepository userRepository) {
+    public RefreshTokenServiceImplementation(
+            RefreshTokenRepository refreshTokenRepository,
+            UserRepository userRepository
+    ) {
         this.refreshTokenRepository = refreshTokenRepository;
         this.userRepository = userRepository;
     }

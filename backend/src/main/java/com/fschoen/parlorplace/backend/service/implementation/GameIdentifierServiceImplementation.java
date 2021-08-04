@@ -14,9 +14,8 @@ import java.util.Random;
 @Service
 public class GameIdentifierServiceImplementation implements GameIdentifierService {
 
-    private final GameRepository<?> gameRepository;
-
     private static final String CHARSET = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    private final GameRepository<?> gameRepository;
 
     @Autowired
     public GameIdentifierServiceImplementation(GeneralGameRepository gameRepository) {

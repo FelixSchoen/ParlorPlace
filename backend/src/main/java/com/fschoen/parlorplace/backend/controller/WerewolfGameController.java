@@ -14,6 +14,7 @@ import com.fschoen.parlorplace.backend.game.werewolf.mapper.WerewolfPlayerMapper
 import com.fschoen.parlorplace.backend.game.werewolf.mapper.WerewolfRuleSetMapper;
 import com.fschoen.parlorplace.backend.repository.GameRepository;
 import com.fschoen.parlorplace.backend.service.AbstractGameService;
+import com.fschoen.parlorplace.backend.service.ObfuscationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -28,12 +29,18 @@ public class WerewolfGameController extends AbstractGameController<
         WerewolfGameDTO,
         WerewolfPlayerDTO,
         WerewolfRuleSetDTO,
-        WerewolfLobbyChangeRequestDTO
-        > {
+        WerewolfLobbyChangeRequestDTO> {
 
     @Autowired
-    public WerewolfGameController(AbstractGameService<WerewolfGame, WerewolfPlayer, WerewolfRuleSet, WerewolfGameRole, ? extends GameRepository<WerewolfGame>> gameService, UserMapper userMapper, WerewolfGameMapper gameMapper, WerewolfPlayerMapper playerMapper, WerewolfRuleSetMapper ruleSetMapper) {
-        super(gameService, userMapper, gameMapper, playerMapper, ruleSetMapper);
+    public WerewolfGameController(
+            AbstractGameService<WerewolfGame, WerewolfPlayer, WerewolfRuleSet, WerewolfGameRole, ? extends GameRepository<WerewolfGame>> gameService,
+            ObfuscationService<WerewolfGameDTO> gameObfuscationService,
+            UserMapper userMapper,
+            WerewolfGameMapper gameMapper,
+            WerewolfPlayerMapper playerMapper,
+            WerewolfRuleSetMapper ruleSetMapper
+    ) {
+        super(gameService, gameObfuscationService, userMapper, gameMapper, playerMapper, ruleSetMapper);
     }
 
 }

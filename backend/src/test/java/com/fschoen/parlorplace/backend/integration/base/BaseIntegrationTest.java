@@ -58,29 +58,25 @@ import static java.util.concurrent.TimeUnit.SECONDS;
 @Slf4j
 public abstract class BaseIntegrationTest {
 
-    protected GeneratedData generatedData;
-    @Autowired
-    private DatabasePopulator databasePopulator;
-    @Autowired
-    private TestIsolationService testIsolationService;
-
-    @Autowired
-    private AuthenticationManager authenticationManager;
-    @Autowired
-    private JwtUtils jwtUtils;
-
     protected static final String BASE_URI = "/";
     protected static final String USER_BASE_URI = BASE_URI + "user/";
     protected static final String GAME_BASE_URI = BASE_URI + "game/";
     protected static final String GENERAL_BASE_URI = GAME_BASE_URI + "general/";
     protected static final String WEREWOLF_BASE_URI = GAME_BASE_URI + "werewolf/";
     protected static final String WEBSOCKET_QUEUE_PRIMARY_URI = "/user/queue/game/primary/";
-
+    protected GeneratedData generatedData;
     protected String WEBSOCKET_GAME_URI;
     protected Map<User, CompletableFuture<ClientNotification>> futureMap = new HashMap<>();
-
     @LocalServerPort
     protected int port;
+    @Autowired
+    private DatabasePopulator databasePopulator;
+    @Autowired
+    private TestIsolationService testIsolationService;
+    @Autowired
+    private AuthenticationManager authenticationManager;
+    @Autowired
+    private JwtUtils jwtUtils;
 
     @BeforeEach
     public void beforeBase() {

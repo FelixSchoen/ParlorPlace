@@ -18,12 +18,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class ExperimentalController {
 
+    private static final String DESTINATION_URI = "/queue/game/";
     @Autowired
     private SimpMessageSendingOperations messagingTemplate;
     @Autowired
     private SimpMessagingTemplate simpMessagingTemplate;
-
-    private static final String DESTINATION_URI = "/queue/game/";
 
     @PostMapping("/exp/send/{username}")
     public ResponseEntity<String> sendMessage(@PathVariable("username") String username, @RequestBody String message) {

@@ -25,6 +25,10 @@ public class JwtUtils {
     @Value("${fschoen.parlorplace.jwtExpirationMs}")
     private int jwtExpirationMs;
 
+    private static SecretKey getKey(String jwtSecret) {
+        return Keys.hmacShaKeyFor(jwtSecret.getBytes(StandardCharsets.UTF_8));
+    }
+
     public String generateJwtToken(UserDetailsImplementation userPrincipal) {
         return generateTokenFromUsername(userPrincipal.getUsername());
     }
@@ -56,10 +60,6 @@ public class JwtUtils {
         }
 
         return false;
-    }
-
-    private static SecretKey getKey(String jwtSecret) {
-        return Keys.hmacShaKeyFor(jwtSecret.getBytes(StandardCharsets.UTF_8));
     }
 
 }

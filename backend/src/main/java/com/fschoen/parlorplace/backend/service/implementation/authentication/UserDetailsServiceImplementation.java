@@ -1,4 +1,4 @@
-package com.fschoen.parlorplace.backend.service.implementation;
+package com.fschoen.parlorplace.backend.service.implementation.authentication;
 
 import com.fschoen.parlorplace.backend.entity.User;
 import com.fschoen.parlorplace.backend.repository.UserRepository;

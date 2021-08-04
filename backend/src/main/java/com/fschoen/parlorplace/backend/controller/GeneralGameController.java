@@ -22,7 +22,10 @@ public class GeneralGameController {
     private final GameIdentifierMapper gameIdentifierMapper;
 
     @Autowired
-    public GeneralGameController(GeneralGameService gameService, GameIdentifierMapper gameIdentifierMapper) {
+    public GeneralGameController(
+            GeneralGameService gameService,
+            GameIdentifierMapper gameIdentifierMapper
+    ) {
         this.gameService = gameService;
         this.gameIdentifierMapper = gameIdentifierMapper;
     }
@@ -38,7 +41,6 @@ public class GeneralGameController {
 
         return ResponseEntity.status(HttpStatus.OK).body(gameBaseInformationDTO);
     }
-
 
 
 }

@@ -19,10 +19,9 @@ import java.util.Set;
 @Service
 public class CommunicationServiceImplementation implements CommunicationService {
 
-    private final SimpMessagingTemplate messagingTemplate;
-
     private static final String PRIMARY_DESTINATION_URI = "/queue/game/primary/";
     private static final String SECONDARY_DESTINATION_URI = "/queue/game/secondary/";
+    private final SimpMessagingTemplate messagingTemplate;
 
     @Autowired
     public CommunicationServiceImplementation(SimpMessagingTemplate messagingTemplate) {

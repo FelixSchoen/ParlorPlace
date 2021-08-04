@@ -37,12 +37,12 @@ public class WerewolfGameMapperTest {
 
     @Test
     public void mapWerewolfGame_toWerewolfGameDTO() {
-        User user = User.builder().roles(new HashSet<>(){{
+        User user = User.builder().roles(new HashSet<>() {{
             add(Role.builder().role(UserRole.ROLE_USER).build());
         }}).build();
         WerewolfGameRole gameRole = WerewolfGameRole.builder().id(0L).werewolfRoleType(WerewolfRoleType.VILLAGER).build();
         WerewolfPlayer player = WerewolfPlayer.builder().id(0L).user(user).playerState(PlayerState.ALIVE).position(0).gameRole(gameRole).build();
-        Set<WerewolfPlayer> players = new HashSet<>(){{
+        Set<WerewolfPlayer> players = new HashSet<>() {{
             add(player);
         }};
         WerewolfGame game = WerewolfGame.builder().id(0L).players(players).build();
