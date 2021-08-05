@@ -8,7 +8,6 @@ import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
 import {DistinctPipe} from "../../pipes/distinct.pipe";
 
 
-
 @NgModule({
   declarations: [
     GeneralComponent,
