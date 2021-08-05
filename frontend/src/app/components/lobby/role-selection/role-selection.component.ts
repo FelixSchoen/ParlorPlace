@@ -48,4 +48,17 @@ export class RoleSelectionComponent<R, P extends Player> implements OnInit {
     this.roleChanged.emit(this.roles);
   }
 
+  countRole(
+    role: R
+  ): number {
+    let count = 0;
+
+    for (let existingRole of this.roles) {
+      if (existingRole == role)
+        count++;
+    }
+
+    return count;
+  }
+
 }

@@ -3,11 +3,11 @@
 
   <mat-chip-list #roleChipList>
     <mat-chip
-      *ngFor="let role of this.roles"
+      *ngFor="let role of this.roles | distinct"
       [selectable]="false"
       [removable]="true"
       (removed)="removeRole(role)">
-      {{this.toStringRepresentation(role)}}
+      {{this.countRole(role)}}x {{this.toStringRepresentation(role)}}
       <mat-icon matChipRemove>cancel</mat-icon>
     </mat-chip>
   </mat-chip-list>

@@ -11,18 +11,20 @@ import {MatSnackBarModule} from "@angular/material/snack-bar";
 import {OverlayContainer} from "@angular/cdk/overlay";
 
 @NgModule({
-  declarations: [
-    AppComponent,
-  ],
-  imports: [
-    AppRoutingModule,
-    BrowserModule,
-    BrowserAnimationsModule,
-    HttpClientModule,
-    MatSnackBarModule,
-  ],
-  providers: [authInterceptorProviders],
-  bootstrap: [AppComponent]
+    declarations: [
+        AppComponent,
+    ],
+    imports: [
+        AppRoutingModule,
+        BrowserModule,
+        BrowserAnimationsModule,
+        HttpClientModule,
+        MatSnackBarModule,
+    ],
+    providers: [authInterceptorProviders],
+    exports: [
+    ],
+    bootstrap: [AppComponent]
 })
 export class AppModule {
 
