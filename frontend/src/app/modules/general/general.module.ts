@@ -6,6 +6,7 @@ import {GeneralComponent} from './general.component';
 import {LoadingIndicatorComponent} from "./loading-indicator/loading-indicator.component";
 import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
 import {DistinctPipe} from "../../pipes/distinct.pipe";
+import {HttpClientModule} from "@angular/common/http";
 
 
 @NgModule({
@@ -17,6 +18,7 @@ import {DistinctPipe} from "../../pipes/distinct.pipe";
   imports: [
     CommonModule,
     GeneralRoutingModule,
+    HttpClientModule,
     MatProgressSpinnerModule
   ],
   exports: [

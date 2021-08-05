@@ -63,7 +63,7 @@
             <mat-list-item *ngFor="let gameEntry of activeGamesMap | keyvalue; last as last">
                 <mat-selection-list [multiple]="false" class="w-100">
                   <mat-list-option *ngFor="let game of gameEntry.value" (click)="joinGameFromList(game)">
-                    <mat-icon mat-list-icon>casino</mat-icon>
+                    <mat-icon mat-list-icon svgIcon="duotone-{{gameEntry.key | lowercase}}"></mat-icon>
                     <h3 matLine>
                       {{gameEntry.key | titlecase}}
                     </h3>
