@@ -13,9 +13,8 @@ export class RoleSelectionComponent<R, P extends Player> implements OnInit {
 
   @Input() roles: R[];
   @Input() currentPlayer: P;
-  @Input() mayEdit: any;
-  @Input() getArray: any;
-  @Input() toStringRepresentation: any;
+  @Input() mayEdit: (player: Player) => boolean;
+  @Input() getArray: () => R[];
 
   @Output() roleChanged = new EventEmitter<R[]>();
 
@@ -23,7 +22,8 @@ export class RoleSelectionComponent<R, P extends Player> implements OnInit {
 
   public roleControl = new FormControl();
 
-  constructor() { }
+  constructor() {
+  }
 
   ngOnInit(): void {
   }
@@ -46,6 +46,12 @@ export class RoleSelectionComponent<R, P extends Player> implements OnInit {
     this.roleInput.nativeElement.value = "";
     this.roleControl.setValue(null);
     this.roleChanged.emit(this.roles);
+  }
+
+  private filter(value: any): R[] {
+    const filterValue = value.toLowerCase();
+
+    return this.getArray().filter(role => (String(role)).includes(filterValue));
   }
 
   countRole(
