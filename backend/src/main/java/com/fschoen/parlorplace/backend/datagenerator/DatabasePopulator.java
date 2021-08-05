@@ -1,14 +1,23 @@
 package com.fschoen.parlorplace.backend.datagenerator;
 
+import com.fschoen.parlorplace.backend.entity.GameIdentifier;
 import com.fschoen.parlorplace.backend.entity.Role;
 import com.fschoen.parlorplace.backend.entity.User;
+import com.fschoen.parlorplace.backend.enumeration.GameState;
+import com.fschoen.parlorplace.backend.enumeration.LobbyRole;
+import com.fschoen.parlorplace.backend.enumeration.PlayerState;
 import com.fschoen.parlorplace.backend.enumeration.UserRole;
+import com.fschoen.parlorplace.backend.game.werewolf.entity.WerewolfGame;
+import com.fschoen.parlorplace.backend.game.werewolf.entity.WerewolfPlayer;
+import com.fschoen.parlorplace.backend.game.werewolf.entity.WerewolfRuleSet;
+import com.fschoen.parlorplace.backend.repository.GameRepository;
 import com.fschoen.parlorplace.backend.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -20,10 +29,15 @@ import java.util.Set;
 public class DatabasePopulator {
 
     private final UserRepository userRepository;
+    private final GameRepository<WerewolfGame> werewolfGameGameRepository;
 
     @Autowired
-    public DatabasePopulator(UserRepository userRepository) {
+    public DatabasePopulator(
+            UserRepository userRepository,
+            GameRepository<WerewolfGame> werewolfGameGameRepository
+    ) {
         this.userRepository = userRepository;
+        this.werewolfGameGameRepository = werewolfGameGameRepository;
     }
 
     /**
@@ -39,6 +53,9 @@ public class DatabasePopulator {
 
         log.info("Generating UserCollection");
         generatedData.setUserCollection(setupUserCollection(passwordCollection));
+
+        log.info("Generating WerewolfGameCollection");
+        generatedData.setWerewolfGameCollection(setupWerewolfGameCollection(generatedData));
 
         return generatedData;
     }
@@ -129,6 +146,48 @@ public class DatabasePopulator {
 
         userRepository.flush();
         return userCollection;
+    }
+
+    private GeneratedData.WerewolfGameCollection setupWerewolfGameCollection(GeneratedData generatedData) {
+        GeneratedData.WerewolfGameCollection werewolfGameCollection = new GeneratedData.WerewolfGameCollection();
+
+        //werewolfGame1
+        WerewolfGame werewolfGame1 = WerewolfGame.builder()
+                .gameIdentifier(new GameIdentifier("GAME1"))
+                .gameState(GameState.LOBBY)
+                .players(new HashSet<>())
+                .ruleSet(new WerewolfRuleSet())
+                .startedAt(new Date())
+                .build();
+        werewolfGame1.getPlayers().add(
+                WerewolfPlayer.builder()
+                        .user(generatedData.getUserCollection().getAdmin1())
+                        .game(werewolfGame1)
+                        .lobbyRole(LobbyRole.ROLE_ADMIN)
+                        .playerState(PlayerState.ALIVE)
+                        .position(0)
+                        .disconnected(false)
+                        .build()
+        );
+        werewolfGame1.getPlayers().add(
+                WerewolfPlayer.builder()
+                        .user(generatedData.getUserCollection().getUser1())
+                        .game(werewolfGame1)
+                        .lobbyRole(LobbyRole.ROLE_USER)
+                        .playerState(PlayerState.ALIVE)
+                        .position(1)
+                        .disconnected(false)
+                        .build()
+        );
+
+        werewolfGameCollection.setWerewolfGame1(werewolfGameGameRepository.save(werewolfGame1));
+        werewolfGameCollection.setWerewolfGame1Users(new HashSet<>(){{
+            add(generatedData.getUserCollection().getAdmin1());
+            add(generatedData.getUserCollection().getUser1());
+        }});
+
+        werewolfGameGameRepository.flush();
+        return werewolfGameCollection;
     }
 
 }
