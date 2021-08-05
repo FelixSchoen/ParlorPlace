@@ -102,7 +102,7 @@ export class ProfileComponent implements OnInit {
       }
     });
 
-    this.gameServiceMap.forEach((value: any, key:GameType) => {
+    this.gameServiceMap.forEach((value: any, key: GameType) => {
       let gameService: AbstractGameService<any> = this.injector.get(value);
       gameService.getUserActiveGames().subscribe({
         next: (next) => {
@@ -199,9 +199,13 @@ export class ProfileComponent implements OnInit {
                   next: (result: Game) => {
                     this.router.navigate([environment.general.GAME_URI + result.gameIdentifier.token]).then();
                   },
-                  error: (error: { error: string; }) => this.notificationService.showError(error.error)
+                  error: (error: { error: string; }) => {
+                    this.notificationService.showError(error.error);
+                  }
                 });
-
+              },
+              error: (error: { error: string; }) => {
+                this.notificationService.showError(error.error);
               }
             })
           }
