@@ -45,8 +45,8 @@ public abstract class Player<GR extends GameRole> {
     @SequenceGenerator(name = "seq_player_id", sequenceName = "seq_player_id")
     protected Long id;
 
-    @OneToOne
-    @JoinColumn(name = "user_id")
+    @ManyToOne
+    @JoinColumn
     @NotNull
     protected User user;
 
@@ -71,7 +71,7 @@ public abstract class Player<GR extends GameRole> {
     @NotNull
     protected PlayerState playerState;
 
-    @OneToMany(mappedBy = "player", targetEntity = GameRole.class, /*fetch = FetchType.EAGER, */cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "player", targetEntity = GameRole.class, cascade = CascadeType.ALL, orphanRemoval = true)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @LazyCollection(LazyCollectionOption.FALSE)
     @EqualsAndHashCode.Exclude

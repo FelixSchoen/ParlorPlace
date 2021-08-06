@@ -12,6 +12,7 @@ import com.fschoen.parlorplace.backend.game.werewolf.dto.game.WerewolfGameDTO;
 import com.fschoen.parlorplace.backend.game.werewolf.entity.WerewolfGame;
 import com.fschoen.parlorplace.backend.game.werewolf.entity.WerewolfGameRole;
 import com.fschoen.parlorplace.backend.game.werewolf.entity.WerewolfPlayer;
+import com.fschoen.parlorplace.backend.game.werewolf.entity.gamerole.VillagerWerewolfGameRole;
 import com.fschoen.parlorplace.backend.game.werewolf.enumeration.WerewolfRoleType;
 import com.fschoen.parlorplace.backend.game.werewolf.mapper.WerewolfGameMapper;
 import com.fschoen.parlorplace.backend.game.werewolf.mapper.WerewolfGameMapperImpl;
@@ -41,7 +42,7 @@ public class WerewolfGameMapperTest {
         User user = User.builder().roles(new HashSet<>() {{
             add(Role.builder().role(UserRole.ROLE_USER).build());
         }}).build();
-        WerewolfGameRole gameRole = WerewolfGameRole.builder().id(0L).werewolfRoleType(WerewolfRoleType.VILLAGER).build();
+        WerewolfGameRole gameRole = VillagerWerewolfGameRole.builder().id(0L).build();
         WerewolfPlayer player = WerewolfPlayer.builder().id(0L).user(user).playerState(PlayerState.ALIVE).position(0).gameRoles(new ArrayList<>(){{
             add(gameRole);
         }}).build();

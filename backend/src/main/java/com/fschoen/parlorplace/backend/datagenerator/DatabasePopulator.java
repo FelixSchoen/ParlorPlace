@@ -11,7 +11,9 @@ import com.fschoen.parlorplace.backend.game.werewolf.entity.WerewolfGame;
 import com.fschoen.parlorplace.backend.game.werewolf.entity.WerewolfPlayer;
 import com.fschoen.parlorplace.backend.game.werewolf.entity.WerewolfRuleSet;
 import com.fschoen.parlorplace.backend.game.werewolf.enumeration.WerewolfGamePhase;
+import com.fschoen.parlorplace.backend.game.werewolf.enumeration.WerewolfRoleType;
 import com.fschoen.parlorplace.backend.repository.GameRepository;
+import com.fschoen.parlorplace.backend.repository.PlayerRepository;
 import com.fschoen.parlorplace.backend.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +34,9 @@ public class DatabasePopulator {
 
     private final UserRepository userRepository;
     private final GameRepository<WerewolfGame> werewolfGameGameRepository;
+
+    @Autowired
+    private PlayerRepository<WerewolfPlayer> werewolfPlayerPlayerRepository;
 
     @Autowired
     public DatabasePopulator(
@@ -158,7 +163,12 @@ public class DatabasePopulator {
                 .gameIdentifier(new GameIdentifier("GAME1"))
                 .gameState(GameState.LOBBY)
                 .players(new HashSet<>())
-                .ruleSet(new WerewolfRuleSet())
+                .ruleSet(WerewolfRuleSet.builder()
+                        .gameRoleTypes(new ArrayList<>(){{
+                            add(WerewolfRoleType.WEREWOLF);
+                            add(WerewolfRoleType.VILLAGER);
+                            add(WerewolfRoleType.VILLAGER);
+                        }}).build())
                 .round(0)
                 .log(new ArrayList<>())
                 .startedAt(new Date())
@@ -183,6 +193,19 @@ public class DatabasePopulator {
                         .playerState(PlayerState.ALIVE)
                         .gameRoles(new ArrayList<>())
                         .position(1)
+
+                        .disconnected(false)
+                        .build()
+        );
+        werewolfGame1.getPlayers().add(
+                WerewolfPlayer.builder()
+                        .user(generatedData.getUserCollection().getUser2())
+                        .game(werewolfGame1)
+                        .lobbyRole(LobbyRole.ROLE_USER)
+                        .playerState(PlayerState.ALIVE)
+                        .gameRoles(new ArrayList<>())
+                        .position(1)
+
                         .disconnected(false)
                         .build()
         );
@@ -191,6 +214,7 @@ public class DatabasePopulator {
         werewolfGameCollection.setWerewolfGame1Users(new HashSet<>(){{
             add(generatedData.getUserCollection().getAdmin1());
             add(generatedData.getUserCollection().getUser1());
+            add(generatedData.getUserCollection().getUser2());
         }});
 
         werewolfGameGameRepository.flush();

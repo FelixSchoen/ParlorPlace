@@ -113,6 +113,18 @@ public abstract class AbstractGameController<
         return ResponseEntity.status(HttpStatus.OK).body(gameDTO);
     }
 
+    @PostMapping("/start/{identifier}")
+    public ResponseEntity<GDTO> startGame(@PathVariable("identifier") String identifier) {
+        GameIdentifier gameIdentifier = new GameIdentifier(identifier);
+        G game;
+
+        game = this.gameService.startGame(gameIdentifier);
+
+        GDTO gameDTO = gameMapper.toDTO(game);
+
+        return ResponseEntity.status(HttpStatus.OK).body(gameDTO);
+    }
+
     @GetMapping("/{identifier}")
     public ResponseEntity<GDTO> getGame(@PathVariable("identifier") String identifier) {
         GameIdentifier gameIdentifier = new GameIdentifier(identifier);

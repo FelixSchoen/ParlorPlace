@@ -6,6 +6,7 @@ import com.fschoen.parlorplace.backend.enumeration.PlayerState;
 import com.fschoen.parlorplace.backend.game.werewolf.dto.game.WerewolfPlayerDTO;
 import com.fschoen.parlorplace.backend.game.werewolf.entity.WerewolfGameRole;
 import com.fschoen.parlorplace.backend.game.werewolf.entity.WerewolfPlayer;
+import com.fschoen.parlorplace.backend.game.werewolf.entity.gamerole.VillagerWerewolfGameRole;
 import com.fschoen.parlorplace.backend.game.werewolf.enumeration.WerewolfRoleType;
 import com.fschoen.parlorplace.backend.game.werewolf.mapper.WerewolfGameRoleMapperImpl;
 import com.fschoen.parlorplace.backend.game.werewolf.mapper.WerewolfPlayerMapper;
@@ -29,7 +30,7 @@ public class WerewolfPlayerMapperTest {
 
     @Test
     public void mapWerewolfPlayer_toWerewolfPlayerDTO() {
-        WerewolfGameRole gameRole = WerewolfGameRole.builder().id(0L).werewolfRoleType(WerewolfRoleType.VILLAGER).build();
+        WerewolfGameRole gameRole = VillagerWerewolfGameRole.builder().id(0L).build();
         WerewolfPlayer player = WerewolfPlayer.builder().id(0L).playerState(PlayerState.ALIVE).position(0).gameRoles(new ArrayList<>(){{
             add(gameRole);
         }}).build();

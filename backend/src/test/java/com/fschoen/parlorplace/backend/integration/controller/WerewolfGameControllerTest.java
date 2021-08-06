@@ -8,6 +8,7 @@ import com.fschoen.parlorplace.backend.game.werewolf.dto.game.WerewolfGameDTO;
 import com.fschoen.parlorplace.backend.game.werewolf.dto.game.WerewolfPlayerDTO;
 import com.fschoen.parlorplace.backend.game.werewolf.dto.lobby.WerewolfLobbyChangeRequestDTO;
 import com.fschoen.parlorplace.backend.game.werewolf.dto.lobby.WerewolfRuleSetDTO;
+import com.fschoen.parlorplace.backend.game.werewolf.entity.WerewolfGame;
 import com.fschoen.parlorplace.backend.game.werewolf.enumeration.WerewolfRoleType;
 import com.fschoen.parlorplace.backend.integration.base.BaseIntegrationTest;
 import io.restassured.response.Response;
@@ -266,6 +267,16 @@ public class WerewolfGameControllerTest extends BaseIntegrationTest {
 
         List<WerewolfGameDTO> werewolfGameDTOList = Arrays.asList(responseGetActiveGames.getBody().as(WerewolfGameDTO[].class));
         assertThat(werewolfGameDTOList).anyMatch(gameDTO -> gameDTO.getGameIdentifier().equals(werewolfGameDTO.getGameIdentifier()));
+    }
+
+    @Test
+    public void startLobbyGame() {
+        User admin1 = this.generatedData.getUserCollection().getAdmin1();
+        WerewolfGame werewolfGame = this.generatedData.getWerewolfGameCollection().getWerewolfGame1();
+
+        Response responseStartGame = post("", WEREWOLF_BASE_URI + "start/" + werewolfGame.getGameIdentifier().getToken(), getToken(admin1));
+        System.out.println(responseStartGame.getBody().peek());
+        assertThat(responseStartGame.statusCode()).isEqualTo(HttpStatus.OK.value());
     }
 
 }

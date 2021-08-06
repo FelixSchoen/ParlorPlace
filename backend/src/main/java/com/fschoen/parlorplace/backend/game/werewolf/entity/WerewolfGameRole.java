@@ -16,17 +16,15 @@ import javax.persistence.InheritanceType;
 import javax.validation.constraints.NotNull;
 
 @NoArgsConstructor
-@AllArgsConstructor
+//@AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 @SuperBuilder(toBuilder = true)
 @ToString(callSuper = true)
 @Data
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-public class WerewolfGameRole extends GameRole {
+public abstract class WerewolfGameRole extends GameRole {
 
-    @Column(nullable = false)
-    @NotNull
-    private WerewolfRoleType werewolfRoleType;
+    public abstract WerewolfRoleType getWerewolfRoleType();
 
 }
