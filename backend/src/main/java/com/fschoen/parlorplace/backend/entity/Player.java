@@ -1,5 +1,6 @@
 package com.fschoen.parlorplace.backend.entity;
 
+import com.fschoen.parlorplace.backend.enumeration.CodeName;
 import com.fschoen.parlorplace.backend.enumeration.LobbyRole;
 import com.fschoen.parlorplace.backend.enumeration.PlayerState;
 import lombok.AllArgsConstructor;
@@ -49,13 +50,17 @@ public abstract class Player<GR extends GameRole> {
     @NotNull
     protected User user;
 
+    @Column
+    @Enumerated
+    protected CodeName codeName;
+
     @ManyToOne(targetEntity = Game.class)
     @JoinColumn
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
     @NotNull
     //TODO I don't need this, but I can't get @OneToMany to work without this - always throws exceptions "Batch Update Returned Unexpected Row Count"
-    protected Game<?, ?> game;
+    protected Game<?, ?, ?> game;
 
     @Column(nullable = false)
     @Enumerated

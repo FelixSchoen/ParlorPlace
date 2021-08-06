@@ -160,6 +160,7 @@ public class DatabasePopulator {
                 .players(new HashSet<>())
                 .ruleSet(new WerewolfRuleSet())
                 .round(0)
+                .log(new ArrayList<>())
                 .startedAt(new Date())
                 .gamePhase(WerewolfGamePhase.START_OF_ROUND)
                 .build();

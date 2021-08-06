@@ -12,13 +12,21 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Data
 public abstract class AbstractGameModerator<
-        G extends Game<P, RS>,
+        G extends Game<P, RS, ?>,
         P extends Player<GR>,
         RS extends RuleSet,
         GR extends GameRole,
         GRepo extends GameRepository<G>
         > implements Runnable {
 
+    protected final CommunicationService communicationService;
+
+    protected final GRepo gameRepository;
+
     protected GameIdentifier gameIdentifier;
 
+    public AbstractGameModerator(CommunicationService communicationService, GRepo gameRepository) {
+        this.communicationService = communicationService;
+        this.gameRepository = gameRepository;
+    }
 }

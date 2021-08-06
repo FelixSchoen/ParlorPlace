@@ -30,7 +30,7 @@ import java.util.stream.Collectors;
 
 @Slf4j
 public abstract class AbstractGameService<
-        G extends Game<P, RS>,
+        G extends Game<P, RS, ?>,
         P extends Player<GR>,
         RS extends RuleSet,
         GR extends GameRole,
@@ -78,6 +78,7 @@ public abstract class AbstractGameService<
             RS ruleSet = this.getRuleSetClass().getDeclaredConstructor().newInstance();
             game.setRuleSet(ruleSet);
             game.setRound(0);
+            game.setLog(new ArrayList<>());
             game.setStartedAt(new Date());
             game.setGameIdentifier(this.gameIdentifierService.generateValidGameIdentifier());
             game = onInitializeGame(game);
@@ -335,7 +336,7 @@ public abstract class AbstractGameService<
 
     protected G getActiveGame(GameIdentifier gameIdentifier) {
         List<G> games = this.getActiveGames(gameIdentifier);
-        Game<?, ?> game = games.get(0);
+        Game<?, ?, ?> game = games.get(0);
         if (!(this.getGameClass().isInstance(game)))
             throw new DataConflictException(Messages.exception(MessageIdentifiers.GAME_TYPE_MISMATCH));
         return games.get(0);

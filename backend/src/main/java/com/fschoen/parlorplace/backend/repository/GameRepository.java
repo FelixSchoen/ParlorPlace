@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Optional;
 
 @NoRepositoryBean
-public interface GameRepository<T extends Game<?, ?>> extends JpaRepository<T, Long> {
+public interface GameRepository<T extends Game<?, ?, ?>> extends JpaRepository<T, Long> {
 
     /**
      * Finds a game by its id.

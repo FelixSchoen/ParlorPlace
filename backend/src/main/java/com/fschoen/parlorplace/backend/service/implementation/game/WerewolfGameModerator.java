@@ -6,7 +6,9 @@ import com.fschoen.parlorplace.backend.game.werewolf.entity.WerewolfPlayer;
 import com.fschoen.parlorplace.backend.game.werewolf.entity.WerewolfRuleSet;
 import com.fschoen.parlorplace.backend.game.werewolf.repository.WerewolfGameRepository;
 import com.fschoen.parlorplace.backend.service.AbstractGameModerator;
+import com.fschoen.parlorplace.backend.service.CommunicationService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -21,6 +23,11 @@ public class WerewolfGameModerator extends AbstractGameModerator<
         WerewolfGameRole,
         WerewolfGameRepository
         > {
+
+    @Autowired
+    public WerewolfGameModerator(CommunicationService communicationService, WerewolfGameRepository gameRepository) {
+        super(communicationService, gameRepository);
+    }
 
     @Override
     public void run() {

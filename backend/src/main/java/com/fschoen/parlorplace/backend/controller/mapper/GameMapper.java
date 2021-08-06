@@ -5,7 +5,7 @@ import com.fschoen.parlorplace.backend.entity.Game;
 
 import java.util.List;
 
-public interface GameMapper<G extends Game<?, ?>, GDTO extends GameDTO<?, ?>> {
+public interface GameMapper<G extends Game<?, ?, ?>, GDTO extends GameDTO<?, ?>> {
 
     GDTO toDTO(G game);
 

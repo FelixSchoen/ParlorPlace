@@ -29,7 +29,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import java.util.List;
 
 public abstract class AbstractGameController<
-        G extends Game<P, RS>,
+        G extends Game<P, RS, ?>,
         P extends Player<GR>,
         RS extends RuleSet,
         GR extends GameRole,

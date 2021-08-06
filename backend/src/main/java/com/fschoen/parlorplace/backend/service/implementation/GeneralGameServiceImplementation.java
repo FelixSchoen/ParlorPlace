@@ -30,12 +30,12 @@ public class GeneralGameServiceImplementation implements GeneralGameService {
     @PostConstruct
     private void onInit() {
         // Remove orphaned Games
-        List<Game<?, ?>> orphanedGames = gameRepository.findAllByGameState(GameState.LOBBY);
+        List<Game<?, ?, ?>> orphanedGames = gameRepository.findAllByGameState(GameState.LOBBY);
         gameRepository.deleteAll(orphanedGames);
     }
 
-    public Game<?, ?> getGameBaseInformation(GameIdentifier gameIdentifier) {
-        List<Game<?, ?>> games = this.gameRepository.findAllByGameIdentifier_TokenAndEndedAt(gameIdentifier.getToken(), null);
+    public Game<?, ?, ?> getGameBaseInformation(GameIdentifier gameIdentifier) {
+        List<Game<?, ?, ?>> games = this.gameRepository.findAllByGameIdentifier_TokenAndEndedAt(gameIdentifier.getToken(), null);
 
         if (games.size() == 0)
             throw new GameException(Messages.exception(MessageIdentifiers.GAME_EXISTS_NOT));

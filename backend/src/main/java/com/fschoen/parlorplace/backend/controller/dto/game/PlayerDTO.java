@@ -1,6 +1,7 @@
 ﻿package com.fschoen.parlorplace.backend.controller.dto.game;
 
 import com.fschoen.parlorplace.backend.controller.dto.user.UserDTO;
+import com.fschoen.parlorplace.backend.enumeration.CodeName;
 import com.fschoen.parlorplace.backend.enumeration.LobbyRole;
 import com.fschoen.parlorplace.backend.enumeration.PlayerState;
 import lombok.AllArgsConstructor;
@@ -25,6 +26,8 @@ public abstract class PlayerDTO<GRDTO extends GameRoleDTO> {
     @NotNull
     @Valid
     protected UserDTO user;
+
+    protected CodeName codeName;
 
     @NotNull
     protected Boolean disconnected;

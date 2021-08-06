@@ -6,7 +6,10 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import lombok.experimental.SuperBuilder;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
@@ -27,6 +30,7 @@ import javax.persistence.SequenceGenerator;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
+import java.util.List;
 import java.util.Set;
 
 @NoArgsConstructor
@@ -35,7 +39,7 @@ import java.util.Set;
 @Data
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-public abstract class Game<P extends Player<?>, RS extends RuleSet> {
+public abstract class Game<P extends Player<?>, RS extends RuleSet, L extends LogEntry<?>> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "seq_game_instance_id")
@@ -69,7 +73,15 @@ public abstract class Game<P extends Player<?>, RS extends RuleSet> {
     @Column(nullable = false)
     @NotNull
     @Min(0)
-    private Integer round;
+    protected Integer round;
+
+    @OneToMany(mappedBy = "game", targetEntity = LogEntry.class, cascade = CascadeType.ALL, orphanRemoval = true)
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    @LazyCollection(LazyCollectionOption.FALSE)
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
+    @NotNull
+    protected List<L> log;
 
     @Column(nullable = false)
     protected Date startedAt;
