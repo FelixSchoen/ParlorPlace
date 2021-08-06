@@ -9,6 +9,7 @@ export abstract class Game {
                         public gameState: GameState,
                         public players: Set<Player>,
                         public ruleSet: RuleSet,
+                        public round: number,
                         public startedAt: string,
                         public endedAt: string | null,
                         public gameIdentifier: GameIdentifier) {
@@ -20,10 +21,11 @@ export class WerewolfGame extends Game {
               public gameState: GameState,
               public players: Set<WerewolfPlayer>,
               public ruleSet: WerewolfRuleSet,
+              public round: number,
               public startedAt: string,
               public endedAt: string | null,
               public gameIdentifier: GameIdentifier) {
-    super(id, GameType.WEREWOLF, gameState, players, ruleSet, startedAt, endedAt, gameIdentifier);
+    super(id, GameType.WEREWOLF, gameState, players, ruleSet, round, startedAt, endedAt, gameIdentifier);
   }
 }
 

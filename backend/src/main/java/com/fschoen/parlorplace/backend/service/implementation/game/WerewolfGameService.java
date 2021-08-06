@@ -9,6 +9,7 @@ import com.fschoen.parlorplace.backend.game.werewolf.entity.WerewolfRuleSet;
 import com.fschoen.parlorplace.backend.game.werewolf.entity.gamerole.SeerWerewolfGameRole;
 import com.fschoen.parlorplace.backend.game.werewolf.entity.gamerole.VillagerWerewolfGameRole;
 import com.fschoen.parlorplace.backend.game.werewolf.entity.gamerole.WerewolfWerewolfGameRole;
+import com.fschoen.parlorplace.backend.game.werewolf.enumeration.WerewolfGamePhase;
 import com.fschoen.parlorplace.backend.game.werewolf.enumeration.WerewolfRoleType;
 import com.fschoen.parlorplace.backend.game.werewolf.repository.WerewolfGameRepository;
 import com.fschoen.parlorplace.backend.repository.UserRepository;
@@ -78,6 +79,12 @@ public class WerewolfGameService extends AbstractGameService<
     @Override
     protected Class<WerewolfGameModerator> getModeratorClass() {
         return WerewolfGameModerator.class;
+    }
+
+    @Override
+    protected WerewolfGame onInitializeGame(WerewolfGame game) {
+        game.setGamePhase(WerewolfGamePhase.START_OF_ROUND);
+        return game;
     }
 
     @Override

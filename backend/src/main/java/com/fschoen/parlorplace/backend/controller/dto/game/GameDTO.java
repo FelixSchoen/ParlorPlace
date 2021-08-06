@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
 import java.util.Set;
@@ -32,6 +33,10 @@ public abstract class GameDTO<PDTO extends PlayerDTO<?>, RSDTO extends RuleSetDT
 
     @NotNull
     protected RSDTO ruleSet;
+
+    @NotNull
+    @Min(0)
+    private Integer round;
 
     @NotNull
     @DateTimeFormat

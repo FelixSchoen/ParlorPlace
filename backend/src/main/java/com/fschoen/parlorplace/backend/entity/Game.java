@@ -24,6 +24,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
 import java.util.Set;
@@ -64,6 +65,11 @@ public abstract class Game<P extends Player<?>, RS extends RuleSet> {
     @EqualsAndHashCode.Exclude
     @NotNull
     protected RS ruleSet;
+
+    @Column(nullable = false)
+    @NotNull
+    @Min(0)
+    private Integer round;
 
     @Column(nullable = false)
     protected Date startedAt;

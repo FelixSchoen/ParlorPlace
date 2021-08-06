@@ -77,8 +77,10 @@ public abstract class AbstractGameService<
             game.setPlayers(new HashSet<>());
             RS ruleSet = this.getRuleSetClass().getDeclaredConstructor().newInstance();
             game.setRuleSet(ruleSet);
+            game.setRound(0);
             game.setStartedAt(new Date());
             game.setGameIdentifier(this.gameIdentifierService.generateValidGameIdentifier());
+            game = onInitializeGame(game);
             game = this.gameRepository.save(game);
 
             log.info("Created new {} instance: {}", this.getGameClass().getName(), game.getGameIdentifier().getToken());
@@ -286,6 +288,10 @@ public abstract class AbstractGameService<
     }
 
     // Interfaces
+
+    protected G onInitializeGame(G game) {
+        return game;
+    }
 
     /**
      * Interface to implement when a player quits.

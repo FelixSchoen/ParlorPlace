@@ -10,6 +10,7 @@ import com.fschoen.parlorplace.backend.enumeration.UserRole;
 import com.fschoen.parlorplace.backend.game.werewolf.entity.WerewolfGame;
 import com.fschoen.parlorplace.backend.game.werewolf.entity.WerewolfPlayer;
 import com.fschoen.parlorplace.backend.game.werewolf.entity.WerewolfRuleSet;
+import com.fschoen.parlorplace.backend.game.werewolf.enumeration.WerewolfGamePhase;
 import com.fschoen.parlorplace.backend.repository.GameRepository;
 import com.fschoen.parlorplace.backend.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -158,7 +159,9 @@ public class DatabasePopulator {
                 .gameState(GameState.LOBBY)
                 .players(new HashSet<>())
                 .ruleSet(new WerewolfRuleSet())
+                .round(0)
                 .startedAt(new Date())
+                .gamePhase(WerewolfGamePhase.START_OF_ROUND)
                 .build();
         werewolfGame1.getPlayers().add(
                 WerewolfPlayer.builder()

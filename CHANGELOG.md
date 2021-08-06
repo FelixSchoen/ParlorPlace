@@ -6,6 +6,26 @@
 
 ---
 
+## v0.4
+<a name="v0.4"></a>
+
+## Added
+
+- Combined role representation in frontend to combine duplicates
+- Icons for seperate games
+- **Game Moderator framework**
+  - Added groundwork for the game moderator feature
+  - Provided an interface for the start of games, in order to handle tasks such as assigning players to roles
+- Added round and phase of game
+
+## Changed
+
+- Players now have lists of roles rather than a single role
+
+## Fixed
+
+---
+
 ## v0.3
 <a name="v0.3"></a>
 
