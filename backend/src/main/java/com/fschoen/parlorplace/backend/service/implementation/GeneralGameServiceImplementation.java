@@ -14,7 +14,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
+import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -30,8 +33,17 @@ public class GeneralGameServiceImplementation implements GeneralGameService {
     @PostConstruct
     private void onInit() {
         // Remove orphaned Games
-        List<Game<?, ?, ?>> orphanedGames = gameRepository.findAllByGameState(GameState.LOBBY);
-        gameRepository.deleteAll(orphanedGames);
+
+        // Remove games stuck in lobby
+        List<Game<?, ?, ?>> orphanedLobbyGames = gameRepository.findAllByGameState(GameState.LOBBY);
+        gameRepository.deleteAll(orphanedLobbyGames);
+
+        // Remove games ongoing longer than 12 hours
+        List<Game<?, ?, ?>> orphanedOngoingGames = gameRepository.findAllByEndedAt(null);
+        orphanedOngoingGames = orphanedLobbyGames.stream()
+                .filter(game -> TimeUnit.HOURS.convert(new Date().getTime() - game.getStartedAt().getTime(), TimeUnit.MILLISECONDS) > 12)
+                .collect(Collectors.toList());
+        gameRepository.deleteAll(orphanedOngoingGames);
     }
 
     public Game<?, ?, ?> getGameBaseInformation(GameIdentifier gameIdentifier) {

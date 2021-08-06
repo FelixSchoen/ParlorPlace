@@ -33,6 +33,14 @@ public interface GameRepository<T extends Game<?, ?, ?>> extends JpaRepository<T
     List<T> findAllByGameIdentifier_TokenAndEndedAt(String gameIdentifierToken, Date endedAt);
 
     /**
+     * Finds all games matching the given end date.
+     *
+     * @param endedAt             End date of the games
+     * @return A list of all the found games
+     */
+    List<T> findAllByEndedAt(Date endedAt);
+
+    /**
      * Finds all games matching the given game state.
      *
      * @param gameState Game state of the games

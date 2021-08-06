@@ -6,6 +6,7 @@ import com.fschoen.parlorplace.backend.entity.GameRole;
 import com.fschoen.parlorplace.backend.entity.Player;
 import com.fschoen.parlorplace.backend.entity.RuleSet;
 import com.fschoen.parlorplace.backend.entity.User;
+import com.fschoen.parlorplace.backend.enumeration.CodeName;
 import com.fschoen.parlorplace.backend.enumeration.GameState;
 import com.fschoen.parlorplace.backend.enumeration.LobbyRole;
 import com.fschoen.parlorplace.backend.enumeration.PlayerState;
@@ -23,8 +24,10 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.EnumSet;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Random;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -232,6 +235,13 @@ public abstract class AbstractGameService<
         return saveAndBroadcast(game);
     }
 
+    /**
+     * Initiates the start of the given game. Starts by assigning each player a random code name which will be used throughout
+     * the game. Calls {@link AbstractGameService#onGameStart(Game)}, which allows subclasses to implement their own starting routine.
+     *
+     * @param gameIdentifier Game identifier of the game to start
+     * @return The started game
+     */
     public G startGame(GameIdentifier gameIdentifier) {
         User principal = getPrincipal();
         log.info("User {} starting Game: {}", principal.getUsername(), gameIdentifier.getToken());
@@ -241,6 +251,15 @@ public abstract class AbstractGameService<
         validateUserLobbyAdmin(gameIdentifier, principal);
 
         G game = getActiveGame(gameIdentifier);
+
+        List<CodeName> codeNames = new ArrayList<>(EnumSet.allOf(CodeName.class));
+        Random random = new Random();
+        for (P player : game.getPlayers()) {
+            CodeName codeName = codeNames.get(random.nextInt(codeNames.size()));
+            player.setCodeName(codeName);
+            codeNames.remove(codeName);
+        }
+
         game = onGameStart(game);
 
         game.setGameState(GameState.ONGOING);
