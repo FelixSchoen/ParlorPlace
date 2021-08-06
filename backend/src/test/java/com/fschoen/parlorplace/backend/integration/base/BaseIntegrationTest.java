@@ -36,6 +36,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.web.socket.WebSocketHttpHeaders;
@@ -56,6 +57,7 @@ import static java.util.concurrent.TimeUnit.SECONDS;
 @SpringBootTest(classes = ParlorPlaceApplication.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
 @Slf4j
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 public abstract class BaseIntegrationTest {
 
     protected static final String BASE_URI = "/";
@@ -80,7 +82,7 @@ public abstract class BaseIntegrationTest {
 
     @BeforeEach
     public void beforeBase() {
-        testIsolationService.recreateDatabase();
+        //testIsolationService.recreateDatabase();
         this.generatedData = databasePopulator.generate();
 
         RestAssured.port = port;
