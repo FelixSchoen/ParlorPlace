@@ -6,7 +6,7 @@ export abstract class RuleSet {
 }
 
 export class WerewolfRuleSet extends RuleSet {
-  constructor(public id: number, public roles: WerewolfRoleType[]) {
+  constructor(public id: number, public gameRoles: WerewolfRoleType[]) {
     super(id);
   }
 }

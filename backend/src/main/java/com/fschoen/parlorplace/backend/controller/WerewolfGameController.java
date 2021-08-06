@@ -12,7 +12,6 @@ import com.fschoen.parlorplace.backend.game.werewolf.entity.WerewolfRuleSet;
 import com.fschoen.parlorplace.backend.game.werewolf.mapper.WerewolfGameMapper;
 import com.fschoen.parlorplace.backend.game.werewolf.mapper.WerewolfPlayerMapper;
 import com.fschoen.parlorplace.backend.game.werewolf.mapper.WerewolfRuleSetMapper;
-import com.fschoen.parlorplace.backend.repository.GameRepository;
 import com.fschoen.parlorplace.backend.service.AbstractGameService;
 import com.fschoen.parlorplace.backend.service.ObfuscationService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,7 +32,7 @@ public class WerewolfGameController extends AbstractGameController<
 
     @Autowired
     public WerewolfGameController(
-            AbstractGameService<WerewolfGame, WerewolfPlayer, WerewolfRuleSet, WerewolfGameRole, ? extends GameRepository<WerewolfGame>> gameService,
+            AbstractGameService<WerewolfGame, WerewolfPlayer, WerewolfRuleSet, WerewolfGameRole, ?, ?> gameService,
             ObfuscationService<WerewolfGameDTO> gameObfuscationService,
             UserMapper userMapper,
             WerewolfGameMapper gameMapper,

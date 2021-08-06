@@ -11,6 +11,8 @@ import lombok.experimental.SuperBuilder;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
 import javax.validation.constraints.NotNull;
 
 @NoArgsConstructor
@@ -20,6 +22,7 @@ import javax.validation.constraints.NotNull;
 @ToString(callSuper = true)
 @Data
 @Entity
+@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public class WerewolfGameRole extends GameRole {
 
     @Column(nullable = false)

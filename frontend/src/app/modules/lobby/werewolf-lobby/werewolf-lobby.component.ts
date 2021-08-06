@@ -45,7 +45,7 @@ export class WerewolfLobbyComponent extends LobbyComponent<WerewolfGame, Werewol
   }
 
   changeRoles(roles: WerewolfRoleType[]): void {
-    this.game.ruleSet.roles = roles;
+    this.game.ruleSet.gameRoles = roles;
     this.changeLobby();
   }
 
