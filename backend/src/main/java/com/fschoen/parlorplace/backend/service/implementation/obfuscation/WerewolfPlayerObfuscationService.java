@@ -20,7 +20,7 @@ public class WerewolfPlayerObfuscationService extends ObfuscationService<Werewol
         if (werewolfPlayerDTO.getUser().getId().equals(user.getId()))
             return werewolfPlayerDTO;
         else
-            return werewolfPlayerDTO.toBuilder().gameRole(null).build();
+            return werewolfPlayerDTO.toBuilder().gameRoles(null).build();
     }
 
 }

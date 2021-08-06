@@ -28,6 +28,6 @@ public class WerewolfRuleSet extends RuleSet {
     @Column(nullable = false)
     @Enumerated
     @ElementCollection(targetClass = WerewolfRoleType.class, fetch = FetchType.EAGER)
-    List<WerewolfRoleType> gameRoles;
+    List<WerewolfRoleType> gameRoleTypes;
 
 }

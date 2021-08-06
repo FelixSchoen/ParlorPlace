@@ -23,6 +23,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -41,7 +42,9 @@ public class WerewolfGameMapperTest {
             add(Role.builder().role(UserRole.ROLE_USER).build());
         }}).build();
         WerewolfGameRole gameRole = WerewolfGameRole.builder().id(0L).werewolfRoleType(WerewolfRoleType.VILLAGER).build();
-        WerewolfPlayer player = WerewolfPlayer.builder().id(0L).user(user).playerState(PlayerState.ALIVE).position(0).gameRole(gameRole).build();
+        WerewolfPlayer player = WerewolfPlayer.builder().id(0L).user(user).playerState(PlayerState.ALIVE).position(0).gameRoles(new ArrayList<>(){{
+            add(gameRole);
+        }}).build();
         Set<WerewolfPlayer> players = new HashSet<>() {{
             add(player);
         }};

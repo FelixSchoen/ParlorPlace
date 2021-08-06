@@ -11,6 +11,7 @@ import lombok.experimental.SuperBuilder;
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
+import java.util.List;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -34,7 +35,8 @@ public abstract class PlayerDTO<GRDTO extends GameRoleDTO> {
     @NotNull
     protected PlayerState playerState;
 
-    protected GRDTO gameRole;
+    @NotNull
+    protected List<GRDTO> gameRoles;
 
     @NotNull
     @Min(0)

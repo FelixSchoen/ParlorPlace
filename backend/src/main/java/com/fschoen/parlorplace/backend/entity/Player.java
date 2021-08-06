@@ -8,6 +8,8 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import lombok.experimental.SuperBuilder;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
@@ -22,10 +24,12 @@ import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
+import java.util.List;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -62,11 +66,11 @@ public abstract class Player<GR extends GameRole> {
     @NotNull
     protected PlayerState playerState;
 
-    @OneToOne(targetEntity = GameRole.class, cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "player", targetEntity = GameRole.class, /*fetch = FetchType.EAGER, */cascade = CascadeType.ALL, orphanRemoval = true)
     @OnDelete(action = OnDeleteAction.CASCADE)
-    @JoinColumn(referencedColumnName = "id")
+    @LazyCollection(LazyCollectionOption.FALSE)
     @EqualsAndHashCode.Exclude
-    protected GR gameRole;
+    protected List<GR> gameRoles;
 
     @Column(nullable = false)
     @NotNull

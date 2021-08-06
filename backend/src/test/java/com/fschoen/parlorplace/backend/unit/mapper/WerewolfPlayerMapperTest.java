@@ -16,6 +16,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.util.ArrayList;
+
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 @RunWith(SpringRunner.class)
@@ -28,12 +30,14 @@ public class WerewolfPlayerMapperTest {
     @Test
     public void mapWerewolfPlayer_toWerewolfPlayerDTO() {
         WerewolfGameRole gameRole = WerewolfGameRole.builder().id(0L).werewolfRoleType(WerewolfRoleType.VILLAGER).build();
-        WerewolfPlayer player = WerewolfPlayer.builder().id(0L).playerState(PlayerState.ALIVE).position(0).gameRole(gameRole).build();
+        WerewolfPlayer player = WerewolfPlayer.builder().id(0L).playerState(PlayerState.ALIVE).position(0).gameRoles(new ArrayList<>(){{
+            add(gameRole);
+        }}).build();
         WerewolfPlayerDTO dto = sut.toDTO(player);
 
         assertThat(dto.getId()).isEqualTo(0);
         assertThat(dto.getPosition()).isEqualTo(0);
-        assertThat(dto.getGameRole().getWerewolfRoleType()).isEqualTo(WerewolfRoleType.VILLAGER);
+        assertThat(dto.getGameRoles().get(0).getWerewolfRoleType()).isEqualTo(WerewolfRoleType.VILLAGER);
     }
 
 }

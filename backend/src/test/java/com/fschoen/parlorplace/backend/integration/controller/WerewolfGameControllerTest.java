@@ -155,8 +155,8 @@ public class WerewolfGameControllerTest extends BaseIntegrationTest {
 
         WerewolfGameDTO werewolfGameDTO = withWerewolfGame(existingUser1, existingUser2);
         WerewolfRuleSetDTO werewolfRuleSetDTO = werewolfGameDTO.getRuleSet();
-        werewolfRuleSetDTO.getGameRoles().add(WerewolfRoleType.WEREWOLF);
-        werewolfRuleSetDTO.getGameRoles().add(WerewolfRoleType.VILLAGER);
+        werewolfRuleSetDTO.getGameRoleTypes().add(WerewolfRoleType.WEREWOLF);
+        werewolfRuleSetDTO.getGameRoleTypes().add(WerewolfRoleType.VILLAGER);
 
         WerewolfLobbyChangeRequestDTO werewolfLobbyChangeRequestDTO = WerewolfLobbyChangeRequestDTO.builder().players(werewolfGameDTO.getPlayers()).ruleSet(werewolfRuleSetDTO).build();
 
@@ -165,8 +165,8 @@ public class WerewolfGameControllerTest extends BaseIntegrationTest {
         assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
 
         werewolfGameDTO = response.getBody().as(WerewolfGameDTO.class);
-        assertThat(werewolfGameDTO.getRuleSet().getGameRoles()).contains(WerewolfRoleType.WEREWOLF);
-        assertThat(werewolfGameDTO.getRuleSet().getGameRoles()).contains(WerewolfRoleType.VILLAGER);
+        assertThat(werewolfGameDTO.getRuleSet().getGameRoleTypes()).contains(WerewolfRoleType.WEREWOLF);
+        assertThat(werewolfGameDTO.getRuleSet().getGameRoleTypes()).contains(WerewolfRoleType.VILLAGER);
     }
 
     @Test

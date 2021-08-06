@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -165,6 +166,7 @@ public class DatabasePopulator {
                         .game(werewolfGame1)
                         .lobbyRole(LobbyRole.ROLE_ADMIN)
                         .playerState(PlayerState.ALIVE)
+                        .gameRoles(new ArrayList<>())
                         .position(0)
                         .disconnected(false)
                         .build()
@@ -175,6 +177,7 @@ public class DatabasePopulator {
                         .game(werewolfGame1)
                         .lobbyRole(LobbyRole.ROLE_USER)
                         .playerState(PlayerState.ALIVE)
+                        .gameRoles(new ArrayList<>())
                         .position(1)
                         .disconnected(false)
                         .build()

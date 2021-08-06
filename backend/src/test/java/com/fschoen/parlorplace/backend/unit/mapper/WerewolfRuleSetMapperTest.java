@@ -24,7 +24,7 @@ public class WerewolfRuleSetMapperTest {
 
     @Test
     public void mapWerewolfRuleSet_toWerewolfRuleSetDTO() {
-        WerewolfRuleSet werewolfRuleSet = WerewolfRuleSet.builder().id(0L).gameRoles(new ArrayList<>() {{
+        WerewolfRuleSet werewolfRuleSet = WerewolfRuleSet.builder().id(0L).gameRoleTypes(new ArrayList<>() {{
             add(WerewolfRoleType.WEREWOLF);
             add(WerewolfRoleType.VILLAGER);
         }}).build();
@@ -32,7 +32,7 @@ public class WerewolfRuleSetMapperTest {
 
         assertThat(dto).isNotNull();
         assertThat(dto.getId()).isEqualTo(0);
-        assertThat(dto.getGameRoles().size()).isEqualTo(2);
+        assertThat(dto.getGameRoleTypes().size()).isEqualTo(2);
     }
 
 }

@@ -83,21 +83,23 @@ public class WerewolfGameService extends AbstractGameService<
     @Override
     protected WerewolfGame onGameStart(WerewolfGame game) {
         int expectedRoles = game.getPlayers().size();
-        int actualRoles = game.getRuleSet().getGameRoles().size();
+        int actualRoles = game.getRuleSet().getGameRoleTypes().size();
 
         if (expectedRoles > actualRoles)
             throw new GameException(Messages.exception(MessageIdentifiers.GAME_ROLES_AMOUNT_MISMATCH));
 
         // Assign roles
 
-        List<WerewolfRoleType> availableRoles = new ArrayList<>(game.getRuleSet().getGameRoles());
+        List<WerewolfRoleType> availableRoles = new ArrayList<>(game.getRuleSet().getGameRoleTypes());
 
         Random random = new Random();
         try {
             for (WerewolfPlayer p : game.getPlayers()) {
                 WerewolfRoleType role = availableRoles.get(random.nextInt(availableRoles.size()));
                 WerewolfGameRole gameRole = werewolfGameRoleClasses.get(role).getDeclaredConstructor().newInstance();
-                p.setGameRole(gameRole);
+                p.setGameRoles(new ArrayList<>(){{
+                    add(gameRole);
+                }});
                 availableRoles.remove(role);
             }
         } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {

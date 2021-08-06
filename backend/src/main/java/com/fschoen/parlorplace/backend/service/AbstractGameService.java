@@ -20,6 +20,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.core.task.TaskExecutor;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.HashSet;
@@ -126,6 +127,7 @@ public abstract class AbstractGameService<
                 player.setLobbyRole(LobbyRole.ROLE_USER);
 
             player.setPlayerState(PlayerState.ALIVE);
+            player.setGameRoles(new ArrayList<>());
             player.setPosition(game.getPlayers().size());
             player.setDisconnected(false);
         } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {

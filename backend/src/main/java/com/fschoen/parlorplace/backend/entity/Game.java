@@ -53,6 +53,7 @@ public abstract class Game<P extends Player<?>, RS extends RuleSet> {
     protected GameState gameState;
 
     @OneToMany(mappedBy = "game", targetEntity = Player.class, fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @EqualsAndHashCode.Exclude
     @NotNull
     protected Set<P> players;
