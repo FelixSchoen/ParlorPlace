@@ -1,6 +1,6 @@
 package com.fschoen.parlorplace.backend.security;
 
-import com.fschoen.parlorplace.backend.utility.messaging.MessageIdentifiers;
+import com.fschoen.parlorplace.backend.utility.messaging.MessageIdentifier;
 import com.fschoen.parlorplace.backend.utility.messaging.Messages;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
@@ -48,15 +48,15 @@ public class JwtUtils {
             Jwts.parserBuilder().setSigningKey(getKey(jwtSecret)).build().parseClaimsJws(authToken);
             return true;
         } catch (SecurityException e) {
-            log.error(Messages.exception(MessageIdentifiers.AUTHORIZATION_SIGNATURE_INVALID), e);
+            log.error(Messages.exception(MessageIdentifier.AUTHORIZATION_SIGNATURE_INVALID), e);
         } catch (MalformedJwtException e) {
-            log.error(Messages.exception(MessageIdentifiers.AUTHORIZATION_TOKEN_INVALID), e);
+            log.error(Messages.exception(MessageIdentifier.AUTHORIZATION_TOKEN_INVALID), e);
         } catch (ExpiredJwtException e) {
-            log.error(Messages.exception(MessageIdentifiers.AUTHORIZATION_TOKEN_EXPIRED), e);
+            log.error(Messages.exception(MessageIdentifier.AUTHORIZATION_TOKEN_EXPIRED), e);
         } catch (UnsupportedJwtException e) {
-            log.error(Messages.exception(MessageIdentifiers.AUTHORIZATION_TOKEN_UNSUPPORTED), e);
+            log.error(Messages.exception(MessageIdentifier.AUTHORIZATION_TOKEN_UNSUPPORTED), e);
         } catch (IllegalArgumentException e) {
-            log.error(Messages.exception(MessageIdentifiers.AUTHORIZATION_TOKEN_EMPTY), e);
+            log.error(Messages.exception(MessageIdentifier.AUTHORIZATION_TOKEN_EMPTY), e);
         }
 
         return false;

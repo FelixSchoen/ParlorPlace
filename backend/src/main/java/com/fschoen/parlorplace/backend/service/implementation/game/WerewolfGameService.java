@@ -16,7 +16,7 @@ import com.fschoen.parlorplace.backend.repository.UserRepository;
 import com.fschoen.parlorplace.backend.service.AbstractGameService;
 import com.fschoen.parlorplace.backend.service.CommunicationService;
 import com.fschoen.parlorplace.backend.service.GameIdentifierService;
-import com.fschoen.parlorplace.backend.utility.messaging.MessageIdentifiers;
+import com.fschoen.parlorplace.backend.utility.messaging.MessageIdentifier;
 import com.fschoen.parlorplace.backend.utility.messaging.Messages;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -93,7 +93,7 @@ public class WerewolfGameService extends AbstractGameService<
         int actualRoles = game.getRuleSet().getGameRoleTypes().size();
 
         if (expectedRoles > actualRoles)
-            throw new GameException(Messages.exception(MessageIdentifiers.GAME_ROLES_AMOUNT_MISMATCH));
+            throw new GameException(Messages.exception(MessageIdentifier.GAME_ROLES_AMOUNT_MISMATCH));
 
         // Assign roles
 
@@ -109,7 +109,7 @@ public class WerewolfGameService extends AbstractGameService<
                 availableRoles.remove(role);
             }
         } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
-            throw new DataConflictException(Messages.exception(MessageIdentifiers.ROLE_TYPE_MISMATCH));
+            throw new DataConflictException(Messages.exception(MessageIdentifier.ROLE_TYPE_MISMATCH));
         }
 
         return game;

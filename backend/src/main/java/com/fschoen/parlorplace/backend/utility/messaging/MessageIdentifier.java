@@ -1,6 +1,6 @@
 package com.fschoen.parlorplace.backend.utility.messaging;
 
-public class MessageIdentifiers {
+public class MessageIdentifier {
     public static final String AUTHORIZATION_PRINCIPAL_EMPTY = "authorization.principal.empty";
     public static final String AUTHORIZATION_UNAUTHORIZED = "authorization.unauthorized";
     public static final String AUTHORIZATION_SIGNATURE_INVALID = "authorization.signature.invalid";

@@ -14,7 +14,7 @@ import com.fschoen.parlorplace.backend.exception.DataConflictException;
 import com.fschoen.parlorplace.backend.exception.GameException;
 import com.fschoen.parlorplace.backend.repository.GameRepository;
 import com.fschoen.parlorplace.backend.repository.UserRepository;
-import com.fschoen.parlorplace.backend.utility.messaging.MessageIdentifiers;
+import com.fschoen.parlorplace.backend.utility.messaging.MessageIdentifier;
 import com.fschoen.parlorplace.backend.utility.messaging.Messages;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationContext;
@@ -38,16 +38,13 @@ public abstract class AbstractGameService<
         RS extends RuleSet,
         GR extends GameRole,
         GRepo extends GameRepository<G>,
-        M extends AbstractGameModerator<G, P, RS, GR, GRepo>
-        > extends BaseService {
+        M extends AbstractGameModerator<G, P, RS, GR, ?, GRepo, ?>
+        > extends BaseGameService<G, P, GRepo> {
 
-    protected final CommunicationService communicationService;
     protected final GameIdentifierService gameIdentifierService;
 
     private final TaskExecutor taskExecutor;
     private final ApplicationContext applicationContext;
-
-    protected final GRepo gameRepository;
 
     public AbstractGameService(
             UserRepository userRepository,
@@ -57,10 +54,8 @@ public abstract class AbstractGameService<
             TaskExecutor taskExecutor,
             ApplicationContext applicationContext
     ) {
-        super(userRepository);
-        this.communicationService = communicationService;
+        super(communicationService, userRepository, gameRepository);
         this.gameIdentifierService = gameIdentifierService;
-        this.gameRepository = gameRepository;
 
         this.taskExecutor = taskExecutor;
         this.applicationContext = applicationContext;
@@ -91,7 +86,7 @@ public abstract class AbstractGameService<
 
             return game;
         } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
-            throw new DataConflictException(Messages.exception(MessageIdentifiers.GAME_TYPE_MISMATCH));
+            throw new DataConflictException(Messages.exception(MessageIdentifier.GAME_TYPE_MISMATCH));
         }
     }
 
@@ -137,7 +132,7 @@ public abstract class AbstractGameService<
             player.setPosition(game.getPlayers().size());
             player.setDisconnected(false);
         } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
-            throw new DataConflictException(Messages.exception(MessageIdentifiers.GAME_TYPE_MISMATCH));
+            throw new DataConflictException(Messages.exception(MessageIdentifier.GAME_TYPE_MISMATCH));
         }
 
         game.getPlayers().add(player);
@@ -203,14 +198,14 @@ public abstract class AbstractGameService<
         validateUserLobbyAdmin(gameIdentifier, principal);
 
         G game = getActiveGame(gameIdentifier);
-        GameException invalidRequestException = new GameException(Messages.exception(MessageIdentifiers.GAME_MODIFY_INVALID));
+        GameException invalidRequestException = new GameException(Messages.exception(MessageIdentifier.GAME_MODIFY_INVALID));
 
         if (
                 players.stream().min(Comparator.comparingInt(Player::getPosition)).orElseThrow(() -> invalidRequestException).getPosition() != 0
                         || players.stream().max(Comparator.comparingInt(Player::getPosition)).orElseThrow(() -> invalidRequestException).getPosition() != game.getPlayers().size() - 1
                         || players.stream().map(Player::getPosition).collect(Collectors.toSet()).size() != game.getPlayers().size()
         )
-            throw new DataConflictException(Messages.exception(MessageIdentifiers.GAME_MODIFY_INVALID));
+            throw new DataConflictException(Messages.exception(MessageIdentifier.GAME_MODIFY_INVALID));
 
         players.forEach(requestPlayer -> {
             P foundPlayer = game.getPlayers().stream().filter(existingPlayer ->
@@ -337,66 +332,36 @@ public abstract class AbstractGameService<
 
     // Utility
 
-    protected G saveAndBroadcast(G game) {
-        G savedGame = this.gameRepository.save(game);
-        broadcastGameStaleNotification(game.getGameIdentifier());
-        return savedGame;
-    }
-
-    protected void broadcastGameStaleNotification(GameIdentifier gameIdentifier) {
-        G game = getActiveGame(gameIdentifier);
-        Set<User> usersInGame = game.getPlayers().stream().map(Player::getUser).collect(Collectors.toSet());
-        this.communicationService.sendGameStaleNotification(gameIdentifier, usersInGame);
-    }
-
-    protected List<G> getActiveGames(GameIdentifier gameIdentifier) {
-        return this.gameRepository.findAllByGameIdentifier_TokenAndEndedAt(gameIdentifier.getToken(), null);
-    }
-
-    protected G getActiveGame(GameIdentifier gameIdentifier) {
-        List<G> games = this.getActiveGames(gameIdentifier);
-        Game<?, ?, ?> game = games.get(0);
-        if (!(this.getGameClass().isInstance(game)))
-            throw new DataConflictException(Messages.exception(MessageIdentifiers.GAME_TYPE_MISMATCH));
-        return games.get(0);
-    }
-
-    protected P getPlayerFromUser(GameIdentifier gameIdentifier, User user) {
-        G game = getActiveGame(gameIdentifier);
-
-        return game.getPlayers().stream().filter(player -> player.getUser().equals(user)).findFirst().orElseThrow();
-    }
-
     // Validation
 
     protected void validateActiveGameExists(GameIdentifier gameIdentifier) throws GameException, DataConflictException {
         List<G> games = this.getActiveGames(gameIdentifier);
 
         if (games.size() == 0)
-            throw new GameException(Messages.exception(MessageIdentifiers.GAME_EXISTS_NOT));
+            throw new GameException(Messages.exception(MessageIdentifier.GAME_EXISTS_NOT));
         if (games.size() > 1)
-            throw new DataConflictException(Messages.exception(MessageIdentifiers.GAME_UNIQUE_NOT));
+            throw new DataConflictException(Messages.exception(MessageIdentifier.GAME_UNIQUE_NOT));
     }
 
     protected void validateActiveGameStateLobby(GameIdentifier gameIdentifier) {
         G game = this.getActiveGame(gameIdentifier);
 
         if (!game.getGameState().equals(GameState.LOBBY))
-            throw new GameException(Messages.exception(MessageIdentifiers.GAME_STATE_STARTED));
+            throw new GameException(Messages.exception(MessageIdentifier.GAME_STATE_STARTED));
     }
 
     protected void validateUserInActiveGame(GameIdentifier gameIdentifier, User user) throws GameException {
         G game = this.getActiveGame(gameIdentifier);
 
         if (game.getPlayers().stream().noneMatch(player -> player.getUser().equals(user)))
-            throw new GameException(Messages.exception(MessageIdentifiers.GAME_USER_INGAME_NOT));
+            throw new GameException(Messages.exception(MessageIdentifier.GAME_USER_INGAME_NOT));
     }
 
     protected void validateUserNotInSpecificActiveGame(GameIdentifier gameIdentifier, User user) throws GameException {
         G game = this.getActiveGame(gameIdentifier);
 
         if (game.getPlayers().stream().anyMatch(player -> player.getUser().equals(user)))
-            throw new GameException(Messages.exception(MessageIdentifiers.GAME_USER_INGAME_THIS));
+            throw new GameException(Messages.exception(MessageIdentifier.GAME_USER_INGAME_THIS));
     }
 
     protected void validateUserLobbyAdmin(GameIdentifier gameIdentifier, User user) throws GameException {
@@ -404,7 +369,7 @@ public abstract class AbstractGameService<
         P player = getPlayerFromUser(gameIdentifier, user);
 
         if (!player.getLobbyRole().equals(LobbyRole.ROLE_ADMIN))
-            throw new GameException(Messages.exception(MessageIdentifiers.AUTHORIZATION_UNAUTHORIZED));
+            throw new GameException(Messages.exception(MessageIdentifier.AUTHORIZATION_UNAUTHORIZED));
     }
 
 }

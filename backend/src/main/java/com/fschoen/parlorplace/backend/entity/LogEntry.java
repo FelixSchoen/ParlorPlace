@@ -50,7 +50,7 @@ public abstract class LogEntry<P extends Player<?>> {
     @NotNull
     protected Game<?, ?, ?> game;
 
-    @ManyToMany(targetEntity = Player.class, cascade = CascadeType.ALL)
+    @ManyToMany(targetEntity = Player.class)
     @JoinTable(
             joinColumns = @JoinColumn(name = "logentry_id"),
             inverseJoinColumns = @JoinColumn(name = "player_id")

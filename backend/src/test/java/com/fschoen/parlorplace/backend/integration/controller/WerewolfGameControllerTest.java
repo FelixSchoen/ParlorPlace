@@ -275,7 +275,6 @@ public class WerewolfGameControllerTest extends BaseIntegrationTest {
         WerewolfGame werewolfGame = this.generatedData.getWerewolfGameCollection().getWerewolfGame1();
 
         Response responseStartGame = post("", WEREWOLF_BASE_URI + "start/" + werewolfGame.getGameIdentifier().getToken(), getToken(admin1));
-        System.out.println(responseStartGame.getBody().peek());
         assertThat(responseStartGame.statusCode()).isEqualTo(HttpStatus.OK.value());
     }
 

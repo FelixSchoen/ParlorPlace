@@ -9,4 +9,6 @@ public interface CommunicationService {
 
     void sendGameStaleNotification(GameIdentifier gameIdentifier, Set<User> recipients);
 
+    void sendLogsStaleNotification(GameIdentifier gameIdentifier, Set<User> recipients);
+
 }
