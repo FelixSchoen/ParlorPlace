@@ -20,6 +20,6 @@ import java.util.List;
 public class WerewolfRuleSetDTO extends RuleSetDTO {
 
     @NotNull
-    List<WerewolfRoleType> roles;
+    List<WerewolfRoleType> gameRoleTypes;
 
 }

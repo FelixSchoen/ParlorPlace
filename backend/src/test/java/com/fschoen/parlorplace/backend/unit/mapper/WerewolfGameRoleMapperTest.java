@@ -2,6 +2,7 @@ package com.fschoen.parlorplace.backend.unit.mapper;
 
 import com.fschoen.parlorplace.backend.game.werewolf.dto.role.WerewolfGameRoleDTO;
 import com.fschoen.parlorplace.backend.game.werewolf.entity.WerewolfGameRole;
+import com.fschoen.parlorplace.backend.game.werewolf.entity.gamerole.VillagerWerewolfGameRole;
 import com.fschoen.parlorplace.backend.game.werewolf.enumeration.WerewolfRoleType;
 import com.fschoen.parlorplace.backend.game.werewolf.mapper.WerewolfGameRoleMapper;
 import com.fschoen.parlorplace.backend.game.werewolf.mapper.WerewolfGameRoleMapperImpl;
@@ -22,7 +23,7 @@ public class WerewolfGameRoleMapperTest {
 
     @Test
     public void mapWerewolfGameRole_toWerewolfGameRoleDTO() {
-        WerewolfGameRole gameRole = WerewolfGameRole.builder().id(0L).werewolfRoleType(WerewolfRoleType.VILLAGER).build();
+        WerewolfGameRole gameRole = VillagerWerewolfGameRole.builder().id(0L).build();
         WerewolfGameRoleDTO dto = sut.toDTO(gameRole);
 
         assertThat(dto.getId()).isEqualTo(0);

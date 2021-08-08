@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Optional;
 
 @NoRepositoryBean
-public interface GameRepository<T extends Game<?, ?>> extends JpaRepository<T, Long> {
+public interface GameRepository<T extends Game<?, ?, ?>> extends JpaRepository<T, Long> {
 
     /**
      * Finds a game by its id.
@@ -31,6 +31,14 @@ public interface GameRepository<T extends Game<?, ?>> extends JpaRepository<T, L
      * @return A list of all the found games
      */
     List<T> findAllByGameIdentifier_TokenAndEndedAt(String gameIdentifierToken, Date endedAt);
+
+    /**
+     * Finds all games matching the given end date.
+     *
+     * @param endedAt             End date of the games
+     * @return A list of all the found games
+     */
+    List<T> findAllByEndedAt(Date endedAt);
 
     /**
      * Finds all games matching the given game state.

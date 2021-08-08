@@ -3,6 +3,27 @@
 - [v0.1 (2021-07-11)](#v0.1)
 - [v0.2 (2021-07-22)](#v0.2)
 - [v0.3 (2021-08-05)](#v0.3)
+- [v0.4 (2021-08-xx)](#v0.4)
+
+---
+
+## v0.4
+<a name="v0.4"></a>
+
+## Added
+
+- Combined role representation in frontend to combine duplicates
+- Icons for seperate games
+- **Game Moderator framework**
+  - Added groundwork for the game moderator feature
+  - Provided an interface for the start of games, in order to handle tasks such as assigning players to roles
+- Added round and phase of game
+
+## Changed
+
+- Players now have lists of roles rather than a single role
+
+## Fixed
 
 ---
 

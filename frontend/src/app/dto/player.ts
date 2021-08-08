@@ -8,6 +8,7 @@ export abstract class Player {
                         public user: User,
                         public lobbyRole: LobbyRole,
                         public playerState: PlayerState,
+
                         public position: number) {
   }
 }

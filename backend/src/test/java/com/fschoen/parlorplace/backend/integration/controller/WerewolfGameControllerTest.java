@@ -8,6 +8,7 @@ import com.fschoen.parlorplace.backend.game.werewolf.dto.game.WerewolfGameDTO;
 import com.fschoen.parlorplace.backend.game.werewolf.dto.game.WerewolfPlayerDTO;
 import com.fschoen.parlorplace.backend.game.werewolf.dto.lobby.WerewolfLobbyChangeRequestDTO;
 import com.fschoen.parlorplace.backend.game.werewolf.dto.lobby.WerewolfRuleSetDTO;
+import com.fschoen.parlorplace.backend.game.werewolf.entity.WerewolfGame;
 import com.fschoen.parlorplace.backend.game.werewolf.enumeration.WerewolfRoleType;
 import com.fschoen.parlorplace.backend.integration.base.BaseIntegrationTest;
 import io.restassured.response.Response;
@@ -155,8 +156,8 @@ public class WerewolfGameControllerTest extends BaseIntegrationTest {
 
         WerewolfGameDTO werewolfGameDTO = withWerewolfGame(existingUser1, existingUser2);
         WerewolfRuleSetDTO werewolfRuleSetDTO = werewolfGameDTO.getRuleSet();
-        werewolfRuleSetDTO.getRoles().add(WerewolfRoleType.WEREWOLF);
-        werewolfRuleSetDTO.getRoles().add(WerewolfRoleType.VILLAGER);
+        werewolfRuleSetDTO.getGameRoleTypes().add(WerewolfRoleType.WEREWOLF);
+        werewolfRuleSetDTO.getGameRoleTypes().add(WerewolfRoleType.VILLAGER);
 
         WerewolfLobbyChangeRequestDTO werewolfLobbyChangeRequestDTO = WerewolfLobbyChangeRequestDTO.builder().players(werewolfGameDTO.getPlayers()).ruleSet(werewolfRuleSetDTO).build();
 
@@ -165,8 +166,8 @@ public class WerewolfGameControllerTest extends BaseIntegrationTest {
         assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
 
         werewolfGameDTO = response.getBody().as(WerewolfGameDTO.class);
-        assertThat(werewolfGameDTO.getRuleSet().getRoles()).contains(WerewolfRoleType.WEREWOLF);
-        assertThat(werewolfGameDTO.getRuleSet().getRoles()).contains(WerewolfRoleType.VILLAGER);
+        assertThat(werewolfGameDTO.getRuleSet().getGameRoleTypes()).contains(WerewolfRoleType.WEREWOLF);
+        assertThat(werewolfGameDTO.getRuleSet().getGameRoleTypes()).contains(WerewolfRoleType.VILLAGER);
     }
 
     @Test
@@ -265,7 +266,16 @@ public class WerewolfGameControllerTest extends BaseIntegrationTest {
         assertThat(responseGetActiveGames.statusCode()).isEqualTo(HttpStatus.OK.value());
 
         List<WerewolfGameDTO> werewolfGameDTOList = Arrays.asList(responseGetActiveGames.getBody().as(WerewolfGameDTO[].class));
-        assertThat(werewolfGameDTOList.get(0).getGameIdentifier()).isEqualTo(werewolfGameDTO.getGameIdentifier());
+        assertThat(werewolfGameDTOList).anyMatch(gameDTO -> gameDTO.getGameIdentifier().equals(werewolfGameDTO.getGameIdentifier()));
+    }
+
+    @Test
+    public void startLobbyGame() throws InterruptedException {
+        User admin1 = this.generatedData.getUserCollection().getAdmin1();
+        WerewolfGame werewolfGame = this.generatedData.getWerewolfGameCollection().getWerewolfLobbyGame1();
+
+        Response responseStartGame = post("", WEREWOLF_BASE_URI + "start/" + werewolfGame.getGameIdentifier().getToken(), getToken(admin1));
+        assertThat(responseStartGame.statusCode()).isEqualTo(HttpStatus.OK.value());
     }
 
 }

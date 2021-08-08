@@ -7,7 +7,7 @@ import com.fschoen.parlorplace.backend.exception.TokenExpiredException;
 import com.fschoen.parlorplace.backend.repository.RefreshTokenRepository;
 import com.fschoen.parlorplace.backend.repository.UserRepository;
 import com.fschoen.parlorplace.backend.service.RefreshTokenService;
-import com.fschoen.parlorplace.backend.utility.messaging.MessageIdentifiers;
+import com.fschoen.parlorplace.backend.utility.messaging.MessageIdentifier;
 import com.fschoen.parlorplace.backend.utility.messaging.Messages;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -46,7 +46,7 @@ public class RefreshTokenServiceImplementation implements RefreshTokenService {
     public RefreshToken createRefreshToken(Long userId) {
         RefreshToken refreshToken = new RefreshToken();
 
-        User user = userRepository.findById(userId).orElseThrow(() -> new DataConflictException(Messages.exception(MessageIdentifiers.USER_ID_EXISTS_NOT)));
+        User user = userRepository.findById(userId).orElseThrow(() -> new DataConflictException(Messages.exception(MessageIdentifier.USER_ID_EXISTS_NOT)));
 
         refreshTokenRepository.removeByUser(user);
 
@@ -62,7 +62,7 @@ public class RefreshTokenServiceImplementation implements RefreshTokenService {
     public RefreshToken verifyExpiration(RefreshToken token) throws TokenExpiredException {
         if (token.getExpiryDate().compareTo(Instant.now()) < 0) {
             refreshTokenRepository.delete(token);
-            throw new TokenExpiredException(token.getRefreshToken(), Messages.exception(MessageIdentifiers.AUTHORIZATION_TOKEN_REFRESH_EXPIRED));
+            throw new TokenExpiredException(token.getRefreshToken(), Messages.exception(MessageIdentifier.AUTHORIZATION_TOKEN_REFRESH_EXPIRED));
         }
 
         return token;
@@ -71,7 +71,7 @@ public class RefreshTokenServiceImplementation implements RefreshTokenService {
     @Override
     @Transactional
     public int deleteByUserId(Long userId) throws DataConflictException {
-        User user = userRepository.findById(userId).orElseThrow(() -> new DataConflictException(Messages.exception(MessageIdentifiers.USER_ID_EXISTS_NOT)));
+        User user = userRepository.findById(userId).orElseThrow(() -> new DataConflictException(Messages.exception(MessageIdentifier.USER_ID_EXISTS_NOT)));
         return refreshTokenRepository.removeByUser(user);
     }
 

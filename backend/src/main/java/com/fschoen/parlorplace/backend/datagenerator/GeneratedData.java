@@ -29,9 +29,13 @@ public class GeneratedData {
 
     @Data
     public static class WerewolfGameCollection {
-        private WerewolfGame werewolfGame1;
+        private WerewolfGame werewolfLobbyGame1;
 
-        private Set<User> werewolfGame1Users;
+        private Set<User> werewolfLobbyGame1Users;
+
+        private WerewolfGame werewolfOngoingGame1;
+
+        private Set<User> werewolfOngoingGame1Users;
     }
 
 }

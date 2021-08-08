@@ -8,4 +8,5 @@ import org.mapstruct.Mapper;
 
 @Mapper(componentModel = "spring", uses = {WerewolfGameMapper.class, WerewolfGameRoleMapper.class, UserMapper.class,})
 public interface WerewolfPlayerMapper extends PlayerMapper<WerewolfPlayer, WerewolfPlayerDTO> {
+
 }

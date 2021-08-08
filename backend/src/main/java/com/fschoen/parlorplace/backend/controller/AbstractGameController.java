@@ -16,7 +16,6 @@ import com.fschoen.parlorplace.backend.entity.GameRole;
 import com.fschoen.parlorplace.backend.entity.Player;
 import com.fschoen.parlorplace.backend.entity.RuleSet;
 import com.fschoen.parlorplace.backend.entity.User;
-import com.fschoen.parlorplace.backend.repository.GameRepository;
 import com.fschoen.parlorplace.backend.service.AbstractGameService;
 import com.fschoen.parlorplace.backend.service.ObfuscationService;
 import com.fschoen.parlorplace.backend.validation.implementation.GameValidator;
@@ -30,17 +29,17 @@ import org.springframework.web.bind.annotation.RequestBody;
 import java.util.List;
 
 public abstract class AbstractGameController<
-        G extends Game<P, RS>,
+        G extends Game<P, RS, ?>,
         P extends Player<GR>,
         RS extends RuleSet,
         GR extends GameRole,
-        GDTO extends GameDTO<?, ?>,
+        GDTO extends GameDTO<?, ?, ?>,
         PDTO extends PlayerDTO<?>,
         RSDTO extends RuleSetDTO,
         LCRDTO extends LobbyChangeRequestDTO<PDTO, RSDTO>
         > {
 
-    private final AbstractGameService<G, P, RS, GR, ? extends GameRepository<G>> gameService;
+    private final AbstractGameService<G, P, RS, GR, ?, ?> gameService;
     private final ObfuscationService<GDTO> gameObfuscationService;
 
     private final UserMapper userMapper;
@@ -51,7 +50,7 @@ public abstract class AbstractGameController<
     private final GameValidator validator = new GameValidator();
 
     public AbstractGameController(
-            AbstractGameService<G, P, RS, GR, ? extends GameRepository<G>> gameService,
+            AbstractGameService<G, P, RS, GR, ?, ?> gameService,
             ObfuscationService<GDTO> gameObfuscationService,
             UserMapper userMapper,
             GameMapper<G, GDTO> gameMapper,
@@ -108,6 +107,18 @@ public abstract class AbstractGameController<
 
         this.gameService.changeGamePlayers(gameIdentifier, playerMapper.fromDTO(lobbyChangeRequestDTO.getPlayers()));
         game = this.gameService.changeGameRuleSet(gameIdentifier, ruleSetMapper.fromDTO(lobbyChangeRequestDTO.getRuleSet()));
+
+        GDTO gameDTO = gameMapper.toDTO(game);
+
+        return ResponseEntity.status(HttpStatus.OK).body(gameDTO);
+    }
+
+    @PostMapping("/start/{identifier}")
+    public ResponseEntity<GDTO> startGame(@PathVariable("identifier") String identifier) {
+        GameIdentifier gameIdentifier = new GameIdentifier(identifier);
+        G game;
+
+        game = this.gameService.startGame(gameIdentifier);
 
         GDTO gameDTO = gameMapper.toDTO(game);
 

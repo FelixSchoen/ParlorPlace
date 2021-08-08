@@ -14,7 +14,7 @@ import com.fschoen.parlorplace.backend.security.UserDetailsImplementation;
 import com.fschoen.parlorplace.backend.service.BaseService;
 import com.fschoen.parlorplace.backend.service.RefreshTokenService;
 import com.fschoen.parlorplace.backend.service.UserService;
-import com.fschoen.parlorplace.backend.utility.messaging.MessageIdentifiers;
+import com.fschoen.parlorplace.backend.utility.messaging.MessageIdentifier;
 import com.fschoen.parlorplace.backend.utility.messaging.Messages;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,9 +61,9 @@ public class UserServiceImplementation extends BaseService implements UserServic
         log.info("Signing up User: {}", user.getUsername());
 
         if (userRepository.findOneByUsername(user.getUsername()).isPresent())
-            throw new DataConflictException(Messages.exception(MessageIdentifiers.USER_USERNAME_EXISTS));
+            throw new DataConflictException(Messages.exception(MessageIdentifier.USER_USERNAME_EXISTS));
         else if (userRepository.findOneByEmail(user.getEmail()).isPresent())
-            throw new DataConflictException(Messages.exception(MessageIdentifiers.USER_EMAIL_EXISTS));
+            throw new DataConflictException(Messages.exception(MessageIdentifier.USER_EMAIL_EXISTS));
 
         String hashedPassword = passwordEncoder.encode(user.getPassword());
         Set<Role> roles = new HashSet<>() {{
@@ -103,7 +103,7 @@ public class UserServiceImplementation extends BaseService implements UserServic
                     RefreshToken newRefreshToken = refreshTokenService.createRefreshToken(user.getId());
                     return TokenRefreshResponseDTO.builder().accessToken(accessToken).refreshToken(newRefreshToken.getRefreshToken()).build();
                 })
-                .orElseThrow(() -> new AuthorizationException(Messages.exception(MessageIdentifiers.AUTHORIZATION_TOKEN_REFRESH_EXISTS_NOT)));
+                .orElseThrow(() -> new AuthorizationException(Messages.exception(MessageIdentifier.AUTHORIZATION_TOKEN_REFRESH_EXISTS_NOT)));
     }
 
     @Override
@@ -115,12 +115,12 @@ public class UserServiceImplementation extends BaseService implements UserServic
         if ((!principal.getId().equals(id) && notAuthority(principal, UserRole.ROLE_ADMIN))
                 || (user.getRoles() != null && !user.getRoles().equals(principal.getRoles()) && notAuthority(principal, UserRole.ROLE_ADMIN))
                 || (user.getUsername() != null && !user.getUsername().equals("") && !user.getUsername().equals(principal.getUsername()) && notAuthority(principal, UserRole.ROLE_ADMIN)))
-            throw new AuthorizationException(Messages.exception(MessageIdentifiers.AUTHORIZATION_UNAUTHORIZED));
+            throw new AuthorizationException(Messages.exception(MessageIdentifier.AUTHORIZATION_UNAUTHORIZED));
 
         if (user.getId() != null && !user.getId().equals(id))
-            throw new DataConflictException(Messages.exception(MessageIdentifiers.DATA_MISMATCHED_ID));
+            throw new DataConflictException(Messages.exception(MessageIdentifier.DATA_MISMATCHED_ID));
 
-        User existingUser = userRepository.findOneById(id).orElseThrow(() -> new DataConflictException(Messages.exception(MessageIdentifiers.USER_ID_EXISTS_NOT)));
+        User existingUser = userRepository.findOneById(id).orElseThrow(() -> new DataConflictException(Messages.exception(MessageIdentifier.USER_ID_EXISTS_NOT)));
         User.UserBuilder persistUserBuilder = existingUser.toBuilder();
 
 //        if (user.getUsername() != null)
@@ -149,7 +149,7 @@ public class UserServiceImplementation extends BaseService implements UserServic
         User principal = getPrincipal();
 
         if (principal == null)
-            throw new DataConflictException(Messages.exception(MessageIdentifiers.USER_EXISTS_NOT));
+            throw new DataConflictException(Messages.exception(MessageIdentifier.USER_EXISTS_NOT));
 
         return principal;
     }
@@ -158,7 +158,7 @@ public class UserServiceImplementation extends BaseService implements UserServic
     public User getUser(Long id) throws DataConflictException {
         log.info("Obtaining user with id: {}", id);
 
-        User existingUser = userRepository.findOneById(id).orElseThrow(() -> new DataConflictException(Messages.exception(MessageIdentifiers.USER_ID_EXISTS_NOT)));
+        User existingUser = userRepository.findOneById(id).orElseThrow(() -> new DataConflictException(Messages.exception(MessageIdentifier.USER_ID_EXISTS_NOT)));
 
         return existingUser;
     }
@@ -167,7 +167,7 @@ public class UserServiceImplementation extends BaseService implements UserServic
     public User getUser(String username) throws DataConflictException {
         log.info("Obtaining user with username: {}", username);
 
-        User existingUser = userRepository.findOneByUsername(username).orElseThrow(() -> new DataConflictException(Messages.exception(MessageIdentifiers.USER_USERNAME_EXISTS_NOT)));
+        User existingUser = userRepository.findOneByUsername(username).orElseThrow(() -> new DataConflictException(Messages.exception(MessageIdentifier.USER_USERNAME_EXISTS_NOT)));
 
         return existingUser;
     }

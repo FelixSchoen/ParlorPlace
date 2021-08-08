@@ -6,6 +6,7 @@ import com.fschoen.parlorplace.backend.entity.GameRole;
 import com.fschoen.parlorplace.backend.entity.Player;
 import com.fschoen.parlorplace.backend.entity.RuleSet;
 import com.fschoen.parlorplace.backend.entity.User;
+import com.fschoen.parlorplace.backend.enumeration.CodeName;
 import com.fschoen.parlorplace.backend.enumeration.GameState;
 import com.fschoen.parlorplace.backend.enumeration.LobbyRole;
 import com.fschoen.parlorplace.backend.enumeration.PlayerState;
@@ -13,52 +14,51 @@ import com.fschoen.parlorplace.backend.exception.DataConflictException;
 import com.fschoen.parlorplace.backend.exception.GameException;
 import com.fschoen.parlorplace.backend.repository.GameRepository;
 import com.fschoen.parlorplace.backend.repository.UserRepository;
-import com.fschoen.parlorplace.backend.utility.messaging.MessageIdentifiers;
+import com.fschoen.parlorplace.backend.utility.messaging.MessageIdentifier;
 import com.fschoen.parlorplace.backend.utility.messaging.Messages;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.ApplicationContext;
+import org.springframework.core.task.TaskExecutor;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.EnumSet;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Random;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 @Slf4j
 public abstract class AbstractGameService<
-        G extends Game<P, RS>,
+        G extends Game<P, RS, ?>,
         P extends Player<GR>,
         RS extends RuleSet,
         GR extends GameRole,
-        GRepo extends GameRepository<G>
-        > extends BaseService {
+        GRepo extends GameRepository<G>,
+        M extends AbstractGameModerator<G, P, RS, GR, ?, GRepo, ?>
+        > extends BaseGameService<G, P, GRepo> {
 
-    protected final CommunicationService communicationService;
     protected final GameIdentifierService gameIdentifierService;
 
-    protected final GRepo gameRepository;
-
-    protected final Class<G> gameClass;
-    protected final Class<P> playerClass;
-    protected final Class<RS> ruleSetClass;
+    private final TaskExecutor taskExecutor;
+    private final ApplicationContext applicationContext;
 
     public AbstractGameService(
             UserRepository userRepository,
             CommunicationService communicationService,
             GameIdentifierService gameIdentifierService,
             GRepo gameRepository,
-            Class<G> gameClass,
-            Class<P> playerClass,
-            Class<RS> ruleSetClass
+            TaskExecutor taskExecutor,
+            ApplicationContext applicationContext
     ) {
-        super(userRepository);
-        this.communicationService = communicationService;
+        super(communicationService, userRepository, gameRepository);
         this.gameIdentifierService = gameIdentifierService;
-        this.gameRepository = gameRepository;
-        this.gameClass = gameClass;
-        this.playerClass = playerClass;
-        this.ruleSetClass = ruleSetClass;
+
+        this.taskExecutor = taskExecutor;
+        this.applicationContext = applicationContext;
     }
 
     /**
@@ -67,23 +67,26 @@ public abstract class AbstractGameService<
      * @return The newly created and persisted game
      */
     public G initializeGame() {
-        log.info("Starting new Game: {}", this.gameClass);
+        log.info("Starting new Game: {}", this.getGameClass().getName());
 
         try {
-            G game = this.gameClass.getDeclaredConstructor().newInstance();
+            G game = this.getGameClass().getDeclaredConstructor().newInstance();
             game.setGameState(GameState.LOBBY);
             game.setPlayers(new HashSet<>());
-            RS ruleSet = this.ruleSetClass.getDeclaredConstructor().newInstance();
+            RS ruleSet = this.getRuleSetClass().getDeclaredConstructor().newInstance();
             game.setRuleSet(ruleSet);
+            game.setRound(0);
+            game.setLog(new ArrayList<>());
             game.setStartedAt(new Date());
             game.setGameIdentifier(this.gameIdentifierService.generateValidGameIdentifier());
+            game = onInitializeGame(game);
             game = this.gameRepository.save(game);
 
-            log.info("Created new {} instance: {}", this.gameClass.getName(), game.getGameIdentifier().getToken());
+            log.info("Created new {} instance: {}", this.getGameClass().getName(), game.getGameIdentifier().getToken());
 
             return game;
         } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
-            throw new DataConflictException(Messages.exception(MessageIdentifiers.GAME_TYPE_MISMATCH));
+            throw new DataConflictException(Messages.exception(MessageIdentifier.GAME_TYPE_MISMATCH));
         }
     }
 
@@ -108,14 +111,14 @@ public abstract class AbstractGameService<
         log.info("User {} joining Game: {}", user.getUsername(), gameIdentifier.getToken());
 
         validateActiveGameExists(gameIdentifier);
-        validateActiveGameInLobby(gameIdentifier);
+        validateActiveGameStateLobby(gameIdentifier);
         validateUserNotInSpecificActiveGame(gameIdentifier, user);
 
         G game = getActiveGame(gameIdentifier);
         P player;
 
         try {
-            player = this.playerClass.getDeclaredConstructor().newInstance();
+            player = this.getPlayerClass().getDeclaredConstructor().newInstance();
             player.setUser(user);
             player.setGame(game);
 
@@ -125,10 +128,11 @@ public abstract class AbstractGameService<
                 player.setLobbyRole(LobbyRole.ROLE_USER);
 
             player.setPlayerState(PlayerState.ALIVE);
+            player.setGameRoles(new ArrayList<>());
             player.setPosition(game.getPlayers().size());
             player.setDisconnected(false);
         } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
-            throw new DataConflictException(Messages.exception(MessageIdentifiers.GAME_TYPE_MISMATCH));
+            throw new DataConflictException(Messages.exception(MessageIdentifier.GAME_TYPE_MISMATCH));
         }
 
         game.getPlayers().add(player);
@@ -190,22 +194,21 @@ public abstract class AbstractGameService<
         log.info("User {} changing players of Game: {}", principal.getUsername(), gameIdentifier.getToken());
 
         validateActiveGameExists(gameIdentifier);
-        validateActiveGameInLobby(gameIdentifier);
+        validateActiveGameStateLobby(gameIdentifier);
         validateUserLobbyAdmin(gameIdentifier, principal);
 
         G game = getActiveGame(gameIdentifier);
-        GameException invalidRequestException = new GameException(Messages.exception(MessageIdentifiers.GAME_MODIFY_INVALID));
+        GameException invalidRequestException = new GameException(Messages.exception(MessageIdentifier.GAME_MODIFY_INVALID));
 
         if (
                 players.stream().min(Comparator.comparingInt(Player::getPosition)).orElseThrow(() -> invalidRequestException).getPosition() != 0
                         || players.stream().max(Comparator.comparingInt(Player::getPosition)).orElseThrow(() -> invalidRequestException).getPosition() != game.getPlayers().size() - 1
                         || players.stream().map(Player::getPosition).collect(Collectors.toSet()).size() != game.getPlayers().size()
         )
-            throw new DataConflictException(Messages.exception(MessageIdentifiers.GAME_MODIFY_INVALID));
+            throw new DataConflictException(Messages.exception(MessageIdentifier.GAME_MODIFY_INVALID));
 
-        G finalGame = game;
         players.forEach(requestPlayer -> {
-            P foundPlayer = finalGame.getPlayers().stream().filter(existingPlayer ->
+            P foundPlayer = game.getPlayers().stream().filter(existingPlayer ->
                     existingPlayer.getUser().equals(requestPlayer.getUser())).findFirst().orElseThrow(() -> invalidRequestException);
             foundPlayer.setPosition(requestPlayer.getPosition());
         });
@@ -218,12 +221,51 @@ public abstract class AbstractGameService<
         log.info("User {} changing Rule Set of Game: {}", principal.getUsername(), gameIdentifier.getToken());
 
         validateActiveGameExists(gameIdentifier);
+        validateActiveGameStateLobby(gameIdentifier);
         validateUserLobbyAdmin(gameIdentifier, principal);
 
         G game = getActiveGame(gameIdentifier);
         game.setRuleSet(ruleSet);
 
         return saveAndBroadcast(game);
+    }
+
+    /**
+     * Initiates the start of the given game. Starts by assigning each player a random code name which will be used throughout
+     * the game. Calls {@link AbstractGameService#onGameStart(Game)}, which allows subclasses to implement their own starting routine.
+     *
+     * @param gameIdentifier Game identifier of the game to start
+     * @return The started game
+     */
+    public G startGame(GameIdentifier gameIdentifier) {
+        User principal = getPrincipal();
+        log.info("User {} starting Game: {}", principal.getUsername(), gameIdentifier.getToken());
+
+        validateActiveGameExists(gameIdentifier);
+        validateActiveGameStateLobby(gameIdentifier);
+        validateUserLobbyAdmin(gameIdentifier, principal);
+
+        G game = getActiveGame(gameIdentifier);
+
+        List<CodeName> codeNames = new ArrayList<>(EnumSet.allOf(CodeName.class));
+        Random random = new Random();
+        for (P player : game.getPlayers()) {
+            CodeName codeName = codeNames.get(random.nextInt(codeNames.size()));
+            player.setCodeName(codeName);
+            codeNames.remove(codeName);
+        }
+
+        game = onGameStart(game);
+
+        game.setGameState(GameState.ONGOING);
+
+        game = saveAndBroadcast(game);
+
+        M moderator = applicationContext.getBean(getModeratorClass());
+        moderator.setGameIdentifier(gameIdentifier);
+        taskExecutor.execute(moderator);
+
+        return game;
     }
 
     /**
@@ -237,7 +279,6 @@ public abstract class AbstractGameService<
 
         return this.getActiveGame(gameIdentifier);
     }
-
 
     /**
      * Calls {@link AbstractGameService#getUserActiveGames(User)} with the current principal.
@@ -256,12 +297,16 @@ public abstract class AbstractGameService<
      */
     public List<G> getUserActiveGames(User user) {
         User principal = getPrincipal();
-        log.info("User {} obtaining active games of User {} of type {}", principal.getUsername(), user.getUsername(), this.gameClass.getName());
+        log.info("User {} obtaining active games of User {} of type {}", principal.getUsername(), user.getUsername(), this.getGameClass().getName());
 
         return this.gameRepository.findAllByUserMember(user);
     }
 
     // Interfaces
+
+    protected G onInitializeGame(G game) {
+        return game;
+    }
 
     /**
      * Interface to implement when a player quits.
@@ -271,37 +316,21 @@ public abstract class AbstractGameService<
     protected void onPlayerQuit(P player) {
     }
 
+    protected G onGameStart(G game) {
+        return game;
+    }
+
+    // Abstract Methods
+
+    protected abstract Class<G> getGameClass();
+
+    protected abstract Class<P> getPlayerClass();
+
+    protected abstract Class<RS> getRuleSetClass();
+
+    protected abstract Class<M> getModeratorClass();
+
     // Utility
-
-    protected G saveAndBroadcast(G game) {
-        G savedGame = this.gameRepository.save(game);
-        broadcastGameStaleNotification(game.getGameIdentifier());
-        return savedGame;
-    }
-
-    protected void broadcastGameStaleNotification(GameIdentifier gameIdentifier) {
-        G game = getActiveGame(gameIdentifier);
-        Set<User> usersInGame = game.getPlayers().stream().map(Player::getUser).collect(Collectors.toSet());
-        this.communicationService.sendGameStaleNotification(gameIdentifier, usersInGame);
-    }
-
-    protected List<G> getActiveGames(GameIdentifier gameIdentifier) {
-        return this.gameRepository.findAllByGameIdentifier_TokenAndEndedAt(gameIdentifier.getToken(), null);
-    }
-
-    protected G getActiveGame(GameIdentifier gameIdentifier) {
-        List<G> games = this.getActiveGames(gameIdentifier);
-        Game<?, ?> game = games.get(0);
-        if (!(this.gameClass.isInstance(game)))
-            throw new DataConflictException(Messages.exception(MessageIdentifiers.GAME_TYPE_MISMATCH));
-        return games.get(0);
-    }
-
-    protected P getPlayerFromUser(GameIdentifier gameIdentifier, User user) {
-        G game = getActiveGame(gameIdentifier);
-
-        return game.getPlayers().stream().filter(player -> player.getUser().equals(user)).findFirst().orElseThrow();
-    }
 
     // Validation
 
@@ -309,30 +338,30 @@ public abstract class AbstractGameService<
         List<G> games = this.getActiveGames(gameIdentifier);
 
         if (games.size() == 0)
-            throw new GameException(Messages.exception(MessageIdentifiers.GAME_EXISTS_NOT));
+            throw new GameException(Messages.exception(MessageIdentifier.GAME_EXISTS_NOT));
         if (games.size() > 1)
-            throw new DataConflictException(Messages.exception(MessageIdentifiers.GAME_UNIQUE_NOT));
+            throw new DataConflictException(Messages.exception(MessageIdentifier.GAME_UNIQUE_NOT));
     }
 
-    protected void validateActiveGameInLobby(GameIdentifier gameIdentifier) {
+    protected void validateActiveGameStateLobby(GameIdentifier gameIdentifier) {
         G game = this.getActiveGame(gameIdentifier);
 
         if (!game.getGameState().equals(GameState.LOBBY))
-            throw new GameException(Messages.exception(MessageIdentifiers.GAME_STATE_STARTED));
+            throw new GameException(Messages.exception(MessageIdentifier.GAME_STATE_STARTED));
     }
 
     protected void validateUserInActiveGame(GameIdentifier gameIdentifier, User user) throws GameException {
         G game = this.getActiveGame(gameIdentifier);
 
         if (game.getPlayers().stream().noneMatch(player -> player.getUser().equals(user)))
-            throw new GameException(Messages.exception(MessageIdentifiers.GAME_USER_INGAME_NOT));
+            throw new GameException(Messages.exception(MessageIdentifier.GAME_USER_INGAME_NOT));
     }
 
     protected void validateUserNotInSpecificActiveGame(GameIdentifier gameIdentifier, User user) throws GameException {
         G game = this.getActiveGame(gameIdentifier);
 
         if (game.getPlayers().stream().anyMatch(player -> player.getUser().equals(user)))
-            throw new GameException(Messages.exception(MessageIdentifiers.GAME_USER_INGAME_THIS));
+            throw new GameException(Messages.exception(MessageIdentifier.GAME_USER_INGAME_THIS));
     }
 
     protected void validateUserLobbyAdmin(GameIdentifier gameIdentifier, User user) throws GameException {
@@ -340,7 +369,7 @@ public abstract class AbstractGameService<
         P player = getPlayerFromUser(gameIdentifier, user);
 
         if (!player.getLobbyRole().equals(LobbyRole.ROLE_ADMIN))
-            throw new GameException(Messages.exception(MessageIdentifiers.AUTHORIZATION_UNAUTHORIZED));
+            throw new GameException(Messages.exception(MessageIdentifier.AUTHORIZATION_UNAUTHORIZED));
     }
 
 }

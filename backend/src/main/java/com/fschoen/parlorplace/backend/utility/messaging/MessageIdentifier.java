@@ -1,6 +1,6 @@
 package com.fschoen.parlorplace.backend.utility.messaging;
 
-public class MessageIdentifiers {
+public class MessageIdentifier {
     public static final String AUTHORIZATION_PRINCIPAL_EMPTY = "authorization.principal.empty";
     public static final String AUTHORIZATION_UNAUTHORIZED = "authorization.unauthorized";
     public static final String AUTHORIZATION_SIGNATURE_INVALID = "authorization.signature.invalid";
@@ -29,6 +29,8 @@ public class MessageIdentifiers {
     public static final String GAME_STATE_STARTED = "game.state.started";
     public static final String GAME_STATE_ENDED = "game.state.ended";
     public static final String GAME_MODIFY_INVALID = "game.modify.invalid";
+    public static final String GAME_ROLES_AMOUNT_MISMATCH = "game.roles.amount.mismatch";
+    public static final String ROLE_TYPE_MISMATCH = "role.type.mismatch";
     public static final String MAPPING_TYPE = "mapping.type";
 
 }

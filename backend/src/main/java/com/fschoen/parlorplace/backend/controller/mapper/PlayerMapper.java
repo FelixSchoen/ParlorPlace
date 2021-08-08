@@ -8,7 +8,7 @@ import java.util.Set;
 
 public interface PlayerMapper<P extends Player<?>, PDTO extends PlayerDTO<?>> {
 
-    @Mapping(target = "gameRole", source = "gameRole")
+    @Mapping(target = "gameRoles", source = "gameRoles")
     PDTO toDTO(P player);
 
     Set<PDTO> toDTO(Set<P> players);

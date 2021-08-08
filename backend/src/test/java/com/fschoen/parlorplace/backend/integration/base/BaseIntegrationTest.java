@@ -36,6 +36,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.web.socket.WebSocketHttpHeaders;
@@ -44,10 +45,13 @@ import org.springframework.web.socket.client.standard.StandardWebSocketClient;
 import org.springframework.web.socket.messaging.WebSocketStompClient;
 
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
-import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeoutException;
 
 import static java.util.concurrent.TimeUnit.SECONDS;
@@ -56,6 +60,7 @@ import static java.util.concurrent.TimeUnit.SECONDS;
 @SpringBootTest(classes = ParlorPlaceApplication.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
 @Slf4j
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 public abstract class BaseIntegrationTest {
 
     protected static final String BASE_URI = "/";
@@ -66,7 +71,7 @@ public abstract class BaseIntegrationTest {
     protected static final String WEBSOCKET_QUEUE_PRIMARY_URI = "/user/queue/game/primary/";
     protected GeneratedData generatedData;
     protected String WEBSOCKET_GAME_URI;
-    protected Map<User, CompletableFuture<ClientNotification>> futureMap = new HashMap<>();
+    protected Map<User, BlockingQueue<ClientNotification>> queueMap = new HashMap<>();
     @LocalServerPort
     protected int port;
     @Autowired
@@ -80,7 +85,7 @@ public abstract class BaseIntegrationTest {
 
     @BeforeEach
     public void beforeBase() {
-        testIsolationService.recreateDatabase();
+        //testIsolationService.recreateDatabase();
         this.generatedData = databasePopulator.generate();
 
         RestAssured.port = port;
@@ -195,20 +200,25 @@ public abstract class BaseIntegrationTest {
     }
 
     private void subscribeSocket(User user, StompSession stompSession, GameIdentifier gameIdentifier) {
-        this.futureMap.put(user, new CompletableFuture<>());
+        this.queueMap.put(user, new LinkedBlockingQueue<>());
         stompSession.subscribe(WEBSOCKET_QUEUE_PRIMARY_URI + gameIdentifier.getToken(), new NotificationStompSessionHandler(user));
     }
 
-    protected ClientNotification waitNotification(User user, StompSession stompSession, GameIdentifier gameIdentifier) {
+    protected ClientNotification waitNotification(User user) {
         try {
-            ClientNotification clientNotification = this.futureMap.get(user).get(5, SECONDS);
-            subscribeSocket(user, stompSession, gameIdentifier);
-
-            return clientNotification;
-        } catch (InterruptedException | ExecutionException | TimeoutException e) {
+            return this.queueMap.get(user).poll(5, SECONDS);
+        } catch (InterruptedException e) {
             e.printStackTrace();
         }
         return null;
+    }
+
+    protected List<ClientNotification> waitNotification(User user, int amount) {
+        List<ClientNotification> returnList = new ArrayList<>();
+        for (int i = 0; i < amount; i++) {
+            returnList.add(this.waitNotification(user));
+        }
+        return returnList;
     }
 
     protected void closeSocket(StompSession stompSession) {
@@ -247,7 +257,8 @@ public abstract class BaseIntegrationTest {
             } catch (JsonProcessingException e) {
                 log.error("Error deserializing payload", e);
             }
-            futureMap.get(user).complete(clientNotification);
+            assert clientNotification != null;
+            queueMap.get(user).add(clientNotification);
         }
 
     }

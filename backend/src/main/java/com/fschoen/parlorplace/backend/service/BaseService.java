@@ -6,7 +6,7 @@ import com.fschoen.parlorplace.backend.enumeration.UserRole;
 import com.fschoen.parlorplace.backend.exception.AuthorizationException;
 import com.fschoen.parlorplace.backend.repository.UserRepository;
 import com.fschoen.parlorplace.backend.security.UserDetailsImplementation;
-import com.fschoen.parlorplace.backend.utility.messaging.MessageIdentifiers;
+import com.fschoen.parlorplace.backend.utility.messaging.MessageIdentifier;
 import com.fschoen.parlorplace.backend.utility.messaging.Messages;
 import org.springframework.security.core.context.SecurityContextHolder;
 
@@ -24,7 +24,7 @@ public abstract class BaseService {
         UserDetailsImplementation userDetails = (UserDetailsImplementation) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Optional<User> potentialUser = userRepository.findOneById(userDetails.getId());
         if (potentialUser.isEmpty())
-            throw new AuthorizationException(Messages.exception(MessageIdentifiers.AUTHORIZATION_PRINCIPAL_EMPTY));
+            throw new AuthorizationException(Messages.exception(MessageIdentifier.AUTHORIZATION_PRINCIPAL_EMPTY));
         return potentialUser.get();
     }
 

@@ -12,10 +12,11 @@ import com.fschoen.parlorplace.backend.game.werewolf.dto.game.WerewolfGameDTO;
 import com.fschoen.parlorplace.backend.game.werewolf.entity.WerewolfGame;
 import com.fschoen.parlorplace.backend.game.werewolf.entity.WerewolfGameRole;
 import com.fschoen.parlorplace.backend.game.werewolf.entity.WerewolfPlayer;
-import com.fschoen.parlorplace.backend.game.werewolf.enumeration.WerewolfRoleType;
+import com.fschoen.parlorplace.backend.game.werewolf.entity.gamerole.VillagerWerewolfGameRole;
 import com.fschoen.parlorplace.backend.game.werewolf.mapper.WerewolfGameMapper;
 import com.fschoen.parlorplace.backend.game.werewolf.mapper.WerewolfGameMapperImpl;
 import com.fschoen.parlorplace.backend.game.werewolf.mapper.WerewolfGameRoleMapperImpl;
+import com.fschoen.parlorplace.backend.game.werewolf.mapper.WerewolfLogEntryMapperImpl;
 import com.fschoen.parlorplace.backend.game.werewolf.mapper.WerewolfPlayerMapperImpl;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -23,13 +24,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes = {WerewolfGameMapperImpl.class, WerewolfPlayerMapperImpl.class, WerewolfGameRoleMapperImpl.class, UserMapperImpl.class, RoleMapperImpl.class, GameIdentifierMapperImpl.class})
+@SpringBootTest(classes = {WerewolfGameMapperImpl.class, WerewolfPlayerMapperImpl.class, WerewolfGameRoleMapperImpl.class, WerewolfLogEntryMapperImpl.class, UserMapperImpl.class, RoleMapperImpl.class, GameIdentifierMapperImpl.class})
 public class WerewolfGameMapperTest {
 
     @Autowired
@@ -40,8 +42,10 @@ public class WerewolfGameMapperTest {
         User user = User.builder().roles(new HashSet<>() {{
             add(Role.builder().role(UserRole.ROLE_USER).build());
         }}).build();
-        WerewolfGameRole gameRole = WerewolfGameRole.builder().id(0L).werewolfRoleType(WerewolfRoleType.VILLAGER).build();
-        WerewolfPlayer player = WerewolfPlayer.builder().id(0L).user(user).playerState(PlayerState.ALIVE).position(0).gameRole(gameRole).build();
+        WerewolfGameRole gameRole = VillagerWerewolfGameRole.builder().id(0L).build();
+        WerewolfPlayer player = WerewolfPlayer.builder().id(0L).user(user).playerState(PlayerState.ALIVE).position(0).gameRoles(new ArrayList<>(){{
+            add(gameRole);
+        }}).build();
         Set<WerewolfPlayer> players = new HashSet<>() {{
             add(player);
         }};

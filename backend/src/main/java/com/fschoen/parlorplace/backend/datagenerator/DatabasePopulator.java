@@ -1,6 +1,7 @@
 package com.fschoen.parlorplace.backend.datagenerator;
 
 import com.fschoen.parlorplace.backend.entity.GameIdentifier;
+import com.fschoen.parlorplace.backend.entity.Player;
 import com.fschoen.parlorplace.backend.entity.Role;
 import com.fschoen.parlorplace.backend.entity.User;
 import com.fschoen.parlorplace.backend.enumeration.GameState;
@@ -8,20 +9,30 @@ import com.fschoen.parlorplace.backend.enumeration.LobbyRole;
 import com.fschoen.parlorplace.backend.enumeration.PlayerState;
 import com.fschoen.parlorplace.backend.enumeration.UserRole;
 import com.fschoen.parlorplace.backend.game.werewolf.entity.WerewolfGame;
+import com.fschoen.parlorplace.backend.game.werewolf.entity.WerewolfLogEntry;
 import com.fschoen.parlorplace.backend.game.werewolf.entity.WerewolfPlayer;
 import com.fschoen.parlorplace.backend.game.werewolf.entity.WerewolfRuleSet;
+import com.fschoen.parlorplace.backend.game.werewolf.entity.gamerole.VillagerWerewolfGameRole;
+import com.fschoen.parlorplace.backend.game.werewolf.entity.gamerole.WerewolfWerewolfGameRole;
+import com.fschoen.parlorplace.backend.game.werewolf.enumeration.WerewolfGamePhase;
+import com.fschoen.parlorplace.backend.game.werewolf.enumeration.WerewolfLogType;
+import com.fschoen.parlorplace.backend.game.werewolf.enumeration.WerewolfRoleType;
 import com.fschoen.parlorplace.backend.repository.GameRepository;
+import com.fschoen.parlorplace.backend.repository.PlayerRepository;
 import com.fschoen.parlorplace.backend.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Component
 @Profile({"test", "setup"})
@@ -30,6 +41,9 @@ public class DatabasePopulator {
 
     private final UserRepository userRepository;
     private final GameRepository<WerewolfGame> werewolfGameGameRepository;
+
+    @Autowired
+    private PlayerRepository<WerewolfPlayer> werewolfPlayerPlayerRepository;
 
     @Autowired
     public DatabasePopulator(
@@ -151,40 +165,128 @@ public class DatabasePopulator {
     private GeneratedData.WerewolfGameCollection setupWerewolfGameCollection(GeneratedData generatedData) {
         GeneratedData.WerewolfGameCollection werewolfGameCollection = new GeneratedData.WerewolfGameCollection();
 
-        //werewolfGame1
-        WerewolfGame werewolfGame1 = WerewolfGame.builder()
-                .gameIdentifier(new GameIdentifier("GAME1"))
+        //werewolfLobbyGame1
+        WerewolfGame werewolfLobbyGame1 = WerewolfGame.builder()
+                .gameIdentifier(new GameIdentifier("LOBBY1"))
                 .gameState(GameState.LOBBY)
                 .players(new HashSet<>())
-                .ruleSet(new WerewolfRuleSet())
+                .ruleSet(WerewolfRuleSet.builder()
+                        .gameRoleTypes(new ArrayList<>() {{
+                            add(WerewolfRoleType.WEREWOLF);
+                            add(WerewolfRoleType.VILLAGER);
+                            add(WerewolfRoleType.VILLAGER);
+                        }}).build())
+                .round(0)
+                .log(new ArrayList<>())
                 .startedAt(new Date())
+                .gamePhase(WerewolfGamePhase.START_OF_ROUND)
                 .build();
-        werewolfGame1.getPlayers().add(
+        werewolfLobbyGame1.getPlayers().add(
                 WerewolfPlayer.builder()
                         .user(generatedData.getUserCollection().getAdmin1())
-                        .game(werewolfGame1)
+                        .game(werewolfLobbyGame1)
                         .lobbyRole(LobbyRole.ROLE_ADMIN)
                         .playerState(PlayerState.ALIVE)
+                        .gameRoles(new ArrayList<>())
                         .position(0)
                         .disconnected(false)
                         .build()
         );
-        werewolfGame1.getPlayers().add(
+        werewolfLobbyGame1.getPlayers().add(
                 WerewolfPlayer.builder()
                         .user(generatedData.getUserCollection().getUser1())
-                        .game(werewolfGame1)
+                        .game(werewolfLobbyGame1)
                         .lobbyRole(LobbyRole.ROLE_USER)
                         .playerState(PlayerState.ALIVE)
+                        .gameRoles(new ArrayList<>())
                         .position(1)
+
+                        .disconnected(false)
+                        .build()
+        );
+        werewolfLobbyGame1.getPlayers().add(
+                WerewolfPlayer.builder()
+                        .user(generatedData.getUserCollection().getUser2())
+                        .game(werewolfLobbyGame1)
+                        .lobbyRole(LobbyRole.ROLE_USER)
+                        .playerState(PlayerState.ALIVE)
+                        .gameRoles(new ArrayList<>())
+                        .position(1)
+
                         .disconnected(false)
                         .build()
         );
 
-        werewolfGameCollection.setWerewolfGame1(werewolfGameGameRepository.save(werewolfGame1));
-        werewolfGameCollection.setWerewolfGame1Users(new HashSet<>(){{
-            add(generatedData.getUserCollection().getAdmin1());
-            add(generatedData.getUserCollection().getUser1());
-        }});
+        werewolfGameCollection.setWerewolfLobbyGame1(werewolfGameGameRepository.save(werewolfLobbyGame1));
+        werewolfGameCollection.setWerewolfOngoingGame1Users(werewolfLobbyGame1.getPlayers().stream().map(Player::getUser).collect(Collectors.toSet()));
+
+        //werewolfLobbyGame1
+        WerewolfGame werewolfOngoingGame1 = WerewolfGame.builder()
+                .gameIdentifier(new GameIdentifier("ONGOING1"))
+                .gameState(GameState.ONGOING)
+                .players(new HashSet<>())
+                .ruleSet(WerewolfRuleSet.builder()
+                        .gameRoleTypes(new ArrayList<>() {{
+                            add(WerewolfRoleType.WEREWOLF);
+                            add(WerewolfRoleType.VILLAGER);
+                            add(WerewolfRoleType.VILLAGER);
+                        }}).build())
+                .round(0)
+                .log(new ArrayList<>())
+                .startedAt(new Date())
+                .gamePhase(WerewolfGamePhase.START_OF_ROUND)
+                .build();
+        werewolfOngoingGame1.getPlayers().add(
+                WerewolfPlayer.builder()
+                        .user(generatedData.getUserCollection().getAdmin1())
+                        .game(werewolfOngoingGame1)
+                        .lobbyRole(LobbyRole.ROLE_ADMIN)
+                        .playerState(PlayerState.ALIVE)
+                        .gameRoles(new ArrayList<>() {{
+                            add(new WerewolfWerewolfGameRole());
+                        }})
+                        .position(0)
+                        .disconnected(false)
+                        .build()
+        );
+        werewolfOngoingGame1.getPlayers().add(
+                WerewolfPlayer.builder()
+                        .user(generatedData.getUserCollection().getUser1())
+                        .game(werewolfOngoingGame1)
+                        .lobbyRole(LobbyRole.ROLE_USER)
+                        .playerState(PlayerState.ALIVE)
+                        .gameRoles(new ArrayList<>() {{
+                            add(new VillagerWerewolfGameRole());
+                        }})
+                        .position(1)
+                        .disconnected(false)
+                        .build()
+        );
+        werewolfOngoingGame1.getPlayers().add(
+                WerewolfPlayer.builder()
+                        .user(generatedData.getUserCollection().getUser2())
+                        .game(werewolfOngoingGame1)
+                        .lobbyRole(LobbyRole.ROLE_USER)
+                        .playerState(PlayerState.ALIVE)
+                        .gameRoles(new ArrayList<>() {{
+                            add(new VillagerWerewolfGameRole());
+                        }})
+                        .position(2)
+                        .disconnected(false)
+                        .build()
+        );
+        for (WerewolfPlayer p : werewolfOngoingGame1.getPlayers()) {
+            p.getGameRoles().forEach(werewolfGameRole -> werewolfGameRole.setPlayer(p));
+        }
+        werewolfOngoingGame1.getLog()
+                .add(WerewolfLogEntry.builder()
+                        .identifier(UUID.randomUUID())
+                        .game(werewolfOngoingGame1)
+                        .recipients(werewolfOngoingGame1.getPlayers())
+                        .logType(WerewolfLogType.START).build());
+
+        werewolfGameCollection.setWerewolfOngoingGame1(werewolfGameGameRepository.save(werewolfOngoingGame1));
+        werewolfGameCollection.setWerewolfOngoingGame1Users(werewolfOngoingGame1.getPlayers().stream().map(Player::getUser).collect(Collectors.toSet()));
 
         werewolfGameGameRepository.flush();
         return werewolfGameCollection;
