@@ -1,6 +1,7 @@
 package com.fschoen.parlorplace.backend.entity;
 
 import com.fschoen.parlorplace.backend.enumeration.VoteState;
+import com.fschoen.parlorplace.backend.enumeration.VoteType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -24,6 +25,7 @@ import javax.persistence.MapKeyJoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.validation.constraints.NotNull;
+import java.util.Date;
 import java.util.Map;
 
 @NoArgsConstructor
@@ -53,6 +55,11 @@ public abstract class Vote<
     @NotNull
     protected VoteState voteState;
 
+    @Column(nullable = false)
+    @Enumerated
+    @NotNull
+    protected VoteType voteType;
+
     @OneToMany(targetEntity = VoteCollection.class, cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinTable(
             joinColumns = @JoinColumn(name = "vote_id", referencedColumnName = "id"),
@@ -64,6 +71,11 @@ public abstract class Vote<
     @EqualsAndHashCode.Exclude
     @NotNull
     protected Map<P, C> voteCollectionMap;
+
+    @Column(nullable = false)
+    protected Date endTime;
+
+
 
 
 }

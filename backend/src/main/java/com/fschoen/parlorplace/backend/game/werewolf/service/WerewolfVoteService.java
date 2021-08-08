@@ -1,7 +1,24 @@
 package com.fschoen.parlorplace.backend.game.werewolf.service;
 
-import com.fschoen.parlorplace.backend.entity.Vote;
+import com.fschoen.parlorplace.backend.game.werewolf.entity.WerewolfGame;
+import com.fschoen.parlorplace.backend.game.werewolf.entity.WerewolfPlayer;
+import com.fschoen.parlorplace.backend.game.werewolf.entity.WerewolfPlayerVoteCollection;
+import com.fschoen.parlorplace.backend.game.werewolf.entity.WerewolfVote;
+import com.fschoen.parlorplace.backend.game.werewolf.repository.WerewolfGameRepository;
+import com.fschoen.parlorplace.backend.repository.UserRepository;
 import com.fschoen.parlorplace.backend.service.AbstractVoteService;
+import com.fschoen.parlorplace.backend.service.CommunicationService;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
-public class WerewolfVoteService extends AbstractVoteService<Vote> {
+@Service
+@Slf4j
+public class WerewolfVoteService extends AbstractVoteService<WerewolfVote, WerewolfGame, WerewolfPlayer, WerewolfPlayerVoteCollection, WerewolfGameRepository> {
+
+    @Autowired
+    public WerewolfVoteService(CommunicationService communicationService, UserRepository userRepository, WerewolfGameRepository gameRepository) {
+        super(communicationService, userRepository, gameRepository);
+    }
+
 }
