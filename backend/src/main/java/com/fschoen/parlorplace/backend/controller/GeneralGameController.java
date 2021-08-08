@@ -33,7 +33,7 @@ public class GeneralGameController {
     @GetMapping("/base_info/{identifier}")
     public ResponseEntity<GameBaseInformationDTO> getGameBaseInformation(@PathVariable("identifier") String identifier) {
         GameIdentifier gameIdentifier = new GameIdentifier(identifier);
-        Game<?, ?, ?> game = this.gameService.getGameBaseInformation(gameIdentifier);
+        Game<?, ?, ?, ?> game = this.gameService.getGameBaseInformation(gameIdentifier);
         GameBaseInformationDTO gameBaseInformationDTO = GameBaseInformationDTO.builder()
                 .gameIdentifier(this.gameIdentifierMapper.toDTO(game.getGameIdentifier()))
                 .gameType(game.getGameType())

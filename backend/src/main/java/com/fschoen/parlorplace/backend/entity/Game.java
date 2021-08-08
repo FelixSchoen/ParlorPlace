@@ -39,7 +39,7 @@ import java.util.Set;
 @Data
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-public abstract class Game<P extends Player<?>, RS extends RuleSet, L extends LogEntry<?>> {
+public abstract class Game<P extends Player<?>, RS extends RuleSet, V extends Vote<P, ?>, L extends LogEntry<?>> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "seq_game_instance_id")
@@ -74,6 +74,14 @@ public abstract class Game<P extends Player<?>, RS extends RuleSet, L extends Lo
     @NotNull
     @Min(0)
     protected Integer round;
+
+    @OneToMany(mappedBy = "game", targetEntity = Vote.class, cascade = CascadeType.ALL, orphanRemoval = true)
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    @LazyCollection(LazyCollectionOption.FALSE)
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
+    @NotNull
+    protected List<V> votes;
 
     @OneToMany(mappedBy = "game", targetEntity = LogEntry.class, cascade = CascadeType.ALL, orphanRemoval = true)
     @OnDelete(action = OnDeleteAction.CASCADE)

@@ -177,6 +177,7 @@ public class DatabasePopulator {
                             add(WerewolfRoleType.VILLAGER);
                         }}).build())
                 .round(0)
+                .votes(new ArrayList<>())
                 .log(new ArrayList<>())
                 .startedAt(new Date())
                 .gamePhase(WerewolfGamePhase.START_OF_ROUND)
@@ -232,6 +233,7 @@ public class DatabasePopulator {
                             add(WerewolfRoleType.VILLAGER);
                         }}).build())
                 .round(0)
+                .votes(new ArrayList<>())
                 .log(new ArrayList<>())
                 .startedAt(new Date())
                 .gamePhase(WerewolfGamePhase.START_OF_ROUND)

@@ -18,7 +18,7 @@ import java.util.Set;
 @AllArgsConstructor
 @SuperBuilder(toBuilder = true)
 @Data
-public abstract class GameDTO<PDTO extends PlayerDTO<?>, RSDTO extends RuleSetDTO, L extends LogEntryDTO<?>> {
+public abstract class GameDTO<PDTO extends PlayerDTO<?>, RSDTO extends RuleSetDTO, VDTO extends VoteDTO<PDTO, ?>, L extends LogEntryDTO<?>> {
 
     @NotNull
     protected Long id;
@@ -38,6 +38,8 @@ public abstract class GameDTO<PDTO extends PlayerDTO<?>, RSDTO extends RuleSetDT
     @NotNull
     @Min(0)
     private Integer round;
+
+    protected List<VDTO> votes;
 
     @NotNull
     protected List<L> log;

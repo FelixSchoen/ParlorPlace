@@ -33,7 +33,7 @@ import java.util.stream.Collectors;
 
 @Slf4j
 public abstract class AbstractGameService<
-        G extends Game<P, RS, ?>,
+        G extends Game<P, RS, ?, ?>,
         P extends Player<GR>,
         RS extends RuleSet,
         GR extends GameRole,
@@ -76,6 +76,7 @@ public abstract class AbstractGameService<
             RS ruleSet = this.getRuleSetClass().getDeclaredConstructor().newInstance();
             game.setRuleSet(ruleSet);
             game.setRound(0);
+            game.setVotes(new ArrayList<>());
             game.setLog(new ArrayList<>());
             game.setStartedAt(new Date());
             game.setGameIdentifier(this.gameIdentifierService.generateValidGameIdentifier());

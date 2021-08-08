@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 
 @Slf4j
 public abstract class AbstractGameModerator<
-        G extends Game<P, RS, ?>,
+        G extends Game<P, RS, ?, ?>,
         P extends Player<GR>,
         RS extends RuleSet,
         GR extends GameRole,

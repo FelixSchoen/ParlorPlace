@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-public abstract class BaseGameService<G extends Game<P, ?, ?>, P extends Player<?>, GRepo extends GameRepository<G>> extends BaseService {
+public abstract class BaseGameService<G extends Game<P, ?, ?, ?>, P extends Player<?>, GRepo extends GameRepository<G>> extends BaseService {
 
     protected final CommunicationService communicationService;
 

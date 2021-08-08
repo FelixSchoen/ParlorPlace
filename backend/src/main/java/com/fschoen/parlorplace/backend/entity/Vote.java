@@ -25,7 +25,7 @@ import javax.persistence.MapKeyJoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.validation.constraints.NotNull;
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.Map;
 
 @NoArgsConstructor
@@ -36,7 +36,7 @@ import java.util.Map;
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public abstract class Vote<
         P extends Player<?>,
-        C extends VoteCollection> {
+        C extends VoteCollection<P>> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "seq_vote_id")
@@ -48,7 +48,7 @@ public abstract class Vote<
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
     @NotNull
-    protected Game<?, ?, ?> game;
+    protected Game<?, ?, ?, ?> game;
 
     @Column(nullable = false)
     @Enumerated
@@ -73,9 +73,6 @@ public abstract class Vote<
     protected Map<P, C> voteCollectionMap;
 
     @Column(nullable = false)
-    protected Date endTime;
-
-
-
+    protected LocalDateTime endTime;
 
 }

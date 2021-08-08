@@ -22,7 +22,7 @@ import javax.validation.constraints.NotNull;
 @ToString(callSuper = true)
 @Data
 @Entity
-public class WerewolfGame extends Game<WerewolfPlayer, WerewolfRuleSet, WerewolfLogEntry> {
+public class WerewolfGame extends Game<WerewolfPlayer, WerewolfRuleSet, WerewolfVote, WerewolfLogEntry> {
 
     @Column(nullable = false)
     private final GameType gameType = GameType.WEREWOLF;
