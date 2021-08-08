@@ -1,6 +1,7 @@
 package com.fschoen.parlorplace.backend.entity;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -9,7 +10,6 @@ import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -23,6 +23,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.validation.constraints.NotNull;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
@@ -56,31 +57,33 @@ public abstract class LogEntry<P extends Player<?>> {
             inverseJoinColumns = @JoinColumn(name = "player_id")
     )
     @LazyCollection(LazyCollectionOption.FALSE)
-    @EqualsAndHashCode.Exclude
     @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     @NotNull
     protected Set<P> recipients;
 
-    @ManyToMany(targetEntity = Player.class, cascade = CascadeType.ALL)
+    @ManyToMany(targetEntity = Player.class)
     @JoinTable(
             joinColumns = @JoinColumn(name = "logentry_id"),
             inverseJoinColumns = @JoinColumn(name = "player_id")
     )
     @LazyCollection(LazyCollectionOption.FALSE)
-    @EqualsAndHashCode.Exclude
     @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    @Builder.Default
     @NotNull
-    protected Set<P> sources;
+    protected Set<P> sources = new HashSet<>();
 
-    @ManyToMany(targetEntity = Player.class, cascade = CascadeType.ALL)
+    @ManyToMany(targetEntity = Player.class)
     @JoinTable(
             joinColumns = @JoinColumn(name = "logentry_id"),
             inverseJoinColumns = @JoinColumn(name = "player_id")
     )
     @LazyCollection(LazyCollectionOption.FALSE)
-    @EqualsAndHashCode.Exclude
     @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    @Builder.Default
     @NotNull
-    protected Set<P> targets;
+    protected Set<P> targets = new HashSet<>();
 
 }

@@ -61,8 +61,9 @@ public class WerewolfGameModerator extends AbstractGameModerator<
     }
 
     private void processTransitionNight() {
-        WerewolfLogEntry logEntry = getLogEntryTemplate(getAllPlayersOfGame()).logType(WerewolfLogType.SLEEP).build();
-        saveAndBroadcast(logEntry);
+        WerewolfGame game = this.getGame();
+        game.getLog().add(getLogEntryTemplate(getAllPlayersOfGame()).logType(WerewolfLogType.SLEEP).build());
+        saveAndBroadcast(game);
     }
 
     // Utility

@@ -41,6 +41,10 @@ public abstract class AbstractGameModerator<
 
     // Utility
 
+    protected G getGame() {
+        return this.getActiveGame(this.gameIdentifier);
+    }
+
     protected Set<P> getAllPlayersOfGame() {
         G game = getActiveGame(gameIdentifier);
         return game.getPlayers();
