@@ -1,7 +1,6 @@
 package com.fschoen.parlorplace.backend.utility.communication;
 
-import com.fschoen.parlorplace.backend.controller.dto.game.LogEntryDTO;
-import com.fschoen.parlorplace.backend.controller.dto.game.PlayerDTO;
+import com.fschoen.parlorplace.backend.enumeration.CodeName;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -9,16 +8,16 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
 import javax.validation.constraints.NotNull;
-import java.util.List;
+import java.util.Set;
 
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-@SuperBuilder(toBuilder = true, builderMethodName = "log_builder")
+@SuperBuilder(toBuilder = true)
 @Data
-public class LogClientNotification<P extends PlayerDTO<?>> extends ClientNotification {
+public abstract class VoiceLineClientNotification extends ClientNotification {
 
     @NotNull
-    private List<LogEntryDTO<P>> logEntryList;
+    private Set<CodeName> codeNames;
 
 }

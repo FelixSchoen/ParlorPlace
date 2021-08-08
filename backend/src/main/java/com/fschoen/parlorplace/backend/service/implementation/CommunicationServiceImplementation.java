@@ -7,6 +7,7 @@ import com.fschoen.parlorplace.backend.entity.User;
 import com.fschoen.parlorplace.backend.enumeration.NotificationType;
 import com.fschoen.parlorplace.backend.service.CommunicationService;
 import com.fschoen.parlorplace.backend.utility.communication.ClientNotification;
+import com.fschoen.parlorplace.backend.utility.communication.VoiceLineClientNotification;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.MessagingException;
@@ -42,6 +43,17 @@ public class CommunicationServiceImplementation implements CommunicationService 
     @Override
     public void sendLogsStaleNotification(GameIdentifier gameIdentifier, Set<User> recipients) {
         ClientNotification notification = ClientNotification.builder().notificationType(NotificationType.STALE_LOGS_INFORMATION).build();
+        for (User user : recipients) {
+            try {
+                send(user.getUsername(), SECONDARY_DESTINATION_URI + gameIdentifier.getToken(), notification);
+            } catch (MessagingException e) {
+                log.error("Could not send Logs Stale Notification for User {}", user.getUsername(), e);
+            }
+        }
+    }
+
+    @Override
+    public void sendVoiceLineNotification(GameIdentifier gameIdentifier, Set<User> recipients, VoiceLineClientNotification notification) {
         for (User user : recipients) {
             try {
                 send(user.getUsername(), SECONDARY_DESTINATION_URI + gameIdentifier.getToken(), notification);

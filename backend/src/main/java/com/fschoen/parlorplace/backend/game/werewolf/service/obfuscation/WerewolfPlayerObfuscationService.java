@@ -27,7 +27,7 @@ public class WerewolfPlayerObfuscationService extends DoubleObfuscationService<W
                 || werewolfPlayerDTO.getPlayerState() == PlayerState.DECEASED)
             return werewolfPlayerDTO;
         else
-            return werewolfPlayerDTO.toBuilder().gameRoles(null).build();
+            return werewolfPlayerDTO.toBuilder().codeName(null).gameRoles(null).build();
     }
 
 }
