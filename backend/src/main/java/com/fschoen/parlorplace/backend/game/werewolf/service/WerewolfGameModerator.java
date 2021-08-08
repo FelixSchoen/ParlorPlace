@@ -1,4 +1,4 @@
-package com.fschoen.parlorplace.backend.game.werewolf.service.game;
+package com.fschoen.parlorplace.backend.game.werewolf.service;
 
 import com.fschoen.parlorplace.backend.enumeration.CodeName;
 import com.fschoen.parlorplace.backend.game.werewolf.entity.WerewolfGame;

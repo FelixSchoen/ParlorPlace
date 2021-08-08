@@ -1,4 +1,4 @@
-package com.fschoen.parlorplace.backend.game.werewolf.service.game;
+package com.fschoen.parlorplace.backend.game.werewolf.service;
 
 import com.fschoen.parlorplace.backend.exception.DataConflictException;
 import com.fschoen.parlorplace.backend.exception.GameException;
