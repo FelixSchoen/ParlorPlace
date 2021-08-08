@@ -15,7 +15,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @SuperBuilder(toBuilder = true)
 @Data
-public class LogEntryDTO<P extends PlayerDTO<?>> {
+public abstract class LogEntryDTO<P extends PlayerDTO<?>> {
 
     @NotNull
     protected UUID identifier;

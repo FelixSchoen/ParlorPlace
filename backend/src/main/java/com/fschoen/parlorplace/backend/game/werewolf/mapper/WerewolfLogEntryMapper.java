@@ -7,4 +7,5 @@ import org.mapstruct.Mapper;
 
 @Mapper(componentModel = "spring", uses = {WerewolfPlayerMapper.class})
 public interface WerewolfLogEntryMapper extends LogEntryMapper<WerewolfLogEntry, WerewolfLogEntryDTO> {
+
 }

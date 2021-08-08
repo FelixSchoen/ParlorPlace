@@ -1,4 +1,4 @@
-package com.fschoen.parlorplace.backend.service.implementation.game;
+package com.fschoen.parlorplace.backend.game.werewolf.service.game;
 
 import com.fschoen.parlorplace.backend.game.werewolf.entity.WerewolfGame;
 import com.fschoen.parlorplace.backend.game.werewolf.entity.WerewolfGameRole;
@@ -62,7 +62,9 @@ public class WerewolfGameModerator extends AbstractGameModerator<
 
     private void processTransitionNight() {
         WerewolfGame game = this.getGame();
+
         game.getLog().add(getLogEntryTemplate(getAllPlayersOfGame()).logType(WerewolfLogType.SLEEP).build());
+
         saveAndBroadcast(game);
     }
 

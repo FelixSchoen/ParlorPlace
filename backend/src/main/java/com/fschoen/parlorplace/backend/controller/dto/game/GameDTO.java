@@ -11,13 +11,14 @@ import org.springframework.format.annotation.DateTimeFormat;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
+import java.util.List;
 import java.util.Set;
 
 @NoArgsConstructor
 @AllArgsConstructor
 @SuperBuilder(toBuilder = true)
 @Data
-public abstract class GameDTO<PDTO extends PlayerDTO<?>, RSDTO extends RuleSetDTO> {
+public abstract class GameDTO<PDTO extends PlayerDTO<?>, RSDTO extends RuleSetDTO, L extends LogEntryDTO<?>> {
 
     @NotNull
     protected Long id;
@@ -37,6 +38,9 @@ public abstract class GameDTO<PDTO extends PlayerDTO<?>, RSDTO extends RuleSetDT
     @NotNull
     @Min(0)
     private Integer round;
+
+    @NotNull
+    protected List<L> log;
 
     @NotNull
     @DateTimeFormat

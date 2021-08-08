@@ -33,7 +33,7 @@ public abstract class AbstractGameController<
         P extends Player<GR>,
         RS extends RuleSet,
         GR extends GameRole,
-        GDTO extends GameDTO<?, ?>,
+        GDTO extends GameDTO<?, ?, ?>,
         PDTO extends PlayerDTO<?>,
         RSDTO extends RuleSetDTO,
         LCRDTO extends LobbyChangeRequestDTO<PDTO, RSDTO>

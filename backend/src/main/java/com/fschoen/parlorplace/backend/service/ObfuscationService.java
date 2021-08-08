@@ -30,7 +30,8 @@ public abstract class ObfuscationService<T> extends BaseService {
      * @return A list of obfuscated objects
      */
     public List<T> obfuscate(List<T> tList) {
-        return tList.stream().map(this::obfuscate).collect(Collectors.toList());
+        User principal = this.getPrincipal();
+        return this.obfuscateFor(tList, principal);
     }
 
     /**
