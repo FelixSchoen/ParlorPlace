@@ -1,5 +1,8 @@
 package com.fschoen.parlorplace.backend.controller.dto.game;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fschoen.parlorplace.backend.configuration.PlayerDTOSerialization;
 import com.fschoen.parlorplace.backend.enumeration.VoteState;
 import com.fschoen.parlorplace.backend.enumeration.VoteType;
 import lombok.AllArgsConstructor;
@@ -26,6 +29,8 @@ public abstract class VoteDTO<P extends PlayerDTO<?>, C extends VoteCollectionDT
     @NotNull
     protected VoteType voteType;
 
+    @JsonSerialize(keyUsing = PlayerDTOSerialization.PlayerDTOKeySerializer.class)
+    @JsonDeserialize(keyUsing = PlayerDTOSerialization.PlayerDTOKeyDeserializer.class)
     @NotNull
     protected Map<P, C> voteCollectionMap;
 

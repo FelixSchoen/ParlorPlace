@@ -270,7 +270,7 @@ public class WerewolfGameControllerTest extends BaseIntegrationTest {
     }
 
     @Test
-    public void startLobbyGame() throws InterruptedException {
+    public void startLobbyGame() {
         User admin1 = this.generatedData.getUserCollection().getAdmin1();
         WerewolfGame werewolfGame = this.generatedData.getWerewolfGameCollection().getWerewolfLobbyGame1();
 

@@ -5,8 +5,8 @@ import com.fschoen.parlorplace.backend.game.werewolf.entity.WerewolfGame;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 @Slf4j
 @Data
@@ -31,11 +31,11 @@ public class GeneratedData {
     public static class WerewolfGameCollection {
         private WerewolfGame werewolfLobbyGame1;
 
-        private Set<User> werewolfLobbyGame1Users;
+        private List<User> werewolfLobbyGame1Users;
 
         private WerewolfGame werewolfOngoingGame1;
 
-        private Set<User> werewolfOngoingGame1Users;
+        private List<User> werewolfOngoingGame1Users;
     }
 
 }
