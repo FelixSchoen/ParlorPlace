@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Optional;
 
 @NoRepositoryBean
-public interface VoteRepository<T extends Vote<?,?>> extends JpaRepository<T, Long> {
+public interface VoteRepository<T extends Vote<?,?, ?>> extends JpaRepository<T, Long> {
 
     /**
      * Finds a vote by its id.

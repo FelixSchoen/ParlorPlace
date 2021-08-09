@@ -5,6 +5,7 @@ import com.fschoen.parlorplace.backend.exception.DataConflictException;
 import com.fschoen.parlorplace.backend.exception.GameException;
 import com.fschoen.parlorplace.backend.exception.NotImplementedException;
 import com.fschoen.parlorplace.backend.exception.ValidationException;
+import com.fschoen.parlorplace.backend.exception.VoteException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,6 +29,11 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
 
     @ExceptionHandler(value = {GameException.class})
     protected ResponseEntity<Object> handleGameException(GameException exception, WebRequest webRequest) {
+        return errorMessage(exception, HttpStatus.CONFLICT, webRequest);
+    }
+
+    @ExceptionHandler(value = {VoteException.class})
+    protected ResponseEntity<Object> handleGameException(VoteException exception, WebRequest webRequest) {
         return errorMessage(exception, HttpStatus.CONFLICT, webRequest);
     }
 

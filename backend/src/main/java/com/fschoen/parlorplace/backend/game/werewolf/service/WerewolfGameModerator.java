@@ -10,6 +10,7 @@ import com.fschoen.parlorplace.backend.game.werewolf.entity.WerewolfRuleSet;
 import com.fschoen.parlorplace.backend.game.werewolf.entity.WerewolfVote;
 import com.fschoen.parlorplace.backend.game.werewolf.enumeration.WerewolfLogType;
 import com.fschoen.parlorplace.backend.game.werewolf.enumeration.WerewolfVoiceLineType;
+import com.fschoen.parlorplace.backend.game.werewolf.enumeration.WerewolfVoteDescriptor;
 import com.fschoen.parlorplace.backend.game.werewolf.repository.WerewolfGameRepository;
 import com.fschoen.parlorplace.backend.game.werewolf.repository.WerewolfLogEntryRepository;
 import com.fschoen.parlorplace.backend.game.werewolf.utility.WerewolfValueIdentifier;
@@ -79,7 +80,7 @@ public class WerewolfGameModerator extends AbstractGameModerator<
             CompletableFuture<WerewolfVote> future = this.voteService.requestVote(this.gameIdentifier,
                     VoteType.PUBLIC_PUBLIC_PUBLIC,
                     this.voteService.getSameChoiceCollectionMap(this.getGame().getPlayers(), this.getGame().getPlayers(), 1),
-                    5);
+                    WerewolfVoteDescriptor.WEREWOLVES_KILL,5);
             WerewolfVote vote = future.get();
             System.out.println("Did it");
             System.out.println(vote);

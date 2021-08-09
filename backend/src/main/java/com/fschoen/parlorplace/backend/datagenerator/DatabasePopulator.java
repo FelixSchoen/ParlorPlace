@@ -21,6 +21,7 @@ import com.fschoen.parlorplace.backend.game.werewolf.entity.gamerole.WerewolfWer
 import com.fschoen.parlorplace.backend.game.werewolf.enumeration.WerewolfGamePhase;
 import com.fschoen.parlorplace.backend.game.werewolf.enumeration.WerewolfLogType;
 import com.fschoen.parlorplace.backend.game.werewolf.enumeration.WerewolfRoleType;
+import com.fschoen.parlorplace.backend.game.werewolf.enumeration.WerewolfVoteDescriptor;
 import com.fschoen.parlorplace.backend.repository.GameRepository;
 import com.fschoen.parlorplace.backend.repository.PlayerRepository;
 import com.fschoen.parlorplace.backend.repository.UserRepository;
@@ -290,6 +291,7 @@ public class DatabasePopulator {
                         .game(werewolfOngoingGame1)
                         .voteState(VoteState.ONGOING)
                         .voteType(VoteType.PUBLIC_PUBLIC_PUBLIC)
+                        .voteDescriptor(WerewolfVoteDescriptor.WEREWOLVES_KILL)
                         .endTime(LocalDateTime.now().plusSeconds(30))
                         .voteCollectionMap(new HashMap<>(){{
                             for (WerewolfPlayer p : werewolfOngoingGame1.getPlayers()) {

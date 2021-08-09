@@ -162,7 +162,7 @@ public abstract class AbstractGameService<
         log.info("User {} removes {} from Game: {}", principal.getUsername(), user.getUsername(), gameIdentifier.getToken());
 
         validateActiveGameExists(gameIdentifier);
-        validateUserInActiveGame(gameIdentifier, user);
+        validateUserInSpecificActiveGame(gameIdentifier, user);
         if (!principal.equals(user))
             validateUserLobbyAdmin(gameIdentifier, principal);
 
@@ -331,31 +331,13 @@ public abstract class AbstractGameService<
 
     protected abstract Class<M> getModeratorClass();
 
-    // Utility
-
     // Validation
-
-    protected void validateActiveGameExists(GameIdentifier gameIdentifier) throws GameException, DataConflictException {
-        List<G> games = this.getActiveGames(gameIdentifier);
-
-        if (games.size() == 0)
-            throw new GameException(Messages.exception(MessageIdentifier.GAME_EXISTS_NOT));
-        if (games.size() > 1)
-            throw new DataConflictException(Messages.exception(MessageIdentifier.GAME_UNIQUE_NOT));
-    }
 
     protected void validateActiveGameStateLobby(GameIdentifier gameIdentifier) {
         G game = this.getActiveGame(gameIdentifier);
 
         if (!game.getGameState().equals(GameState.LOBBY))
             throw new GameException(Messages.exception(MessageIdentifier.GAME_STATE_STARTED));
-    }
-
-    protected void validateUserInActiveGame(GameIdentifier gameIdentifier, User user) throws GameException {
-        G game = this.getActiveGame(gameIdentifier);
-
-        if (game.getPlayers().stream().noneMatch(player -> player.getUser().equals(user)))
-            throw new GameException(Messages.exception(MessageIdentifier.GAME_USER_INGAME_NOT));
     }
 
     protected void validateUserNotInSpecificActiveGame(GameIdentifier gameIdentifier, User user) throws GameException {
@@ -366,7 +348,7 @@ public abstract class AbstractGameService<
     }
 
     protected void validateUserLobbyAdmin(GameIdentifier gameIdentifier, User user) throws GameException {
-        validateUserInActiveGame(gameIdentifier, user);
+        validateUserInSpecificActiveGame(gameIdentifier, user);
         P player = getPlayerFromUser(gameIdentifier, user);
 
         if (!player.getLobbyRole().equals(LobbyRole.ROLE_ADMIN))

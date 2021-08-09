@@ -6,6 +6,7 @@ import com.fschoen.parlorplace.backend.entity.PlayerVoteCollection;
 import com.fschoen.parlorplace.backend.entity.Vote;
 import com.fschoen.parlorplace.backend.exception.DataConflictException;
 import com.fschoen.parlorplace.backend.repository.GameRepository;
+import com.fschoen.parlorplace.backend.repository.PlayerRepository;
 import com.fschoen.parlorplace.backend.repository.UserRepository;
 import com.fschoen.parlorplace.backend.repository.VoteRepository;
 import com.fschoen.parlorplace.backend.utility.messaging.MessageIdentifier;
@@ -19,15 +20,17 @@ import java.util.Map;
 import java.util.Set;
 
 public abstract class AbstractPlayerVoteService<
-        V extends Vote<P, C>,
+        V extends Vote<P, C, D>,
         G extends Game<P, ?, V, ?>,
         P extends Player<?>,
         C extends PlayerVoteCollection<P, P>,
+        D extends Enum<D>,
         GRepo extends GameRepository<G>,
-        VRepo extends VoteRepository<V>> extends AbstractVoteService<V, G, P, C, GRepo, VRepo> {
+        PRepo extends PlayerRepository<P>,
+        VRepo extends VoteRepository<V>> extends AbstractVoteService<V, G, P, C, D, GRepo, PRepo, VRepo> {
 
-    public AbstractPlayerVoteService(CommunicationService communicationService, UserRepository userRepository, GRepo gameRepository, VRepo voteRepository, TaskExecutor taskExecutor) {
-        super(communicationService, userRepository, gameRepository, voteRepository, taskExecutor);
+    public AbstractPlayerVoteService(CommunicationService communicationService, UserRepository userRepository, GRepo gameRepository, PRepo playerRepository, VRepo voteRepository, TaskExecutor taskExecutor) {
+        super(communicationService, userRepository, gameRepository, playerRepository, voteRepository, taskExecutor);
     }
 
     // Utility

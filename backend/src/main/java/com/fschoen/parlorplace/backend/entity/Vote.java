@@ -36,7 +36,8 @@ import java.util.Map;
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public abstract class Vote<
         P extends Player<?>,
-        C extends VoteCollection<P>> {
+        C extends VoteCollection<P>,
+        D extends Enum<D>> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "seq_vote_id")
@@ -74,5 +75,10 @@ public abstract class Vote<
 
     @Column(nullable = false)
     protected LocalDateTime endTime;
+
+    // TODO Not ideal, I would have preferred to have this as a field, but since enums cannot inherit I cannot specify a supertype using targetEntity=
+    public abstract D getVoteDescriptor();
+
+    public abstract void setVoteDescriptor(D d);
 
 }

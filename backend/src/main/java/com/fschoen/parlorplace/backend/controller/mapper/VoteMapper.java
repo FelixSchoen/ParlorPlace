@@ -5,7 +5,7 @@ import com.fschoen.parlorplace.backend.entity.Vote;
 
 import java.util.List;
 
-public interface VoteMapper<V extends Vote<?, ?>, VDTO extends VoteDTO<?, ?>> {
+public interface VoteMapper<V extends Vote<?, ?, ?>, VDTO extends VoteDTO<?, ?, ?>> {
 
     VDTO toDTO(V vote);
 

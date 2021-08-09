@@ -19,6 +19,7 @@ public class MessageIdentifier {
     public static final String VALIDATION_MESSAGE_TEMPLATE = "validation.message.template";
     public static final String DATA_MISMATCHED_ID = "data.mismatched.id";
     public static final String PLAYER_TYPE_MISMATCH = "player.type.mismatch";
+    public static final String PLAYER_EXISTS_NOT = "player.exists.not";
     public static final String GAME_EXISTS_NOT = "game.exists.not";
     public static final String GAME_UNIQUE_NOT = "game.unique.not";
     public static final String GAME_TYPE_MISMATCH = "game.type.mismatch";
@@ -32,6 +33,9 @@ public class MessageIdentifier {
     public static final String GAME_ROLES_AMOUNT_MISMATCH = "game.roles.amount.mismatch";
     public static final String ROLE_TYPE_MISMATCH = "role.type.mismatch";
     public static final String VOTE_TYPE_MISMATCH = "vote.type.mismatch";
+    public static final String VOTE_EXISTS_NOT = "vote.exists.not";
+    public static final String VOTE_STATUS_CONCLUDED = "vote.status.concluded";
+    public static final String VOTE_DATA_CONFLICT = "vote.data.conflict";
     public static final String MAPPING_TYPE = "mapping.type";
 
 }

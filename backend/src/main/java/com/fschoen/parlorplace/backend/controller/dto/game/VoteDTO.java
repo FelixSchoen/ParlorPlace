@@ -18,7 +18,7 @@ import java.util.Map;
 @AllArgsConstructor
 @SuperBuilder(toBuilder = true)
 @Data
-public abstract class VoteDTO<P extends PlayerDTO<?>, C extends VoteCollectionDTO<P>> {
+public abstract class VoteDTO<P extends PlayerDTO<?>, C extends VoteCollectionDTO<P>, D extends Enum<D>> {
 
     @NotNull
     protected Long id;
@@ -28,6 +28,9 @@ public abstract class VoteDTO<P extends PlayerDTO<?>, C extends VoteCollectionDT
 
     @NotNull
     protected VoteType voteType;
+
+    @NotNull
+    protected D voteDescriptor;
 
     @JsonSerialize(keyUsing = PlayerDTOSerialization.PlayerDTOKeySerializer.class)
     @JsonDeserialize(keyUsing = PlayerDTOSerialization.PlayerDTOKeyDeserializer.class)
