@@ -23,6 +23,7 @@ import java.util.Set;
 @ToString(callSuper = true)
 @Data
 @Entity
+// TODO I really dislike this class - all it does is to provide the Player.class annotation for hibernate, otherwise I could have made VoteCollection generic... Is there a way around this?
 public abstract class PlayerVoteCollection<P extends Player<?>, T extends Player<?>> extends VoteCollection<P> {
 
     @ManyToMany(targetEntity = Player.class)

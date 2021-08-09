@@ -270,12 +270,14 @@ public class WerewolfGameControllerTest extends BaseIntegrationTest {
     }
 
     @Test
-    public void startLobbyGame() {
+    public void startLobbyGame() throws InterruptedException {
         User admin1 = this.generatedData.getUserCollection().getAdmin1();
         WerewolfGame werewolfGame = this.generatedData.getWerewolfGameCollection().getWerewolfLobbyGame1();
 
         Response responseStartGame = post("", WEREWOLF_BASE_URI + "start/" + werewolfGame.getGameIdentifier().getToken(), getToken(admin1));
         assertThat(responseStartGame.statusCode()).isEqualTo(HttpStatus.OK.value());
+
+        Thread.sleep(7000);
     }
 
 }

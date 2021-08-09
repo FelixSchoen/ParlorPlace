@@ -13,9 +13,10 @@ import com.fschoen.parlorplace.backend.repository.UserRepository;
 import com.fschoen.parlorplace.backend.repository.VoteRepository;
 import com.fschoen.parlorplace.backend.utility.messaging.MessageIdentifier;
 import com.fschoen.parlorplace.backend.utility.messaging.Messages;
+import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.core.task.TaskExecutor;
 
 import java.lang.reflect.InvocationTargetException;
 import java.time.LocalDateTime;
@@ -33,18 +34,20 @@ public abstract class AbstractVoteService<
         GRepo extends GameRepository<G>,
         VRepo extends VoteRepository<V>> extends BaseGameService<G, P, GRepo> {
 
-    // TODO Not stateless, but not persistable either - I believe that this still should be ok, on a server crash we can delete open votes and restart the moderator
+    // TODO Not stateless, but not persistent either - I believe that this still should be ok, on a server crash we can delete open votes and restart the moderator
     private final ConcurrentMap<Long, CompletableFuture<V>> futureMap;
 
     private final VRepo voteRepository;
 
-    public AbstractVoteService(CommunicationService communicationService, UserRepository userRepository, GRepo gameRepository, VRepo voteRepository) {
+    private final TaskExecutor taskExecutor;
+
+    public AbstractVoteService(CommunicationService communicationService, UserRepository userRepository, GRepo gameRepository, VRepo voteRepository, TaskExecutor taskExecutor) {
         super(communicationService, userRepository, gameRepository);
         this.futureMap = new ConcurrentHashMap<>();
         this.voteRepository = voteRepository;
+        this.taskExecutor = taskExecutor;
     }
 
-    @Transactional
     public CompletableFuture<V> requestVote(GameIdentifier gameIdentifier, VoteType voteType, Map<P, C> voteCollectionMap, int durationInSeconds) {
         G game = getActiveGame(gameIdentifier);
         V vote;
@@ -57,16 +60,20 @@ public abstract class AbstractVoteService<
             vote.setVoteCollectionMap(voteCollectionMap);
             vote.setEndTime(LocalDateTime.now().plusSeconds(durationInSeconds));
         } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
-            throw new DataConflictException(Messages.exception(MessageIdentifier.VOTE_TYPE_MISMATCH));
+            throw new DataConflictException(Messages.exception(MessageIdentifier.VOTE_TYPE_MISMATCH), e);
         }
 
         game.getVotes().add(vote);
+        vote = this.voteRepository.save(vote);
         game = this.gameRepository.save(game);
 
         CompletableFuture<V> completableFuture = new CompletableFuture<>();
-        this.futureMap.put(game.getId(), completableFuture);
+        this.futureMap.put(vote.getId(), completableFuture);
 
         broadcastGameStaleNotification(game.getGameIdentifier());
+
+        VoteConcludeTask voteConcludeTask = new VoteConcludeTask(vote.getId(), durationInSeconds, true);
+        taskExecutor.execute(voteConcludeTask);
 
         return completableFuture;
     }
@@ -82,17 +89,12 @@ public abstract class AbstractVoteService<
      * their preferences, this can be used to provide them with a small window of opportunity ("grace period"), in which
      * they can alter their vote before it finally closes.
      */
+    @AllArgsConstructor
     private class VoteConcludeTask implements Runnable {
 
         private final Long voteId;
-        private final Integer sleepDuration;
+        private final Integer sleepDurationSeconds;
         private final Boolean forceClose;
-
-        public VoteConcludeTask(Long voteId, Integer sleepDuration, Boolean forceClose) {
-            this.voteId = voteId;
-            this.sleepDuration = sleepDuration;
-            this.forceClose = forceClose;
-        }
 
         @SneakyThrows
         @Override
@@ -100,7 +102,7 @@ public abstract class AbstractVoteService<
             V initialVote = voteRepository.findOneById(voteId).orElseThrow();
             if (initialVote.getVoteState().equals(VoteState.CONCLUDED)) return;
 
-            Thread.sleep(sleepDuration);
+            Thread.sleep(sleepDurationSeconds * 1000);
 
             V currentVote = voteRepository.findOneById(voteId).orElseThrow();
             if (currentVote.getVoteState().equals(VoteState.CONCLUDED)) return;

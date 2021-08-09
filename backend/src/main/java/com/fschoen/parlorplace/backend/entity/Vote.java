@@ -62,8 +62,8 @@ public abstract class Vote<
 
     @OneToMany(targetEntity = VoteCollection.class, cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinTable(
-            joinColumns = @JoinColumn(name = "vote_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "collection_id", referencedColumnName = "id")
+            joinColumns = @JoinColumn(name = "vote_id"),
+            inverseJoinColumns = @JoinColumn(name = "collection_id")
     )
     @MapKeyJoinColumn(name = "player_id")
     //@LazyCollection(LazyCollectionOption.FALSE)
