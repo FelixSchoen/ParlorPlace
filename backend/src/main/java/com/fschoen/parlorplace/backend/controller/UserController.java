@@ -9,8 +9,8 @@ import com.fschoen.parlorplace.backend.controller.dto.user.UserRegisterRequestDT
 import com.fschoen.parlorplace.backend.controller.dto.user.UserUpdateRequestDTO;
 import com.fschoen.parlorplace.backend.controller.mapper.UserMapper;
 import com.fschoen.parlorplace.backend.entity.User;
-import com.fschoen.parlorplace.backend.service.ObfuscationService;
 import com.fschoen.parlorplace.backend.service.UserService;
+import com.fschoen.parlorplace.backend.service.obfuscation.ObfuscationService;
 import com.fschoen.parlorplace.backend.validation.implementation.UserValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

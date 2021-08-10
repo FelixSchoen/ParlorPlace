@@ -4,6 +4,7 @@ import com.fschoen.parlorplace.backend.controller.dto.game.GameDTO;
 import com.fschoen.parlorplace.backend.controller.dto.game.GameStartRequestDTO;
 import com.fschoen.parlorplace.backend.controller.dto.game.PlayerDTO;
 import com.fschoen.parlorplace.backend.controller.dto.game.RuleSetDTO;
+import com.fschoen.parlorplace.backend.controller.dto.game.VoteCollectionDTO;
 import com.fschoen.parlorplace.backend.controller.dto.lobby.LobbyChangeRequestDTO;
 import com.fschoen.parlorplace.backend.controller.dto.user.UserDTO;
 import com.fschoen.parlorplace.backend.controller.mapper.GameMapper;
@@ -12,12 +13,12 @@ import com.fschoen.parlorplace.backend.controller.mapper.RuleSetMapper;
 import com.fschoen.parlorplace.backend.controller.mapper.UserMapper;
 import com.fschoen.parlorplace.backend.entity.Game;
 import com.fschoen.parlorplace.backend.entity.GameIdentifier;
-import com.fschoen.parlorplace.backend.entity.GameRole;
 import com.fschoen.parlorplace.backend.entity.Player;
 import com.fschoen.parlorplace.backend.entity.RuleSet;
 import com.fschoen.parlorplace.backend.entity.User;
-import com.fschoen.parlorplace.backend.service.AbstractGameService;
-import com.fschoen.parlorplace.backend.service.ObfuscationService;
+import com.fschoen.parlorplace.backend.entity.VoteCollection;
+import com.fschoen.parlorplace.backend.service.game.AbstractGameService;
+import com.fschoen.parlorplace.backend.service.obfuscation.ObfuscationService;
 import com.fschoen.parlorplace.backend.validation.implementation.GameValidator;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,16 +31,17 @@ import java.util.List;
 
 public abstract class AbstractGameController<
         G extends Game<P, RS, ?, ?>,
-        P extends Player<GR>,
+        P extends Player<?>,
         RS extends RuleSet,
-        GR extends GameRole,
-        GDTO extends GameDTO<?, ?, ?, ?>,
+        C extends VoteCollection<P, ?>,
+        GDTO extends GameDTO<PDTO, RSDTO, ?, ?>,
         PDTO extends PlayerDTO<?>,
         RSDTO extends RuleSetDTO,
+        CDTO extends VoteCollectionDTO<PDTO, ?>,
         LCRDTO extends LobbyChangeRequestDTO<PDTO, RSDTO>
         > {
 
-    private final AbstractGameService<G, P, RS, GR, ?, ?> gameService;
+    private final AbstractGameService<G, P, RS, ?, ?, ?> gameService;
     private final ObfuscationService<GDTO> gameObfuscationService;
 
     private final UserMapper userMapper;
@@ -50,7 +52,7 @@ public abstract class AbstractGameController<
     private final GameValidator validator = new GameValidator();
 
     public AbstractGameController(
-            AbstractGameService<G, P, RS, GR, ?, ?> gameService,
+            AbstractGameService<G, P, RS, ?, ?, ?> gameService,
             ObfuscationService<GDTO> gameObfuscationService,
             UserMapper userMapper,
             GameMapper<G, GDTO> gameMapper,
@@ -73,6 +75,7 @@ public abstract class AbstractGameController<
         game = this.gameService.joinGame(game.getGameIdentifier());
 
         GDTO gameDTO = gameMapper.toDTO(game);
+        gameDTO = gameObfuscationService.obfuscate(gameDTO);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(gameDTO);
     }
@@ -82,6 +85,7 @@ public abstract class AbstractGameController<
         G game = this.gameService.joinGame(new GameIdentifier(identifier));
 
         GDTO gameDTO = gameMapper.toDTO(game);
+        gameDTO = gameObfuscationService.obfuscate(gameDTO);
 
         return ResponseEntity.status(HttpStatus.OK).body(gameDTO);
     }
@@ -109,6 +113,7 @@ public abstract class AbstractGameController<
         game = this.gameService.changeGameRuleSet(gameIdentifier, ruleSetMapper.fromDTO(lobbyChangeRequestDTO.getRuleSet()));
 
         GDTO gameDTO = gameMapper.toDTO(game);
+        gameDTO = gameObfuscationService.obfuscate(gameDTO);
 
         return ResponseEntity.status(HttpStatus.OK).body(gameDTO);
     }
@@ -121,6 +126,7 @@ public abstract class AbstractGameController<
         game = this.gameService.startGame(gameIdentifier);
 
         GDTO gameDTO = gameMapper.toDTO(game);
+        gameDTO = gameObfuscationService.obfuscate(gameDTO);
 
         return ResponseEntity.status(HttpStatus.OK).body(gameDTO);
     }
@@ -129,7 +135,9 @@ public abstract class AbstractGameController<
     public ResponseEntity<GDTO> getGame(@PathVariable("identifier") String identifier) {
         GameIdentifier gameIdentifier = new GameIdentifier(identifier);
         G game = this.gameService.getGame(gameIdentifier);
+
         GDTO gameDTO = gameMapper.toDTO(game);
+        gameDTO = gameObfuscationService.obfuscate(gameDTO);
 
         return ResponseEntity.status(HttpStatus.OK).body(gameDTO);
     }
@@ -137,7 +145,9 @@ public abstract class AbstractGameController<
     @GetMapping("/active")
     public ResponseEntity<List<GDTO>> getUserActiveGames() {
         List<G> games = this.gameService.getUserActiveGames();
+
         List<GDTO> gameDTOS = gameMapper.toDTO(games);
+        gameDTOS = gameObfuscationService.obfuscate(gameDTOS);
 
         return ResponseEntity.status(HttpStatus.OK).body(gameDTOS);
     }

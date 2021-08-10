@@ -1,4 +1,4 @@
-package com.fschoen.parlorplace.backend.service;
+package com.fschoen.parlorplace.backend.service.game;
 
 import com.fschoen.parlorplace.backend.entity.GameIdentifier;
 

@@ -1,4 +1,4 @@
-package com.fschoen.parlorplace.backend.service;
+package com.fschoen.parlorplace.backend.service.game;
 
 import com.fschoen.parlorplace.backend.entity.Game;
 import com.fschoen.parlorplace.backend.entity.GameIdentifier;
@@ -8,6 +8,8 @@ import com.fschoen.parlorplace.backend.exception.DataConflictException;
 import com.fschoen.parlorplace.backend.exception.GameException;
 import com.fschoen.parlorplace.backend.repository.GameRepository;
 import com.fschoen.parlorplace.backend.repository.UserRepository;
+import com.fschoen.parlorplace.backend.service.BaseService;
+import com.fschoen.parlorplace.backend.service.CommunicationService;
 import com.fschoen.parlorplace.backend.utility.messaging.MessageIdentifier;
 import com.fschoen.parlorplace.backend.utility.messaging.Messages;
 

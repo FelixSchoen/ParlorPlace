@@ -16,8 +16,8 @@ import com.fschoen.parlorplace.backend.game.werewolf.repository.WerewolfLogEntry
 import com.fschoen.parlorplace.backend.game.werewolf.utility.WerewolfValueIdentifier;
 import com.fschoen.parlorplace.backend.game.werewolf.utility.WerewolfVoiceLineClientNotification;
 import com.fschoen.parlorplace.backend.repository.UserRepository;
-import com.fschoen.parlorplace.backend.service.AbstractGameModerator;
 import com.fschoen.parlorplace.backend.service.CommunicationService;
+import com.fschoen.parlorplace.backend.service.game.AbstractGameModerator;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

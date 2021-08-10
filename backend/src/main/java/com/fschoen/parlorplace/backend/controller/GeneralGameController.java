@@ -4,7 +4,7 @@ import com.fschoen.parlorplace.backend.controller.dto.game.GameBaseInformationDT
 import com.fschoen.parlorplace.backend.controller.mapper.GameIdentifierMapper;
 import com.fschoen.parlorplace.backend.entity.Game;
 import com.fschoen.parlorplace.backend.entity.GameIdentifier;
-import com.fschoen.parlorplace.backend.service.GeneralGameService;
+import com.fschoen.parlorplace.backend.service.game.GeneralGameService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

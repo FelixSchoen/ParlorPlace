@@ -1,7 +1,8 @@
-package com.fschoen.parlorplace.backend.service;
+package com.fschoen.parlorplace.backend.service.obfuscation;
 
 import com.fschoen.parlorplace.backend.entity.User;
 import com.fschoen.parlorplace.backend.repository.UserRepository;
+import com.fschoen.parlorplace.backend.service.BaseService;
 
 import java.util.List;
 import java.util.stream.Collectors;

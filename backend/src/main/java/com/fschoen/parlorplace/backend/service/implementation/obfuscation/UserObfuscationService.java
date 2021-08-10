@@ -3,7 +3,7 @@ package com.fschoen.parlorplace.backend.service.implementation.obfuscation;
 import com.fschoen.parlorplace.backend.controller.dto.user.UserDTO;
 import com.fschoen.parlorplace.backend.entity.User;
 import com.fschoen.parlorplace.backend.repository.UserRepository;
-import com.fschoen.parlorplace.backend.service.ObfuscationService;
+import com.fschoen.parlorplace.backend.service.obfuscation.ObfuscationService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

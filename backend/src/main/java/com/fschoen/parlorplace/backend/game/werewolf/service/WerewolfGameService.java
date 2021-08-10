@@ -13,9 +13,9 @@ import com.fschoen.parlorplace.backend.game.werewolf.enumeration.WerewolfGamePha
 import com.fschoen.parlorplace.backend.game.werewolf.enumeration.WerewolfRoleType;
 import com.fschoen.parlorplace.backend.game.werewolf.repository.WerewolfGameRepository;
 import com.fschoen.parlorplace.backend.repository.UserRepository;
-import com.fschoen.parlorplace.backend.service.AbstractGameService;
 import com.fschoen.parlorplace.backend.service.CommunicationService;
-import com.fschoen.parlorplace.backend.service.GameIdentifierService;
+import com.fschoen.parlorplace.backend.service.game.AbstractGameService;
+import com.fschoen.parlorplace.backend.service.game.GameIdentifierService;
 import com.fschoen.parlorplace.backend.utility.messaging.MessageIdentifier;
 import com.fschoen.parlorplace.backend.utility.messaging.Messages;
 import lombok.extern.slf4j.Slf4j;

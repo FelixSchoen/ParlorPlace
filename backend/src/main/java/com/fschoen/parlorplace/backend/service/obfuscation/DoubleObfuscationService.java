@@ -1,4 +1,4 @@
-package com.fschoen.parlorplace.backend.service;
+package com.fschoen.parlorplace.backend.service.obfuscation;
 
 import com.fschoen.parlorplace.backend.entity.User;
 import com.fschoen.parlorplace.backend.repository.UserRepository;

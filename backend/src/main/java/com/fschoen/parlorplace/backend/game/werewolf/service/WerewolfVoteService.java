@@ -9,8 +9,8 @@ import com.fschoen.parlorplace.backend.game.werewolf.repository.WerewolfGameRepo
 import com.fschoen.parlorplace.backend.game.werewolf.repository.WerewolfPlayerRepository;
 import com.fschoen.parlorplace.backend.game.werewolf.repository.WerewolfVoteRepository;
 import com.fschoen.parlorplace.backend.repository.UserRepository;
-import com.fschoen.parlorplace.backend.service.AbstractVoteService;
 import com.fschoen.parlorplace.backend.service.CommunicationService;
+import com.fschoen.parlorplace.backend.service.game.AbstractVoteService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;

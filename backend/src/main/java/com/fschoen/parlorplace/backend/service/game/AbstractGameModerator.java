@@ -1,4 +1,4 @@
-package com.fschoen.parlorplace.backend.service;
+package com.fschoen.parlorplace.backend.service.game;
 
 import com.fschoen.parlorplace.backend.entity.Game;
 import com.fschoen.parlorplace.backend.entity.GameIdentifier;
@@ -9,6 +9,7 @@ import com.fschoen.parlorplace.backend.entity.RuleSet;
 import com.fschoen.parlorplace.backend.repository.GameRepository;
 import com.fschoen.parlorplace.backend.repository.LogEntryRepository;
 import com.fschoen.parlorplace.backend.repository.UserRepository;
+import com.fschoen.parlorplace.backend.service.CommunicationService;
 import com.fschoen.parlorplace.backend.utility.communication.VoiceLineClientNotification;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;

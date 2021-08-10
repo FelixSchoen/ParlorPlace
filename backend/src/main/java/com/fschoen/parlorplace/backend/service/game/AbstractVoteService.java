@@ -1,4 +1,4 @@
-package com.fschoen.parlorplace.backend.service;
+package com.fschoen.parlorplace.backend.service.game;
 
 import com.fschoen.parlorplace.backend.entity.Game;
 import com.fschoen.parlorplace.backend.entity.GameIdentifier;
@@ -14,6 +14,7 @@ import com.fschoen.parlorplace.backend.repository.GameRepository;
 import com.fschoen.parlorplace.backend.repository.PlayerRepository;
 import com.fschoen.parlorplace.backend.repository.UserRepository;
 import com.fschoen.parlorplace.backend.repository.VoteRepository;
+import com.fschoen.parlorplace.backend.service.CommunicationService;
 import com.fschoen.parlorplace.backend.utility.messaging.MessageIdentifier;
 import com.fschoen.parlorplace.backend.utility.messaging.Messages;
 import lombok.AllArgsConstructor;
@@ -30,6 +31,7 @@ import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
+import java.util.stream.Collectors;
 
 @Slf4j
 public abstract class AbstractVoteService<
@@ -50,6 +52,8 @@ public abstract class AbstractVoteService<
     protected final VRepo voteRepository;
 
     private final TaskExecutor taskExecutor;
+
+    private static final double GRACE_PERIOD_DURATION = 1.5;
 
     public AbstractVoteService(CommunicationService communicationService, UserRepository userRepository, GRepo gameRepository, PRepo playerRepository, VRepo voteRepository, TaskExecutor taskExecutor) {
         super(communicationService, userRepository, gameRepository);
@@ -84,34 +88,52 @@ public abstract class AbstractVoteService<
         CompletableFuture<V> completableFuture = new CompletableFuture<>();
         this.futureMap.put(vote.getId(), completableFuture);
 
-        broadcastGameStaleNotification(game.getGameIdentifier());
+        sendGameStaleNotification(game.getGameIdentifier(), voteCollectionMap.keySet().stream().map(player -> player.getUser()).collect(Collectors.toSet()));
 
-        VoteConcludeTask voteConcludeTask = new VoteConcludeTask(vote.getId(), durationInSeconds, true);
+        VoteConcludeTask voteConcludeTask = new VoteConcludeTask(vote.getId(), (double) durationInSeconds, true);
         taskExecutor.execute(voteConcludeTask);
 
         return completableFuture;
     }
 
-    public V vote(GameIdentifier gameIdentifier, long voteId, C voteCollection) {
+    public V vote(GameIdentifier gameIdentifier, long voteId, C voteCollectionProposal) {
         User principal = getPrincipal();
-        log.info("User {} votes on Vote: {}", principal.getUsername(), voteId);
+        log.info("User {} votes on Vote {} with Subjects: {}", principal.getUsername(), voteId, voteCollectionProposal.getSubjects());
 
         validateUserInSpecificActiveGame(gameIdentifier, principal);
         validateVoteExists(voteId);
         validateUserIsVoter(voteId, principal);
         validateVoteStatusOngoing(voteId);
 
+        G game = this.getActiveGame(gameIdentifier);
         V vote = this.voteRepository.findOneById(voteId).orElseThrow();
 
-        P player = this.playerRepository.findOneById(voteCollection.getPlayer().getId()).orElseThrow(() -> new DataConflictException(Messages.exception(MessageIdentifier.PLAYER_EXISTS_NOT)));
+        P player = this.playerRepository.findOneById(voteCollectionProposal.getPlayer().getId()).orElseThrow(() -> new DataConflictException(Messages.exception(MessageIdentifier.PLAYER_EXISTS_NOT)));
 
-        if (voteCollection.getSelection().size() > vote.getVoteCollectionMap().get(player).getAmountVotes()
-        || voteCollection.getSelection().stream().anyMatch(selection -> !vote.getVoteCollectionMap().get(player).getSubjects().contains(selection)))
+        // Check if vote proposal is valid
+        V finalVote = vote;
+        if (voteCollectionProposal.getSelection().size() > vote.getVoteCollectionMap().get(player).getAmountVotes()
+                || voteCollectionProposal.getSelection().stream().anyMatch(selection -> !finalVote.getVoteCollectionMap().get(player).getSubjects().contains(selection)))
             throw new VoteException(Messages.exception(MessageIdentifier.VOTE_DATA_CONFLICT));
 
-        // TODO Stopped
+        // Transfer vote proposal to vote entity
+        C voteCollection = vote.getVoteCollectionMap().get(player);
+        voteCollection.getSelection().removeAll(voteCollection.getSelection());
+        for (T element : voteCollectionProposal.getSelection()) {
+            voteCollection.getSelection().add(voteCollection.getSubjects().stream().filter(subject -> subject.equals(element)).findAny().orElseThrow());
+        }
 
-        return null;
+        vote = this.voteRepository.save(vote);
+
+        sendGameStaleNotification(game.getGameIdentifier(), vote.getVoteCollectionMap().keySet().stream().map(voter -> voter.getUser()).collect(Collectors.toSet()));
+
+        // Setup VoteConcludeTask with grace period
+        if (vote.getVoteCollectionMap().values().stream().allMatch(collection -> collection.getSelection().size() == collection.getAmountVotes())) {
+            VoteConcludeTask voteConcludeTask = new VoteConcludeTask(vote.getId(), GRACE_PERIOD_DURATION, false);
+            taskExecutor.execute(voteConcludeTask);
+        }
+
+        return vote;
     }
 
     // Abstract Methods
@@ -131,7 +153,7 @@ public abstract class AbstractVoteService<
                 voteCollection = this.getVoteCollectionClass().getDeclaredConstructor().newInstance();
                 voteCollection.setPlayer(voter);
                 voteCollection.setAmountVotes(amountVotes);
-                voteCollection.setSubjects(new HashSet<>(){{
+                voteCollection.setSubjects(new HashSet<>() {{
                     addAll(subjects);
                 }});
                 voteCollection.setSelection(new HashSet<>());
@@ -171,7 +193,7 @@ public abstract class AbstractVoteService<
     private class VoteConcludeTask implements Runnable {
 
         private final Long voteId;
-        private final Integer sleepDurationSeconds;
+        private final Double sleepDurationSeconds;
         private final Boolean forceClose;
 
         @SneakyThrows
@@ -180,17 +202,24 @@ public abstract class AbstractVoteService<
             V initialVote = voteRepository.findOneById(voteId).orElseThrow();
             if (initialVote.getVoteState().equals(VoteState.CONCLUDED)) return;
 
-            Thread.sleep(sleepDurationSeconds * 1000);
+            Thread.sleep((long) (sleepDurationSeconds * 1000));
 
+            // If already concluded do not complete future again
             V currentVote = voteRepository.findOneById(voteId).orElseThrow();
             if (currentVote.getVoteState().equals(VoteState.CONCLUDED)) return;
 
+            // If changes during grace period, disregard conclusion task
             if (!forceClose && !initialVote.equals(currentVote)) return;
 
+            // Close vote
             currentVote.setVoteState(VoteState.CONCLUDED);
             voteRepository.save(currentVote);
 
-            futureMap.get(currentVote.getId()).complete(currentVote);
+            // Complete future
+            if (futureMap.containsKey(currentVote.getId())) {
+                futureMap.get(currentVote.getId()).complete(currentVote);
+                futureMap.remove(currentVote.getId());
+            }
         }
 
     }

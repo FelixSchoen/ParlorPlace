@@ -6,7 +6,7 @@ import com.fschoen.parlorplace.backend.enumeration.GameState;
 import com.fschoen.parlorplace.backend.exception.DataConflictException;
 import com.fschoen.parlorplace.backend.exception.GameException;
 import com.fschoen.parlorplace.backend.repository.GeneralGameRepository;
-import com.fschoen.parlorplace.backend.service.GeneralGameService;
+import com.fschoen.parlorplace.backend.service.game.GeneralGameService;
 import com.fschoen.parlorplace.backend.utility.messaging.MessageIdentifier;
 import com.fschoen.parlorplace.backend.utility.messaging.Messages;
 import lombok.extern.slf4j.Slf4j;

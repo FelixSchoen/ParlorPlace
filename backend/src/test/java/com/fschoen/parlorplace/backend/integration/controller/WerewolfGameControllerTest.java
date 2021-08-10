@@ -182,7 +182,7 @@ public class WerewolfGameControllerTest extends BaseIntegrationTest {
         assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
 
         WerewolfGameDTO gameDTOResponse = response.getBody().as(WerewolfGameDTO.class);
-        assertThat(gameDTOResponse).isEqualTo(werewolfGameDTO);
+        assertThat(gameDTOResponse.getGameIdentifier()).isEqualTo(werewolfGameDTO.getGameIdentifier());
     }
 
     @Test
