@@ -21,7 +21,7 @@ import javax.validation.constraints.NotNull;
 @ToString(callSuper = true)
 @Data
 @Entity
-public class WerewolfVote extends Vote<WerewolfPlayer, WerewolfPlayerVoteCollection, WerewolfVoteDescriptor> {
+public class WerewolfVote extends Vote<WerewolfPlayer, WerewolfVoteCollection, WerewolfVoteDescriptor> {
 
     @Column(nullable = false)
     @Enumerated

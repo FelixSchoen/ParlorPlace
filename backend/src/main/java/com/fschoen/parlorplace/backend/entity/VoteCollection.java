@@ -18,6 +18,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.validation.constraints.NotNull;
+import java.util.Set;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -25,7 +26,7 @@ import javax.validation.constraints.NotNull;
 @Data
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-public abstract class VoteCollection<P extends Player<?>> {
+public abstract class VoteCollection<P extends Player<?>, T> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "seq_collection_id")
@@ -42,5 +43,13 @@ public abstract class VoteCollection<P extends Player<?>> {
     @Column(nullable = false)
     @NotNull
     protected Integer amountVotes;
+
+    public abstract Set<T> getSubjects();
+
+    public abstract void setSubjects(Set<T> subjects);
+
+    public abstract Set<T> getSelection();
+
+    public abstract void setSelection(Set<T> selection);
 
 }

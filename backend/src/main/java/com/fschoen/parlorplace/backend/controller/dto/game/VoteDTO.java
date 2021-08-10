@@ -18,7 +18,7 @@ import java.util.Map;
 @AllArgsConstructor
 @SuperBuilder(toBuilder = true)
 @Data
-public abstract class VoteDTO<P extends PlayerDTO<?>, C extends VoteCollectionDTO<P>, D extends Enum<D>> {
+public abstract class VoteDTO<P extends PlayerDTO<?>, C extends VoteCollectionDTO<P, ?>, D extends Enum<D>> {
 
     @NotNull
     protected Long id;

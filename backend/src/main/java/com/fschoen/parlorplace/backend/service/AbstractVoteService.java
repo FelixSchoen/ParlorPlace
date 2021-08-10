@@ -23,7 +23,10 @@ import org.springframework.core.task.TaskExecutor;
 
 import java.lang.reflect.InvocationTargetException;
 import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
@@ -33,7 +36,8 @@ public abstract class AbstractVoteService<
         V extends Vote<P, C, D>,
         G extends Game<P, ?, V, ?>,
         P extends Player<?>,
-        C extends VoteCollection<P>,
+        T,
+        C extends VoteCollection<P, T>,
         D extends Enum<D>,
         GRepo extends GameRepository<G>,
         PRepo extends PlayerRepository<P>,
@@ -73,8 +77,6 @@ public abstract class AbstractVoteService<
             throw new DataConflictException(Messages.exception(MessageIdentifier.VOTE_TYPE_MISMATCH), e);
         }
 
-        System.out.println(vote);
-
         game.getVotes().add(vote);
         vote = this.voteRepository.save(vote);
         game = this.gameRepository.save(game);
@@ -92,16 +94,22 @@ public abstract class AbstractVoteService<
 
     public V vote(GameIdentifier gameIdentifier, long voteId, C voteCollection) {
         User principal = getPrincipal();
-        log.info("User {} votes on Vote: {}", principal.getUsername());
+        log.info("User {} votes on Vote: {}", principal.getUsername(), voteId);
 
         validateUserInSpecificActiveGame(gameIdentifier, principal);
         validateVoteExists(voteId);
         validateUserIsVoter(voteId, principal);
         validateVoteStatusOngoing(voteId);
 
+        V vote = this.voteRepository.findOneById(voteId).orElseThrow();
+
         P player = this.playerRepository.findOneById(voteCollection.getPlayer().getId()).orElseThrow(() -> new DataConflictException(Messages.exception(MessageIdentifier.PLAYER_EXISTS_NOT)));
-        if (!player.getUser().equals(principal))
-            throw new VoteException(Messages.exception(MessageIdentifier.AUTHORIZATION_UNAUTHORIZED));
+
+        if (voteCollection.getSelection().size() > vote.getVoteCollectionMap().get(player).getAmountVotes()
+        || voteCollection.getSelection().stream().anyMatch(selection -> !vote.getVoteCollectionMap().get(player).getSubjects().contains(selection)))
+            throw new VoteException(Messages.exception(MessageIdentifier.VOTE_DATA_CONFLICT));
+
+        // TODO Stopped
 
         return null;
     }
@@ -111,6 +119,29 @@ public abstract class AbstractVoteService<
     protected abstract Class<V> getVoteClass();
 
     protected abstract Class<C> getVoteCollectionClass();
+
+    // Utility
+
+    public Map<P, C> getSameChoiceCollectionMap(Set<P> voters, Set<T> subjects, int amountVotes) {
+        Map<P, C> map = new HashMap<>();
+        for (P voter : voters) {
+            C voteCollection;
+
+            try {
+                voteCollection = this.getVoteCollectionClass().getDeclaredConstructor().newInstance();
+                voteCollection.setPlayer(voter);
+                voteCollection.setAmountVotes(amountVotes);
+                voteCollection.setSubjects(new HashSet<>(){{
+                    addAll(subjects);
+                }});
+                voteCollection.setSelection(new HashSet<>());
+                map.put(voter, voteCollection);
+            } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
+                throw new DataConflictException(Messages.exception(MessageIdentifier.VOTE_TYPE_MISMATCH), e);
+            }
+        }
+        return map;
+    }
 
     // Validation
 

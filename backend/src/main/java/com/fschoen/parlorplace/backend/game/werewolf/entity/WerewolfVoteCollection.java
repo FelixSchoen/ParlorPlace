@@ -1,6 +1,7 @@
-package com.fschoen.parlorplace.backend.entity;
+package com.fschoen.parlorplace.backend.game.werewolf.entity;
 
-import lombok.AllArgsConstructor;
+import com.fschoen.parlorplace.backend.entity.Player;
+import com.fschoen.parlorplace.backend.entity.VoteCollection;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -16,36 +17,36 @@ import javax.persistence.ManyToMany;
 import javax.validation.constraints.NotNull;
 import java.util.Set;
 
+
 @NoArgsConstructor
-@AllArgsConstructor
+//@AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 @SuperBuilder(toBuilder = true)
 @ToString(callSuper = true)
 @Data
 @Entity
-// TODO I really dislike this class - all it does is to provide the Player.class annotation for hibernate, otherwise I could have made VoteCollection generic... Is there a way around this?
-public abstract class PlayerVoteCollection<P extends Player<?>, T extends Player<?>> extends VoteCollection<P> {
+public class WerewolfVoteCollection extends VoteCollection<WerewolfPlayer, WerewolfPlayer> {
 
     @ManyToMany(targetEntity = Player.class)
     @JoinTable(
-            joinColumns = @JoinColumn(name = "playervotecollection_id"),
+            joinColumns = @JoinColumn(name = "votecollection_id"),
             inverseJoinColumns = @JoinColumn(name = "player_id")
     )
     @LazyCollection(LazyCollectionOption.FALSE)
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
     @NotNull
-    protected Set<T> subjects;
+    private Set<WerewolfPlayer> subjects;
 
     @ManyToMany(targetEntity = Player.class)
     @JoinTable(
-            joinColumns = @JoinColumn(name = "playervotecollection_id"),
+            joinColumns = @JoinColumn(name = "votecollection_id"),
             inverseJoinColumns = @JoinColumn(name = "player_id")
     )
     @LazyCollection(LazyCollectionOption.FALSE)
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
     @NotNull
-    protected Set<T> selection;
+    private Set<WerewolfPlayer> selection;
 
 }

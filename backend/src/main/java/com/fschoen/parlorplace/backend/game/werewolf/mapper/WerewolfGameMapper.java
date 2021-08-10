@@ -7,6 +7,6 @@ import com.fschoen.parlorplace.backend.game.werewolf.dto.game.WerewolfGameDTO;
 import com.fschoen.parlorplace.backend.game.werewolf.entity.WerewolfGame;
 import org.mapstruct.Mapper;
 
-@Mapper(componentModel = "spring", uses = {UserMapper.class, WerewolfPlayerMapper.class, GameIdentifierMapper.class, WerewolfLogEntryMapper.class})
+@Mapper(componentModel = "spring", uses = {UserMapper.class, WerewolfPlayerMapper.class, GameIdentifierMapper.class, WerewolfVoteMapper.class, WerewolfLogEntryMapper.class})
 public interface WerewolfGameMapper extends GameMapper<WerewolfGame, WerewolfGameDTO> {
 }

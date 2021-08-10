@@ -13,9 +13,9 @@ import com.fschoen.parlorplace.backend.enumeration.VoteType;
 import com.fschoen.parlorplace.backend.game.werewolf.entity.WerewolfGame;
 import com.fschoen.parlorplace.backend.game.werewolf.entity.WerewolfLogEntry;
 import com.fschoen.parlorplace.backend.game.werewolf.entity.WerewolfPlayer;
-import com.fschoen.parlorplace.backend.game.werewolf.entity.WerewolfPlayerVoteCollection;
 import com.fschoen.parlorplace.backend.game.werewolf.entity.WerewolfRuleSet;
 import com.fschoen.parlorplace.backend.game.werewolf.entity.WerewolfVote;
+import com.fschoen.parlorplace.backend.game.werewolf.entity.WerewolfVoteCollection;
 import com.fschoen.parlorplace.backend.game.werewolf.entity.gamerole.VillagerWerewolfGameRole;
 import com.fschoen.parlorplace.backend.game.werewolf.entity.gamerole.WerewolfWerewolfGameRole;
 import com.fschoen.parlorplace.backend.game.werewolf.enumeration.WerewolfGamePhase;
@@ -295,7 +295,7 @@ public class DatabasePopulator {
                         .endTime(LocalDateTime.now().plusSeconds(30))
                         .voteCollectionMap(new HashMap<>(){{
                             for (WerewolfPlayer p : werewolfOngoingGame1.getPlayers()) {
-                                put(p, WerewolfPlayerVoteCollection.builder()
+                                put(p, WerewolfVoteCollection.builder()
                                         .player(p)
                                         .amountVotes(1)
                                         .subjects(new HashSet<>(){{

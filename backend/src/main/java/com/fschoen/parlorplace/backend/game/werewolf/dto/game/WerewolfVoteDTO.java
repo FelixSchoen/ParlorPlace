@@ -14,6 +14,6 @@ import lombok.experimental.SuperBuilder;
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
 @Data
-public class WerewolfVoteDTO extends VoteDTO<WerewolfPlayerDTO, WerewolfPlayerVoteCollectionDTO, WerewolfVoteDescriptor> {
+public class WerewolfVoteDTO extends VoteDTO<WerewolfPlayerDTO, WerewolfVoteCollectionDTO, WerewolfVoteDescriptor> {
 
 }

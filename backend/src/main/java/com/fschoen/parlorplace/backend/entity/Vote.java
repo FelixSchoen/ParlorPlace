@@ -36,7 +36,7 @@ import java.util.Map;
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public abstract class Vote<
         P extends Player<?>,
-        C extends VoteCollection<P>,
+        C extends VoteCollection<P, ?>,
         D extends Enum<D>> {
 
     @Id
