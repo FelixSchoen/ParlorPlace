@@ -14,6 +14,7 @@ import com.fschoen.parlorplace.backend.game.werewolf.entity.WerewolfGame;
 import com.fschoen.parlorplace.backend.game.werewolf.enumeration.WerewolfRoleType;
 import com.fschoen.parlorplace.backend.integration.base.BaseIntegrationTest;
 import io.restassured.response.Response;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 
@@ -272,6 +273,7 @@ public class WerewolfGameControllerTest extends BaseIntegrationTest {
     }
 
     @Test
+    @Disabled
     public void startLobbyGame() {
         User admin1 = this.generatedData.getUserCollection().getAdmin1();
         WerewolfGame werewolfGame = this.generatedData.getWerewolfGameCollection().getWerewolfLobbyGame1();
@@ -300,7 +302,7 @@ public class WerewolfGameControllerTest extends BaseIntegrationTest {
                 .post(WEREWOLF_BASE_URI + "vote/{identifier}/{voteIdentifier}").then().extract().response();
         assertThat(responseVote.statusCode()).isEqualTo(HttpStatus.OK.value());
 
-        waitNotification(admin1, 4);
+        waitNotification(admin1, 6);
 
         Response responseUpdateGame = payload("", getToken(admin1)).pathParam("identifier", werewolfGame.getGameIdentifier().getToken())
                 .get(WEREWOLF_BASE_URI + "{identifier}").then().extract().response();

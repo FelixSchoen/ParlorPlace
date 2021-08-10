@@ -10,11 +10,13 @@ public class ThreadConfig {
 
     @Bean
     public TaskExecutor taskExecutor() {
-
         ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
+
         executor.setCorePoolSize(8);
-        executor.setMaxPoolSize(16);
-        executor.setThreadNamePrefix("task_executor_thread");
+        executor.setMaxPoolSize(Integer.MAX_VALUE);
+        executor.setQueueCapacity(0);
+        executor.setThreadNamePrefix("parlorplace_executor_thread_");
+        executor.setKeepAliveSeconds(10);
         executor.initialize();
 
         return executor;
