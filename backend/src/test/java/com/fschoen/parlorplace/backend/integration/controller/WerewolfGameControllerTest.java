@@ -14,6 +14,7 @@ import com.fschoen.parlorplace.backend.game.werewolf.entity.WerewolfGame;
 import com.fschoen.parlorplace.backend.game.werewolf.enumeration.WerewolfRoleType;
 import com.fschoen.parlorplace.backend.integration.base.BaseIntegrationTest;
 import io.restassured.response.Response;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 
@@ -272,7 +273,7 @@ public class WerewolfGameControllerTest extends BaseIntegrationTest {
     }
 
     @Test
-    //@Disabled
+    @Disabled
     public void startLobbyGame() {
         User admin1 = this.generatedData.getUserCollection().getAdmin1();
         WerewolfGame werewolfGame = this.generatedData.getWerewolfGameCollection().getWerewolfLobbyGame1();
