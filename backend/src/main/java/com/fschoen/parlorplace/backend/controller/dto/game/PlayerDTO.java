@@ -23,8 +23,8 @@ public abstract class PlayerDTO<GRDTO extends GameRoleDTO> {
     @NotNull
     protected Long id;
 
-    @NotNull
     @Valid
+    @NotNull
     protected UserDTO user;
 
     protected CodeName codeName;
@@ -38,6 +38,7 @@ public abstract class PlayerDTO<GRDTO extends GameRoleDTO> {
     @NotNull
     protected PlayerState playerState;
 
+    @Valid
     @NotNull
     protected List<GRDTO> gameRoles;
 

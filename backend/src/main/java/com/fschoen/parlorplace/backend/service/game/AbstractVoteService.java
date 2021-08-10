@@ -96,7 +96,7 @@ public abstract class AbstractVoteService<
         return completableFuture;
     }
 
-    public V vote(GameIdentifier gameIdentifier, long voteId, C voteCollectionProposal) {
+    public G vote(GameIdentifier gameIdentifier, long voteId, C voteCollectionProposal) {
         User principal = getPrincipal();
         log.info("User {} votes on Vote {} with Subjects: {}", principal.getUsername(), voteId, voteCollectionProposal.getSubjects());
 
@@ -133,7 +133,9 @@ public abstract class AbstractVoteService<
             taskExecutor.execute(voteConcludeTask);
         }
 
-        return vote;
+        game = this.getActiveGame(gameIdentifier);
+
+        return game;
     }
 
     // Abstract Methods

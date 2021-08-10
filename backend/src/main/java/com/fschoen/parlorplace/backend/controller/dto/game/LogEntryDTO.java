@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.HashSet;
 import java.util.Set;
@@ -21,10 +22,12 @@ public abstract class LogEntryDTO<P extends PlayerDTO<?>> {
     protected UUID identifier;
 
     @Builder.Default
+    @Valid
     @NotNull
     protected Set<P> sources = new HashSet<>();
 
     @Builder.Default
+    @Valid
     @NotNull
     protected Set<P> targets = new HashSet<>();
 

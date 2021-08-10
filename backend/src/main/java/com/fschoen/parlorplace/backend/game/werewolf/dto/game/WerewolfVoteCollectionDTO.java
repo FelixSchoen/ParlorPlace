@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.Set;
 
@@ -19,9 +20,11 @@ import java.util.Set;
 @Data
 public class WerewolfVoteCollectionDTO extends VoteCollectionDTO<WerewolfPlayerDTO, WerewolfPlayerDTO> {
 
+    @Valid
     @NotNull
     protected Set<WerewolfPlayerDTO> subjects;
 
+    @Valid
     @NotNull
     protected Set<WerewolfPlayerDTO> selection;
 
