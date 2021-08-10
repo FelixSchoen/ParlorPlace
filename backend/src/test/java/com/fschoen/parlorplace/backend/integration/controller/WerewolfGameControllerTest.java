@@ -283,9 +283,10 @@ public class WerewolfGameControllerTest extends BaseIntegrationTest {
 
         waitNotification(admin1, 2);
 
-        Response response = payload("", getToken(admin1)).pathParam("identifier", werewolfGame.getGameIdentifier().getToken())
+        Response responseGetGame = payload("", getToken(admin1)).pathParam("identifier", werewolfGame.getGameIdentifier().getToken())
                 .get(WEREWOLF_BASE_URI + "{identifier}").then().extract().response();
-        WerewolfGameDTO gameDTOResponse = response.getBody().as(WerewolfGameDTO.class);
+        assertThat(responseGetGame.statusCode()).isEqualTo(HttpStatus.OK.value());
+        WerewolfGameDTO gameDTOResponse = responseGetGame.getBody().as(WerewolfGameDTO.class);
 
         WerewolfVoteDTO werewolfVoteDTO = gameDTOResponse.getVotes().get(0);
         WerewolfPlayerDTO werewolfPlayerDTO = gameDTOResponse.getPlayers().stream().filter(player -> player.getUser().getId().equals(admin1.getId())).findFirst().orElseThrow();
@@ -301,9 +302,10 @@ public class WerewolfGameControllerTest extends BaseIntegrationTest {
 
         waitNotification(admin1, 4);
 
-        response = payload("", getToken(admin1)).pathParam("identifier", werewolfGame.getGameIdentifier().getToken())
+        Response responseUpdateGame = payload("", getToken(admin1)).pathParam("identifier", werewolfGame.getGameIdentifier().getToken())
                 .get(WEREWOLF_BASE_URI + "{identifier}").then().extract().response();
-        gameDTOResponse = response.getBody().as(WerewolfGameDTO.class);
+        assertThat(responseUpdateGame.statusCode()).isEqualTo(HttpStatus.OK.value());
+        gameDTOResponse = responseUpdateGame.getBody().as(WerewolfGameDTO.class);
 
         System.out.println(gameDTOResponse.getVotes().get(0).getVoteCollectionMap().get(werewolfPlayerDTO));
     }

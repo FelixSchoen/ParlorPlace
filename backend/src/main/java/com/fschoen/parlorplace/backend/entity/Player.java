@@ -51,6 +51,7 @@ public abstract class Player<GR extends GameRole> {
 
     @Column
     @Enumerated
+    @EqualsAndHashCode.Exclude
     protected CodeName codeName;
 
     @ManyToOne(targetEntity = Game.class)
