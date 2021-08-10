@@ -78,7 +78,7 @@ public abstract class AbstractGameController<
         game = this.gameService.joinGame(game.getGameIdentifier());
 
         GDTO gameDTO = gameMapper.toDTO(game);
-        gameDTO = gameObfuscationService.obfuscate(gameDTO);
+        gameObfuscationService.obfuscate(gameDTO);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(gameDTO);
     }
@@ -88,7 +88,7 @@ public abstract class AbstractGameController<
         G game = this.gameService.joinGame(new GameIdentifier(identifier));
 
         GDTO gameDTO = gameMapper.toDTO(game);
-        gameDTO = gameObfuscationService.obfuscate(gameDTO);
+        gameObfuscationService.obfuscate(gameDTO);
 
         return ResponseEntity.status(HttpStatus.OK).body(gameDTO);
     }
@@ -116,7 +116,7 @@ public abstract class AbstractGameController<
         game = this.gameService.changeGameRuleSet(gameIdentifier, ruleSetMapper.fromDTO(lobbyChangeRequestDTO.getRuleSet()));
 
         GDTO gameDTO = gameMapper.toDTO(game);
-        gameDTO = gameObfuscationService.obfuscate(gameDTO);
+        gameObfuscationService.obfuscate(gameDTO);
 
         return ResponseEntity.status(HttpStatus.OK).body(gameDTO);
     }
@@ -129,7 +129,7 @@ public abstract class AbstractGameController<
         game = this.gameService.startGame(gameIdentifier);
 
         GDTO gameDTO = gameMapper.toDTO(game);
-        gameDTO = gameObfuscationService.obfuscate(gameDTO);
+        gameObfuscationService.obfuscate(gameDTO);
 
         return ResponseEntity.status(HttpStatus.OK).body(gameDTO);
     }
@@ -140,7 +140,7 @@ public abstract class AbstractGameController<
         G game = this.gameService.getGame(gameIdentifier);
 
         GDTO gameDTO = gameMapper.toDTO(game);
-        gameDTO = gameObfuscationService.obfuscate(gameDTO);
+        gameObfuscationService.obfuscate(gameDTO);
 
         return ResponseEntity.status(HttpStatus.OK).body(gameDTO);
     }
@@ -150,7 +150,7 @@ public abstract class AbstractGameController<
         List<G> games = this.gameService.getUserActiveGames();
 
         List<GDTO> gameDTOS = gameMapper.toDTO(games);
-        gameDTOS = gameObfuscationService.obfuscate(gameDTOS);
+        gameObfuscationService.obfuscate(gameDTOS);
 
         return ResponseEntity.status(HttpStatus.OK).body(gameDTOS);
     }
@@ -166,7 +166,7 @@ public abstract class AbstractGameController<
         G game = voteService.vote(gameIdentifier, voteIdentifier, voteCollection);
 
         GDTO gameDTO = gameMapper.toDTO(game);
-        gameDTO = gameObfuscationService.obfuscate(gameDTO);
+        gameObfuscationService.obfuscate(gameDTO);
 
         return ResponseEntity.status(HttpStatus.OK).body(gameDTO);
     }

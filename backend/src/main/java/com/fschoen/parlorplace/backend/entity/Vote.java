@@ -30,6 +30,8 @@ import java.util.Map;
 
 @NoArgsConstructor
 @AllArgsConstructor
+@EqualsAndHashCode
+@ToString
 @SuperBuilder(toBuilder = true)
 @Data
 @Entity

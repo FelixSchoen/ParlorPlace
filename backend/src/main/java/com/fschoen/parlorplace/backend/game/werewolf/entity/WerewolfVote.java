@@ -17,8 +17,8 @@ import javax.validation.constraints.NotNull;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-@SuperBuilder(toBuilder = true)
 @ToString(callSuper = true)
+@SuperBuilder(toBuilder = true)
 @Data
 @Entity
 public class WerewolfVote extends Vote<WerewolfPlayer, WerewolfVoteCollection, WerewolfVoteDescriptor> {

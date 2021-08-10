@@ -18,11 +18,9 @@ public class UserObfuscationService extends ObfuscationService<UserDTO> {
     }
 
     @Override
-    public UserDTO obfuscateFor(UserDTO userDTO, User user) {
-        if (userDTO.getId().equals(user.getId()))
-            return userDTO;
-        else
-            return userDTO.toBuilder().email(null).build();
+    public void obfuscateFor(UserDTO userDTO, User user) {
+        if (!userDTO.getId().equals(user.getId()))
+            userDTO.setEmail(null);
     }
 
 }

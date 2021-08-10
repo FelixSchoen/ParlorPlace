@@ -6,6 +6,8 @@ import com.fschoen.parlorplace.backend.enumeration.GameType;
 import com.fschoen.parlorplace.backend.enumeration.LobbyRole;
 import com.fschoen.parlorplace.backend.game.werewolf.dto.game.WerewolfGameDTO;
 import com.fschoen.parlorplace.backend.game.werewolf.dto.game.WerewolfPlayerDTO;
+import com.fschoen.parlorplace.backend.game.werewolf.dto.game.WerewolfVoteCollectionDTO;
+import com.fschoen.parlorplace.backend.game.werewolf.dto.game.WerewolfVoteDTO;
 import com.fschoen.parlorplace.backend.game.werewolf.dto.lobby.WerewolfLobbyChangeRequestDTO;
 import com.fschoen.parlorplace.backend.game.werewolf.dto.lobby.WerewolfRuleSetDTO;
 import com.fschoen.parlorplace.backend.game.werewolf.entity.WerewolfGame;
@@ -270,14 +272,40 @@ public class WerewolfGameControllerTest extends BaseIntegrationTest {
     }
 
     @Test
-    public void startLobbyGame() throws InterruptedException {
+    public void startLobbyGame() {
         User admin1 = this.generatedData.getUserCollection().getAdmin1();
         WerewolfGame werewolfGame = this.generatedData.getWerewolfGameCollection().getWerewolfLobbyGame1();
+
+        connectNotification(admin1, werewolfGame.getGameIdentifier());
 
         Response responseStartGame = post("", WEREWOLF_BASE_URI + "start/" + werewolfGame.getGameIdentifier().getToken(), getToken(admin1));
         assertThat(responseStartGame.statusCode()).isEqualTo(HttpStatus.OK.value());
 
-        Thread.sleep(7000);
+        waitNotification(admin1, 2);
+
+        Response response = payload("", getToken(admin1)).pathParam("identifier", werewolfGame.getGameIdentifier().getToken())
+                .get(WEREWOLF_BASE_URI + "{identifier}").then().extract().response();
+        WerewolfGameDTO gameDTOResponse = response.getBody().as(WerewolfGameDTO.class);
+
+        WerewolfVoteDTO werewolfVoteDTO = gameDTOResponse.getVotes().get(0);
+        WerewolfPlayerDTO werewolfPlayerDTO = gameDTOResponse.getPlayers().stream().filter(player -> player.getUser().getId().equals(admin1.getId())).findFirst().orElseThrow();
+        WerewolfVoteCollectionDTO werewolfVoteCollectionDTO = werewolfVoteDTO.getVoteCollectionMap().get(werewolfPlayerDTO);
+
+        werewolfVoteCollectionDTO.getSelection().add(werewolfVoteCollectionDTO.getSubjects().stream().findAny().orElseThrow());
+
+        Response responseVote = payload(werewolfVoteCollectionDTO, getToken(admin1))
+                .pathParam("identifier", werewolfGame.getGameIdentifier().getToken())
+                .pathParam("voteIdentifier", werewolfVoteDTO.getId())
+                .post(WEREWOLF_BASE_URI + "vote/{identifier}/{voteIdentifier}").then().extract().response();
+        assertThat(responseVote.statusCode()).isEqualTo(HttpStatus.OK.value());
+
+        waitNotification(admin1, 4);
+
+        response = payload("", getToken(admin1)).pathParam("identifier", werewolfGame.getGameIdentifier().getToken())
+                .get(WEREWOLF_BASE_URI + "{identifier}").then().extract().response();
+        gameDTOResponse = response.getBody().as(WerewolfGameDTO.class);
+
+        System.out.println(gameDTOResponse.getVotes().get(0).getVoteCollectionMap().get(werewolfPlayerDTO));
     }
 
 }

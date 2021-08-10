@@ -62,4 +62,5 @@ public class WerewolfGameController extends AbstractGameController<
     public ResponseEntity<WerewolfGameDTO> vote(@PathVariable("identifier") String identifier, @PathVariable("voteIdentifier") Long voteIdentifier, @RequestBody WerewolfVoteCollectionDTO voteCollectionDTO) {
         return this.vote(voteService, voteCollectionMapper, identifier, voteIdentifier, voteCollectionDTO);
     }
+
 }

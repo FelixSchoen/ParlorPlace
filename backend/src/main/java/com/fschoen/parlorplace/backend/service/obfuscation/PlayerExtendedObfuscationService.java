@@ -5,20 +5,19 @@ import com.fschoen.parlorplace.backend.controller.dto.user.UserDTO;
 import com.fschoen.parlorplace.backend.entity.User;
 import com.fschoen.parlorplace.backend.repository.UserRepository;
 
-public abstract class PlayerDoubleObfuscationService<T extends PlayerDTO<?>, U> extends DoubleObfuscationService<T, U> {
+public abstract class PlayerExtendedObfuscationService<T extends PlayerDTO<?>, U> extends ExtendedObfuscationService<T, U> {
 
     private final ObfuscationService<UserDTO> userObfuscationService;
 
-    public PlayerDoubleObfuscationService(UserRepository userRepository, ObfuscationService<UserDTO> userObfuscationService) {
+    public PlayerExtendedObfuscationService(UserRepository userRepository, ObfuscationService<UserDTO> userObfuscationService) {
         super(userRepository);
         this.userObfuscationService = userObfuscationService;
     }
 
     @Override
-    public T obfuscateFor(T t, User user, U u) {
-        T object = this.obfuscateForInitial(t, user, u);
-        object.setUser(this.userObfuscationService.obfuscate(object.getUser()));
-        return object;
+    public void obfuscateFor(T t, User user, U u) {
+        this.obfuscateForInitial(t, user, u);
+        this.userObfuscationService.obfuscate(t.getUser());
     }
 
     /**
@@ -29,6 +28,6 @@ public abstract class PlayerDoubleObfuscationService<T extends PlayerDTO<?>, U> 
      * @param u    Additional information about the object to obfuscate
      * @return The obfuscated object
      */
-    public abstract T obfuscateForInitial(T t, User user, U u);
+    public abstract void obfuscateForInitial(T t, User user, U u);
 
 }

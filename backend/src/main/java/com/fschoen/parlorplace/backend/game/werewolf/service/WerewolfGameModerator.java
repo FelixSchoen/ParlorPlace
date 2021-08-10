@@ -75,15 +75,16 @@ public class WerewolfGameModerator extends AbstractGameModerator<
 
         while (this.isGameOngoing()) {
             processTransitionNight();
+
             // Delete me afterwards
             System.out.println("Requesting vote");
             CompletableFuture<WerewolfVote> future = this.voteService.requestVote(this.gameIdentifier,
                     VoteType.PUBLIC_PUBLIC_PUBLIC,
                     this.voteService.getSameChoiceCollectionMap(this.getGame().getPlayers(), this.getGame().getPlayers(), 1),
-                    WerewolfVoteDescriptor.WEREWOLVES_KILL,5);
+                    WerewolfVoteDescriptor.WEREWOLVES_KILL, 5);
             WerewolfVote vote = future.get();
-            System.out.println("Did it");
-            System.out.println(vote);
+            System.out.println("Result: " + vote);
+            broadcastGameStaleNotification(this.gameIdentifier);
             break;
         }
     }
@@ -104,7 +105,6 @@ public class WerewolfGameModerator extends AbstractGameModerator<
         Set<CodeName> codeNamesSet = new HashSet<>(List.of(codeNames));
         return WerewolfVoiceLineClientNotification.builder().voiceLineType(voiceLineType).codeNames(codeNamesSet).build();
     }
-
 
 
 }

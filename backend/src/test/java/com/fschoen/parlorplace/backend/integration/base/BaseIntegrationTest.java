@@ -204,19 +204,18 @@ public abstract class BaseIntegrationTest {
         stompSession.subscribe(WEBSOCKET_QUEUE_PRIMARY_URI + gameIdentifier.getToken(), new NotificationStompSessionHandler(user));
     }
 
-    protected ClientNotification waitNotification(User user) {
-        try {
-            return this.queueMap.get(user).poll(5, SECONDS);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        return null;
+    protected ClientNotification waitNotification(User user) throws InterruptedException {
+        return this.queueMap.get(user).poll(5, SECONDS);
     }
 
     protected List<ClientNotification> waitNotification(User user, int amount) {
         List<ClientNotification> returnList = new ArrayList<>();
         for (int i = 0; i < amount; i++) {
-            returnList.add(this.waitNotification(user));
+            try {
+                returnList.add(this.waitNotification(user));
+            } catch (InterruptedException e) {
+                log.error("Interrupted while waiting. Message: {}", i);
+            }
         }
         return returnList;
     }
