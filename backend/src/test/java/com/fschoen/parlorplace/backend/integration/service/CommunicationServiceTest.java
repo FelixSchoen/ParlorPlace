@@ -42,7 +42,7 @@ public class CommunicationServiceTest extends BaseIntegrationTest {
         }});
 
         ClientNotification notificationUser1 = waitNotification(user1, 1).get(0);
-        ClientNotification notificationUser2 = waitNotification(user2);
+        ClientNotification notificationUser2 = waitNotification(user2, 1).get(0);
 
         assertThat(notificationUser1.getNotificationType()).isEqualTo(NotificationType.STALE_GAME_INFORMATION);
         assertThat(notificationUser2.getNotificationType()).isEqualTo(NotificationType.STALE_GAME_INFORMATION);

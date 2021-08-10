@@ -4,38 +4,38 @@ import com.fschoen.parlorplace.backend.entity.User;
 import com.fschoen.parlorplace.backend.game.werewolf.dto.game.WerewolfGameDTO;
 import com.fschoen.parlorplace.backend.game.werewolf.dto.game.WerewolfLogEntryDTO;
 import com.fschoen.parlorplace.backend.game.werewolf.dto.game.WerewolfPlayerDTO;
+import com.fschoen.parlorplace.backend.game.werewolf.dto.game.WerewolfVoteDTO;
 import com.fschoen.parlorplace.backend.repository.UserRepository;
-import com.fschoen.parlorplace.backend.service.DoubleObfuscationService;
-import com.fschoen.parlorplace.backend.service.ObfuscationService;
+import com.fschoen.parlorplace.backend.service.obfuscation.ExtendedObfuscationService;
+import com.fschoen.parlorplace.backend.service.obfuscation.ObfuscationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 
 @Service
 public class WerewolfGameObfuscationService extends ObfuscationService<WerewolfGameDTO> {
 
-    private final DoubleObfuscationService<WerewolfPlayerDTO, WerewolfGameDTO> werewolfPlayerObfuscationService;
-    private final DoubleObfuscationService<WerewolfLogEntryDTO, WerewolfGameDTO> werewolfLogEntryObfuscationService;
+    private final ExtendedObfuscationService<WerewolfPlayerDTO, WerewolfGameDTO> playerObfuscationService;
+    private final ExtendedObfuscationService<WerewolfVoteDTO, WerewolfGameDTO> voteObfuscationService;
+    private final ExtendedObfuscationService<WerewolfLogEntryDTO, WerewolfGameDTO> logEntryObfuscationService;
 
     @Autowired
     public WerewolfGameObfuscationService(
             UserRepository userRepository,
-            DoubleObfuscationService<WerewolfPlayerDTO, WerewolfGameDTO> werewolfPlayerObfuscationService,
-            DoubleObfuscationService<WerewolfLogEntryDTO, WerewolfGameDTO> werewolfLogEntryObfuscationService
+            ExtendedObfuscationService<WerewolfPlayerDTO, WerewolfGameDTO> playerObfuscationService,
+            ExtendedObfuscationService<WerewolfVoteDTO, WerewolfGameDTO> voteObfuscationService,
+            ExtendedObfuscationService<WerewolfLogEntryDTO, WerewolfGameDTO> logEntryObfuscationService
     ) {
         super(userRepository);
-        this.werewolfPlayerObfuscationService = werewolfPlayerObfuscationService;
-        this.werewolfLogEntryObfuscationService = werewolfLogEntryObfuscationService;
+        this.playerObfuscationService = playerObfuscationService;
+        this.voteObfuscationService = voteObfuscationService;
+        this.logEntryObfuscationService = logEntryObfuscationService;
     }
 
     @Override
-    public WerewolfGameDTO obfuscateFor(WerewolfGameDTO werewolfGameDTO, User user) {
-        Set<WerewolfPlayerDTO> obfuscatedPlayerDTOSet = new HashSet<>(this.werewolfPlayerObfuscationService.obfuscateFor(werewolfGameDTO.getPlayers().stream().toList(), user, werewolfGameDTO));
-        List<WerewolfLogEntryDTO> obfuscatedLogEntryDTOList = this.werewolfLogEntryObfuscationService.obfuscateFor(werewolfGameDTO.getLog(), user, werewolfGameDTO);
-        return werewolfGameDTO.toBuilder().players(obfuscatedPlayerDTOSet).log(obfuscatedLogEntryDTOList).build();
+    public void obfuscateFor(WerewolfGameDTO werewolfGameDTO, User user) {
+        this.playerObfuscationService.obfuscateFor(werewolfGameDTO.getPlayers(), user, werewolfGameDTO);
+        this.voteObfuscationService.obfuscateFor(werewolfGameDTO.getVotes(), user, werewolfGameDTO);
+        this.logEntryObfuscationService.obfuscateFor(werewolfGameDTO.getLog(), user, werewolfGameDTO);
     }
 
 }

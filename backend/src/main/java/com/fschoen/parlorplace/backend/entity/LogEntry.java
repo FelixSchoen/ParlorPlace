@@ -49,7 +49,7 @@ public abstract class LogEntry<P extends Player<?>> {
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
     @NotNull
-    protected Game<?, ?, ?> game;
+    protected Game<?, ?, ?, ?> game;
 
     @ManyToMany(targetEntity = Player.class)
     @JoinTable(

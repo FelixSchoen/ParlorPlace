@@ -1,33 +1,37 @@
 package com.fschoen.parlorplace.backend.game.werewolf.service.obfuscation;
 
+import com.fschoen.parlorplace.backend.controller.dto.user.UserDTO;
 import com.fschoen.parlorplace.backend.entity.User;
 import com.fschoen.parlorplace.backend.enumeration.GameState;
 import com.fschoen.parlorplace.backend.enumeration.PlayerState;
 import com.fschoen.parlorplace.backend.game.werewolf.dto.game.WerewolfGameDTO;
 import com.fschoen.parlorplace.backend.game.werewolf.dto.game.WerewolfPlayerDTO;
 import com.fschoen.parlorplace.backend.repository.UserRepository;
-import com.fschoen.parlorplace.backend.service.DoubleObfuscationService;
+import com.fschoen.parlorplace.backend.service.obfuscation.ObfuscationService;
+import com.fschoen.parlorplace.backend.service.obfuscation.PlayerExtendedObfuscationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+
 @Service
-public class WerewolfPlayerObfuscationService extends DoubleObfuscationService<WerewolfPlayerDTO, WerewolfGameDTO> {
+public class WerewolfPlayerObfuscationService extends PlayerExtendedObfuscationService<WerewolfPlayerDTO, WerewolfGameDTO> {
 
     @Autowired
-    public WerewolfPlayerObfuscationService(UserRepository userRepository) {
-        super(userRepository);
+    public WerewolfPlayerObfuscationService(UserRepository userRepository, ObfuscationService<UserDTO> userObfuscationService) {
+        super(userRepository, userObfuscationService);
     }
 
     @Override
-    public WerewolfPlayerDTO obfuscateFor(WerewolfPlayerDTO werewolfPlayerDTO, User user, WerewolfGameDTO werewolfGameDTO) {
-        if (werewolfGameDTO != null && werewolfGameDTO.getGameState() == GameState.CONCLUDED) {
-            return werewolfPlayerDTO;
+    public void obfuscateForInitial(WerewolfPlayerDTO werewolfPlayerDTO, User user, WerewolfGameDTO werewolfGameDTO) {
+        if (werewolfGameDTO != null && werewolfGameDTO.getGameState() == GameState.CONCLUDED
+                || werewolfPlayerDTO.getUser().getId().equals(user.getId())
+                || werewolfPlayerDTO.getPlayerState() == PlayerState.DECEASED) {
+            return;
         }
-        else if (werewolfPlayerDTO.getUser().getId().equals(user.getId())
-                || werewolfPlayerDTO.getPlayerState() == PlayerState.DECEASED)
-            return werewolfPlayerDTO;
-        else
-            return werewolfPlayerDTO.toBuilder().codeName(null).gameRoles(null).build();
+
+        werewolfPlayerDTO.setCodeName(null);
+        werewolfPlayerDTO.setGameRoles(new ArrayList<>());
     }
 
 }

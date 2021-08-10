@@ -1,14 +1,14 @@
-package com.fschoen.parlorplace.backend.service;
+package com.fschoen.parlorplace.backend.service.obfuscation;
 
 import com.fschoen.parlorplace.backend.entity.User;
 import com.fschoen.parlorplace.backend.repository.UserRepository;
 
-import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Collection;
+import java.util.Collections;
 
-public abstract class DoubleObfuscationService<T, U> extends ObfuscationService<T> {
+public abstract class ExtendedObfuscationService<T, U> extends ObfuscationService<T> {
 
-    public DoubleObfuscationService(UserRepository userRepository) {
+    public ExtendedObfuscationService(UserRepository userRepository) {
         super(userRepository);
     }
 
@@ -17,10 +17,9 @@ public abstract class DoubleObfuscationService<T, U> extends ObfuscationService<
      *
      * @param t    The object to obfuscate
      * @param user The user to obfuscate the object for
-     * @return The obfuscated object
      */
-    public T obfuscateFor(T t, User user) {
-        return this.obfuscateFor(t, user, null);
+    public void obfuscateFor(T t, User user) {
+        this.obfuscateFor(t, user, null);
     }
 
     /**
@@ -29,20 +28,19 @@ public abstract class DoubleObfuscationService<T, U> extends ObfuscationService<
      * @param t    The object to obfuscate
      * @param user The user to obfuscate the object for
      * @param u    Additional information about the object to obfuscate
-     * @return The obfuscated object
      */
-    public abstract T obfuscateFor(T t, User user, U u);
+    public abstract void obfuscateFor(T t, User user, U u);
 
     /**
      * Obfuscates all the objects in a list for a specific user and additional information given by {@param u}.
      *
-     * @param tList List of objects to obfuscate
+     * @param tCollection List of objects to obfuscate
      * @param user  The user to obfuscate the objects for
-     *              * @param u    Additional information about the object to obfuscate
-     * @return A list of obfuscated objects, specifically for the given user
+     * @param u     Additional information about the object to obfuscate
      */
-    public List<T> obfuscateFor(List<T> tList, User user, U u) {
-        return tList.stream().map(element -> this.obfuscateFor(element, user, u)).collect(Collectors.toList());
+    public void obfuscateFor(Collection<T> tCollection, User user, U u) {
+        tCollection.forEach(element -> this.obfuscateFor(element, user, u));
+        tCollection.removeAll(Collections.singleton(null));
     }
 
 }

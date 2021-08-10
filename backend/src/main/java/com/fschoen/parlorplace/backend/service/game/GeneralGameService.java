@@ -1,10 +1,10 @@
-package com.fschoen.parlorplace.backend.service;
+package com.fschoen.parlorplace.backend.service.game;
 
 import com.fschoen.parlorplace.backend.entity.Game;
 import com.fschoen.parlorplace.backend.entity.GameIdentifier;
 
 public interface GeneralGameService {
 
-    Game<?, ?, ?> getGameBaseInformation(GameIdentifier gameIdentifier);
+    Game<?, ?, ?, ?> getGameBaseInformation(GameIdentifier gameIdentifier);
 
 }

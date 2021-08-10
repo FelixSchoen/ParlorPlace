@@ -1,10 +1,11 @@
-package com.fschoen.parlorplace.backend.service;
+package com.fschoen.parlorplace.backend.service.obfuscation;
 
 import com.fschoen.parlorplace.backend.entity.User;
 import com.fschoen.parlorplace.backend.repository.UserRepository;
+import com.fschoen.parlorplace.backend.service.BaseService;
 
-import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Collection;
+import java.util.Collections;
 
 public abstract class ObfuscationService<T> extends BaseService {
 
@@ -16,22 +17,20 @@ public abstract class ObfuscationService<T> extends BaseService {
      * Removes information from {@param t} that is considered to be confidential for the current principal
      *
      * @param t The object to obfuscate
-     * @return The obfuscated object
      */
-    public T obfuscate(T t) {
+    public void obfuscate(T t) {
         User principal = this.getPrincipal();
-        return this.obfuscateFor(t, principal);
+        this.obfuscateFor(t, principal);
     }
 
     /**
      * Obfuscates all the objects in a list for the current principal
      *
-     * @param tList List of objects to obfuscate
-     * @return A list of obfuscated objects
+     * @param tCollection List of objects to obfuscate
      */
-    public List<T> obfuscate(List<T> tList) {
+    public void obfuscate(Collection<T> tCollection) {
         User principal = this.getPrincipal();
-        return this.obfuscateFor(tList, principal);
+        this.obfuscateFor(tCollection, principal);
     }
 
     /**
@@ -39,19 +38,18 @@ public abstract class ObfuscationService<T> extends BaseService {
      *
      * @param t    The object to obfuscate
      * @param user The user to obfuscate the object for
-     * @return The obfuscated object
      */
-    public abstract T obfuscateFor(T t, User user);
+    public abstract void obfuscateFor(T t, User user);
 
     /**
-     * Obfuscates all the objects in a list for a specific user
+     * Obfuscates all the objects in a collection for a specific user
      *
-     * @param tList List of objects to obfuscate
+     * @param tCollection List of objects to obfuscate
      * @param user  The user to obfuscate the objects for
-     * @return A list of obfuscated objects, specifically for the given user
      */
-    public List<T> obfuscateFor(List<T> tList, User user) {
-        return tList.stream().map(element -> this.obfuscateFor(element, user)).collect(Collectors.toList());
+    public void obfuscateFor(Collection<T> tCollection, User user) {
+        tCollection.forEach(element -> this.obfuscateFor(element, user));
+        tCollection.removeAll(Collections.singleton(null));
     }
 
 }

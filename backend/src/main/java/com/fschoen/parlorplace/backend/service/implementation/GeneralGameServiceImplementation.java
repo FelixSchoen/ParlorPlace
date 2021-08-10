@@ -6,7 +6,7 @@ import com.fschoen.parlorplace.backend.enumeration.GameState;
 import com.fschoen.parlorplace.backend.exception.DataConflictException;
 import com.fschoen.parlorplace.backend.exception.GameException;
 import com.fschoen.parlorplace.backend.repository.GeneralGameRepository;
-import com.fschoen.parlorplace.backend.service.GeneralGameService;
+import com.fschoen.parlorplace.backend.service.game.GeneralGameService;
 import com.fschoen.parlorplace.backend.utility.messaging.MessageIdentifier;
 import com.fschoen.parlorplace.backend.utility.messaging.Messages;
 import lombok.extern.slf4j.Slf4j;
@@ -35,19 +35,19 @@ public class GeneralGameServiceImplementation implements GeneralGameService {
         // Remove orphaned Games
 
         // Remove games stuck in lobby
-        List<Game<?, ?, ?>> orphanedLobbyGames = gameRepository.findAllByGameState(GameState.LOBBY);
+        List<Game<?, ?, ?, ?>> orphanedLobbyGames = gameRepository.findAllByGameState(GameState.LOBBY);
         gameRepository.deleteAll(orphanedLobbyGames);
 
         // Remove games ongoing longer than 12 hours
-        List<Game<?, ?, ?>> orphanedOngoingGames = gameRepository.findAllByEndedAt(null);
+        List<Game<?, ?, ?, ?>> orphanedOngoingGames = gameRepository.findAllByEndedAt(null);
         orphanedOngoingGames = orphanedLobbyGames.stream()
                 .filter(game -> TimeUnit.HOURS.convert(new Date().getTime() - game.getStartedAt().getTime(), TimeUnit.MILLISECONDS) > 12)
                 .collect(Collectors.toList());
         gameRepository.deleteAll(orphanedOngoingGames);
     }
 
-    public Game<?, ?, ?> getGameBaseInformation(GameIdentifier gameIdentifier) {
-        List<Game<?, ?, ?>> games = this.gameRepository.findAllByGameIdentifier_TokenAndEndedAt(gameIdentifier.getToken(), null);
+    public Game<?, ?, ?, ?> getGameBaseInformation(GameIdentifier gameIdentifier) {
+        List<Game<?, ?, ?, ?>> games = this.gameRepository.findAllByGameIdentifier_TokenAndEndedAt(gameIdentifier.getToken(), null);
 
         if (games.size() == 0)
             throw new GameException(Messages.exception(MessageIdentifier.GAME_EXISTS_NOT));

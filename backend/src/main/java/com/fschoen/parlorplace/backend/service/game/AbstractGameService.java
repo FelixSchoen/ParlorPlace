@@ -1,4 +1,4 @@
-package com.fschoen.parlorplace.backend.service;
+package com.fschoen.parlorplace.backend.service.game;
 
 import com.fschoen.parlorplace.backend.entity.Game;
 import com.fschoen.parlorplace.backend.entity.GameIdentifier;
@@ -14,6 +14,7 @@ import com.fschoen.parlorplace.backend.exception.DataConflictException;
 import com.fschoen.parlorplace.backend.exception.GameException;
 import com.fschoen.parlorplace.backend.repository.GameRepository;
 import com.fschoen.parlorplace.backend.repository.UserRepository;
+import com.fschoen.parlorplace.backend.service.CommunicationService;
 import com.fschoen.parlorplace.backend.utility.messaging.MessageIdentifier;
 import com.fschoen.parlorplace.backend.utility.messaging.Messages;
 import lombok.extern.slf4j.Slf4j;
@@ -33,7 +34,7 @@ import java.util.stream.Collectors;
 
 @Slf4j
 public abstract class AbstractGameService<
-        G extends Game<P, RS, ?>,
+        G extends Game<P, RS, ?, ?>,
         P extends Player<GR>,
         RS extends RuleSet,
         GR extends GameRole,
@@ -76,6 +77,7 @@ public abstract class AbstractGameService<
             RS ruleSet = this.getRuleSetClass().getDeclaredConstructor().newInstance();
             game.setRuleSet(ruleSet);
             game.setRound(0);
+            game.setVotes(new ArrayList<>());
             game.setLog(new ArrayList<>());
             game.setStartedAt(new Date());
             game.setGameIdentifier(this.gameIdentifierService.generateValidGameIdentifier());
@@ -161,7 +163,7 @@ public abstract class AbstractGameService<
         log.info("User {} removes {} from Game: {}", principal.getUsername(), user.getUsername(), gameIdentifier.getToken());
 
         validateActiveGameExists(gameIdentifier);
-        validateUserInActiveGame(gameIdentifier, user);
+        validateUserInSpecificActiveGame(gameIdentifier, user);
         if (!principal.equals(user))
             validateUserLobbyAdmin(gameIdentifier, principal);
 
@@ -330,31 +332,13 @@ public abstract class AbstractGameService<
 
     protected abstract Class<M> getModeratorClass();
 
-    // Utility
-
     // Validation
-
-    protected void validateActiveGameExists(GameIdentifier gameIdentifier) throws GameException, DataConflictException {
-        List<G> games = this.getActiveGames(gameIdentifier);
-
-        if (games.size() == 0)
-            throw new GameException(Messages.exception(MessageIdentifier.GAME_EXISTS_NOT));
-        if (games.size() > 1)
-            throw new DataConflictException(Messages.exception(MessageIdentifier.GAME_UNIQUE_NOT));
-    }
 
     protected void validateActiveGameStateLobby(GameIdentifier gameIdentifier) {
         G game = this.getActiveGame(gameIdentifier);
 
         if (!game.getGameState().equals(GameState.LOBBY))
             throw new GameException(Messages.exception(MessageIdentifier.GAME_STATE_STARTED));
-    }
-
-    protected void validateUserInActiveGame(GameIdentifier gameIdentifier, User user) throws GameException {
-        G game = this.getActiveGame(gameIdentifier);
-
-        if (game.getPlayers().stream().noneMatch(player -> player.getUser().equals(user)))
-            throw new GameException(Messages.exception(MessageIdentifier.GAME_USER_INGAME_NOT));
     }
 
     protected void validateUserNotInSpecificActiveGame(GameIdentifier gameIdentifier, User user) throws GameException {
@@ -365,7 +349,7 @@ public abstract class AbstractGameService<
     }
 
     protected void validateUserLobbyAdmin(GameIdentifier gameIdentifier, User user) throws GameException {
-        validateUserInActiveGame(gameIdentifier, user);
+        validateUserInSpecificActiveGame(gameIdentifier, user);
         P player = getPlayerFromUser(gameIdentifier, user);
 
         if (!player.getLobbyRole().equals(LobbyRole.ROLE_ADMIN))
