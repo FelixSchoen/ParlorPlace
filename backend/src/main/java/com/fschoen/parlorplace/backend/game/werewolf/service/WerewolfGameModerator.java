@@ -81,7 +81,7 @@ public class WerewolfGameModerator extends AbstractGameModerator<
             CompletableFuture<WerewolfVote> future = this.voteService.requestVote(this.gameIdentifier,
                     VoteType.PUBLIC_PUBLIC_PUBLIC,
                     this.voteService.getSameChoiceCollectionMap(this.getGame().getPlayers(), this.getGame().getPlayers(), 1),
-                    WerewolfVoteDescriptor.WEREWOLVES_KILL, 5);
+                    WerewolfVoteDescriptor.WEREWOLVES_KILL, 2);
             WerewolfVote vote = future.get();
             System.out.println("Result: " + vote);
             broadcastGameStaleNotification(this.gameIdentifier);

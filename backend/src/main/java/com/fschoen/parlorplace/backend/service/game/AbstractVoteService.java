@@ -201,10 +201,14 @@ public abstract class AbstractVoteService<
         @SneakyThrows
         @Override
         public void run() {
+            log.info("Started VoteConcludeTask for Vote {}", voteId);
+
             V initialVote = voteRepository.findOneById(voteId).orElseThrow();
             if (initialVote.getVoteState().equals(VoteState.CONCLUDED)) return;
 
             Thread.sleep((long) (sleepDurationSeconds * 1000));
+
+            log.info("Trying to conclude Vote {}", voteId);
 
             // If already concluded do not complete future again
             V currentVote = voteRepository.findOneById(voteId).orElseThrow();
