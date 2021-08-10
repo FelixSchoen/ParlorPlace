@@ -122,7 +122,7 @@ public class UserController {
     public ResponseEntity<Set<UserDTO>> getAllUsersFiltered(@RequestParam(value = "username", required = false) String username,
                                                             @RequestParam(value = "nickname", required = false) String nickname) {
         Set<UserDTO> userDTOs = userMapper.toDTO(userService.getAllUsersFiltered(username, nickname));
-        userObfuscationService.obfuscate(userDTOs.stream().toList());
+        userObfuscationService.obfuscate(userDTOs);
 
         return ResponseEntity.status(HttpStatus.OK).body(userDTOs);
     }

@@ -71,7 +71,7 @@ public abstract class BaseIntegrationTest {
     protected static final String WEBSOCKET_QUEUE_PRIMARY_URI = "/user/queue/game/primary/";
     protected GeneratedData generatedData;
     protected String WEBSOCKET_GAME_URI;
-    protected Map<User, BlockingQueue<ClientNotification>> queueMap = new HashMap<>();
+    protected Map<User, BlockingQueue<ClientNotification>> queueMap;
     @LocalServerPort
     protected int port;
     @Autowired
@@ -90,6 +90,8 @@ public abstract class BaseIntegrationTest {
 
         RestAssured.port = port;
         WEBSOCKET_GAME_URI = "ws://localhost:" + port + "/communication/game";
+
+        this.queueMap = new HashMap<>();
     }
 
     // Authentication
