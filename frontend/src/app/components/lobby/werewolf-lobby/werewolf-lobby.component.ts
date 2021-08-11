@@ -1,21 +1,19 @@
-import {Component, OnInit} from '@angular/core';
+import {Component} from '@angular/core';
 import {LobbyComponent} from "../lobby.component";
 import {ActivatedRoute, Router} from "@angular/router";
-import {WerewolfGame} from "../../../dto/game";
 import {NotificationService} from "../../../services/notification.service";
 import {UserService} from "../../../services/user.service";
-import {WerewolfPlayer} from "../../../dto/player";
-import {WerewolfLobbyChangeRequest} from "../../../dto/lobby";
 import {WerewolfRoleType, WerewolfRoleTypeUtil} from "../../../enums/games/werewolfroletype";
 import {WerewolfGameService} from "../../../services/werewolf-game.service";
 import {CommunicationService} from "../../../services/communication.service";
+import {WerewolfGame, WerewolfLobbyChangeRequest, WerewolfPlayer} from "../../../dto/werewolf";
 
 @Component({
   selector: 'app-werewolf-lobby',
   templateUrl: './werewolf-lobby.component.html',
   styleUrls: ['./werewolf-lobby.component.scss']
 })
-export class WerewolfLobbyComponent extends LobbyComponent<WerewolfGame, WerewolfPlayer> implements OnInit {
+export class WerewolfLobbyComponent extends LobbyComponent<WerewolfGame, WerewolfPlayer> {
 
   public werewolfRoleTypeToString = WerewolfRoleTypeUtil.toStringRepresentation;
   public werewolfRoleTypeArray: WerewolfRoleType[] = WerewolfRoleTypeUtil.getArray();
@@ -29,11 +27,6 @@ export class WerewolfLobbyComponent extends LobbyComponent<WerewolfGame, Werewol
     public router: Router
   ) {
     super(userService, gameService, communicationService, notificationService, activatedRoute, router)
-  }
-
-  ngOnInit(): void {
-    this.initialize();
-    this.refresh();
   }
 
   changeLobby(): void {

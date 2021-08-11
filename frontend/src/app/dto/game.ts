@@ -1,7 +1,7 @@
 import {GameType} from "../enums/gametype";
 import {GameState} from "../enums/gamestate";
-import {Player, WerewolfPlayer} from "./player";
-import {RuleSet, WerewolfRuleSet} from "./ruleset";
+import {Player} from "./player";
+import {RuleSet} from "./ruleset";
 
 export abstract class Game {
   protected constructor(public id: number,
@@ -13,19 +13,6 @@ export abstract class Game {
                         public startedAt: string,
                         public endedAt: string | null,
                         public gameIdentifier: GameIdentifier) {
-  }
-}
-
-export class WerewolfGame extends Game {
-  constructor(public id: number,
-              public gameState: GameState,
-              public players: Set<WerewolfPlayer>,
-              public ruleSet: WerewolfRuleSet,
-              public round: number,
-              public startedAt: string,
-              public endedAt: string | null,
-              public gameIdentifier: GameIdentifier) {
-    super(id, GameType.WEREWOLF, gameState, players, ruleSet, round, startedAt, endedAt, gameIdentifier);
   }
 }
 

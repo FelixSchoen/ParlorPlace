@@ -1,0 +1,44 @@
+<div class="container p-3 h-100">
+
+  <mat-tab-group id="group" dynamicHeight mat-stretch-tabs mat-align-tabs="center" *ngIf="!loading">
+
+    <mat-tab>
+      <ng-template mat-tab-label>
+        <mat-icon class="material-icons">home</mat-icon>
+      </ng-template>
+      <div class="pt-3">
+      </div>
+    </mat-tab>
+
+    <mat-tab>
+      <ng-template mat-tab-label>
+        <mat-icon class="material-icons">gavel</mat-icon>
+      </ng-template>
+      <div class="h-100 pt-3">
+      </div>
+    </mat-tab>
+
+    <mat-tab>
+      <ng-template mat-tab-label>
+        <mat-icon class="material-icons">format_list_bulleted</mat-icon>
+      </ng-template>
+      <div class="h-100 pt-3">
+      </div>
+    </mat-tab>
+
+    <mat-tab>
+      <ng-template mat-tab-label>
+        <mat-icon class="material-icons">info</mat-icon>
+      </ng-template>
+      <div class="h-100 pt-3">
+      </div>
+    </mat-tab>
+
+  </mat-tab-group>
+
+  <!-- Loading Indicator -->
+  <div class="d-flex justify-content-center align-items-center h-100" *ngIf="loading">
+    <app-loading-indicator [loading]="loading" [errorMessage]="errorMessage"></app-loading-indicator>
+  </div>
+
+</div>

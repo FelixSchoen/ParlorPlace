@@ -16,21 +16,23 @@ import {DragDropModule} from "@angular/cdk/drag-drop";
 import {MatListModule} from "@angular/material/list";
 import {MatProgressBarModule} from "@angular/material/progress-bar";
 import {MatTabsModule} from "@angular/material/tabs";
-import {LobbyComponent} from "../lobby/lobby.component";
-import {WerewolfLobbyComponent} from "../lobby/werewolf-lobby/werewolf-lobby.component";
-import {RoleSelectionComponent} from "../../components/lobby/role-selection/role-selection.component";
-import {PlayerListComponent} from "../../components/lobby/player-list/player-list.component";
+import {WerewolfLobbyComponent} from "../../components/lobby/werewolf-lobby/werewolf-lobby.component";
+import {RoleSelectionComponent} from "../../components/lobby-components/role-selection/role-selection.component";
+import {PlayerListComponent} from "../../components/lobby-components/player-list/player-list.component";
 import {GeneralModule} from "../general/general.module";
+import {GameInterfaceComponent} from '../../components/game-interface/game-interface.component';
+import {WerewolfInterfaceComponent} from '../../components/game-interface/werewolf-interface/werewolf-interface.component';
 
 
 @NgModule({
   declarations: [
-    GameComponent,
     GameDirective,
-    LobbyComponent,
+    GameComponent,
     WerewolfLobbyComponent,
     RoleSelectionComponent,
     PlayerListComponent,
+    GameInterfaceComponent,
+    WerewolfInterfaceComponent,
   ],
     imports: [
         CommonModule,

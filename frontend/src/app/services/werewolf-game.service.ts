@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {AbstractGameService} from "./abstract-game.service";
-import {WerewolfGame} from "../dto/game";
 import {HttpClient} from "@angular/common/http";
+import {WerewolfGame} from "../dto/werewolf";
 
 @Injectable({
   providedIn: 'root'
