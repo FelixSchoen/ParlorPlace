@@ -3,11 +3,11 @@ import {Player} from "../../../dto/player";
 import {CdkDragDrop} from "@angular/cdk/drag-drop";
 
 @Component({
-  selector: 'app-player-list',
-  templateUrl: './player-list.component.html',
-  styleUrls: ['./player-list.component.scss']
+  selector: 'app-participant-list',
+  templateUrl: './participant-list.component.html',
+  styleUrls: ['./participant-list.component.scss']
 })
-export class PlayerListComponent<P extends Player> implements OnInit {
+export class ParticipantListComponent<P extends Player> implements OnInit {
 
   @Input() players: Set<P>;
   @Input() currentPlayer: P;

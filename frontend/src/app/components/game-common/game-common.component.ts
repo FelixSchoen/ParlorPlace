@@ -10,6 +10,7 @@ import {NotificationService} from "../../services/notification.service";
 import {ActivatedRoute, Router} from "@angular/router";
 import {ClientNotification} from "../../dto/communication";
 import {NotificationType} from "../../enums/notificationtype";
+import {User} from "../../dto/user";
 
 const WEBSOCKET_URI = environment.WEBSOCKET_BASE_URI + environment.general.WEBSOCKET_GAME_URI;
 const WEBSOCKET_QUEUE_URI = environment.general.WEBSOCKET_QUEUE_PRIMARY_URI;
@@ -42,7 +43,7 @@ export abstract class GameCommonComponent<G extends Game, P extends Player>  imp
 
   ngOnInit(): void {
     this.initialize();
-    this.refresh();
+    this.refreshGame();
   }
 
   ngOnDestroy(): void {
@@ -56,13 +57,32 @@ export abstract class GameCommonComponent<G extends Game, P extends Player>  imp
     this.client = this.communicationService.connectSocket(WEBSOCKET_URI, WEBSOCKET_QUEUE_URI + this.gameIdentifier.token, this.subscribeCallback.bind(this));
   }
 
-  protected abstract refresh(): void
+  protected refreshGame(): void {
+    this.gameService.getGame(this.gameIdentifier).subscribe(
+      {
+        next: (result: G) => {
+          this.game = result
+          this.userService.getCurrentUser().subscribe(
+            {
+              next: (user: User) => {
+                this.currentPlayer = <P>[...this.game.players].filter(function (player) {
+                  return player.user.id == user.id;
+                })[0];
+                this.loading = false;
+              }
+            }
+          )
+        },
+        error: () => this.router.navigate([environment.general.PROFILE_URI]).then()
+      }
+    )
+  }
 
   protected subscribeCallback(payload: any) {
     let notification: ClientNotification = JSON.parse(payload.body);
 
     if (notification.notificationType == NotificationType.STALE_GAME_INFORMATION) {
-      this.refresh();
+      this.refreshGame();
     } else {
       console.error("Unknown Notification Type")
     }

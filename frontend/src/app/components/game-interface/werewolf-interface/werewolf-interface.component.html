@@ -7,6 +7,20 @@
         <mat-icon class="material-icons">home</mat-icon>
       </ng-template>
       <div class="pt-3">
+
+        <!-- Participants Card -->
+        <mat-card class="mx-3 mb-3">
+          <mat-card-header class="pp-center">
+            <mat-card-title>
+              Players
+            </mat-card-title>
+          </mat-card-header>
+
+          <mat-card-content>
+            <app-werewolf-player-list [players]="this.game.players"></app-werewolf-player-list>
+          </mat-card-content>
+        </mat-card>
+
       </div>
     </mat-tab>
 

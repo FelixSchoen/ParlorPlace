@@ -17,10 +17,10 @@
           </mat-card-header>
 
           <mat-card-content>
-            <app-player-list [players]="this.game.players"
-                             [currentPlayer]="this.currentPlayer"
-                             [mayEdit]="isLobbyAdmin"
-                             (playersChanged)="changePlayers($event)"></app-player-list>
+            <app-participant-list [players]="this.game.players"
+                                  [currentPlayer]="this.currentPlayer"
+                                  [mayEdit]="isLobbyAdmin"
+                                  (playersChanged)="changePlayers($event)"></app-participant-list>
           </mat-card-content>
 
           <mat-card-actions>

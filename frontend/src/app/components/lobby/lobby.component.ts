@@ -29,27 +29,6 @@ export abstract class LobbyComponent<G extends Game, P extends Player> extends G
     super(userService, gameService, communicationService, notificationService, activatedRoute, router);
   }
 
-  protected refresh(): void {
-    this.gameService.getGame(this.gameIdentifier).subscribe(
-      {
-        next: (result: G) => {
-          this.game = result
-          this.userService.getCurrentUser().subscribe(
-            {
-              next: (user: User) => {
-                this.currentPlayer = <P>[...this.game.players].filter(function (player) {
-                  return player.user.id == user.id;
-                })[0];
-                this.loading = false;
-              }
-            }
-          )
-        },
-        error: () => this.router.navigate([environment.general.PROFILE_URI]).then()
-      }
-    )
-  }
-
   protected abstract changeLobby(): void;
 
   public quitLobby(user: User | null): void {

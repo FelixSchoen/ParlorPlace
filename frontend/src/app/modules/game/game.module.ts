@@ -18,10 +18,11 @@ import {MatProgressBarModule} from "@angular/material/progress-bar";
 import {MatTabsModule} from "@angular/material/tabs";
 import {WerewolfLobbyComponent} from "../../components/lobby/werewolf-lobby/werewolf-lobby.component";
 import {RoleSelectionComponent} from "../../components/lobby-components/role-selection/role-selection.component";
-import {PlayerListComponent} from "../../components/lobby-components/player-list/player-list.component";
+import {ParticipantListComponent} from "../../components/lobby-components/participant-list/participant-list.component";
 import {GeneralModule} from "../general/general.module";
 import {GameInterfaceComponent} from '../../components/game-interface/game-interface.component';
 import {WerewolfInterfaceComponent} from '../../components/game-interface/werewolf-interface/werewolf-interface.component';
+import {WerewolfPlayerListComponent} from '../../components/game-interface/werewolf-interface/werewolf-player-list/werewolf-player-list.component';
 
 
 @NgModule({
@@ -30,9 +31,10 @@ import {WerewolfInterfaceComponent} from '../../components/game-interface/werewo
     GameComponent,
     WerewolfLobbyComponent,
     RoleSelectionComponent,
-    PlayerListComponent,
+    ParticipantListComponent,
     GameInterfaceComponent,
     WerewolfInterfaceComponent,
+    WerewolfPlayerListComponent,
   ],
     imports: [
         CommonModule,

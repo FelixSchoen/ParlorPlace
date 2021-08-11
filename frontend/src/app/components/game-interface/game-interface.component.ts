@@ -26,8 +26,6 @@ export class GameInterfaceComponent<G extends Game, P extends Player> extends Ga
     super(userService, gameService, communicationService, notificationService, activatedRoute, router);
   }
 
-  protected refresh(): void {
-    this.loading = false;
-  }
+
 
 }

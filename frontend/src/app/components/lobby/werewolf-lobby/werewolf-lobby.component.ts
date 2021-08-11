@@ -32,7 +32,7 @@ export class WerewolfLobbyComponent extends LobbyComponent<WerewolfGame, Werewol
   changeLobby(): void {
     let lobbyChangeRequest = new WerewolfLobbyChangeRequest(this.game.players, this.game.ruleSet);
     this.gameService.changeLobby(this.gameIdentifier, lobbyChangeRequest).subscribe(
-      () => this.refresh(),
+      () => this.refreshGame(),
       (error => this.notificationService.showError(error.error))
     );
   }

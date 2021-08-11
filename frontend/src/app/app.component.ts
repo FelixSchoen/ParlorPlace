@@ -24,12 +24,23 @@ export class AppComponent implements OnInit {
     private domSanitizer: DomSanitizer
   ) {
     this.matIconRegistry.addSvgIcon(
-      "solid-werewolf",
-      this.domSanitizer.bypassSecurityTrustResourceUrl(solid_folder + "claw-marks.svg")
+      "duotone-unknown",
+      this.domSanitizer.bypassSecurityTrustResourceUrl(duotone_folder + "question.svg")
     );
+
+    // Werewolf
+
     this.matIconRegistry.addSvgIcon(
       "duotone-werewolf",
       this.domSanitizer.bypassSecurityTrustResourceUrl(duotone_folder + "claw-marks.svg")
+    );
+    this.matIconRegistry.addSvgIcon(
+      "duotone-villager",
+      this.domSanitizer.bypassSecurityTrustResourceUrl(duotone_folder + "utensil-fork.svg")
+    );
+    this.matIconRegistry.addSvgIcon(
+      "duotone-seer",
+      this.domSanitizer.bypassSecurityTrustResourceUrl(duotone_folder + "eye.svg")
     );
   }
 

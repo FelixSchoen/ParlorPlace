@@ -2,17 +2,21 @@ import {GameType} from "../enums/gametype";
 import {GameState} from "../enums/gamestate";
 import {Player} from "./player";
 import {RuleSet} from "./ruleset";
+import {LogEntry} from "./logentry";
+import {Vote} from "./vote";
 
 export abstract class Game {
   protected constructor(public id: number,
                         public gameType: GameType,
+                        public gameIdentifier: GameIdentifier,
                         public gameState: GameState,
                         public players: Set<Player>,
                         public ruleSet: RuleSet,
                         public round: number,
+                        public votes: Vote[],
+                        public log: LogEntry[],
                         public startedAt: string,
-                        public endedAt: string | null,
-                        public gameIdentifier: GameIdentifier) {
+                        public endedAt: string | null) {
   }
 }
 

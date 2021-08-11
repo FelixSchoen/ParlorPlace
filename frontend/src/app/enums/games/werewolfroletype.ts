@@ -1,4 +1,5 @@
 import {Injectable} from "@angular/core";
+import {TitleCasePipe} from "@angular/common";
 
 export enum WerewolfRoleType {
   VILLAGER = "VILLAGER",
@@ -19,16 +20,11 @@ export class WerewolfRoleTypeUtil {
   }
 
   public static toStringRepresentation(type: WerewolfRoleType): string {
-    switch (type) {
-      case WerewolfRoleType.VILLAGER:
-        return "Villager";
-      case WerewolfRoleType.WEREWOLF:
-        return "Werewolf";
-      case WerewolfRoleType.SEER:
-        return "Seer";
-      default:
-        return "Unknown";
-    }
+    return new TitleCasePipe().transform(type.valueOf())
+  }
+
+  public static toIconRepresentation(type: WerewolfRoleType): string {
+    return "duotone-" + type.toLowerCase();
   }
 
 }
