@@ -1,30 +1,43 @@
 {
-  "role": {
-    "villager": {
-      "name": "Villager",
-      "description": "Find the Werewolves and kill them, before they kill you."
+  "werewolf": {
+    "role": {
+      "villager": {
+        "name": "Villager",
+        "description": "Find the Werewolves and kill them, before they kill you."
+      },
+      "werewolf": {
+        "name": "Werewolf",
+        "description": "You wake up each night together with the other Werewolves and choose 1 victim, which you kill."
+      },
+      "seer": {
+        "name": "Seer",
+        "description": "You choose 1 player every night. You learn whether the player is a Werewolf or not."
+      }
     },
-    "werewolf": {
-      "name": "Werewolf",
-      "description": "You wake up each night together with the other Werewolves and choose 1 victim, which you kill."
+    "faction": {
+      "villagers": {
+        "name": "Villagers",
+        "description": "You win if you kill all the Werewolves."
+      },
+      "werewolves": {
+        "name": "Werewolves",
+        "description": "You win if you kill all the Villagers."
+      },
+      "lovers": {
+        "name": "Lovers",
+        "description": "You win if you and your lover are the only survivors."
+      }
     },
-    "seer": {
-      "name": "Seer",
-      "description": "You choose 1 player every night. You learn whether the player is a Werewolf or not."
-    }
-  },
-  "faction": {
-    "villagers": {
-      "name": "Villagers",
-      "description": "You win if you kill all the Werewolves."
-    },
-    "werewolves": {
-      "name": "Werewolves",
-      "description": "You win if you kill all the Villagers."
-    },
-    "lovers": {
-      "name": "Lovers",
-      "description": "You win if you and your lover are the only survivors."
+    "log": {
+      "start": "Game has started",
+      "end": "Game has ended",
+      "sleep": "You fall asleep",
+      "wake": "You wake up",
+      "death": "{{player}} has died",
+      "werewolves_vote": "The werewolves savage {{player}}",
+      "seer_success": "{{player}} is a Werewolf",
+      "seer_failure": "{{player}} is not a Werewolf",
+      "villagers_vote": "The villagers lynch {{player}}"
     }
   }
 }

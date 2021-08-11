@@ -1,0 +1,5 @@
+<mat-list>
+  <mat-list-item *ngFor="let logEntry of this.log">
+    <h3 matLine>{{this.logService.toStringRepresentation(logEntry, this.players) | async}}</h3>
+  </mat-list-item>
+</mat-list>

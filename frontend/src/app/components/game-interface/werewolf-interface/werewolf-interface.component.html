@@ -60,6 +60,11 @@
             </mat-card-title>
           </mat-card-header>
 
+          <mat-card-content>
+
+            <app-werewolf-log-entry-list [log]="this.game.log" [players]="this.game.players"></app-werewolf-log-entry-list>
+
+          </mat-card-content>
         </mat-card>
 
       </div>
@@ -86,17 +91,17 @@
               <div class="flex-row mw-100 mt-5 pp-center">
                 <div class="col icon-container">
                   <mat-icon inline="true"
-                            svgIcon="duotone-{{this.getCurrentRoleType().valueOf() | internalRepresentation}}"></mat-icon>
+                            svgIcon="duotone-{{this.getCurrentRoleTypeCurrentPlayer().valueOf() | internalRepresentation}}"></mat-icon>
                 </div>
               </div>
               <div class="flex-row mt-5">
                 <div class="col">
-                  <div><h3>{{("role."+(this.getCurrentRoleType().valueOf() | internalRepresentation)+".name") | translate}}</h3></div>
+                  <div><h3>{{("werewolf.role."+(this.getCurrentRoleTypeCurrentPlayer().valueOf() | internalRepresentation)+".name") | translate}}</h3></div>
                 </div>
               </div>
               <div class="flex-row mt-1">
                 <div class="col">
-                  <div>{{("role."+(this.getCurrentRoleType().valueOf() | internalRepresentation)+".description") | translate}}</div>
+                  <div>{{("werewolf.role."+(this.getCurrentRoleTypeCurrentPlayer().valueOf() | internalRepresentation)+".description") | translate}}</div>
                 </div>
               </div>
             </div>

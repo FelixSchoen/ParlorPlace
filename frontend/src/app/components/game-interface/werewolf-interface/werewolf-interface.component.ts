@@ -1,12 +1,13 @@
-import {Component} from '@angular/core';
+import {Component, ViewChild} from '@angular/core';
 import {GameInterfaceComponent} from "../game-interface.component";
-import {WerewolfGame, WerewolfPlayer} from "../../../dto/werewolf";
+import {WerewolfGame, WerewolfLogEntry, WerewolfPlayer} from "../../../dto/werewolf";
 import {UserService} from "../../../services/user.service";
 import {WerewolfGameService} from "../../../services/werewolf-game.service";
 import {CommunicationService} from "../../../services/communication.service";
 import {NotificationService} from "../../../services/notification.service";
 import {ActivatedRoute, Router} from "@angular/router";
 import {WerewolfRoleType} from "../../../enums/games/werewolfroletype";
+import {LogEntryListComponent} from "../../game-interface-components/log-entry-list/log-entry-list.component";
 
 @Component({
   selector: 'app-werewolf-interface',
@@ -15,7 +16,7 @@ import {WerewolfRoleType} from "../../../enums/games/werewolfroletype";
 })
 export class WerewolfInterfaceComponent extends GameInterfaceComponent<WerewolfGame, WerewolfPlayer> {
 
-  public werewolfRoleType = WerewolfRoleType;
+  @ViewChild(LogEntryListComponent) logEntryList: LogEntryListComponent<WerewolfLogEntry, WerewolfPlayer>
 
   public viewedRole : boolean;
 
@@ -36,8 +37,12 @@ export class WerewolfInterfaceComponent extends GameInterfaceComponent<WerewolfG
       this.viewedRole = true;
   }
 
-  getCurrentRoleType(): WerewolfRoleType {
-    return this.currentPlayer.gameRoles[this.currentPlayer.gameRoles.length-1].werewolfRoleType;
+  getCurrentRoleTypeCurrentPlayer(): WerewolfRoleType {
+    return this.getCurrentRoleType(this.currentPlayer);
+  }
+
+  getCurrentRoleType(player: WerewolfPlayer): WerewolfRoleType {
+    return player.gameRoles[this.currentPlayer.gameRoles.length-1].werewolfRoleType;
   }
 
 }
