@@ -44,6 +44,12 @@ public abstract class VoteCollection<P extends Player<?>, T> {
     @NotNull
     protected Integer amountVotes;
 
+    @Column(nullable = false)
+    protected Boolean allowAbstain;
+
+    @Column
+    protected Boolean abstain;
+
     public abstract Set<T> getSubjects();
 
     public abstract void setSubjects(Set<T> subjects);

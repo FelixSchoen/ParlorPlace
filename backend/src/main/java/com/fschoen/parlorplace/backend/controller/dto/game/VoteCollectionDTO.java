@@ -20,6 +20,11 @@ public abstract class VoteCollectionDTO<P extends PlayerDTO<?>, T> {
     @NotNull
     protected Integer amountVotes;
 
+    @NotNull
+    protected Boolean allowAbstain;
+
+    protected Boolean abstain;
+
     public abstract Set<T> getSubjects();
 
     public abstract void setSubjects(Set<T> subjects);

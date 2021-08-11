@@ -298,6 +298,7 @@ public class DatabasePopulator {
                                 put(p, WerewolfVoteCollection.builder()
                                         .player(p)
                                         .amountVotes(1)
+                                        .abstain(false)
                                         .subjects(new HashSet<>(){{
                                             add(p);
                                         }})
