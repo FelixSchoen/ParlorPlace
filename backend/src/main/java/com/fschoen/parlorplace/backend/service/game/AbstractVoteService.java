@@ -112,12 +112,16 @@ public abstract class AbstractVoteService<
 
         // Check if vote proposal is valid
         V finalVote = vote;
-        if (voteCollectionProposal.getSelection().size() > vote.getVoteCollectionMap().get(player).getAmountVotes()
-                || voteCollectionProposal.getSelection().stream().anyMatch(selection -> !finalVote.getVoteCollectionMap().get(player).getSubjects().contains(selection)))
+        C asdf = vote.getVoteCollectionMap().get(player);
+        if (voteCollectionProposal.getSelection().size() > asdf.getAmountVotes()
+                || voteCollectionProposal.getSelection().stream().anyMatch(selection -> !finalVote.getVoteCollectionMap().get(player).getSubjects().contains(selection))
+                || voteCollectionProposal.getAllowAbstain() != asdf.getAllowAbstain()
+                || !voteCollectionProposal.getAllowAbstain() && voteCollectionProposal.getAbstain() != null && voteCollectionProposal.getAbstain())
             throw new VoteException(Messages.exception(MessageIdentifier.VOTE_DATA_CONFLICT));
 
         // Transfer vote proposal to vote entity
         C voteCollection = vote.getVoteCollectionMap().get(player);
+        voteCollection.setAbstain(voteCollectionProposal.getAbstain());
         voteCollection.getSelection().removeAll(voteCollection.getSelection());
         for (T element : voteCollectionProposal.getSelection()) {
             voteCollection.getSelection().add(voteCollection.getSubjects().stream().filter(subject -> subject.equals(element)).findAny().orElseThrow());
