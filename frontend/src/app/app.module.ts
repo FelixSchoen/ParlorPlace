@@ -2,7 +2,10 @@ import {NgModule} from '@angular/core';
 import {BrowserModule} from '@angular/platform-browser';
 
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {HttpClientModule} from "@angular/common/http";
+
+import {TranslateLoader, TranslateModule} from '@ngx-translate/core';
+import {TranslateHttpLoader} from '@ngx-translate/http-loader';
+import {HttpClient, HttpClientModule} from '@angular/common/http';
 
 import {authInterceptorProviders} from './interceptors/auth.interceptor';
 import {AppRoutingModule} from './app-routing.module';
@@ -19,6 +22,13 @@ import {OverlayContainer} from "@angular/cdk/overlay";
     BrowserModule,
     BrowserAnimationsModule,
     HttpClientModule,
+    TranslateModule.forRoot({
+      loader: {
+        provide: TranslateLoader,
+        useFactory: HttpLoaderFactory,
+        deps: [HttpClient]
+      }
+    }),
     MatSnackBarModule,
   ],
   providers: [authInterceptorProviders],
@@ -44,4 +54,8 @@ export class AppModule {
     overlayContainerClasses.add(theme);
   }
 
+}
+
+export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
+  return new TranslateHttpLoader(http);
 }

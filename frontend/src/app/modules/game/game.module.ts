@@ -23,6 +23,7 @@ import {GeneralModule} from "../general/general.module";
 import {GameInterfaceComponent} from '../../components/game-interface/game-interface.component';
 import {WerewolfInterfaceComponent} from '../../components/game-interface/werewolf-interface/werewolf-interface.component';
 import {WerewolfPlayerListComponent} from '../../components/game-interface/werewolf-interface/werewolf-player-list/werewolf-player-list.component';
+import {MatBadgeModule} from "@angular/material/badge";
 
 
 @NgModule({
@@ -36,22 +37,24 @@ import {WerewolfPlayerListComponent} from '../../components/game-interface/werew
     WerewolfInterfaceComponent,
     WerewolfPlayerListComponent,
   ],
-    imports: [
-        CommonModule,
-        GeneralModule,
-        GameRoutingModule,
-        ReactiveFormsModule,
-        MatChipsModule,
-        MatCardModule,
-        MatButtonModule,
-        MatDialogModule,
-        MatInputModule,
-        MatAutocompleteModule,
-        MatIconModule,
-        DragDropModule,
-        MatListModule,
-        MatProgressBarModule,
-        MatTabsModule,
-    ]
+  imports: [
+    CommonModule,
+    GeneralModule,
+    GameRoutingModule,
+    ReactiveFormsModule,
+    MatChipsModule,
+    MatCardModule,
+    MatButtonModule,
+    MatDialogModule,
+    MatInputModule,
+    MatAutocompleteModule,
+    MatIconModule,
+    DragDropModule,
+    MatListModule,
+    MatProgressBarModule,
+    MatTabsModule,
+    MatBadgeModule,
+  ]
 })
-export class GameModule { }
+export class GameModule {
+}

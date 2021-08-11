@@ -6,6 +6,7 @@ import {WerewolfGameService} from "../../../services/werewolf-game.service";
 import {CommunicationService} from "../../../services/communication.service";
 import {NotificationService} from "../../../services/notification.service";
 import {ActivatedRoute, Router} from "@angular/router";
+import {WerewolfRoleType} from "../../../enums/games/werewolfroletype";
 
 @Component({
   selector: 'app-werewolf-interface',
@@ -13,6 +14,10 @@ import {ActivatedRoute, Router} from "@angular/router";
   styleUrls: ['./werewolf-interface.component.scss']
 })
 export class WerewolfInterfaceComponent extends GameInterfaceComponent<WerewolfGame, WerewolfPlayer> {
+
+  public werewolfRoleType = WerewolfRoleType;
+
+  public viewedRole : boolean;
 
   constructor(
     public userService: UserService,
@@ -23,6 +28,16 @@ export class WerewolfInterfaceComponent extends GameInterfaceComponent<WerewolfG
     public router: Router
   ) {
     super(userService, gameService, communicationService, notificationService, activatedRoute, router)
+    this.viewedRole = false;
+  }
+
+  public selectedTabChange(event: any): void {
+    if (event.index == 3)
+      this.viewedRole = true;
+  }
+
+  getCurrentRoleType(): WerewolfRoleType {
+    return this.currentPlayer.gameRoles[this.currentPlayer.gameRoles.length-1].werewolfRoleType;
   }
 
 }

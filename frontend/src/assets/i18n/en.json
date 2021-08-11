@@ -1,0 +1,30 @@
+{
+  "role": {
+    "villager": {
+      "name": "Villager",
+      "description": "Find the Werewolves and kill them, before they kill you."
+    },
+    "werewolf": {
+      "name": "Werewolf",
+      "description": "You wake up each night together with the other Werewolves and choose 1 victim, which you kill."
+    },
+    "seer": {
+      "name": "Seer",
+      "description": "You choose 1 player every night. You learn whether the player is a Werewolf or not."
+    }
+  },
+  "faction": {
+    "villagers": {
+      "name": "Villagers",
+      "description": "You win if you kill all the Werewolves."
+    },
+    "werewolves": {
+      "name": "Werewolves",
+      "description": "You win if you kill all the Villagers."
+    },
+    "lovers": {
+      "name": "Lovers",
+      "description": "You win if you and your lover are the only survivors."
+    }
+  }
+}

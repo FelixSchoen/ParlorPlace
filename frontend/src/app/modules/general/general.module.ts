@@ -8,6 +8,7 @@ import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
 import {DistinctPipe} from "../../pipes/distinct.pipe";
 import {HttpClientModule} from "@angular/common/http";
 import {InternalRepresentationPipe} from "../../pipes/internal-representation.pipe";
+import {TranslateModule} from "@ngx-translate/core";
 
 
 @NgModule({
@@ -19,11 +20,13 @@ import {InternalRepresentationPipe} from "../../pipes/internal-representation.pi
   ],
   imports: [
     CommonModule,
+    TranslateModule,
     GeneralRoutingModule,
     HttpClientModule,
     MatProgressSpinnerModule
   ],
   exports: [
+    TranslateModule,
     LoadingIndicatorComponent,
     DistinctPipe,
     InternalRepresentationPipe,

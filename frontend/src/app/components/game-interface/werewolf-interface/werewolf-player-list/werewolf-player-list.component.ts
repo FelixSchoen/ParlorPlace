@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input} from '@angular/core';
 import {WerewolfPlayer} from "../../../../dto/werewolf";
 import {PlayerState} from "../../../../enums/playerstate";
 
@@ -7,17 +7,13 @@ import {PlayerState} from "../../../../enums/playerstate";
   templateUrl: './werewolf-player-list.component.html',
   styleUrls: ['./werewolf-player-list.component.scss']
 })
-export class WerewolfPlayerListComponent implements OnInit {
+export class WerewolfPlayerListComponent {
 
   @Input() players: Set<WerewolfPlayer>;
 
   public playerState = PlayerState;
 
   constructor() {
-  }
-
-  ngOnInit(): void {
-    console.log(this.players)
   }
 
   public sortPlayers(
