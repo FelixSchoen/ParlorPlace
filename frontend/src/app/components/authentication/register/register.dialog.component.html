@@ -57,7 +57,7 @@
     <mat-label>{{"general.attribute.email" | translate}}</mat-label>
     <input matInput [(ngModel)]="data.email" [formControl]="emailControl">
     <mat-error *ngIf="emailControl.hasError('required')">{{"general.validation.required" | translate:{"name": ("general.attribute.email" | translate)} }}</mat-error>
-    <mat-error *ngIf="emailControl.hasError('email')" i18n>{{"general.validation.invalid" | translate:{"name": ("general.attribute.email" | translate)} }}</mat-error>
+    <mat-error *ngIf="emailControl.hasError('email')">{{"general.validation.invalid" | translate:{"name": ("general.attribute.email" | translate)} }}</mat-error>
   </mat-form-field>
 
 </mat-dialog-content>

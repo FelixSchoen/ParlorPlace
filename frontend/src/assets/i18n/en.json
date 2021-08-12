@@ -7,13 +7,23 @@
       "register": "Register",
       "signOut": "Sign Out",
       "edit": "Edit",
-      "goHome": "Home"
+      "goHome": "Home",
+      "host": "Host",
+      "join": "Join",
+      "start": "Start",
+      "quit": "Quit"
     },
     "attribute": {
       "username": "Username",
       "nickname": "Nickname",
       "password": "Password",
-      "email": "E-Mail"
+      "email": "E-Mail",
+      "gameIdentifier": "Game Identifier",
+      "host": "Host",
+      "roles": "Roles",
+      "players": "Players",
+      "rules": "Rules",
+      "settings": "Settings"
     },
     "validation": {
       "required": "{{name}} is required",
@@ -42,7 +52,11 @@
     "profile": {
       "userSearch": "User search",
       "userSearchPlaceholder": "Search for a user ...",
-      "activeGames": "Active Games"
+      "activeGames": "Active Games",
+      "editUser": "Edit user"
+    },
+    "gameJoin": {
+      "join": "Join Game"
     }
   },
   "werewolf": {
@@ -84,6 +98,12 @@
       "seer_success": "{{player}} is a Werewolf",
       "seer_failure": "{{player}} is not a Werewolf",
       "villagers_vote": "The villagers lynch {{player}}"
+    },
+    "misc": {
+      "village": "Village",
+      "action": "Action",
+      "log": "Log",
+      "information": "Information"
     }
   }
 }
