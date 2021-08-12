@@ -1,4 +1,38 @@
 {
+  "general": {
+    "confirm": "Confirm",
+    "cancel": "Cancel",
+    "attribute": {
+      "username": "Username",
+      "nickname": "Nickname",
+      "password": "Password",
+      "email": "E-Mail"
+    },
+    "validation": {
+      "required": "{{name}} is required",
+      "invalid": "{{name}} is invalid",
+      "minLength": "{{name}} must be at least {{value}} characters",
+      "maxLength": "{{name}} must be at most {{value}} characters",
+      "matching": "{{name1}} and {{name2}} do not match"
+    }
+  },
+  "module": {
+    "entry": {
+      "title": "ParlorPlace",
+      "welcome": "Welcome to ParlorPlace, your central hub for all social deduction based games!",
+      "accountCreation": "Please sign up for a new account or log in if you are already registered."
+    },
+    "authentication": {
+      "title": "Authentication",
+      "login": "Login",
+      "register": "Register",
+      "confirmPassword": "Confirm Password"
+    },
+    "credits": {
+      "notice": "Created by Felix Schön, 2021",
+      "acknowledgement": "Special thanks to Hirsch"
+    }
+  },
   "werewolf": {
     "role": {
       "villager": {

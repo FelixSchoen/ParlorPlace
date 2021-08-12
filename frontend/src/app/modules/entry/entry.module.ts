@@ -13,6 +13,7 @@ import {MatButtonModule} from "@angular/material/button";
 import {MatDialogModule} from "@angular/material/dialog";
 import {MatInputModule} from "@angular/material/input";
 import {EntryComponent} from "./entry.component";
+import {GeneralModule} from "../general/general.module";
 
 
 @NgModule({
@@ -23,16 +24,17 @@ import {EntryComponent} from "./entry.component";
     LoginComponent,
     DialogContentSigninDialog,
   ],
-  imports: [
-    CommonModule,
-    EntryRoutingModule,
-    FormsModule,
-    ReactiveFormsModule,
-    MatCardModule,
-    MatButtonModule,
-    MatDialogModule,
-    MatInputModule,
-  ],
+    imports: [
+        CommonModule,
+        EntryRoutingModule,
+        FormsModule,
+        ReactiveFormsModule,
+        MatCardModule,
+        MatButtonModule,
+        MatDialogModule,
+        MatInputModule,
+        GeneralModule,
+    ],
   entryComponents: [DialogContentSignupDialog, DialogContentSigninDialog,],
 })
 export class EntryModule {
