@@ -15,7 +15,7 @@ public abstract class VoteExtendedObfuscationService<
         P extends PlayerDTO<?>,
         C extends VoteCollectionDTO<P, ?>,
         POServ extends PlayerExtendedObfuscationService<P, G>,
-        COServ extends VoteCollectionExtendedObfuscationService<C, ?, G, P, POServ, ?>
+        COServ extends VoteCollectionExtendedObfuscationService<C, ?, G, P, ?>
         > extends ExtendedObfuscationService<V, G> {
 
     private final POServ playerObfuscationService;

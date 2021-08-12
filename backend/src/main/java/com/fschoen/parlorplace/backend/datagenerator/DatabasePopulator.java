@@ -296,7 +296,6 @@ public class DatabasePopulator {
                         .voteCollectionMap(new HashMap<>(){{
                             for (WerewolfPlayer p : werewolfOngoingGame1.getPlayers()) {
                                 put(p, WerewolfVoteCollection.builder()
-                                        .player(p)
                                         .amountVotes(1)
                                         .allowAbstain(false)
                                         .subjects(new HashSet<>(){{

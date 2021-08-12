@@ -108,7 +108,7 @@ public abstract class AbstractVoteService<
         G game = this.getActiveGame(gameIdentifier);
         V vote = this.voteRepository.findOneById(voteId).orElseThrow();
 
-        P player = this.playerRepository.findOneById(voteCollectionProposal.getPlayer().getId()).orElseThrow(() -> new DataConflictException(Messages.exception(MessageIdentifier.PLAYER_EXISTS_NOT)));
+        P player = game.getPlayers().stream().filter(p -> p.getUser().equals(principal)).findFirst().orElseThrow(() -> new DataConflictException(Messages.exception(MessageIdentifier.PLAYER_EXISTS_NOT)));
 
         // Check if vote proposal is valid
         V finalVote = vote;
@@ -157,7 +157,6 @@ public abstract class AbstractVoteService<
 
             try {
                 voteCollection = this.getVoteCollectionClass().getDeclaredConstructor().newInstance();
-                voteCollection.setPlayer(voter);
                 voteCollection.setAmountVotes(amountVotes);
                 voteCollection.setSubjects(new HashSet<>() {{
                     addAll(subjects);

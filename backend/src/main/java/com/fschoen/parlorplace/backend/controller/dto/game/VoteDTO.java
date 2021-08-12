@@ -14,6 +14,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.Map;
+import java.util.Set;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -32,6 +33,9 @@ public abstract class VoteDTO<P extends PlayerDTO<?>, C extends VoteCollectionDT
 
     @NotNull
     protected D voteDescriptor;
+
+    @NotNull
+    protected Set<P> voters;
 
     @JsonSerialize(keyUsing = PlayerDTOSerialization.PlayerDTOKeySerializer.class)
     @JsonDeserialize(keyUsing = PlayerDTOSerialization.PlayerDTOKeyDeserializer.class)

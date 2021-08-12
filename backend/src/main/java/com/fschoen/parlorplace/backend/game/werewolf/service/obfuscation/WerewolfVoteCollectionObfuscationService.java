@@ -14,13 +14,12 @@ public class WerewolfVoteCollectionObfuscationService extends VoteCollectionExte
         WerewolfPlayerDTO,
         WerewolfGameDTO,
         WerewolfPlayerDTO,
-        WerewolfPlayerObfuscationService,
         WerewolfPlayerObfuscationService
         > {
 
     @Autowired
-    public WerewolfVoteCollectionObfuscationService(UserRepository userRepository, WerewolfPlayerObfuscationService playerObfuscationService, WerewolfPlayerObfuscationService targetObfuscationService) {
-        super(userRepository, playerObfuscationService, targetObfuscationService);
+    public WerewolfVoteCollectionObfuscationService(UserRepository userRepository, WerewolfPlayerObfuscationService targetObfuscationService) {
+        super(userRepository, targetObfuscationService);
     }
 
 }
