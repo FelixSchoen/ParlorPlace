@@ -1,10 +1,10 @@
 <div class="container p-3">
 
   <mat-form-field appearance="outline" class="px-3 w-100">
-    <mat-label>User search</mat-label>
+    <mat-label>{{"module.profile.userSearch" | translate}}</mat-label>
     <mat-icon matSuffix>person</mat-icon>
     <input matInput type="text"
-           placeholder="Search for a user..."
+           placeholder="{{'module.profile.userSearchPlaceholder' | translate}}"
            [formControl]="userSearchControl"
            [matAutocomplete]="userSearchAutocomplete">
     <mat-autocomplete #userSearchAutocomplete="matAutocomplete" [displayWith]="displayUser">
@@ -44,8 +44,8 @@
       </mat-card-header>
 
       <mat-card-actions *ngIf="currentUser.id == profileUser.id || this.userService.isAdmin(currentUser)">
-        <button mat-button (click)="signOut()" *ngIf="currentUser.id == profileUser.id">SIGN OUT</button>
-        <button mat-button (click)="openEditDialog()">EDIT</button>
+        <button mat-button (click)="signOut()" *ngIf="currentUser.id == profileUser.id">{{("general.action.signOut" | translate).toUpperCase()}}</button>
+        <button mat-button (click)="openEditDialog()">{{("general.action.edit" | translate).toUpperCase()}}</button>
       </mat-card-actions>
     </mat-card>
 
@@ -54,7 +54,7 @@
       <mat-card class="mx-3 mt-3">
         <mat-card-header class="pp-center">
           <mat-card-title>
-            Active Games
+            {{"module.profile.activeGames" | translate}}
           </mat-card-title>
         </mat-card-header>
 
@@ -81,7 +81,7 @@
 
     <!-- Home -->
     <div *ngIf="profileUser.id != currentUser.id" class="pp-center pt-3">
-      <button mat-button color="accent" (click)="goHome()">Home</button>
+      <button mat-button color="accent" (click)="goHome()">{{"general.action.goHome" | translate}}</button>
     </div>
 
   </div>

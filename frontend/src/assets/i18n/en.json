@@ -1,7 +1,14 @@
 {
   "general": {
-    "confirm": "Confirm",
-    "cancel": "Cancel",
+    "action": {
+      "confirm": "Confirm",
+      "cancel": "Cancel",
+      "logIn": "Login",
+      "register": "Register",
+      "signOut": "Sign Out",
+      "edit": "Edit",
+      "goHome": "Home"
+    },
     "attribute": {
       "username": "Username",
       "nickname": "Nickname",
@@ -31,6 +38,11 @@
     "credits": {
       "notice": "Created by Felix Schön, 2021",
       "acknowledgement": "Special thanks to Hirsch"
+    },
+    "profile": {
+      "userSearch": "User search",
+      "userSearchPlaceholder": "Search for a user ...",
+      "activeGames": "Active Games"
     }
   },
   "werewolf": {
