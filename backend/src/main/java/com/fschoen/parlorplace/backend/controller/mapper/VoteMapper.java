@@ -8,7 +8,7 @@ import org.mapstruct.Mapping;
 
 import java.util.List;
 
-public interface VoteMapper<V extends Vote<P, ?, ?>, VDTO extends VoteDTO<PDTO, ?, ?, ?>, P extends Player<?>, PDTO extends PlayerDTO<?>> {
+public interface VoteMapper<V extends Vote<P, ?, ?, ?>, VDTO extends VoteDTO<PDTO, ?, ?, ?>, P extends Player<?>, PDTO extends PlayerDTO<?>> {
 
     @Mapping(source = "voteCollectionMap", target = "voters")
     VDTO toDTO(V vote);

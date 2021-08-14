@@ -27,6 +27,7 @@ import javax.persistence.SequenceGenerator;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.Map;
+import java.util.Set;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -38,7 +39,8 @@ import java.util.Map;
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public abstract class Vote<
         P extends Player<?>,
-        C extends VoteCollection<P, ?>,
+        T,
+        C extends VoteCollection<T>,
         D extends Enum<D>> {
 
     @Id
@@ -76,7 +78,15 @@ public abstract class Vote<
     protected Map<P, C> voteCollectionMap;
 
     @Column(nullable = false)
+    @NotNull
+    protected Integer outcomeAmount;
+
+    @Column(nullable = false)
     protected LocalDateTime endTime;
+
+    public abstract Set<T> getOutcome();
+
+    public abstract void setOutcome(Set<T> tSet);
 
     // TODO Not ideal, I would have preferred to have this as a field, but since enums cannot inherit I cannot specify a supertype using targetEntity=
     public abstract D getVoteDescriptor();

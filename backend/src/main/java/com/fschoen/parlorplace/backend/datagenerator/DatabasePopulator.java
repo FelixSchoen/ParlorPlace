@@ -305,6 +305,8 @@ public class DatabasePopulator {
                                         .build());
                             }
                         }})
+                        .outcome(new HashSet<>())
+                        .outcomeAmount(1)
                         .build()
         );
         werewolfOngoingGame1.getLog().add(

@@ -24,9 +24,13 @@ import org.springframework.core.task.TaskExecutor;
 
 import java.lang.reflect.InvocationTargetException;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
@@ -35,11 +39,11 @@ import java.util.stream.Collectors;
 
 @Slf4j
 public abstract class AbstractVoteService<
-        V extends Vote<P, C, D>,
+        V extends Vote<P, T, C, D>,
         G extends Game<P, ?, V, ?>,
         P extends Player<?>,
         T,
-        C extends VoteCollection<P, T>,
+        C extends VoteCollection<T>,
         D extends Enum<D>,
         GRepo extends GameRepository<G>,
         PRepo extends PlayerRepository<P>,
@@ -63,7 +67,7 @@ public abstract class AbstractVoteService<
         this.taskExecutor = taskExecutor;
     }
 
-    public CompletableFuture<V> requestVote(GameIdentifier gameIdentifier, VoteType voteType, Map<P, C> voteCollectionMap, D voteDescriptor, int durationInSeconds) {
+    public CompletableFuture<V> requestVote(GameIdentifier gameIdentifier, VoteType voteType, Integer outcomeAmount, Map<P, C> voteCollectionMap, D voteDescriptor, int durationInSeconds) {
         log.info("Starting new Vote for Game: {}", gameIdentifier.getToken());
 
         G game = getActiveGame(gameIdentifier);
@@ -75,6 +79,8 @@ public abstract class AbstractVoteService<
             vote.setVoteState(VoteState.ONGOING);
             vote.setVoteType(voteType);
             vote.setVoteCollectionMap(voteCollectionMap);
+            vote.setOutcome(new HashSet<>());
+            vote.setOutcomeAmount(outcomeAmount);
             vote.setVoteDescriptor(voteDescriptor);
             vote.setEndTime(LocalDateTime.now().plusSeconds(durationInSeconds));
         } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
@@ -222,6 +228,43 @@ public abstract class AbstractVoteService<
 
             // Close vote
             currentVote.setVoteState(VoteState.CONCLUDED);
+
+            // Calculate outcome
+            Map<T, Integer> votes = new HashMap<>();
+
+            for (Entry<P, C> entry : currentVote.getVoteCollectionMap().entrySet()) {
+                for (T t : entry.getValue().getSelection()) {
+                    votes.putIfAbsent(t, 0);
+                    votes.put(t, votes.get(t) + 1);
+                }
+            }
+
+            // Sort by votes
+            List<Entry<T, Integer>> sortedCandidates = votes.entrySet().stream().sorted(Map.Entry.comparingByValue(Integer::compareTo)).collect(Collectors.toList());
+
+            // Create bins of equal votes
+            List<List<T>> binList = new ArrayList<>();
+            List<T> currentBin = new ArrayList<>();
+            int currentMaxVotes = sortedCandidates.get(0).getValue();
+
+            for (Entry<T, Integer> entry : sortedCandidates) {
+                if (entry.getValue() < currentMaxVotes) {
+                    currentMaxVotes = entry.getValue();
+                    binList.add(currentBin);
+                    currentBin = new ArrayList<>();
+                }
+                currentBin.add(entry.getKey());
+            }
+
+            // Shuffle bins
+            for (List<T> bin : binList) {
+                Collections.shuffle(bin);
+            }
+
+            // Get top outcomeAmount choices
+            List<T> flatList = binList.stream().flatMap(List::stream).collect(Collectors.toList());
+            currentVote.getOutcome().addAll(flatList.stream().limit(currentVote.getOutcomeAmount()).collect(Collectors.toList()));
+
             voteRepository.save(currentVote);
 
             // Complete future

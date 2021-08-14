@@ -25,7 +25,7 @@ import java.util.Set;
 @ToString(callSuper = true)
 @Data
 @Entity
-public class WerewolfVoteCollection extends VoteCollection<WerewolfPlayer, WerewolfPlayer> {
+public class WerewolfVoteCollection extends VoteCollection<WerewolfPlayer> {
 
     @ManyToMany(targetEntity = Player.class)
     @JoinTable(

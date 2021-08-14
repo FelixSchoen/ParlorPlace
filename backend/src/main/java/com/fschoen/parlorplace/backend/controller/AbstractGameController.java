@@ -156,7 +156,7 @@ public abstract class AbstractGameController<
     }
 
     // TODO My thoughts behind this were as follows: If a game allows for two different types of votes (e.g. a vote on players and on other objects) I want to have as little code duplication as possible, which is why I'm providing one fixed endpoint, but the subclasses can easily reuse the vote implementation for different types of votes
-    protected <C extends VoteCollection<?,?>, CDTO extends VoteCollectionDTO<?,?>, VS extends AbstractVoteService<?, G, ?, ?, C, ?, ?, ?, ?>, VMap extends VoteCollectionMapper<C, CDTO, ?, ?>>
+    protected <C extends VoteCollection<?>, CDTO extends VoteCollectionDTO<?,?>, VS extends AbstractVoteService<?, G, ?, ?, C, ?, ?, ?, ?>, VMap extends VoteCollectionMapper<C, CDTO, ?, ?>>
     ResponseEntity<GDTO> vote(VS voteService, VMap voteCollectionMapper, String identifier, Long voteIdentifier, CDTO voteCollectionDTO) {
         voteValidator.validate(voteCollectionDTO).throwIfInvalid();
 
