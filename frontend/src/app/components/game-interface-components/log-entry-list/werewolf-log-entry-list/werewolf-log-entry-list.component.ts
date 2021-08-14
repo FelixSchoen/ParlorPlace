@@ -5,8 +5,8 @@ import {WerewolfLogService} from "../../../../services/werewolf-log.service";
 
 @Component({
   selector: 'app-werewolf-log-entry-list',
-  templateUrl: './werewolf-log-entry-list.component.html',
-  styleUrls: ['./werewolf-log-entry-list.component.scss']
+  templateUrl: '../log-entry-list.component.html',
+  styleUrls: ['../log-entry-list.component.scss']
 })
 // TODO Want to delete this class if generic approach with the abstract log component works
 export class WerewolfLogEntryListComponent extends LogEntryListComponent<WerewolfLogEntry, WerewolfPlayer> {

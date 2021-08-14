@@ -18,7 +18,7 @@
   <!-- Profile Section -->
   <div *ngIf="!loading && !error">
     <!-- Floating Action Button -->
-    <button mat-fab color="accent" class="btn-fab" (click)="openEnterGameDialog()">
+    <button mat-fab color="primary" class="btn-fab" (click)="openEnterGameDialog()">
       <mat-icon>games</mat-icon>
     </button>
 
@@ -44,7 +44,8 @@
       </mat-card-header>
 
       <mat-card-actions *ngIf="currentUser.id == profileUser.id || this.userService.isAdmin(currentUser)">
-        <button mat-button (click)="signOut()" *ngIf="currentUser.id == profileUser.id">{{("general.action.signOut" | translate).toUpperCase()}}</button>
+        <button mat-button (click)="signOut()"
+                *ngIf="currentUser.id == profileUser.id">{{("general.action.signOut" | translate).toUpperCase()}}</button>
         <button mat-button (click)="openEditDialog()">{{("general.action.edit" | translate).toUpperCase()}}</button>
       </mat-card-actions>
     </mat-card>
@@ -61,17 +62,17 @@
         <mat-card-content>
           <mat-list>
             <mat-list-item *ngFor="let gameEntry of activeGamesMap | keyvalue; last as last">
-                <mat-selection-list [multiple]="false" class="w-100">
-                  <mat-list-option *ngFor="let game of gameEntry.value" (click)="joinGameFromList(game)">
-                    <mat-icon mat-list-icon svgIcon="duotone-{{gameEntry.key | lowercase}}"></mat-icon>
-                    <h3 matLine>
-                      {{gameEntry.key | titlecase}}
-                    </h3>
-                    <p matLine>
-                      {{game.gameIdentifier.token}}
-                    </p>
-                  </mat-list-option>
-                </mat-selection-list>
+              <mat-selection-list [multiple]="false" class="w-100">
+                <mat-list-option *ngFor="let game of gameEntry.value" (click)="joinGameFromList(game)">
+                  <mat-icon mat-list-icon svgIcon="duotone-{{gameEntry.key | lowercase}}"></mat-icon>
+                  <h3 matLine>
+                    {{gameEntry.key | titlecase}}
+                  </h3>
+                  <p matLine>
+                    {{game.gameIdentifier.token}}
+                  </p>
+                </mat-list-option>
+              </mat-selection-list>
               <mat-divider [inset]="true" *ngIf="!last"></mat-divider>
             </mat-list-item>
           </mat-list>

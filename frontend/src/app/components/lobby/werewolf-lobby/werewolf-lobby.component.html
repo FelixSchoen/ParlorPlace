@@ -24,8 +24,8 @@
           </mat-card-content>
 
           <mat-card-actions>
-            <button mat-button (click)="quitLobby(this.currentPlayer.user)">QUIT</button>
-            <button mat-button color="primary" *ngIf="isLobbyAdmin(this.currentPlayer)">START</button>
+            <button mat-button (click)="quitLobby(this.currentPlayer.user)">{{("general.action.quit" | translate).toUpperCase()}}</button>
+            <button mat-button color="primary" *ngIf="isLobbyAdmin(this.currentPlayer)" (click)="startGame()">{{("general.action.start" | translate).toUpperCase()}}</button>
           </mat-card-actions>
         </mat-card>
 

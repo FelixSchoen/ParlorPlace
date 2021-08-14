@@ -15,7 +15,6 @@ import {WerewolfGame, WerewolfLobbyChangeRequest, WerewolfPlayer} from "../../..
 })
 export class WerewolfLobbyComponent extends LobbyComponent<WerewolfGame, WerewolfPlayer> {
 
-  public werewolfRoleTypeToString = WerewolfRoleTypeUtil.toStringRepresentation;
   public werewolfRoleTypeArray: WerewolfRoleType[] = WerewolfRoleTypeUtil.getArray();
 
   constructor(

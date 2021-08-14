@@ -10,7 +10,6 @@ import {environment} from "../../../environments/environment";
 import {CommunicationService} from "../../services/communication.service";
 import {GameCommonComponent} from "../game-common/game-common.component";
 
-
 @Component({
   selector: 'app-lobby',
   templateUrl: './lobby.component.html',
@@ -30,6 +29,12 @@ export abstract class LobbyComponent<G extends Game, P extends Player> extends G
   }
 
   protected abstract changeLobby(): void;
+
+  public startGame(): void {
+    this.gameService.startGame(this.gameIdentifier).subscribe({
+      error: error => this.notificationService.showError(error.error)
+    })
+  }
 
   public quitLobby(user: User | null): void {
     this.gameService.quitGame(this.gameIdentifier, user).subscribe(

@@ -10,6 +10,8 @@ export abstract class Vote {
                         public voteType: VoteType,
                         public voteDescriptor: EnumValue,
                         public voteCollectionMap: Map<Player, VoteCollection>,
+                        public outcome: Set<any>,
+                        public outcomeAmount: number,
                         public endTime: number) {
   }
 

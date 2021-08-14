@@ -39,5 +39,4 @@ export class CommunicationService {
       client.webSocket.close();
   }
 
-
 }

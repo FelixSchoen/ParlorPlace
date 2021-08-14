@@ -55,8 +55,10 @@ export class WerewolfVote extends Vote {
               public voteType: VoteType,
               public voteDescriptor: EnumValue,
               public voteCollectionMap: Map<WerewolfPlayer, WerewolfVoteCollection>,
+              public outcome: Set<WerewolfPlayer>,
+              public outcomeAmount: number,
               public endTime: number) {
-    super(id, voteState, voteType, voteDescriptor, voteCollectionMap, endTime);
+    super(id, voteState, voteType, voteDescriptor, voteCollectionMap, outcome, outcomeAmount, endTime);
   }
 
 }

@@ -26,6 +26,8 @@ import {WerewolfPlayerListComponent} from '../../components/game-interface/werew
 import {MatBadgeModule} from "@angular/material/badge";
 import {LogEntryListComponent} from '../../components/game-interface-components/log-entry-list/log-entry-list.component';
 import {WerewolfLogEntryListComponent} from '../../components/game-interface-components/log-entry-list/werewolf-log-entry-list/werewolf-log-entry-list.component';
+import { VoteComponent } from '../../components/game-interface-components/vote/vote.component';
+import { WerewolfVoteComponent } from '../../components/werewolf-vote/werewolf-vote.component';
 
 
 @NgModule({
@@ -38,8 +40,9 @@ import {WerewolfLogEntryListComponent} from '../../components/game-interface-com
     GameInterfaceComponent,
     WerewolfInterfaceComponent,
     WerewolfPlayerListComponent,
-    LogEntryListComponent,
     WerewolfLogEntryListComponent,
+    VoteComponent,
+    WerewolfVoteComponent,
   ],
   imports: [
     CommonModule,

@@ -46,7 +46,6 @@ export class GameComponent implements OnInit {
     if (queryIdentifier != undefined && queryIdentifier.length > 0) {
       this.loadComponent(queryIdentifier);
     }
-
   }
 
   private loadComponent(componentIdentifier: string) {

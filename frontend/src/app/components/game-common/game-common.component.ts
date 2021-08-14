@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Directive, OnDestroy, OnInit} from '@angular/core';
 import {environment} from "../../../environments/environment";
 import {Game, GameIdentifier} from "../../dto/game";
 import {CompatClient} from "@stomp/stompjs/esm6/compatibility/compat-client";
@@ -11,16 +11,15 @@ import {ActivatedRoute, Router} from "@angular/router";
 import {ClientNotification} from "../../dto/communication";
 import {NotificationType} from "../../enums/notificationtype";
 import {User} from "../../dto/user";
+import {GameState} from "../../enums/gamestate";
 
 const WEBSOCKET_URI = environment.WEBSOCKET_BASE_URI + environment.general.WEBSOCKET_GAME_URI;
 const WEBSOCKET_QUEUE_URI = environment.general.WEBSOCKET_QUEUE_PRIMARY_URI;
 
-@Component({
+@Directive({
   selector: 'app-game-common',
-  templateUrl: './game-common.component.html',
-  styleUrls: ['./game-common.component.scss']
 })
-export abstract class GameCommonComponent<G extends Game, P extends Player>  implements OnInit, OnDestroy {
+export abstract class GameCommonComponent<G extends Game, P extends Player> implements OnInit, OnDestroy {
 
   public loading: boolean = true;
   public errorMessage: string = "";
@@ -43,6 +42,7 @@ export abstract class GameCommonComponent<G extends Game, P extends Player>  imp
 
   ngOnInit(): void {
     this.initialize();
+    this.initializeSocket();
     this.refreshGame();
   }
 
@@ -53,14 +53,24 @@ export abstract class GameCommonComponent<G extends Game, P extends Player>  imp
   protected initialize(): void {
     const queryIdentifier: string = this.activatedRoute.snapshot.params["identifier"];
     this.gameIdentifier = new GameIdentifier(queryIdentifier);
+  }
 
-    this.client = this.communicationService.connectSocket(WEBSOCKET_URI, WEBSOCKET_QUEUE_URI + this.gameIdentifier.token, this.subscribeCallback.bind(this));
+  protected initializeSocket(): void {
+    this.gameService.getGame(this.gameIdentifier).subscribe(
+      {
+        next: (result: G) => {
+          if (result.gameState != GameState.CONCLUDED)
+            this.client = this.communicationService.connectSocket(WEBSOCKET_URI, WEBSOCKET_QUEUE_URI + this.gameIdentifier.token, this.subscribeCallback.bind(this));
+        }
+      });
   }
 
   protected refreshGame(): void {
     this.gameService.getGame(this.gameIdentifier).subscribe(
       {
         next: (result: G) => {
+          if (this.game != undefined && this.game.gameState != result.gameState)
+            this.router.navigate([environment.general.GAME_URI + "/" + result.gameIdentifier.token]).then()
           this.game = result
           this.userService.getCurrentUser().subscribe(
             {
