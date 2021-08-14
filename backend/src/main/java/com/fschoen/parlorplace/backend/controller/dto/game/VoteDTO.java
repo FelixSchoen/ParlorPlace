@@ -20,7 +20,7 @@ import java.util.Set;
 @AllArgsConstructor
 @SuperBuilder(toBuilder = true)
 @Data
-public abstract class VoteDTO<P extends PlayerDTO<?>, C extends VoteCollectionDTO<P, ?>, D extends Enum<D>> {
+public abstract class VoteDTO<P extends PlayerDTO<?>, T, C extends VoteCollectionDTO<P, T>, D extends Enum<D>> {
 
     @NotNull
     protected Long id;
@@ -42,6 +42,9 @@ public abstract class VoteDTO<P extends PlayerDTO<?>, C extends VoteCollectionDT
     @Valid
     @NotNull
     protected Map<P, C> voteCollectionMap;
+
+    @NotNull
+    protected Set<T> outcome;
 
     @NotNull
     protected LocalDateTime endTime;

@@ -10,7 +10,7 @@ import com.fschoen.parlorplace.backend.repository.UserRepository;
 import java.util.Map;
 
 public abstract class VoteExtendedObfuscationService<
-        V extends VoteDTO<P, C, ?>,
+        V extends VoteDTO<P, ?, C, ?>,
         G extends GameDTO<?, ?, ?, ?>,
         P extends PlayerDTO<?>,
         C extends VoteCollectionDTO<P, ?>,
