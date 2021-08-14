@@ -1,0 +1,5 @@
+export enum WerewolfVoteDescriptor {
+  VILLAGERS_LYNCH = "VILLAGERS_LYNCH",
+  WEREWOLVES_KILL = "WEREWOLVES_KILL",
+  SEER_SEE = "SEER_SEE",
+}

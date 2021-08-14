@@ -14,25 +14,20 @@ public abstract class VoteExtendedObfuscationService<
         G extends GameDTO<?, ?, ?, ?>,
         P extends PlayerDTO<?>,
         C extends VoteCollectionDTO<P, ?>,
-        POServ extends PlayerExtendedObfuscationService<P, G>,
         COServ extends VoteCollectionExtendedObfuscationService<C, ?, G, P, ?>
         > extends ExtendedObfuscationService<V, G> {
 
-    private final POServ playerObfuscationService;
     private final COServ voteCollectionObfuscationService;
 
-    public VoteExtendedObfuscationService(UserRepository userRepository, POServ playerObfuscationService, COServ voteCollectionObfuscationService) {
+    public VoteExtendedObfuscationService(UserRepository userRepository, COServ voteCollectionObfuscationService) {
         super(userRepository);
-        this.playerObfuscationService = playerObfuscationService;
         this.voteCollectionObfuscationService = voteCollectionObfuscationService;
     }
 
     @Override
     public void obfuscateFor(V v, User user, G g) {
-        for (Map.Entry<P,C> entry : v.getVoteCollectionMap().entrySet()) {
-            this.playerObfuscationService.obfuscateFor(entry.getKey(), user, g);
+        for (Map.Entry<Long,C> entry : v.getVoteCollectionMap().entrySet()) {
             this.voteCollectionObfuscationService.obfuscateFor(entry.getValue(), user, g);
-            // TODO Map keys immutable?
         }
     }
 

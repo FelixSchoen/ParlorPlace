@@ -71,11 +71,10 @@ public abstract class Vote<
             inverseJoinColumns = @JoinColumn(name = "collection_id")
     )
     @MapKeyJoinColumn(name = "player_id")
-    //@LazyCollection(LazyCollectionOption.FALSE)
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
     @NotNull
-    protected Map<P, C> voteCollectionMap;
+    protected Map<Long, C> voteCollectionMap;
 
     @Column(nullable = false)
     @NotNull

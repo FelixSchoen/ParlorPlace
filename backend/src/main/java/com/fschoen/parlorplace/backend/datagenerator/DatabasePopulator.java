@@ -293,18 +293,7 @@ public class DatabasePopulator {
                         .voteType(VoteType.PUBLIC_PUBLIC_PUBLIC)
                         .voteDescriptor(WerewolfVoteDescriptor.WEREWOLVES_KILL)
                         .endTime(LocalDateTime.now().plusSeconds(30))
-                        .voteCollectionMap(new HashMap<>(){{
-                            for (WerewolfPlayer p : werewolfOngoingGame1.getPlayers()) {
-                                put(p, WerewolfVoteCollection.builder()
-                                        .amountVotes(1)
-                                        .allowAbstain(false)
-                                        .subjects(new HashSet<>(){{
-                                            add(p);
-                                        }})
-                                        .selection(new HashSet<>())
-                                        .build());
-                            }
-                        }})
+                        .voteCollectionMap(new HashMap<>())
                         .outcome(new HashSet<>())
                         .outcomeAmount(1)
                         .build()
@@ -315,6 +304,20 @@ public class DatabasePopulator {
                         .game(werewolfOngoingGame1)
                         .recipients(werewolfOngoingGame1.getPlayers())
                         .logType(WerewolfLogType.START).build());
+
+        werewolfGameGameRepository.save(werewolfOngoingGame1);
+
+        for (WerewolfPlayer p : werewolfOngoingGame1.getPlayers()) {
+            werewolfOngoingGame1.getVotes().get(0).getVoteCollectionMap().put(p.getId(),
+                    WerewolfVoteCollection.builder()
+                            .amountVotes(1)
+                            .allowAbstain(false)
+                            .subjects(new HashSet<>() {{
+                                add(p);
+                            }})
+                            .selection(new HashSet<>())
+                            .build());
+        }
 
         werewolfGameCollection.setWerewolfOngoingGame1(werewolfGameGameRepository.save(werewolfOngoingGame1));
         werewolfGameCollection.setWerewolfOngoingGame1Users(werewolfOngoingGame1.getPlayers().stream().map(Player::getUser).collect(Collectors.toList()));

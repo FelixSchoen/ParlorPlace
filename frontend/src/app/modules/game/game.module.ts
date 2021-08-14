@@ -22,12 +22,10 @@ import {ParticipantListComponent} from "../../components/lobby-components/partic
 import {GeneralModule} from "../general/general.module";
 import {GameInterfaceComponent} from '../../components/game-interface/game-interface.component';
 import {WerewolfInterfaceComponent} from '../../components/game-interface/werewolf-interface/werewolf-interface.component';
-import {WerewolfPlayerListComponent} from '../../components/game-interface/werewolf-interface/werewolf-player-list/werewolf-player-list.component';
+import {WerewolfPlayerListComponent} from '../../components/game-interface-components/werewolf-player-list/werewolf-player-list.component';
 import {MatBadgeModule} from "@angular/material/badge";
-import {LogEntryListComponent} from '../../components/game-interface-components/log-entry-list/log-entry-list.component';
 import {WerewolfLogEntryListComponent} from '../../components/game-interface-components/log-entry-list/werewolf-log-entry-list/werewolf-log-entry-list.component';
-import { VoteComponent } from '../../components/game-interface-components/vote/vote.component';
-import { WerewolfVoteComponent } from '../../components/werewolf-vote/werewolf-vote.component';
+import {WerewolfVoteComponent} from '../../components/game-interface-components/vote/werewolf-vote/werewolf-vote.component';
 
 
 @NgModule({
@@ -41,7 +39,6 @@ import { WerewolfVoteComponent } from '../../components/werewolf-vote/werewolf-v
     WerewolfInterfaceComponent,
     WerewolfPlayerListComponent,
     WerewolfLogEntryListComponent,
-    VoteComponent,
     WerewolfVoteComponent,
   ],
   imports: [

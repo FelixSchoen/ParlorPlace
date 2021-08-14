@@ -1,4 +1,4 @@
-import {Component, Directive, Input} from '@angular/core';
+import {Directive, Input} from '@angular/core';
 import {LogEntry} from "../../../dto/logentry";
 import {AbstractLogService} from "../../../services/abstract-log.service";
 import {Player} from "../../../dto/player";

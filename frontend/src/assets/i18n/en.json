@@ -11,7 +11,8 @@
       "host": "Host",
       "join": "Join",
       "start": "Start",
-      "quit": "Quit"
+      "quit": "Quit",
+      "vote": "Vote"
     },
     "attribute": {
       "username": "Username",
@@ -31,6 +32,10 @@
       "minLength": "{{name}} must be at least {{value}} characters",
       "maxLength": "{{name}} must be at most {{value}} characters",
       "matching": "{{name1}} and {{name2}} do not match"
+    },
+    "vote": {
+      "choose": "Choose {{amount}} options",
+      "time": "Remaining: {{amount}}"
     }
   },
   "module": {
@@ -86,6 +91,17 @@
       "lovers": {
         "name": "Lovers",
         "description": "You win if you and your lover are the only survivors."
+      }
+    },
+    "vote": {
+      "villagers": {
+        "lynch": "Who do you want to lynch?"
+      },
+      "werewolves": {
+        "kill": "Who do you want to kill?"
+      },
+      "seer": {
+        "see": "Who do you want to check?"
       }
     },
     "log": {

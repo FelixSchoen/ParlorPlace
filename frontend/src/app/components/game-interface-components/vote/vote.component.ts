@@ -1,15 +1,20 @@
-import { Component, OnInit } from '@angular/core';
+import {Directive, Input, OnInit} from '@angular/core';
+import {Vote} from "../../../dto/vote";
+import {Player} from "../../../dto/player";
 
-@Component({
+@Directive({
   selector: 'app-vote',
-  templateUrl: './vote.component.html',
-  styleUrls: ['./vote.component.scss']
 })
-export class VoteComponent implements OnInit {
+export abstract class VoteComponent<P extends Player, V extends Vote<T>, T> implements OnInit {
 
-  constructor() { }
+  @Input() public currentPlayer: P;
+  @Input() public vote: V;
+
+  protected constructor() { }
 
   ngOnInit(): void {
   }
+
+  abstract getTranslationKey(e: Object): string;
 
 }
