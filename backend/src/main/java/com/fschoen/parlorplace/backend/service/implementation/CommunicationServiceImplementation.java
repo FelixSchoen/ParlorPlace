@@ -7,6 +7,7 @@ import com.fschoen.parlorplace.backend.entity.User;
 import com.fschoen.parlorplace.backend.enumeration.NotificationType;
 import com.fschoen.parlorplace.backend.service.CommunicationService;
 import com.fschoen.parlorplace.backend.utility.communication.ClientNotification;
+import com.fschoen.parlorplace.backend.utility.communication.VoiceLineClientNotification;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.MessagingException;
@@ -32,12 +33,42 @@ public class CommunicationServiceImplementation implements CommunicationService 
         ClientNotification notification = ClientNotification.builder().notificationType(NotificationType.STALE_GAME_INFORMATION).build();
         for (User user : recipients) {
             try {
-                ObjectMapper objectMapper = new ObjectMapper();
-                messagingTemplate.convertAndSendToUser(user.getUsername(), PRIMARY_DESTINATION_URI + gameIdentifier.getToken(), objectMapper.writeValueAsString(notification));
-                log.info("Sent Game Stale Notification to User {} at {}", user.getUsername(), PRIMARY_DESTINATION_URI + gameIdentifier.getToken());
-            } catch (MessagingException | JsonProcessingException e) {
-                log.error("Could not send Game Stale Notification for User {}", user.getUsername());
+                send(user.getUsername(), PRIMARY_DESTINATION_URI + gameIdentifier.getToken(), notification);
+            } catch (MessagingException e) {
+                log.error("Could not send Game Stale Notification for User {}", user.getUsername(), e);
             }
+        }
+    }
+
+    @Override
+    public void sendLogsStaleNotification(GameIdentifier gameIdentifier, Set<User> recipients) {
+        ClientNotification notification = ClientNotification.builder().notificationType(NotificationType.STALE_LOGS_INFORMATION).build();
+        for (User user : recipients) {
+            try {
+                send(user.getUsername(), SECONDARY_DESTINATION_URI + gameIdentifier.getToken(), notification);
+            } catch (MessagingException e) {
+                log.error("Could not send Logs Stale Notification for User {}", user.getUsername(), e);
+            }
+        }
+    }
+
+    @Override
+    public void sendVoiceLineNotification(GameIdentifier gameIdentifier, Set<User> recipients, VoiceLineClientNotification notification) {
+        for (User user : recipients) {
+            try {
+                send(user.getUsername(), SECONDARY_DESTINATION_URI + gameIdentifier.getToken(), notification);
+            } catch (MessagingException e) {
+                log.error("Could not send Logs Stale Notification for User {}", user.getUsername(), e);
+            }
+        }
+    }
+
+    private void send(String username, String destination, Object payload) throws MessagingException {
+        ObjectMapper objectMapper = new ObjectMapper();
+        try {
+            messagingTemplate.convertAndSendToUser(username, destination, objectMapper.writeValueAsString(payload));
+        } catch (JsonProcessingException e) {
+            log.error("Could not serialize object", e);
         }
     }
 

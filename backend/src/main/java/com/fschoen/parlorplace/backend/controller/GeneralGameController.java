@@ -4,7 +4,7 @@ import com.fschoen.parlorplace.backend.controller.dto.game.GameBaseInformationDT
 import com.fschoen.parlorplace.backend.controller.mapper.GameIdentifierMapper;
 import com.fschoen.parlorplace.backend.entity.Game;
 import com.fschoen.parlorplace.backend.entity.GameIdentifier;
-import com.fschoen.parlorplace.backend.service.GeneralGameService;
+import com.fschoen.parlorplace.backend.service.game.GeneralGameService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -33,7 +33,7 @@ public class GeneralGameController {
     @GetMapping("/base_info/{identifier}")
     public ResponseEntity<GameBaseInformationDTO> getGameBaseInformation(@PathVariable("identifier") String identifier) {
         GameIdentifier gameIdentifier = new GameIdentifier(identifier);
-        Game<?, ?> game = this.gameService.getGameBaseInformation(gameIdentifier);
+        Game<?, ?, ?, ?> game = this.gameService.getGameBaseInformation(gameIdentifier);
         GameBaseInformationDTO gameBaseInformationDTO = GameBaseInformationDTO.builder()
                 .gameIdentifier(this.gameIdentifierMapper.toDTO(game.getGameIdentifier()))
                 .gameType(game.getGameType())

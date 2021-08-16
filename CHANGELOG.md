@@ -3,6 +3,39 @@
 - [v0.1 (2021-07-11)](#v0.1)
 - [v0.2 (2021-07-22)](#v0.2)
 - [v0.3 (2021-08-05)](#v0.3)
+- [v0.4 (2021-08-16)](#v0.4)
+
+---
+
+## v0.4
+<a name="v0.4"></a>
+
+## Added
+
+- Combined role representation in frontend to combine duplicates
+- Icons for seperate games
+- **Game Moderator framework**
+  - Added groundwork for the game moderator feature
+  - Provided an interface for the start of games, in order to handle tasks such as assigning players to roles
+- Added round and phase of game
+- Added an option to see all current games
+- Unique icons for different games
+- Persistent test data for games
+- **Vote framework**
+  - One of the biggest changes to date: Added support for votes on objects of different kinds
+  - Each vote can only be held on the same type of object
+  - Only players are allowed to vote on choices
+  - One can define the amount of votes each player has, and the options each player can vote on
+  - Votes can also be abstained from, if the flag is set
+- **Vote frontend framework**
+  - Added a highly adaptable component that works for votes of different kinds
+
+## Changed
+
+- Players now have lists of roles rather than a single role
+- Open lobbies that have not started are removed upon start of the backend
+- Refactored obfuscation into its own service
+- The frontend now combines several roles of the same type into one chip for better readability
 
 ---
 

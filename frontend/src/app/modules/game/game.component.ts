@@ -1,12 +1,14 @@
 import {Component, ComponentFactoryResolver, OnInit, ViewChild} from '@angular/core';
 import {GameDirective} from "./game.directive";
-import {WerewolfLobbyComponent} from "../lobby/werewolf-lobby/werewolf-lobby.component";
+import {WerewolfLobbyComponent} from "../../components/lobby/werewolf-lobby/werewolf-lobby.component";
 import {ActivatedRoute, Router} from "@angular/router";
 import {GameBaseInformation, GameIdentifier} from "../../dto/game";
 import {GameType} from "../../enums/gametype";
 import {NotificationService} from "../../services/notification.service";
 import {environment} from "../../../environments/environment";
 import {GeneralGameService} from "../../services/general-game.service";
+import {GameState} from "../../enums/gamestate";
+import {WerewolfInterfaceComponent} from "../../components/game-interface/werewolf-interface/werewolf-interface.component";
 
 export interface GameComponents {
   mainComponent?: any,
@@ -26,8 +28,8 @@ export class GameComponent implements OnInit {
   public errorMessage: string = "";
 
   private gameComponentMap = new Map<GameType, GameComponents>([
-    [GameType.WEREWOLF, {lobbyComponent: WerewolfLobbyComponent}],
-  ]); //TODO Add main component
+    [GameType.WEREWOLF, {mainComponent: WerewolfInterfaceComponent, lobbyComponent: WerewolfLobbyComponent}],
+  ]);
 
   constructor(
     private generalGameService: GeneralGameService,
@@ -44,7 +46,6 @@ export class GameComponent implements OnInit {
     if (queryIdentifier != undefined && queryIdentifier.length > 0) {
       this.loadComponent(queryIdentifier);
     }
-
   }
 
   private loadComponent(componentIdentifier: string) {
@@ -61,10 +62,14 @@ export class GameComponent implements OnInit {
 
         let componentToLoad;
 
-        if (false) //TODO Check if in lobby or game state
-          componentToLoad = gameComponent?.mainComponent;
-        else if (true)
+        if (gameBaseInformation.gameState == GameState.LOBBY)
           componentToLoad = gameComponent.lobbyComponent;
+        else if (gameBaseInformation.gameState == GameState.ONGOING)
+          componentToLoad = gameComponent.mainComponent;
+        else if (gameBaseInformation.gameState == GameState.CONCLUDED)
+          this.router.navigate([environment.general.PROFILE_URI]).then();
+        else
+          console.error("Unknown game state");
 
         const componentFactory = this.componentFactoryResolver.resolveComponentFactory(componentToLoad);
 

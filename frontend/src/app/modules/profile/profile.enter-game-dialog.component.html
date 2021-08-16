@@ -1,20 +1,23 @@
-<h2 mat-dialog-title>Join Game</h2>
+<h2 mat-dialog-title>{{"module.gameJoin.join" | translate}}</h2>
 
 <mat-dialog-content class="mat-typography">
 
   <mat-form-field class="w-100">
-    <mat-label i18n>Game Identifier</mat-label>
+    <mat-label>{{"general.attribute.gameIdentifier" | translate}}</mat-label>
     <input matInput [(ngModel)]="data.outputData.identifier" [formControl]="identifierControl">
-    <mat-error *ngIf="identifierControl.hasError('minlength')" i18n>Identifier must be at least 4 characters</mat-error>
+    <mat-error *ngIf="identifierControl.hasError('minlength')">{{"general.validation.minLength" | translate:{
+      "name": ("general.attribute.gameIdentifier" | translate),
+      "value": 4
+    } }}</mat-error>
   </mat-form-field>
 
 </mat-dialog-content>
 
 <mat-dialog-actions align="end">
-  <button mat-button color="accent" [matMenuTriggerFor]="hostMenu">Host</button>
+  <button mat-button color="accent" [matMenuTriggerFor]="hostMenu">{{"general.action.host" | translate}}</button>
   <mat-menu #hostMenu="matMenu">
     <button *ngFor="let game of games" mat-menu-item (click)="onHost(game)">{{gameTypeToString(game)}}</button>
   </mat-menu>
-  <button mat-button (click)="onCancel()">Cancel</button>
-  <button mat-button (click)="onSubmit()" cdkFocusInitial>Confirm</button>
+  <button mat-button (click)="onCancel()">{{"general.action.cancel" | translate}}</button>
+  <button mat-button (click)="onSubmit()" cdkFocusInitial>{{"general.action.confirm" | translate}}</button>
 </mat-dialog-actions>

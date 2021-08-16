@@ -1,5 +1,6 @@
 package com.fschoen.parlorplace.backend.entity;
 
+import com.fschoen.parlorplace.backend.enumeration.CodeName;
 import com.fschoen.parlorplace.backend.enumeration.LobbyRole;
 import com.fschoen.parlorplace.backend.enumeration.PlayerState;
 import lombok.AllArgsConstructor;
@@ -8,6 +9,8 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import lombok.experimental.SuperBuilder;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
@@ -22,10 +25,11 @@ import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
+import java.util.List;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -40,10 +44,15 @@ public abstract class Player<GR extends GameRole> {
     @SequenceGenerator(name = "seq_player_id", sequenceName = "seq_player_id")
     protected Long id;
 
-    @OneToOne
-    @JoinColumn(name = "user_id")
+    @ManyToOne
+    @JoinColumn
     @NotNull
     protected User user;
+
+    @Column
+    @Enumerated
+    @EqualsAndHashCode.Exclude
+    protected CodeName codeName;
 
     @ManyToOne(targetEntity = Game.class)
     @JoinColumn
@@ -51,7 +60,7 @@ public abstract class Player<GR extends GameRole> {
     @ToString.Exclude
     @NotNull
     //TODO I don't need this, but I can't get @OneToMany to work without this - always throws exceptions "Batch Update Returned Unexpected Row Count"
-    protected Game<?, ?> game;
+    protected Game<?, ?, ?, ?> game;
 
     @Column(nullable = false)
     @Enumerated
@@ -62,11 +71,11 @@ public abstract class Player<GR extends GameRole> {
     @NotNull
     protected PlayerState playerState;
 
-    @OneToOne(targetEntity = GameRole.class, cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "player", targetEntity = GameRole.class, cascade = CascadeType.ALL, orphanRemoval = true)
     @OnDelete(action = OnDeleteAction.CASCADE)
-    @JoinColumn(referencedColumnName = "id")
+    @LazyCollection(LazyCollectionOption.FALSE)
     @EqualsAndHashCode.Exclude
-    protected GR gameRole;
+    protected List<GR> gameRoles;
 
     @Column(nullable = false)
     @NotNull

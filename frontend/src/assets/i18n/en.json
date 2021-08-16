@@ -1,0 +1,129 @@
+{
+  "general": {
+    "action": {
+      "confirm": "Confirm",
+      "cancel": "Cancel",
+      "logIn": "Login",
+      "register": "Register",
+      "signOut": "Sign Out",
+      "edit": "Edit",
+      "goHome": "Home",
+      "host": "Host",
+      "join": "Join",
+      "start": "Start",
+      "quit": "Quit",
+      "vote": "Vote"
+    },
+    "attribute": {
+      "username": "Username",
+      "nickname": "Nickname",
+      "password": "Password",
+      "email": "E-Mail",
+      "gameIdentifier": "Game Identifier",
+      "host": "Host",
+      "roles": "Roles",
+      "players": "Players",
+      "rules": "Rules",
+      "settings": "Settings"
+    },
+    "validation": {
+      "required": "{name} is required",
+      "invalid": "{name} is invalid",
+      "minLength": "{name} must be at least {value} characters",
+      "maxLength": "{name} must be at most {value} characters",
+      "matching": "{name1} and {name2} do not match"
+    },
+    "vote": {
+      "choose": "Choose {amount} {amount, plural, =0{options} one{option} other{options}}",
+      "time": "Remaining: {amount}",
+      "result": "Result",
+      "abstain": "Abstain",
+      "abstained": "Abstained",
+      "others": "Selection of players"
+    }
+  },
+  "module": {
+    "entry": {
+      "title": "ParlorPlace",
+      "welcome": "Welcome to ParlorPlace, your central hub for all social deduction based games!",
+      "accountCreation": "Please sign up for a new account or log in if you are already registered."
+    },
+    "authentication": {
+      "title": "Authentication",
+      "login": "Login",
+      "register": "Register",
+      "confirmPassword": "Confirm Password"
+    },
+    "credits": {
+      "notice": "Created by Felix Schön, 2021",
+      "acknowledgement": "Special thanks to Hirsch"
+    },
+    "profile": {
+      "userSearch": "User search",
+      "userSearchPlaceholder": "Search for a user ...",
+      "activeGames": "Active Games",
+      "editUser": "Edit user"
+    },
+    "gameJoin": {
+      "join": "Join Game"
+    }
+  },
+  "werewolf": {
+    "role": {
+      "villager": {
+        "name": "Villager",
+        "description": "Find the Werewolves and kill them, before they kill you."
+      },
+      "werewolf": {
+        "name": "Werewolf",
+        "description": "You wake up each night together with the other Werewolves and choose 1 victim, which you kill."
+      },
+      "seer": {
+        "name": "Seer",
+        "description": "You choose 1 player every night. You learn whether the player is a Werewolf or not."
+      }
+    },
+    "faction": {
+      "villagers": {
+        "name": "Villagers",
+        "description": "You win if you kill all the Werewolves."
+      },
+      "werewolves": {
+        "name": "Werewolves",
+        "description": "You win if you kill all the Villagers."
+      },
+      "lovers": {
+        "name": "Lovers",
+        "description": "You win if you and your lover are the only survivors."
+      }
+    },
+    "vote": {
+      "villagers": {
+        "lynch": "Who do you want to lynch?"
+      },
+      "werewolves": {
+        "kill": "Who do you want to kill?"
+      },
+      "seer": {
+        "see": "Who do you want to check?"
+      }
+    },
+    "log": {
+      "start": "Game has started",
+      "end": "Game has ended",
+      "sleep": "You fall asleep",
+      "wake": "You wake up",
+      "death": "{player} has died",
+      "werewolves_vote": "The werewolves savage {player}",
+      "seer_success": "{player} is a Werewolf",
+      "seer_failure": "{player} is not a Werewolf",
+      "villagers_vote": "The villagers lynch {player}"
+    },
+    "misc": {
+      "village": "Village",
+      "action": "Action",
+      "log": "Log",
+      "information": "Information"
+    }
+  }
+}

@@ -3,7 +3,7 @@ package com.fschoen.parlorplace.backend.service.implementation;
 import com.fschoen.parlorplace.backend.entity.GameIdentifier;
 import com.fschoen.parlorplace.backend.repository.GameRepository;
 import com.fschoen.parlorplace.backend.repository.GeneralGameRepository;
-import com.fschoen.parlorplace.backend.service.GameIdentifierService;
+import com.fschoen.parlorplace.backend.service.game.GameIdentifierService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

@@ -1,7 +1,12 @@
 import {Component, OnInit} from '@angular/core';
 import {AppModule} from "./app.module";
+import {MatIconRegistry} from "@angular/material/icon";
+import {DomSanitizer} from "@angular/platform-browser";
 
 const THEME_KEY = 'theme-style';
+
+const solid_folder = "assets/icon/solid/"
+const duotone_folder = "assets/icon/duotone/"
 
 @Component({
   selector: 'app-root',
@@ -13,7 +18,31 @@ export class AppComponent implements OnInit {
   public title = 'ParlorPlace';
   public darkTheme = false;
 
-  constructor(private appModule: AppModule) {
+  constructor(
+    private appModule: AppModule,
+    private matIconRegistry: MatIconRegistry,
+    private domSanitizer: DomSanitizer
+  ) {
+
+    this.matIconRegistry.addSvgIcon(
+      "duotone-unknown",
+      this.domSanitizer.bypassSecurityTrustResourceUrl(duotone_folder + "question.svg")
+    );
+
+    // Werewolf
+
+    this.matIconRegistry.addSvgIcon(
+      "duotone-werewolf",
+      this.domSanitizer.bypassSecurityTrustResourceUrl(duotone_folder + "claw-marks.svg")
+    );
+    this.matIconRegistry.addSvgIcon(
+      "duotone-villager",
+      this.domSanitizer.bypassSecurityTrustResourceUrl(duotone_folder + "utensil-fork.svg")
+    );
+    this.matIconRegistry.addSvgIcon(
+      "duotone-seer",
+      this.domSanitizer.bypassSecurityTrustResourceUrl(duotone_folder + "eye.svg")
+    );
   }
 
   ngOnInit(): void {

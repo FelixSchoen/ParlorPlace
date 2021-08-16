@@ -4,6 +4,7 @@ import {GameComponent} from "./game.component";
 
 const routes: Routes = [
   {path: ':identifier', component: GameComponent},
+  {path: '**', redirectTo: 'profile', pathMatch: 'full'},
 ];
 
 @NgModule({
