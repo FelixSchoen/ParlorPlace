@@ -7,39 +7,46 @@
 
   <mat-card-content class="mt-3">
     <div>
-      <div class="row">
-        <div class="col-7">
-          {{"general.vote.choose" | translate: {"amount": voteMap.get(currentPlayer.id)?.amountVotes} }}
+
+      <!-- Selection -->
+      <div *ngIf="this.vote.voteState == voteState.ONGOING">
+        <div class="row">
+          <div class="col-7">
+            {{"general.vote.choose" | translate: {"amount": voteMap.get(currentPlayer.id)?.amountVotes} }}
+          </div>
+          <div class="col text-right">
+            {{"general.vote.time" | translate:{"amount": (this.timeRemaining | formatTime)} }}
+          </div>
         </div>
-        <div class="col text-right">
-          {{"general.vote.time" | translate:{"amount": (this.timeRemaining | formatTime)} }}
+        <div class="row mt-2">
+          <div class="col">
+            <mat-divider [inset]="true"></mat-divider>
+          </div>
+        </div>
+        <div class="row mt-2">
+          <div class="col">
+            <mat-chip-list>
+              <mat-chip *ngFor="let subject of this.voteMap.get(currentPlayer.id)?.subjects"
+                        [selected]="includedInSelection(subject)" (click)="selectOption(subject)">
+                {{subjectToStringRepresentation(subject)}}
+              </mat-chip>
+              <mat-chip *ngIf="this.voteMap.get(currentPlayer.id)?.allowAbstain" color="accent"
+                        [selected]="voteMap.get(currentPlayer.id)?.abstain" (click)="selectAbstain()">
+                <mat-icon>shortcut</mat-icon>
+                {{"general.vote.abstain" | translate}}
+              </mat-chip>
+            </mat-chip-list>
+          </div>
+        </div>
+        <div class="row mt-2">
+          <div class="col">
+            <mat-divider [inset]="true"></mat-divider>
+          </div>
         </div>
       </div>
-      <div class="row mt-2">
-        <div class="col">
-          <mat-divider [inset]="true"></mat-divider>
-        </div>
-      </div>
-      <div class="row mt-2">
-        <div class="col">
-          <mat-chip-list>
-            <mat-chip *ngFor="let subject of this.voteMap.get(currentPlayer.id)?.subjects"
-                      [selected]="includedInSelection(subject)" (click)="selectOption(subject)">
-              {{subjectToStringRepresentation(subject)}}
-            </mat-chip>
-            <mat-chip *ngIf="this.voteMap.get(currentPlayer.id)?.allowAbstain" color="accent" [selected]="voteMap.get(currentPlayer.id)?.abstain" (click)="selectAbstain()">
-              <mat-icon>shortcut</mat-icon>
-              {{"general.vote.abstain" | translate}}
-            </mat-chip>
-          </mat-chip-list>
-        </div>
-      </div>
-      <div class="row mt-2">
-        <div class="col">
-          <mat-divider [inset]="true"></mat-divider>
-        </div>
-      </div>
-      <div class="row mt-5">
+
+      <!-- Other Players -->
+      <div class="row" [ngClass]="(this.vote.voteState == voteState.ONGOING) ? 'mt-5' : ''">
         <div class="col">
           <h3 class="text-center">{{"general.vote.others" | translate}}</h3>
         </div>
@@ -72,6 +79,25 @@
           </table>
         </div>
       </div>
+
+      <!-- Result -->
+      <div *ngIf="this.vote.voteState == voteState.CONCLUDED">
+        <div class="row mt-5">
+          <div class="col">
+            <h3 class="text-center">{{"general.vote.result" | translate}}</h3>
+          </div>
+        </div>
+        <div class="row mt-3">
+          <div class="col">
+            <mat-chip-list class="pp-center">
+              <mat-chip *ngFor="let outcome of this.vote.outcome">
+                {{subjectToStringRepresentation(outcome)}}
+              </mat-chip>
+            </mat-chip-list>
+          </div>
+        </div>
+      </div>
+
     </div>
   </mat-card-content>
 

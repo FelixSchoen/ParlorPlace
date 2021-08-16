@@ -1,6 +1,6 @@
 import {Component, ViewChild} from '@angular/core';
 import {GameInterfaceComponent} from "../game-interface.component";
-import {WerewolfGame, WerewolfLogEntry, WerewolfPlayer} from "../../../dto/werewolf";
+import {WerewolfGame, WerewolfLogEntry, WerewolfPlayer, WerewolfVote} from "../../../dto/werewolf";
 import {UserService} from "../../../services/user.service";
 import {WerewolfGameService} from "../../../services/werewolf-game.service";
 import {CommunicationService} from "../../../services/communication.service";
@@ -14,7 +14,7 @@ import {LogEntryListComponent} from "../../game-interface-components/log-entry-l
   templateUrl: './werewolf-interface.component.html',
   styleUrls: ['./werewolf-interface.component.scss']
 })
-export class WerewolfInterfaceComponent extends GameInterfaceComponent<WerewolfGame, WerewolfPlayer> {
+export class WerewolfInterfaceComponent extends GameInterfaceComponent<WerewolfGame, WerewolfPlayer, WerewolfVote> {
 
   @ViewChild(LogEntryListComponent) logEntryList: LogEntryListComponent<WerewolfLogEntry, WerewolfPlayer>
 

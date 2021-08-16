@@ -79,6 +79,9 @@ public abstract class AbstractVoteService<
             vote.setGame(game);
             vote.setVoteState(VoteState.ONGOING);
             vote.setVoteType(voteType);
+            vote.setVoters(new HashSet<>() {{
+                addAll(voteCollectionMap.keySet().stream().map(id -> playerRepository.findOneById(id).orElseThrow()).collect(Collectors.toList()));
+            }});
             vote.setVoteCollectionMap(voteCollectionMap);
             vote.setOutcome(new HashSet<>());
             vote.setOutcomeAmount(outcomeAmount);
@@ -140,7 +143,7 @@ public abstract class AbstractVoteService<
         broadcastGameStaleNotification(game, vote);
 
         // Setup VoteConcludeTask with grace period
-        if (vote.getVoteCollectionMap().values().stream().allMatch(collection -> collection.getSelection().size() == collection.getAmountVotes())) {
+        if (vote.getVoteCollectionMap().values().stream().allMatch(collection -> (collection.getSelection().size() == collection.getAmountVotes()) || collection.getAbstain())) {
             VoteConcludeTask voteConcludeTask = new VoteConcludeTask(vote.getId(), GRACE_PERIOD_DURATION, false, game.getGameIdentifier());
             taskExecutor.execute(voteConcludeTask);
         }
@@ -248,6 +251,11 @@ public abstract class AbstractVoteService<
                     votes.putIfAbsent(t, 0);
                     votes.put(t, votes.get(t) + 1);
                 }
+
+                // Add non voted-upon at the end of the list
+                for (T t : entry.getValue().getSubjects()) {
+                    votes.putIfAbsent(t, 0);
+                }
             }
 
             // Sort by votes
@@ -267,6 +275,8 @@ public abstract class AbstractVoteService<
                 currentBin.add(entry.getKey());
             }
 
+            binList.add(currentBin);
+
             // Shuffle bins
             for (List<T> bin : binList) {
                 Collections.shuffle(bin);
@@ -274,7 +284,10 @@ public abstract class AbstractVoteService<
 
             // Get top outcomeAmount choices
             List<T> flatList = binList.stream().flatMap(List::stream).collect(Collectors.toList());
+            System.out.println(flatList);
             currentVote.getOutcome().addAll(flatList.stream().limit(currentVote.getOutcomeAmount()).collect(Collectors.toList()));
+
+            System.out.println(flatList.stream().limit(currentVote.getOutcomeAmount()).collect(Collectors.toList()));
 
             voteRepository.save(currentVote);
 
