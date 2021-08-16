@@ -3,7 +3,7 @@
 - [v0.1 (2021-07-11)](#v0.1)
 - [v0.2 (2021-07-22)](#v0.2)
 - [v0.3 (2021-08-05)](#v0.3)
-- [v0.4 (2021-08-xx)](#v0.4)
+- [v0.4 (2021-08-16)](#v0.4)
 
 ---
 
@@ -36,8 +36,6 @@
 - Open lobbies that have not started are removed upon start of the backend
 - Refactored obfuscation into its own service
 - The frontend now combines several roles of the same type into one chip for better readability
-
-## Fixed
 
 ---
 
