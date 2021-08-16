@@ -12,11 +12,11 @@ export abstract class Player {
                         public position: number) {
   }
 
-  public toNameRepresentation(playersInGame: Set<Player>) {
-    if ([...playersInGame].some(x => x.user.nickname == this.user.nickname))
-      return (this.user.nickname + " ("+this.user.username+")")
+  public static toNameRepresentation(user: User, playersInGame: Set<Player>) {
+    if ([...playersInGame].some(x => (x.user.nickname == user.nickname && x.user.username != user.username)))
+      return (user.nickname + " ("+user.username+")")
     else
-      return this.user.nickname
+      return user.nickname
   }
 
 }

@@ -46,7 +46,7 @@
         </mat-card>
 
         <div *ngFor="let vote of game.votes" class="mx-3 mb-3">
-          <app-werewolf-vote [currentPlayer]="currentPlayer" [vote]="vote"></app-werewolf-vote>
+          <app-werewolf-vote [currentPlayer]="currentPlayer" [players]="this.game.players" [vote]="vote"></app-werewolf-vote>
         </div>
 
       </div>

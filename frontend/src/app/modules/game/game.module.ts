@@ -26,6 +26,7 @@ import {WerewolfPlayerListComponent} from '../../components/game-interface-compo
 import {MatBadgeModule} from "@angular/material/badge";
 import {WerewolfLogEntryListComponent} from '../../components/game-interface-components/log-entry-list/werewolf-log-entry-list/werewolf-log-entry-list.component';
 import {WerewolfVoteComponent} from '../../components/game-interface-components/vote/werewolf-vote/werewolf-vote.component';
+import {MatTableModule} from "@angular/material/table";
 
 
 @NgModule({
@@ -41,24 +42,25 @@ import {WerewolfVoteComponent} from '../../components/game-interface-components/
     WerewolfLogEntryListComponent,
     WerewolfVoteComponent,
   ],
-    imports: [
-        CommonModule,
-        GeneralModule,
-        GameRoutingModule,
-        ReactiveFormsModule,
-        MatChipsModule,
-        MatCardModule,
-        MatButtonModule,
-        MatDialogModule,
-        MatInputModule,
-        MatAutocompleteModule,
-        MatIconModule,
-        DragDropModule,
-        MatListModule,
-        MatProgressBarModule,
-        MatTabsModule,
-        MatBadgeModule,
-    ]
+  imports: [
+    CommonModule,
+    GeneralModule,
+    GameRoutingModule,
+    ReactiveFormsModule,
+    MatChipsModule,
+    MatCardModule,
+    MatButtonModule,
+    MatDialogModule,
+    MatInputModule,
+    MatAutocompleteModule,
+    MatIconModule,
+    DragDropModule,
+    MatListModule,
+    MatProgressBarModule,
+    MatTabsModule,
+    MatBadgeModule,
+    MatTableModule,
+  ]
 })
 export class GameModule {
 }

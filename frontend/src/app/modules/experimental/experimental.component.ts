@@ -1,57 +1,33 @@
-import {Component, OnInit} from '@angular/core';
-import {Stomp} from "@stomp/stompjs";
-import {TokenService} from "../../authentication/token.service";
+import {Component} from '@angular/core';
+
+export interface PeriodicElement {
+  name: string;
+  position: number;
+  weight: number;
+  symbol: string[];
+}
+
+const ELEMENT_DATA: PeriodicElement[] = [
+  {position: 1, name: 'Hydrogen', weight: 1.0079, symbol: ['Dwayne Jhonson','Tom cruise']},
+  {position: 2, name: 'Helium', weight: 4.0026, symbol: ['Kevin peterson', 'Brett Lee']},
+  {position: 3, name: 'Lithium', weight: 6.941, symbol: ['Sachin Tendulakar', 'Yuvraj Sing']},
+  {position: 4, name: 'Beryllium', weight: 9.0122, symbol: ['Be']},
+  {position: 5, name: 'Boron', weight: 10.811, symbol: ['B']},
+  {position: 6, name: 'Carbon', weight: 12.0107, symbol: ['C']},
+  {position: 7, name: 'Nitrogen', weight: 14.0067, symbol: ['N']},
+  {position: 8, name: 'Oxygen', weight: 15.9994, symbol: ['O']},
+  {position: 9, name: 'Fluorine', weight: 18.9984, symbol: ['F']},
+  {position: 10, name: 'Neon', weight: 20.1797, symbol: ['Ne']},
+];
 
 @Component({
   selector: 'app-experimental',
   templateUrl: './experimental.component.html',
   styleUrls: ['./experimental.component.css']
 })
-export class ExperimentalComponent implements OnInit {
+export class ExperimentalComponent {
 
-  public ws: any;
-  public sessionId = "";
-  public url = "ws://localhost:8080/communication/game";
-
-  constructor(private tokenService: TokenService) {
-    this.headers.Authentication = this.headers.Authentication + this.tokenService.getToken()?.accessToken;
-  }
-
-  ngOnInit(): void {
-
-  }
-
-  headers = {
-    Authentication: "Bearer "
-  };
-
-  connect() {
-    let socket = new WebSocket(this.url);
-    this.ws = Stomp.over(socket);
-
-    let that = this;
-    this.ws.connect(this.headers, function() {
-      that.ws.subscribe("/user/queue/game/TEST", function(message: any) {
-        console.log(message.body)
-      });
-
-    }, function (error: string) {
-      alert("STOMP error " + error);
-    });
-  }
-
-  disconnect() {
-    if (this.ws != null) {
-      this.ws.ws.close();
-    }
-    console.log("Disconnected");
-  }
-
-  send(message: String) {
-    let data = JSON.stringify({
-      'name': message
-    })
-    this.ws.send("/ws/wss/exp", {}, data);
-  }
+  displayedColumns: string[] = ['position', 'name', 'weight', 'symbol'];
+  dataSource = ELEMENT_DATA;
 
 }

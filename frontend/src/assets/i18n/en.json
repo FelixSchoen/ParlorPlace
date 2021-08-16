@@ -35,7 +35,9 @@
     },
     "vote": {
       "choose": "Choose {amount} {amount, plural, =0{options} one{option} other{options}}",
-      "time": "Remaining: {amount}"
+      "time": "Remaining: {amount}",
+      "result": "Result",
+      "others": "Selection of players"
     }
   },
   "module": {
