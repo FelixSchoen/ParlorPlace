@@ -80,12 +80,16 @@ public class WerewolfGameModerator extends AbstractGameModerator<
             System.out.println("Requesting vote");
             CompletableFuture<WerewolfVote> future = this.voteService.requestVote(this.gameIdentifier,
                     VoteType.PUBLIC_PUBLIC_PUBLIC,
-                    this.voteService.getSameChoiceCollectionMap(this.getGame().getPlayers(), this.getGame().getPlayers(), 1),
-                    WerewolfVoteDescriptor.WEREWOLVES_KILL, 2);
+                    1,
+                    this.voteService.getSameChoiceCollectionMap(
+                            this.getGame().getPlayers(),
+                            this.getGame().getPlayers(),
+                            1,
+                            true),
+                    WerewolfVoteDescriptor.WEREWOLVES_KILL,
+                    6000);
             WerewolfVote vote = future.get();
             System.out.println("Result: " + vote);
-            broadcastGameStaleNotification(this.gameIdentifier);
-            break;
         }
     }
 

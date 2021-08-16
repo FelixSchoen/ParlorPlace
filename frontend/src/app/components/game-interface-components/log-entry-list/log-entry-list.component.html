@@ -1,0 +1,7 @@
+<mat-list>
+  <mat-list-item *ngFor="let logEntry of this.log.reverse(); last as last">
+    <mat-icon mat-list-icon>description</mat-icon>
+    <h3 matLine>{{this.logService.toStringRepresentation(logEntry, this.players) | async}}</h3>
+    <mat-divider [inset]="false" *ngIf="!last"></mat-divider>
+  </mat-list-item>
+</mat-list>

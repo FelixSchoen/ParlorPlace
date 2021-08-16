@@ -15,9 +15,6 @@ import java.util.Set;
 public abstract class VoteCollectionDTO<P extends PlayerDTO<?>, T> {
 
     @NotNull
-    protected P player;
-
-    @NotNull
     protected Integer amountVotes;
 
     @NotNull

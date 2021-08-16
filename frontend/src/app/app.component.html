@@ -1,3 +1,5 @@
 <body [ngClass]="darkTheme ? 'dark-theme' : ''" class="mat-typography mat-app-background">
-<router-outlet></router-outlet>
+<div [ngClass]="darkTheme ? 'dark-theme' : ''" class="mat-typography mat-app-background">
+  <router-outlet></router-outlet>
+</div>
 </body>

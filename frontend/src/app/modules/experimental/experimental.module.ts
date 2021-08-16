@@ -19,32 +19,34 @@ import {DragDropModule} from "@angular/cdk/drag-drop";
 import {MatListModule} from "@angular/material/list";
 import {MatProgressBarModule} from "@angular/material/progress-bar";
 import {MatTabsModule} from "@angular/material/tabs";
+import {MatTableModule} from "@angular/material/table";
 
 
 @NgModule({
   declarations: [
     ExperimentalComponent,
   ],
-  imports: [
-    CommonModule,
-    ExperimentalRoutingModule,
-    MatChipsModule,
-    MatCardModule,
-    MatButtonModule,
-    MatDialogModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatSnackBarModule,
-    MatProgressSpinnerModule,
-    MatAutocompleteModule,
-    MatOptionModule,
-    MatIconModule,
-    MatMenuModule,
-    DragDropModule,
-    MatListModule,
-    MatProgressBarModule,
-    MatTabsModule,
-  ]
+    imports: [
+        CommonModule,
+        ExperimentalRoutingModule,
+        MatChipsModule,
+        MatCardModule,
+        MatButtonModule,
+        MatDialogModule,
+        MatFormFieldModule,
+        MatInputModule,
+        MatSnackBarModule,
+        MatProgressSpinnerModule,
+        MatAutocompleteModule,
+        MatOptionModule,
+        MatIconModule,
+        MatMenuModule,
+        DragDropModule,
+        MatListModule,
+        MatProgressBarModule,
+        MatTabsModule,
+        MatTableModule,
+    ]
 })
 export class ExperimentalModule {
 }

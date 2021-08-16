@@ -5,7 +5,7 @@ import {LobbyChangeRequest} from "../dto/lobby";
 import {User} from "../dto/user";
 import {environment} from "../../environments/environment";
 
-const GAME_URI = environment.BASE_URI + environment.general.GAME_API;
+export const GAME_URI = environment.BASE_URI + environment.general.GAME_API;
 
 export abstract class AbstractGameService<G extends Game> {
 
@@ -38,6 +38,12 @@ export abstract class AbstractGameService<G extends Game> {
     lobbyChangeRequest: LobbyChangeRequest
   ): Observable<G> {
     return this.httpClient.post<G>(GAME_URI + this.SPECIFIC_GAME_URI + "lobby/change/" + gameIdentifier.token, lobbyChangeRequest);
+  }
+
+  public startGame(
+    gameIdentifier: GameIdentifier
+  ): Observable<G> {
+    return this.httpClient.post<G>(GAME_URI + this.SPECIFIC_GAME_URI + "start/" + gameIdentifier.token, null);
   }
 
   public getGame(

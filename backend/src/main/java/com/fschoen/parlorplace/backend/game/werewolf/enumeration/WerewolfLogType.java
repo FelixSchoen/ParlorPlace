@@ -7,6 +7,7 @@ public enum WerewolfLogType {
     WAKE,
     DEATH,
     WEREWOLVES_VOTE,
-    SEER_CHOICE,
+    SEER_SUCCESS,
+    SEER_FAILURE,
     VILLAGERS_VOTE
 }

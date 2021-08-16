@@ -1,5 +1,5 @@
-import {Player, WerewolfPlayer} from "./player";
-import {RuleSet, WerewolfRuleSet} from "./ruleset";
+import {Player} from "./player";
+import {RuleSet} from "./ruleset";
 
 export abstract class LobbyChangeRequest {
   protected constructor(public players: Set<Player>,
@@ -7,15 +7,3 @@ export abstract class LobbyChangeRequest {
   }
 }
 
-export class WerewolfLobbyChangeRequest extends LobbyChangeRequest {
-  constructor(public players: Set<WerewolfPlayer>,
-              public ruleSet: WerewolfRuleSet) {
-    super(players, ruleSet);
-  }
-
-  public toJSON(): WerewolfLobbyChangeRequest {
-    return Object.assign({}, this, {
-      $class: 'WerewolfLobbyChangeRequestDTO'
-    });
-  }
-}

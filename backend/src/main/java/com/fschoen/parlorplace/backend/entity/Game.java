@@ -39,7 +39,7 @@ import java.util.Set;
 @Data
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-public abstract class Game<P extends Player<?>, RS extends RuleSet, V extends Vote<P, ?, ?>, L extends LogEntry<?>> {
+public abstract class Game<P extends Player<?>, RS extends RuleSet, V extends Vote<P, ?, ?, ?>, L extends LogEntry<?>> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "seq_game_instance_id")

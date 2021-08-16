@@ -2,13 +2,17 @@ import {NgModule} from '@angular/core';
 import {BrowserModule} from '@angular/platform-browser';
 
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {HttpClientModule} from "@angular/common/http";
+
+import {TranslateCompiler, TranslateLoader, TranslateModule, TranslateService} from '@ngx-translate/core';
+import {TranslateHttpLoader} from '@ngx-translate/http-loader';
+import {HttpClient, HttpClientModule} from '@angular/common/http';
 
 import {authInterceptorProviders} from './interceptors/auth.interceptor';
 import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from "./app.component";
 import {MatSnackBarModule} from "@angular/material/snack-bar";
 import {OverlayContainer} from "@angular/cdk/overlay";
+import {TranslateMessageFormatCompiler} from "ngx-translate-messageformat-compiler";
 
 @NgModule({
   declarations: [
@@ -19,6 +23,17 @@ import {OverlayContainer} from "@angular/cdk/overlay";
     BrowserModule,
     BrowserAnimationsModule,
     HttpClientModule,
+    TranslateModule.forRoot({
+      loader: {
+        provide: TranslateLoader,
+        useFactory: HttpLoaderFactory,
+        deps: [HttpClient]
+      },
+      compiler: {
+        provide: TranslateCompiler,
+        useClass: TranslateMessageFormatCompiler
+      }
+    }),
     MatSnackBarModule,
   ],
   providers: [authInterceptorProviders],
@@ -27,7 +42,9 @@ import {OverlayContainer} from "@angular/cdk/overlay";
 })
 export class AppModule {
 
-  constructor(private overlayContainer: OverlayContainer) {
+  constructor(private overlayContainer: OverlayContainer, private translateService: TranslateService) {
+    translateService.setDefaultLang("en");
+    translateService.use("en");
   }
 
   changeTheme(
@@ -44,4 +61,8 @@ export class AppModule {
     overlayContainerClasses.add(theme);
   }
 
+}
+
+export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
+  return new TranslateHttpLoader(http);
 }

@@ -1,42 +1,68 @@
-<h2 mat-dialog-title>Register</h2>
+<h2 mat-dialog-title>{{"general.action.register" | translate}}</h2>
 
 <mat-dialog-content class="mat-typography">
 
   <mat-form-field class="w-100">
-    <mat-label i18n>Username</mat-label>
+    <mat-label>{{"general.attribute.username" | translate}}</mat-label>
     <input matInput [(ngModel)]="data.username" [formControl]="usernameControl">
-    <mat-error *ngIf="usernameControl.hasError('required')" i18n>Username is required</mat-error>
-    <mat-error *ngIf="usernameControl.hasError('minlength')" i18n>Username must be at least 3 characters</mat-error>
-    <mat-error *ngIf="usernameControl.hasError('maxlength')" i18n>Username must be at most 15 characters</mat-error>
+    <mat-error
+      *ngIf="usernameControl.hasError('required')">{{"general.validation.required" | translate:{"name": ("general.attribute.username" | translate)} }}
+    </mat-error>
+    <mat-error *ngIf="usernameControl.hasError('minlength')">{{"general.validation.minLength" | translate:{
+      "name": ("general.attribute.username" | translate),
+      "value": 3
+    } }}</mat-error>
+    <mat-error *ngIf="usernameControl.hasError('maxlength')">{{"general.validation.maxLength" | translate:{
+      "name": ("general.attribute.username" | translate),
+      "value": 15
+    } }}</mat-error>
   </mat-form-field>
 
   <mat-form-field class="w-100">
-    <mat-label>Password</mat-label>
+    <mat-label>{{"general.attribute.password" | translate}}</mat-label>
     <input matInput type="password" [(ngModel)]="data.password" [formControl]="passwordControl">
-    <mat-error *ngIf="passwordControl.hasError('required')" i18n>Password is required</mat-error>
-    <mat-error *ngIf="passwordControl.hasError('minlength')" i18n>Password must be at least 8 characters</mat-error>
-    <mat-error *ngIf="passwordControl.hasError('maxlength')" i18n>Password must be at most 255 characters</mat-error>
+    <mat-error
+      *ngIf="passwordControl.hasError('required')">{{"general.validation.required" | translate:{"name": ("general.attribute.password" | translate)} }}</mat-error>
+    <mat-error *ngIf="passwordControl.hasError('minlength')">{{"general.validation.minLength" | translate:{
+      "name": ("general.attribute.password" | translate),
+      "value": 8
+    } }}</mat-error>
+    <mat-error *ngIf="passwordControl.hasError('maxlength')">{{"general.validation.maxLength" | translate:{
+      "name": ("general.attribute.password" | translate),
+      "value": 255
+    } }}</mat-error>
   </mat-form-field>
 
   <mat-form-field class="w-100">
-    <mat-label>Confirm Password</mat-label>
+    <mat-label>{{"module.authentication.confirmPassword" | translate}}</mat-label>
     <input matInput type="password" [formControl]="confirmPasswordControl" [errorStateMatcher]="matcher">
-    <mat-error *ngIf="confirmPasswordControl.hasError('required')" i18n>Confirm password is required</mat-error>
-    <mat-error *ngIf="confirmPasswordControl.hasError('minlength')" i18n>Confirm password must be at least 8 characters</mat-error>
-    <mat-error *ngIf="confirmPasswordControl.hasError('maxlength')" i18n>Confirm password must be at most 255 characters</mat-error>
-    <mat-error *ngIf="confirmPasswordControl.hasError('matching')" i18n>Passwords do not match</mat-error>
+    <mat-error *ngIf="confirmPasswordControl.hasError('required')">{{"general.validation.required" | translate:{"name": ("module.authentication.confirmPassword" | translate)} }}</mat-error>
+    <mat-error *ngIf="confirmPasswordControl.hasError('minlength')">{{"general.validation.minLength" | translate:{
+      "name": ("module.authentication.confirmPassword" | translate),
+      "value": 8
+    } }}
+    </mat-error>
+    <mat-error *ngIf="confirmPasswordControl.hasError('maxlength')">{{"general.validation.maxLength" | translate:{
+      "name": ("module.authentication.confirmPassword" | translate),
+      "value": 255
+    } }}
+    </mat-error>
+    <mat-error *ngIf="confirmPasswordControl.hasError('matching')">{{"general.validation.matching" | translate:{
+      "name1": ("general.attribute.password" | translate),
+      "name2": ("module.authentication.confirmPassword" | translate)
+    } }}</mat-error>
   </mat-form-field>
 
   <mat-form-field class="w-100">
-    <mat-label i18n>E-Mail</mat-label>
+    <mat-label>{{"general.attribute.email" | translate}}</mat-label>
     <input matInput [(ngModel)]="data.email" [formControl]="emailControl">
-    <mat-error *ngIf="emailControl.hasError('required')" i18n>E-Mail is required</mat-error>
-    <mat-error *ngIf="emailControl.hasError('email')" i18n>E-Mail is invalid</mat-error>
+    <mat-error *ngIf="emailControl.hasError('required')">{{"general.validation.required" | translate:{"name": ("general.attribute.email" | translate)} }}</mat-error>
+    <mat-error *ngIf="emailControl.hasError('email')">{{"general.validation.invalid" | translate:{"name": ("general.attribute.email" | translate)} }}</mat-error>
   </mat-form-field>
 
 </mat-dialog-content>
 
 <mat-dialog-actions align="end">
-  <button mat-button (click)="onCancel()">Cancel</button>
-  <button mat-button (click)="onSubmit()" cdkFocusInitial>Confirm</button>
+  <button mat-button (click)="onCancel()">{{"general.action.cancel" | translate}}</button>
+  <button mat-button (click)="onSubmit()" cdkFocusInitial>{{"general.action.confirm" | translate}}</button>
 </mat-dialog-actions>

@@ -1,0 +1,129 @@
+<div class="container p-3 h-100">
+
+  <mat-tab-group id="group" dynamicHeight mat-stretch-tabs mat-align-tabs="center" *ngIf="!loading" (selectedTabChange)="selectedTabChange($event)">
+
+    <mat-tab>
+      <ng-template mat-tab-label>
+        <mat-icon class="material-icons">home</mat-icon>
+      </ng-template>
+
+      <div class="pt-3">
+
+        <!-- Village Card -->
+        <mat-card class="mx-3 mb-3">
+          <mat-card-header class="pp-center">
+            <mat-card-title>
+              {{"werewolf.misc.village" | translate}}
+            </mat-card-title>
+          </mat-card-header>
+
+          <mat-card-content>
+            <app-werewolf-player-list [players]="this.game.players"></app-werewolf-player-list>
+          </mat-card-content>
+        </mat-card>
+
+      </div>
+    </mat-tab>
+
+    <mat-tab>
+      <ng-template mat-tab-label>
+        <mat-icon class="material-icons">gavel</mat-icon>
+      </ng-template>
+
+      <div class="h-100 pt-3">
+
+        <!-- Action Card -->
+        <mat-card class="mx-3 mb-3">
+          <mat-card-header class="pp-center">
+            <mat-card-title>
+              {{"werewolf.misc.action" | translate}}
+            </mat-card-title>
+          </mat-card-header>
+
+          <mat-card-content>
+          </mat-card-content>
+
+        </mat-card>
+
+        <div *ngFor="let vote of game.votes" class="mx-3 mb-3">
+          <app-werewolf-vote [currentPlayer]="currentPlayer" [gameIdentifier]="this.game.gameIdentifier" [players]="this.game.players" [vote]="vote"></app-werewolf-vote>
+        </div>
+
+      </div>
+    </mat-tab>
+
+    <mat-tab>
+      <ng-template mat-tab-label>
+        <mat-icon class="material-icons">format_list_bulleted</mat-icon>
+      </ng-template>
+
+      <div class="h-100 pt-3">
+
+        <!-- Log Card -->
+        <mat-card class="mx-3 mb-3">
+          <mat-card-header class="pp-center">
+            <mat-card-title>
+              {{"werewolf.misc.log" | translate}}
+            </mat-card-title>
+          </mat-card-header>
+
+          <mat-card-content>
+
+            <app-werewolf-log-entry-list [log]="this.game.log" [players]="this.game.players"></app-werewolf-log-entry-list>
+
+          </mat-card-content>
+        </mat-card>
+
+      </div>
+    </mat-tab>
+
+    <mat-tab>
+      <ng-template mat-tab-label>
+        <mat-icon class="material-icons" matBadge="‎" matBadgeSize="small" [matBadgeHidden]="this.viewedRole">info</mat-icon>
+      </ng-template>
+
+      <div class="h-100 pt-3">
+
+        <!-- Information Card -->
+        <mat-card class="mx-3 mb-3">
+          <mat-card-header class="pp-center">
+            <mat-card-title>
+              {{"werewolf.misc.information" | translate}}
+            </mat-card-title>
+          </mat-card-header>
+
+          <mat-card-content class="pp-center">
+
+            <div>
+              <div class="flex-row mw-100 mt-5 pp-center">
+                <div class="col icon-container">
+                  <mat-icon inline="true"
+                            svgIcon="duotone-{{this.getCurrentRoleTypeCurrentPlayer().valueOf() | internalRepresentation}}"></mat-icon>
+                </div>
+              </div>
+              <div class="flex-row mt-5">
+                <div class="col">
+                  <div><h3>{{("werewolf.role."+(this.getCurrentRoleTypeCurrentPlayer().valueOf() | internalRepresentation)+".name") | translate}}</h3></div>
+                </div>
+              </div>
+              <div class="flex-row mt-1">
+                <div class="col">
+                  <div>{{("werewolf.role."+(this.getCurrentRoleTypeCurrentPlayer().valueOf() | internalRepresentation)+".description") | translate}}</div>
+                </div>
+              </div>
+            </div>
+
+          </mat-card-content>
+        </mat-card>
+
+      </div>
+    </mat-tab>
+
+  </mat-tab-group>
+
+  <!-- Loading Indicator -->
+  <div class="d-flex justify-content-center align-items-center h-100" *ngIf="loading">
+    <app-loading-indicator [loading]="loading" [errorMessage]="errorMessage"></app-loading-indicator>
+  </div>
+
+</div>

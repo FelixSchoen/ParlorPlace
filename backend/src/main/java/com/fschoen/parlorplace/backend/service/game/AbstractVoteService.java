@@ -23,10 +23,14 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.task.TaskExecutor;
 
 import java.lang.reflect.InvocationTargetException;
-import java.time.LocalDateTime;
+import java.time.Instant;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
@@ -35,15 +39,16 @@ import java.util.stream.Collectors;
 
 @Slf4j
 public abstract class AbstractVoteService<
-        V extends Vote<P, C, D>,
+        V extends Vote<P, T, C, D>,
         G extends Game<P, ?, V, ?>,
         P extends Player<?>,
         T,
-        C extends VoteCollection<P, T>,
+        C extends VoteCollection<T>,
         D extends Enum<D>,
         GRepo extends GameRepository<G>,
         PRepo extends PlayerRepository<P>,
-        VRepo extends VoteRepository<V>> extends BaseGameService<G, P, GRepo> {
+        VRepo extends VoteRepository<V>
+        > extends BaseGameService<G, P, GRepo> {
 
     // TODO Not stateless, but not persistent either - I believe that this still should be ok, on a server crash we can delete open votes and restart the moderator
     protected final ConcurrentMap<Long, CompletableFuture<V>> futureMap;
@@ -63,7 +68,7 @@ public abstract class AbstractVoteService<
         this.taskExecutor = taskExecutor;
     }
 
-    public CompletableFuture<V> requestVote(GameIdentifier gameIdentifier, VoteType voteType, Map<P, C> voteCollectionMap, D voteDescriptor, int durationInSeconds) {
+    public CompletableFuture<V> requestVote(GameIdentifier gameIdentifier, VoteType voteType, Integer outcomeAmount, Map<Long, C> voteCollectionMap, D voteDescriptor, int durationInSeconds) {
         log.info("Starting new Vote for Game: {}", gameIdentifier.getToken());
 
         G game = getActiveGame(gameIdentifier);
@@ -75,8 +80,10 @@ public abstract class AbstractVoteService<
             vote.setVoteState(VoteState.ONGOING);
             vote.setVoteType(voteType);
             vote.setVoteCollectionMap(voteCollectionMap);
+            vote.setOutcome(new HashSet<>());
+            vote.setOutcomeAmount(outcomeAmount);
             vote.setVoteDescriptor(voteDescriptor);
-            vote.setEndTime(LocalDateTime.now().plusSeconds(durationInSeconds));
+            vote.setEndTime(Instant.now().plusSeconds(durationInSeconds));
         } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
             throw new DataConflictException(Messages.exception(MessageIdentifier.VOTE_TYPE_MISMATCH), e);
         }
@@ -88,9 +95,9 @@ public abstract class AbstractVoteService<
         CompletableFuture<V> completableFuture = new CompletableFuture<>();
         this.futureMap.put(vote.getId(), completableFuture);
 
-        sendGameStaleNotification(game.getGameIdentifier(), voteCollectionMap.keySet().stream().map(player -> player.getUser()).collect(Collectors.toSet()));
+        broadcastGameStaleNotification(game, vote);
 
-        VoteConcludeTask voteConcludeTask = new VoteConcludeTask(vote.getId(), (double) durationInSeconds, true);
+        VoteConcludeTask voteConcludeTask = new VoteConcludeTask(vote.getId(), (double) durationInSeconds, true, game.getGameIdentifier());
         taskExecutor.execute(voteConcludeTask);
 
         return completableFuture;
@@ -102,25 +109,26 @@ public abstract class AbstractVoteService<
 
         validateUserInSpecificActiveGame(gameIdentifier, principal);
         validateVoteExists(voteId);
-        validateUserIsVoter(voteId, principal);
         validateVoteStatusOngoing(voteId);
 
         G game = this.getActiveGame(gameIdentifier);
         V vote = this.voteRepository.findOneById(voteId).orElseThrow();
+        P player = game.getPlayers().stream().filter(p -> p.getUser().equals(principal)).findFirst().orElseThrow(() -> new DataConflictException(Messages.exception(MessageIdentifier.PLAYER_EXISTS_NOT)));
 
-        P player = this.playerRepository.findOneById(voteCollectionProposal.getPlayer().getId()).orElseThrow(() -> new DataConflictException(Messages.exception(MessageIdentifier.PLAYER_EXISTS_NOT)));
+        validatePlayerIsVoter(voteId, player);
 
         // Check if vote proposal is valid
         V finalVote = vote;
-        C asdf = vote.getVoteCollectionMap().get(player);
-        if (voteCollectionProposal.getSelection().size() > asdf.getAmountVotes()
-                || voteCollectionProposal.getSelection().stream().anyMatch(selection -> !finalVote.getVoteCollectionMap().get(player).getSubjects().contains(selection))
-                || voteCollectionProposal.getAllowAbstain() != asdf.getAllowAbstain()
+        C existingVoteCollection = vote.getVoteCollectionMap().get(player.getId());
+        if (existingVoteCollection == null
+                || voteCollectionProposal.getSelection().size() > existingVoteCollection.getAmountVotes()
+                || voteCollectionProposal.getSelection().stream().anyMatch(selection -> !finalVote.getVoteCollectionMap().get(player.getId()).getSubjects().contains(selection))
+                || voteCollectionProposal.getAllowAbstain() != existingVoteCollection.getAllowAbstain()
                 || !voteCollectionProposal.getAllowAbstain() && voteCollectionProposal.getAbstain() != null && voteCollectionProposal.getAbstain())
             throw new VoteException(Messages.exception(MessageIdentifier.VOTE_DATA_CONFLICT));
 
         // Transfer vote proposal to vote entity
-        C voteCollection = vote.getVoteCollectionMap().get(player);
+        C voteCollection = vote.getVoteCollectionMap().get(player.getId());
         voteCollection.setAbstain(voteCollectionProposal.getAbstain());
         voteCollection.getSelection().removeAll(voteCollection.getSelection());
         for (T element : voteCollectionProposal.getSelection()) {
@@ -129,11 +137,11 @@ public abstract class AbstractVoteService<
 
         vote = this.voteRepository.save(vote);
 
-        sendGameStaleNotification(game.getGameIdentifier(), vote.getVoteCollectionMap().keySet().stream().map(voter -> voter.getUser()).collect(Collectors.toSet()));
+        broadcastGameStaleNotification(game, vote);
 
         // Setup VoteConcludeTask with grace period
         if (vote.getVoteCollectionMap().values().stream().allMatch(collection -> collection.getSelection().size() == collection.getAmountVotes())) {
-            VoteConcludeTask voteConcludeTask = new VoteConcludeTask(vote.getId(), GRACE_PERIOD_DURATION, false);
+            VoteConcludeTask voteConcludeTask = new VoteConcludeTask(vote.getId(), GRACE_PERIOD_DURATION, false, game.getGameIdentifier());
             taskExecutor.execute(voteConcludeTask);
         }
 
@@ -150,20 +158,26 @@ public abstract class AbstractVoteService<
 
     // Utility
 
-    public Map<P, C> getSameChoiceCollectionMap(Set<P> voters, Set<T> subjects, int amountVotes) {
-        Map<P, C> map = new HashMap<>();
+    protected void broadcastGameStaleNotification(G game, V vote) {
+        sendGameStaleNotification(game.getGameIdentifier(), vote.getVoteCollectionMap().keySet().stream().map(
+                        playerId -> game.getPlayers().stream().filter(player -> player.getId().equals(playerId)).findFirst().orElseThrow().getUser())
+                .collect(Collectors.toSet()));
+    }
+
+    public Map<Long, C> getSameChoiceCollectionMap(Set<P> voters, Set<T> subjects, int amountVotes, boolean allowAbstain) {
+        Map<Long, C> map = new HashMap<>();
         for (P voter : voters) {
             C voteCollection;
 
             try {
                 voteCollection = this.getVoteCollectionClass().getDeclaredConstructor().newInstance();
-                voteCollection.setPlayer(voter);
                 voteCollection.setAmountVotes(amountVotes);
+                voteCollection.setAllowAbstain(allowAbstain);
                 voteCollection.setSubjects(new HashSet<>() {{
                     addAll(subjects);
                 }});
                 voteCollection.setSelection(new HashSet<>());
-                map.put(voter, voteCollection);
+                map.put(voter.getId(), voteCollection);
             } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
                 throw new DataConflictException(Messages.exception(MessageIdentifier.VOTE_TYPE_MISMATCH), e);
             }
@@ -178,13 +192,13 @@ public abstract class AbstractVoteService<
             throw new VoteException(Messages.exception(MessageIdentifier.VOTE_EXISTS_NOT));
     }
 
-    protected void validateUserIsVoter(long voteId, User user) {
-        if (this.voteRepository.findOneById(voteId).get().getVoteCollectionMap().keySet().stream().noneMatch(key -> key.getUser().equals(user)))
+    protected void validatePlayerIsVoter(long voteId, P player) {
+        if (this.voteRepository.findOneById(voteId).orElseThrow().getVoteCollectionMap().keySet().stream().noneMatch(key -> key.equals(player.getId())))
             throw new VoteException(Messages.exception(MessageIdentifier.VOTE_EXISTS_NOT));
     }
 
     protected void validateVoteStatusOngoing(long voteId) {
-        if (!this.voteRepository.findOneById(voteId).get().getVoteState().equals(VoteState.ONGOING))
+        if (!this.voteRepository.findOneById(voteId).orElseThrow().getVoteState().equals(VoteState.ONGOING))
             throw new VoteException(Messages.exception(MessageIdentifier.VOTE_STATUS_CONCLUDED));
     }
 
@@ -201,6 +215,8 @@ public abstract class AbstractVoteService<
         private final Long voteId;
         private final Double sleepDurationSeconds;
         private final Boolean forceClose;
+
+        private final GameIdentifier gameIdentifier;
 
         @SneakyThrows
         @Override
@@ -223,7 +239,48 @@ public abstract class AbstractVoteService<
 
             // Close vote
             currentVote.setVoteState(VoteState.CONCLUDED);
+
+            // Calculate outcome
+            Map<T, Integer> votes = new HashMap<>();
+
+            for (Entry<Long, C> entry : currentVote.getVoteCollectionMap().entrySet()) {
+                for (T t : entry.getValue().getSelection()) {
+                    votes.putIfAbsent(t, 0);
+                    votes.put(t, votes.get(t) + 1);
+                }
+            }
+
+            // Sort by votes
+            List<Entry<T, Integer>> sortedCandidates = votes.entrySet().stream().sorted(Map.Entry.comparingByValue(Integer::compareTo)).collect(Collectors.toList());
+
+            // Create bins of equal votes
+            List<List<T>> binList = new ArrayList<>();
+            List<T> currentBin = new ArrayList<>();
+            int currentMaxVotes = sortedCandidates.get(0).getValue();
+
+            for (Entry<T, Integer> entry : sortedCandidates) {
+                if (entry.getValue() < currentMaxVotes) {
+                    currentMaxVotes = entry.getValue();
+                    binList.add(currentBin);
+                    currentBin = new ArrayList<>();
+                }
+                currentBin.add(entry.getKey());
+            }
+
+            // Shuffle bins
+            for (List<T> bin : binList) {
+                Collections.shuffle(bin);
+            }
+
+            // Get top outcomeAmount choices
+            List<T> flatList = binList.stream().flatMap(List::stream).collect(Collectors.toList());
+            currentVote.getOutcome().addAll(flatList.stream().limit(currentVote.getOutcomeAmount()).collect(Collectors.toList()));
+
             voteRepository.save(currentVote);
+
+            G currentGame = getActiveGame(gameIdentifier);
+
+            broadcastGameStaleNotification(currentGame, currentVote);
 
             // Complete future
             if (futureMap.containsKey(currentVote.getId())) {

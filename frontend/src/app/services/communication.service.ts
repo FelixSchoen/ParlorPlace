@@ -8,20 +8,21 @@ import {CompatClient, Stomp} from "@stomp/stompjs";
 export class CommunicationService {
 
   private headers = {
-    Authentication: "Bearer "
+    Authentication: ""
   };
 
   constructor(private tokenService: TokenService) {
   }
 
   public connectSocket(url: string, subscribeUrl: string, subscribeCallback: (payload: any) => any) {
-    this.headers.Authentication += this.tokenService.getToken()?.accessToken;
+    this.headers.Authentication = "Bearer " + this.tokenService.getToken()?.accessToken;
 
     let client = Stomp.client(url);
     client.brokerURL = url;
 
     // Disables console messages
-    client.debug = () => {};
+    client.debug = () => {
+    };
 
     client.connect(this.headers,
       function () {
@@ -34,8 +35,8 @@ export class CommunicationService {
   }
 
   public disconnectSocket(client: CompatClient) {
-    client.webSocket.close();
+    if (client.webSocket != undefined)
+      client.webSocket.close();
   }
-
 
 }

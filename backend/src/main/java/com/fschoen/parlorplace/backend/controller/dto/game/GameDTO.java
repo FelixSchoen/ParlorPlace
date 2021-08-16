@@ -19,7 +19,7 @@ import java.util.Set;
 @AllArgsConstructor
 @SuperBuilder(toBuilder = true)
 @Data
-public abstract class GameDTO<PDTO extends PlayerDTO<?>, RSDTO extends RuleSetDTO, VDTO extends VoteDTO<PDTO, ?, ?>, L extends LogEntryDTO<?>> {
+public abstract class GameDTO<PDTO extends PlayerDTO<?>, RSDTO extends RuleSetDTO, VDTO extends VoteDTO<PDTO, ?, ?, ?>, L extends LogEntryDTO<?>> {
 
     @NotNull
     protected Long id;

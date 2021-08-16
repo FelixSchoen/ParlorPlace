@@ -16,38 +16,51 @@ import {DragDropModule} from "@angular/cdk/drag-drop";
 import {MatListModule} from "@angular/material/list";
 import {MatProgressBarModule} from "@angular/material/progress-bar";
 import {MatTabsModule} from "@angular/material/tabs";
-import {LobbyComponent} from "../lobby/lobby.component";
-import {WerewolfLobbyComponent} from "../lobby/werewolf-lobby/werewolf-lobby.component";
-import {RoleSelectionComponent} from "../../components/lobby/role-selection/role-selection.component";
-import {PlayerListComponent} from "../../components/lobby/player-list/player-list.component";
+import {WerewolfLobbyComponent} from "../../components/lobby/werewolf-lobby/werewolf-lobby.component";
+import {RoleSelectionComponent} from "../../components/lobby-components/role-selection/role-selection.component";
+import {ParticipantListComponent} from "../../components/lobby-components/participant-list/participant-list.component";
 import {GeneralModule} from "../general/general.module";
+import {GameInterfaceComponent} from '../../components/game-interface/game-interface.component';
+import {WerewolfInterfaceComponent} from '../../components/game-interface/werewolf-interface/werewolf-interface.component';
+import {WerewolfPlayerListComponent} from '../../components/game-interface-components/werewolf-player-list/werewolf-player-list.component';
+import {MatBadgeModule} from "@angular/material/badge";
+import {WerewolfLogEntryListComponent} from '../../components/game-interface-components/log-entry-list/werewolf-log-entry-list/werewolf-log-entry-list.component';
+import {WerewolfVoteComponent} from '../../components/game-interface-components/vote/werewolf-vote/werewolf-vote.component';
+import {MatTableModule} from "@angular/material/table";
 
 
 @NgModule({
   declarations: [
-    GameComponent,
     GameDirective,
-    LobbyComponent,
+    GameComponent,
     WerewolfLobbyComponent,
     RoleSelectionComponent,
-    PlayerListComponent,
+    ParticipantListComponent,
+    GameInterfaceComponent,
+    WerewolfInterfaceComponent,
+    WerewolfPlayerListComponent,
+    WerewolfLogEntryListComponent,
+    WerewolfVoteComponent,
   ],
-    imports: [
-        CommonModule,
-        GeneralModule,
-        GameRoutingModule,
-        ReactiveFormsModule,
-        MatChipsModule,
-        MatCardModule,
-        MatButtonModule,
-        MatDialogModule,
-        MatInputModule,
-        MatAutocompleteModule,
-        MatIconModule,
-        DragDropModule,
-        MatListModule,
-        MatProgressBarModule,
-        MatTabsModule,
-    ]
+  imports: [
+    CommonModule,
+    GeneralModule,
+    GameRoutingModule,
+    ReactiveFormsModule,
+    MatChipsModule,
+    MatCardModule,
+    MatButtonModule,
+    MatDialogModule,
+    MatInputModule,
+    MatAutocompleteModule,
+    MatIconModule,
+    DragDropModule,
+    MatListModule,
+    MatProgressBarModule,
+    MatTabsModule,
+    MatBadgeModule,
+    MatTableModule,
+  ]
 })
-export class GameModule { }
+export class GameModule {
+}
