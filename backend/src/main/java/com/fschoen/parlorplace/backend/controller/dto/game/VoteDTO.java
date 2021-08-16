@@ -9,7 +9,7 @@ import lombok.experimental.SuperBuilder;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.Map;
 import java.util.Set;
 
@@ -45,6 +45,6 @@ public abstract class VoteDTO<P extends PlayerDTO<?>, T, C extends VoteCollectio
     protected Integer outcomeAmount;
 
     @NotNull
-    protected LocalDateTime endTime;
+    protected Instant endTime;
 
 }

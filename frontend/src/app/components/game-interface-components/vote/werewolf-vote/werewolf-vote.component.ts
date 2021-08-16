@@ -14,6 +14,7 @@ export class WerewolfVoteComponent extends VoteComponent<WerewolfPlayer, Werewol
   }
 
   ngOnInit(): void {
+    super.ngOnInit()
   }
 
   getTranslationKey(e: Object): string {

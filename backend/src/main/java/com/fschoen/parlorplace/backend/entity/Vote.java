@@ -25,7 +25,7 @@ import javax.persistence.MapKeyJoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.validation.constraints.NotNull;
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.Map;
 import java.util.Set;
 
@@ -81,7 +81,7 @@ public abstract class Vote<
     protected Integer outcomeAmount;
 
     @Column(nullable = false)
-    protected LocalDateTime endTime;
+    protected Instant endTime;
 
     public abstract Set<T> getOutcome();
 

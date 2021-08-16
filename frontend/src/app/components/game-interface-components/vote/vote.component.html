@@ -12,7 +12,7 @@
           {{"general.vote.choose" | translate: {"amount": voteMap.get(currentPlayer.id)?.amountVotes} }}
         </div>
         <div class="col text-right">
-          {{"general.vote.time" | translate:{"amount": 5} }}
+          {{"general.vote.time" | translate:{"amount": (this.timeRemaining | formatTime)} }}
         </div>
       </div>
       <div class="row">

@@ -9,6 +9,7 @@ import {DistinctPipe} from "../../pipes/distinct.pipe";
 import {HttpClientModule} from "@angular/common/http";
 import {InternalRepresentationPipe} from "../../pipes/internal-representation.pipe";
 import {TranslateModule} from "@ngx-translate/core";
+import {FormatTimePipe} from "../../pipes/format-time.pipe";
 
 
 @NgModule({
@@ -17,6 +18,7 @@ import {TranslateModule} from "@ngx-translate/core";
     LoadingIndicatorComponent,
     DistinctPipe,
     InternalRepresentationPipe,
+    FormatTimePipe,
   ],
   imports: [
     CommonModule,
@@ -30,6 +32,7 @@ import {TranslateModule} from "@ngx-translate/core";
     LoadingIndicatorComponent,
     DistinctPipe,
     InternalRepresentationPipe,
+    FormatTimePipe,
   ]
 })
 export class GeneralModule { }

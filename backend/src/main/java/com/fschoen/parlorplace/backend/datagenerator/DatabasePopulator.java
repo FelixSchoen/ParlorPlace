@@ -30,7 +30,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -292,7 +292,7 @@ public class DatabasePopulator {
                         .voteState(VoteState.ONGOING)
                         .voteType(VoteType.PUBLIC_PUBLIC_PUBLIC)
                         .voteDescriptor(WerewolfVoteDescriptor.WEREWOLVES_KILL)
-                        .endTime(LocalDateTime.now().plusSeconds(30))
+                        .endTime(Instant.now().plusSeconds(600))
                         .voteCollectionMap(new HashMap<>())
                         .outcome(new HashSet<>())
                         .outcomeAmount(1)

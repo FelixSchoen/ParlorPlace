@@ -23,7 +23,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.task.TaskExecutor;
 
 import java.lang.reflect.InvocationTargetException;
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -82,7 +82,7 @@ public abstract class AbstractVoteService<
             vote.setOutcome(new HashSet<>());
             vote.setOutcomeAmount(outcomeAmount);
             vote.setVoteDescriptor(voteDescriptor);
-            vote.setEndTime(LocalDateTime.now().plusSeconds(durationInSeconds));
+            vote.setEndTime(Instant.now().plusSeconds(durationInSeconds));
         } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
             throw new DataConflictException(Messages.exception(MessageIdentifier.VOTE_TYPE_MISMATCH), e);
         }
