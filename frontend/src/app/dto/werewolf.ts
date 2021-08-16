@@ -15,7 +15,6 @@ import {VoteType} from "../enums/votetype";
 import {EnumValue} from "@angular/compiler-cli/src/ngtsc/partial_evaluator";
 import {Vote, VoteCollection} from "./vote";
 import {WerewolfLogType} from "../enums/games/werewolflogtype";
-import {Pairing} from "./pairing";
 
 export class WerewolfGame extends Game {
   constructor(public id: number,
@@ -41,6 +40,7 @@ export class WerewolfPlayer extends Player {
               public position: number) {
     super(id, user, lobbyRole, playerState, gameRoles, position);
   }
+
 }
 
 export class WerewolfRuleSet extends RuleSet {
@@ -49,13 +49,13 @@ export class WerewolfRuleSet extends RuleSet {
   }
 }
 
-export class WerewolfVote extends Vote<WerewolfPlayer> {
+export class WerewolfVote extends Vote<WerewolfPlayer, WerewolfVoteCollection> {
 
   constructor(public id: number,
               public voteState: VoteState,
               public voteType: VoteType,
               public voteDescriptor: EnumValue,
-              public voteCollectionMap: Pairing<number, WerewolfVoteCollection>[],
+              public voteCollectionMap: [number, WerewolfVoteCollection][],
               public outcome: Set<WerewolfPlayer>,
               public outcomeAmount: number,
               public endTime: number) {
@@ -64,7 +64,7 @@ export class WerewolfVote extends Vote<WerewolfPlayer> {
 
 }
 
-export class WerewolfVoteCollection extends VoteCollection<WerewolfPlayer, WerewolfPlayer> {
+export class WerewolfVoteCollection extends VoteCollection<WerewolfPlayer> {
 
   constructor(public amountVotes: number,
               public allowAbstain: boolean,

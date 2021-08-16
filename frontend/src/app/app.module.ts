@@ -3,7 +3,7 @@ import {BrowserModule} from '@angular/platform-browser';
 
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 
-import {TranslateLoader, TranslateModule} from '@ngx-translate/core';
+import {TranslateCompiler, TranslateLoader, TranslateModule, TranslateService} from '@ngx-translate/core';
 import {TranslateHttpLoader} from '@ngx-translate/http-loader';
 import {HttpClient, HttpClientModule} from '@angular/common/http';
 
@@ -12,6 +12,7 @@ import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from "./app.component";
 import {MatSnackBarModule} from "@angular/material/snack-bar";
 import {OverlayContainer} from "@angular/cdk/overlay";
+import {TranslateMessageFormatCompiler} from "ngx-translate-messageformat-compiler";
 
 @NgModule({
   declarations: [
@@ -27,6 +28,10 @@ import {OverlayContainer} from "@angular/cdk/overlay";
         provide: TranslateLoader,
         useFactory: HttpLoaderFactory,
         deps: [HttpClient]
+      },
+      compiler: {
+        provide: TranslateCompiler,
+        useClass: TranslateMessageFormatCompiler
       }
     }),
     MatSnackBarModule,
@@ -37,7 +42,9 @@ import {OverlayContainer} from "@angular/cdk/overlay";
 })
 export class AppModule {
 
-  constructor(private overlayContainer: OverlayContainer) {
+  constructor(private overlayContainer: OverlayContainer, private translateService: TranslateService) {
+    translateService.setDefaultLang("en");
+    translateService.use("en");
   }
 
   changeTheme(

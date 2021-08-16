@@ -70,7 +70,7 @@ public abstract class Vote<
             joinColumns = @JoinColumn(name = "vote_id"),
             inverseJoinColumns = @JoinColumn(name = "collection_id")
     )
-    @MapKeyJoinColumn(name = "player_id")
+    @MapKeyJoinColumn(name = "votecollection_id")
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
     @NotNull

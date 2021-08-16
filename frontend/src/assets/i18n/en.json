@@ -27,15 +27,15 @@
       "settings": "Settings"
     },
     "validation": {
-      "required": "{{name}} is required",
-      "invalid": "{{name}} is invalid",
-      "minLength": "{{name}} must be at least {{value}} characters",
-      "maxLength": "{{name}} must be at most {{value}} characters",
-      "matching": "{{name1}} and {{name2}} do not match"
+      "required": "{name} is required",
+      "invalid": "{name} is invalid",
+      "minLength": "{name} must be at least {value} characters",
+      "maxLength": "{name} must be at most {value} characters",
+      "matching": "{name1} and {name2} do not match"
     },
     "vote": {
-      "choose": "Choose {{amount}} options",
-      "time": "Remaining: {{amount}}"
+      "choose": "Choose {amount} {amount, plural, =0{options} one{option} other{options}}",
+      "time": "Remaining: {amount}"
     }
   },
   "module": {
@@ -109,11 +109,11 @@
       "end": "Game has ended",
       "sleep": "You fall asleep",
       "wake": "You wake up",
-      "death": "{{player}} has died",
-      "werewolves_vote": "The werewolves savage {{player}}",
-      "seer_success": "{{player}} is a Werewolf",
-      "seer_failure": "{{player}} is not a Werewolf",
-      "villagers_vote": "The villagers lynch {{player}}"
+      "death": "{player} has died",
+      "werewolves_vote": "The werewolves savage {player}",
+      "seer_success": "{player} is a Werewolf",
+      "seer_failure": "{player} is not a Werewolf",
+      "villagers_vote": "The villagers lynch {player}"
     },
     "misc": {
       "village": "Village",

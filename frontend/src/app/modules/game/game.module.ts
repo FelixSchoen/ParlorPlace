@@ -41,24 +41,24 @@ import {WerewolfVoteComponent} from '../../components/game-interface-components/
     WerewolfLogEntryListComponent,
     WerewolfVoteComponent,
   ],
-  imports: [
-    CommonModule,
-    GeneralModule,
-    GameRoutingModule,
-    ReactiveFormsModule,
-    MatChipsModule,
-    MatCardModule,
-    MatButtonModule,
-    MatDialogModule,
-    MatInputModule,
-    MatAutocompleteModule,
-    MatIconModule,
-    DragDropModule,
-    MatListModule,
-    MatProgressBarModule,
-    MatTabsModule,
-    MatBadgeModule,
-  ]
+    imports: [
+        CommonModule,
+        GeneralModule,
+        GameRoutingModule,
+        ReactiveFormsModule,
+        MatChipsModule,
+        MatCardModule,
+        MatButtonModule,
+        MatDialogModule,
+        MatInputModule,
+        MatAutocompleteModule,
+        MatIconModule,
+        DragDropModule,
+        MatListModule,
+        MatProgressBarModule,
+        MatTabsModule,
+        MatBadgeModule,
+    ]
 })
 export class GameModule {
 }

@@ -2,7 +2,6 @@ import {Component, OnInit} from '@angular/core';
 import {AppModule} from "./app.module";
 import {MatIconRegistry} from "@angular/material/icon";
 import {DomSanitizer} from "@angular/platform-browser";
-import {TranslateService} from "@ngx-translate/core";
 
 const THEME_KEY = 'theme-style';
 
@@ -21,11 +20,9 @@ export class AppComponent implements OnInit {
 
   constructor(
     private appModule: AppModule,
-    private translateService: TranslateService,
     private matIconRegistry: MatIconRegistry,
     private domSanitizer: DomSanitizer
   ) {
-    translateService.setDefaultLang("en");
 
     this.matIconRegistry.addSvgIcon(
       "duotone-unknown",

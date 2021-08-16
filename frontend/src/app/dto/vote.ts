@@ -1,35 +1,35 @@
 import {VoteState} from "../enums/votestate";
 import {VoteType} from "../enums/votetype";
 import {EnumValue} from "@angular/compiler-cli/src/ngtsc/partial_evaluator";
-import {Pairing} from "./pairing";
 
-export abstract class Vote<P> {
-
-  public voteCollection: Map<number, VoteCollection<P, any>>;
+export abstract class Vote<T, C extends VoteCollection<T>> {
 
   protected constructor(public id: number,
                         public voteState: VoteState,
                         public voteType: VoteType,
                         public voteDescriptor: EnumValue,
-                        public voteCollectionMap: Pairing<number, VoteCollection<P, any>>[],
-                        public outcome: Set<P>,
+                        public voteCollectionMap: [number, C][],
+                        public outcome: Set<T>,
                         public outcomeAmount: number,
                         public endTime: number) {
-    this.voteCollection = new Map<number, VoteCollection<P, any>>();
-    for (let entry of this.voteCollectionMap) {
-      console.log("now")
-      console.log(entry.key)
+  }
+
+  public static toMap<C extends VoteCollection<any>>(voteCollectionMap: [number, C][]): Map<number, C> {
+    let map = new Map<number, C>();
+    for (let entry of Object.entries(voteCollectionMap)) {
+      map.set(Number(entry[0]), entry[1] as unknown as C);
     }
+    return map;
   }
 
 }
 
-export abstract class VoteCollection<P, T> {
+export abstract class VoteCollection<T> {
 
   protected constructor(public amountVotes: number,
                         public allowAbstain: boolean,
                         public abstain: boolean,
-                        public subjects: Set<P>,
+                        public subjects: Set<T>,
                         public selection: Set<T>) {
   }
 
