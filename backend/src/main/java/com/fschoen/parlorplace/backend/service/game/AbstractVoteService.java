@@ -140,7 +140,7 @@ public abstract class AbstractVoteService<
         broadcastGameStaleNotification(game, vote);
 
         // Setup VoteConcludeTask with grace period
-        if (vote.getVoteCollectionMap().values().stream().allMatch(collection -> collection.getSelection().size() == collection.getAmountVotes())) {
+        if (vote.getVoteCollectionMap().values().stream().allMatch(collection -> (collection.getSelection().size() == collection.getAmountVotes())) || voteCollection.getAbstain()) {
             VoteConcludeTask voteConcludeTask = new VoteConcludeTask(vote.getId(), GRACE_PERIOD_DURATION, false, game.getGameIdentifier());
             taskExecutor.execute(voteConcludeTask);
         }

@@ -22,7 +22,7 @@ export class WerewolfVoteComponent extends VoteComponent<WerewolfGame, WerewolfP
 
   protected sendVoteData(voteCollection: WerewolfVoteCollection): void {
     this.gameService.vote(this.gameIdentifier, this.vote.id, voteCollection).subscribe({
-      error: err => this.notificationService.showError(err)
+      error: error => this.notificationService.showError(error.error)
     });
   }
 

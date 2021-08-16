@@ -13,6 +13,7 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -65,7 +66,7 @@ public abstract class Vote<
     @NotNull
     protected VoteType voteType;
 
-    @OneToMany(targetEntity = VoteCollection.class, cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(targetEntity = VoteCollection.class, cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     @JoinTable(
             joinColumns = @JoinColumn(name = "vote_id"),
             inverseJoinColumns = @JoinColumn(name = "collection_id")
