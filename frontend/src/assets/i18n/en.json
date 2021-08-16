@@ -37,6 +37,8 @@
       "choose": "Choose {amount} {amount, plural, =0{options} one{option} other{options}}",
       "time": "Remaining: {amount}",
       "result": "Result",
+      "abstain": "Abstain",
+      "abstained": "Abstained",
       "others": "Selection of players"
     }
   },

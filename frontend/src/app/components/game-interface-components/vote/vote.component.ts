@@ -2,13 +2,15 @@ import {Directive, Input, OnChanges, OnDestroy, OnInit, SimpleChanges} from '@an
 import {Vote, VoteCollection} from "../../../dto/vote";
 import {Player} from "../../../dto/player";
 import {Subscription, timer} from "rxjs";
+import {Game, GameIdentifier} from "../../../dto/game";
 
 @Directive({
   selector: 'app-vote',
 })
-export abstract class VoteComponent<P extends Player, V extends Vote<T, C>, T, C extends VoteCollection<T>> implements OnInit, OnDestroy, OnChanges {
+export abstract class VoteComponent<G extends Game, P extends Player, V extends Vote<T, C>, T, C extends VoteCollection<T>> implements OnInit, OnDestroy, OnChanges {
 
   @Input() public currentPlayer: P;
+  @Input() public gameIdentifier: GameIdentifier;
   @Input() public players: Set<P>;
   @Input() public vote: V;
 
@@ -28,7 +30,8 @@ export abstract class VoteComponent<P extends Player, V extends Vote<T, C>, T, C
   ngOnInit(): void {
     this.timeRemaining = (this.vote.endTime * 1000 - new Date().getTime()) / 1000
     this.countDown = timer(0, 1000).subscribe(() => this.timeRemaining = Math.max(0, this.timeRemaining - 1));
-    this.votersData = this.getData();
+
+    this.update();
   }
 
   ngOnDestroy(): void {
@@ -36,13 +39,45 @@ export abstract class VoteComponent<P extends Player, V extends Vote<T, C>, T, C
   }
 
   ngOnChanges(simpleChanges: SimpleChanges) {
+    this.update();
+  }
+
+  update(): void {
     this.voteMap = Vote.toMap<C>(this.vote.voteCollectionMap);
     this.votersData = this.getData();
+    this.selectedOptions = Array.from(this.voteMap.get(this.currentPlayer.id)!.selection);
   }
 
-  public selectOption() {
+  public selectOption(t: T) {
+    let voteCollection = this.voteMap.get(this.currentPlayer.id);
+    if (voteCollection == undefined) return;
 
+    voteCollection.abstain = false;
+
+    this.selectedOptions.push(t);
+    if (this.selectedOptions.length > voteCollection.amountVotes) {
+      let removedElement = this.selectedOptions.shift();
+      voteCollection.selection = voteCollection.selection.filter(obj => obj != removedElement);
+    }
+
+    voteCollection.selection.push(t);
+
+    this.sendVoteData(voteCollection);
   }
+
+  public selectAbstain() {
+    let voteCollection = this.voteMap.get(this.currentPlayer.id);
+    if (voteCollection == undefined) return;
+
+    voteCollection.abstain = true;
+    voteCollection.selection = [];
+
+    this.selectedOptions = [];
+
+    this.sendVoteData(voteCollection)
+  }
+
+  protected abstract sendVoteData(voteCollection: C): void;
 
   public getData(): [P, C][] {
     let entries = this.voteMap.entries();

@@ -1,21 +1,29 @@
 import {Component, OnInit} from '@angular/core';
 import {VoteComponent} from "../vote.component";
-import {WerewolfPlayer, WerewolfVote, WerewolfVoteCollection} from "../../../../dto/werewolf";
+import {WerewolfGame, WerewolfPlayer, WerewolfVote, WerewolfVoteCollection} from "../../../../dto/werewolf";
 import {Player} from "../../../../dto/player";
+import {WerewolfGameService} from "../../../../services/werewolf-game.service";
+import {NotificationService} from "../../../../services/notification.service";
 
 @Component({
   selector: 'app-werewolf-vote',
   templateUrl: '../vote.component.html',
   styleUrls: ['../vote.component.scss']
 })
-export class WerewolfVoteComponent extends VoteComponent<WerewolfPlayer, WerewolfVote, WerewolfPlayer, WerewolfVoteCollection> implements OnInit {
+export class WerewolfVoteComponent extends VoteComponent<WerewolfGame, WerewolfPlayer, WerewolfVote, WerewolfPlayer, WerewolfVoteCollection> implements OnInit {
 
-  constructor() {
+  constructor(public gameService: WerewolfGameService, public notificationService: NotificationService) {
     super();
   }
 
   ngOnInit(): void {
     super.ngOnInit()
+  }
+
+  protected sendVoteData(voteCollection: WerewolfVoteCollection): void {
+    this.gameService.vote(this.gameIdentifier, this.vote.id, voteCollection).subscribe({
+      error: err => this.notificationService.showError(err)
+    });
   }
 
   getTranslationKey(e: Object): string {
@@ -26,11 +34,11 @@ export class WerewolfVoteComponent extends VoteComponent<WerewolfPlayer, Werewol
     return Player.toNameRepresentation(s.user, this.players)
   }
 
-  includedInSelection(s: any): boolean {
+  includedInSelection(s: WerewolfPlayer): boolean {
     let array = this.voteMap.get(this.currentPlayer.id)?.selection
     if (array == undefined)
       return false;
-    return Array.from(array).some(entry => entry == s);
+    return array.some(entry => entry.id == s.id);
   }
 
 }

@@ -29,8 +29,8 @@ export abstract class VoteCollection<T> {
   protected constructor(public amountVotes: number,
                         public allowAbstain: boolean,
                         public abstain: boolean,
-                        public subjects: Set<T>,
-                        public selection: Set<T>) {
+                        public subjects: T[],
+                        public selection: T[]) {
   }
 
 }

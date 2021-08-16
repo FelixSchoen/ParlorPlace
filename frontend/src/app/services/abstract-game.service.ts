@@ -5,7 +5,7 @@ import {LobbyChangeRequest} from "../dto/lobby";
 import {User} from "../dto/user";
 import {environment} from "../../environments/environment";
 
-const GAME_URI = environment.BASE_URI + environment.general.GAME_API;
+export const GAME_URI = environment.BASE_URI + environment.general.GAME_API;
 
 export abstract class AbstractGameService<G extends Game> {
 

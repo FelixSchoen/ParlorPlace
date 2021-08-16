@@ -69,8 +69,8 @@ export class WerewolfVoteCollection extends VoteCollection<WerewolfPlayer> {
   constructor(public amountVotes: number,
               public allowAbstain: boolean,
               public abstain: boolean,
-              public subjects: Set<WerewolfPlayer>,
-              public selection: Set<WerewolfPlayer>) {
+              public subjects: WerewolfPlayer[],
+              public selection: WerewolfPlayer[]) {
     super(amountVotes, allowAbstain, abstain, subjects, selection);
   }
 

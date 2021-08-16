@@ -47,7 +47,8 @@ public abstract class AbstractVoteService<
         D extends Enum<D>,
         GRepo extends GameRepository<G>,
         PRepo extends PlayerRepository<P>,
-        VRepo extends VoteRepository<V>> extends BaseGameService<G, P, GRepo> {
+        VRepo extends VoteRepository<V>
+        > extends BaseGameService<G, P, GRepo> {
 
     // TODO Not stateless, but not persistent either - I believe that this still should be ok, on a server crash we can delete open votes and restart the moderator
     protected final ConcurrentMap<Long, CompletableFuture<V>> futureMap;
@@ -108,25 +109,26 @@ public abstract class AbstractVoteService<
 
         validateUserInSpecificActiveGame(gameIdentifier, principal);
         validateVoteExists(voteId);
-        validateUserIsVoter(voteId, principal);
         validateVoteStatusOngoing(voteId);
 
         G game = this.getActiveGame(gameIdentifier);
         V vote = this.voteRepository.findOneById(voteId).orElseThrow();
-
         P player = game.getPlayers().stream().filter(p -> p.getUser().equals(principal)).findFirst().orElseThrow(() -> new DataConflictException(Messages.exception(MessageIdentifier.PLAYER_EXISTS_NOT)));
+
+        validatePlayerIsVoter(voteId, player);
 
         // Check if vote proposal is valid
         V finalVote = vote;
-        C asdf = vote.getVoteCollectionMap().get(player);
-        if (voteCollectionProposal.getSelection().size() > asdf.getAmountVotes()
-                || voteCollectionProposal.getSelection().stream().anyMatch(selection -> !finalVote.getVoteCollectionMap().get(player).getSubjects().contains(selection))
-                || voteCollectionProposal.getAllowAbstain() != asdf.getAllowAbstain()
+        C existingVoteCollection = vote.getVoteCollectionMap().get(player.getId());
+        if (existingVoteCollection == null
+                || voteCollectionProposal.getSelection().size() > existingVoteCollection.getAmountVotes()
+                || voteCollectionProposal.getSelection().stream().anyMatch(selection -> !finalVote.getVoteCollectionMap().get(player.getId()).getSubjects().contains(selection))
+                || voteCollectionProposal.getAllowAbstain() != existingVoteCollection.getAllowAbstain()
                 || !voteCollectionProposal.getAllowAbstain() && voteCollectionProposal.getAbstain() != null && voteCollectionProposal.getAbstain())
             throw new VoteException(Messages.exception(MessageIdentifier.VOTE_DATA_CONFLICT));
 
         // Transfer vote proposal to vote entity
-        C voteCollection = vote.getVoteCollectionMap().get(player);
+        C voteCollection = vote.getVoteCollectionMap().get(player.getId());
         voteCollection.setAbstain(voteCollectionProposal.getAbstain());
         voteCollection.getSelection().removeAll(voteCollection.getSelection());
         for (T element : voteCollectionProposal.getSelection()) {
@@ -190,13 +192,13 @@ public abstract class AbstractVoteService<
             throw new VoteException(Messages.exception(MessageIdentifier.VOTE_EXISTS_NOT));
     }
 
-    protected void validateUserIsVoter(long voteId, User user) {
-        if (this.voteRepository.findOneById(voteId).get().getVoteCollectionMap().keySet().stream().noneMatch(key -> key.equals(user.getId())))
+    protected void validatePlayerIsVoter(long voteId, P player) {
+        if (this.voteRepository.findOneById(voteId).orElseThrow().getVoteCollectionMap().keySet().stream().noneMatch(key -> key.equals(player.getId())))
             throw new VoteException(Messages.exception(MessageIdentifier.VOTE_EXISTS_NOT));
     }
 
     protected void validateVoteStatusOngoing(long voteId) {
-        if (!this.voteRepository.findOneById(voteId).get().getVoteState().equals(VoteState.ONGOING))
+        if (!this.voteRepository.findOneById(voteId).orElseThrow().getVoteState().equals(VoteState.ONGOING))
             throw new VoteException(Messages.exception(MessageIdentifier.VOTE_STATUS_CONCLUDED));
     }
 

@@ -24,8 +24,12 @@
         <div class="col">
           <mat-chip-list>
             <mat-chip *ngFor="let subject of this.voteMap.get(currentPlayer.id)?.subjects"
-                      [selected]="includedInSelection(subject)">
+                      [selected]="includedInSelection(subject)" (click)="selectOption(subject)">
               {{subjectToStringRepresentation(subject)}}
+            </mat-chip>
+            <mat-chip *ngIf="this.voteMap.get(currentPlayer.id)?.allowAbstain" color="accent" [selected]="voteMap.get(currentPlayer.id)?.abstain" (click)="selectAbstain()">
+              <mat-icon>shortcut</mat-icon>
+              {{"general.vote.abstain" | translate}}
             </mat-chip>
           </mat-chip-list>
         </div>
@@ -39,10 +43,10 @@
         <div class="col">
           <h3 class="text-center">{{"general.vote.others" | translate}}</h3>
         </div>
-        </div>
+      </div>
       <div class="row mt-0">
         <div class="col">
-          <table mat-table [dataSource]="votersData" class="full-width" >
+          <table mat-table [dataSource]="votersData" class="full-width">
 
             <ng-container matColumnDef="player">
               <th mat-header-cell *matHeaderCellDef>Player</th>
@@ -52,7 +56,10 @@
             <ng-container matColumnDef="selection">
               <th mat-header-cell *matHeaderCellDef>Selection</th>
               <td mat-cell *matCellDef="let element">
-                <mat-chip-list>
+                <div *ngIf="element[1].abstain">
+                  {{"general.vote.abstained" | translate}}
+                </div>
+                <mat-chip-list *ngIf="!element[1].abstain">
                   <span *ngFor="let selection of element[1].selection">
                     <mat-chip>{{subjectToStringRepresentation(selection)}}</mat-chip>
                   </span>
