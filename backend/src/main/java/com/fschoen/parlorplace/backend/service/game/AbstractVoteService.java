@@ -79,6 +79,9 @@ public abstract class AbstractVoteService<
             vote.setGame(game);
             vote.setVoteState(VoteState.ONGOING);
             vote.setVoteType(voteType);
+            vote.setVoters(new HashSet<>() {{
+                addAll(voteCollectionMap.keySet().stream().map(id -> playerRepository.findOneById(id).orElseThrow()).collect(Collectors.toList()));
+            }});
             vote.setVoteCollectionMap(voteCollectionMap);
             vote.setOutcome(new HashSet<>());
             vote.setOutcomeAmount(outcomeAmount);
@@ -267,6 +270,8 @@ public abstract class AbstractVoteService<
                 currentBin.add(entry.getKey());
             }
 
+            binList.add(currentBin);
+
             // Shuffle bins
             for (List<T> bin : binList) {
                 Collections.shuffle(bin);
@@ -274,7 +279,10 @@ public abstract class AbstractVoteService<
 
             // Get top outcomeAmount choices
             List<T> flatList = binList.stream().flatMap(List::stream).collect(Collectors.toList());
+            System.out.println(flatList);
             currentVote.getOutcome().addAll(flatList.stream().limit(currentVote.getOutcomeAmount()).collect(Collectors.toList()));
+
+            System.out.println(flatList.stream().limit(currentVote.getOutcomeAmount()).collect(Collectors.toList()));
 
             voteRepository.save(currentVote);
 

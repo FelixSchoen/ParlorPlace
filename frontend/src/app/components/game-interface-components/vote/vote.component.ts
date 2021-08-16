@@ -3,6 +3,7 @@ import {Vote, VoteCollection} from "../../../dto/vote";
 import {Player} from "../../../dto/player";
 import {Subscription, timer} from "rxjs";
 import {Game, GameIdentifier} from "../../../dto/game";
+import {VoteState} from "../../../enums/votestate";
 
 @Directive({
   selector: 'app-vote',
@@ -21,6 +22,7 @@ export abstract class VoteComponent<G extends Game, P extends Player, V extends 
 
   public selectedOptions: T[];
 
+  public voteState = VoteState;
   public displayedColumns: string[] = ["player", "selection"]
 
   protected constructor() {

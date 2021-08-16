@@ -1,6 +1,7 @@
 <div class="container p-3 h-100">
 
-  <mat-tab-group id="group" dynamicHeight mat-stretch-tabs mat-align-tabs="center" *ngIf="!loading" (selectedTabChange)="selectedTabChange($event)">
+  <mat-tab-group id="group" dynamicHeight mat-stretch-tabs mat-align-tabs="center" *ngIf="!loading"
+                 (selectedTabChange)="selectedTabChange($event)">
 
     <mat-tab>
       <ng-template mat-tab-label>
@@ -45,8 +46,10 @@
 
         </mat-card>
 
-        <div *ngFor="let vote of game.votes" class="mx-3 mb-3">
-          <app-werewolf-vote [currentPlayer]="currentPlayer" [gameIdentifier]="this.game.gameIdentifier" [players]="this.game.players" [vote]="vote"></app-werewolf-vote>
+        <div *ngFor="let vote of sortVotes(game.votes)" class="mx-3 mb-3">
+          <app-werewolf-vote [currentPlayer]="currentPlayer" [gameIdentifier]="this.game.gameIdentifier"
+                             [players]="this.game.players" [vote]="vote"
+                             *ngIf="vote.voteState == voteState.ONGOING || !hideVotes"></app-werewolf-vote>
         </div>
 
       </div>
@@ -69,7 +72,8 @@
 
           <mat-card-content>
 
-            <app-werewolf-log-entry-list [log]="this.game.log" [players]="this.game.players"></app-werewolf-log-entry-list>
+            <app-werewolf-log-entry-list [log]="this.game.log"
+                                         [players]="this.game.players"></app-werewolf-log-entry-list>
 
           </mat-card-content>
         </mat-card>
@@ -79,7 +83,8 @@
 
     <mat-tab>
       <ng-template mat-tab-label>
-        <mat-icon class="material-icons" matBadge="‎" matBadgeSize="small" [matBadgeHidden]="this.viewedRole">info</mat-icon>
+        <mat-icon class="material-icons" matBadge="‎" matBadgeSize="small" [matBadgeHidden]="this.viewedRole">info
+        </mat-icon>
       </ng-template>
 
       <div class="h-100 pt-3">
@@ -103,12 +108,14 @@
               </div>
               <div class="flex-row mt-5">
                 <div class="col">
-                  <div><h3>{{("werewolf.role."+(this.getCurrentRoleTypeCurrentPlayer().valueOf() | internalRepresentation)+".name") | translate}}</h3></div>
+                  <div>
+                    <h3>{{("werewolf.role." + (this.getCurrentRoleTypeCurrentPlayer().valueOf() | internalRepresentation) + ".name") | translate}}</h3>
+                  </div>
                 </div>
               </div>
               <div class="flex-row mt-1">
                 <div class="col">
-                  <div>{{("werewolf.role."+(this.getCurrentRoleTypeCurrentPlayer().valueOf() | internalRepresentation)+".description") | translate}}</div>
+                  <div>{{("werewolf.role." + (this.getCurrentRoleTypeCurrentPlayer().valueOf() | internalRepresentation) + ".description") | translate}}</div>
                 </div>
               </div>
             </div>
