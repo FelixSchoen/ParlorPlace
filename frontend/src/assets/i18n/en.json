@@ -40,7 +40,9 @@
       "abstain": "Abstain",
       "abstained": "Abstained",
       "others": "Selection of players",
-      "results": "Vote Result"
+      "results": "Vote Result",
+      "hideConcluded": "Hide concluded",
+      "showConcluded": "Show concluded"
     }
   },
   "module": {

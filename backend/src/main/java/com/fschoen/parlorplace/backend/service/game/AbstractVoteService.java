@@ -143,7 +143,7 @@ public abstract class AbstractVoteService<
         broadcastGameStaleNotification(game, vote);
 
         // Setup VoteConcludeTask with grace period
-        if (vote.getVoteCollectionMap().values().stream().allMatch(collection -> (collection.getSelection().size() == collection.getAmountVotes())) || voteCollection.getAbstain()) {
+        if (vote.getVoteCollectionMap().values().stream().allMatch(collection -> (collection.getSelection().size() == collection.getAmountVotes()) || collection.getAbstain())) {
             VoteConcludeTask voteConcludeTask = new VoteConcludeTask(vote.getId(), GRACE_PERIOD_DURATION, false, game.getGameIdentifier());
             taskExecutor.execute(voteConcludeTask);
         }
@@ -250,6 +250,11 @@ public abstract class AbstractVoteService<
                 for (T t : entry.getValue().getSelection()) {
                     votes.putIfAbsent(t, 0);
                     votes.put(t, votes.get(t) + 1);
+                }
+
+                // Add non voted-upon at the end of the list
+                for (T t : entry.getValue().getSubjects()) {
+                    votes.putIfAbsent(t, 0);
                 }
             }
 

@@ -41,8 +41,18 @@
             </mat-card-title>
           </mat-card-header>
 
-          <mat-card-content>
-          </mat-card-content>
+          <mat-card-actions>
+            <button mat-button (click)="this.hideVotes = true"
+                    *ngIf="!hideVotes">
+              <mat-icon class="material-icons-outlined">visibility_off</mat-icon>
+              {{("general.vote.hideConcluded" | translate).toUpperCase()}}
+            </button>
+            <button mat-button (click)="this.hideVotes = false"
+                    *ngIf="hideVotes">
+              <mat-icon class="material-icons-outlined">visibility</mat-icon>
+              {{("general.vote.showConcluded" | translate).toUpperCase()}}
+            </button>
+          </mat-card-actions>
 
         </mat-card>
 
