@@ -33,34 +33,33 @@
 
       <div class="h-100 pt-3">
 
-        <!-- Action Card -->
-        <mat-card class="mx-3 mb-3">
-          <mat-card-header class="pp-center">
-            <mat-card-title>
-              {{"werewolf.misc.action" | translate}}
-            </mat-card-title>
-          </mat-card-header>
-
-          <mat-card-actions>
-            <button mat-button (click)="this.hideVotes = true"
-                    *ngIf="!hideVotes">
-              <mat-icon class="material-icons-outlined">visibility_off</mat-icon>
-              {{("general.vote.hideConcluded" | translate).toUpperCase()}}
-            </button>
-            <button mat-button (click)="this.hideVotes = false"
-                    *ngIf="hideVotes">
-              <mat-icon class="material-icons-outlined">visibility</mat-icon>
-              {{("general.vote.showConcluded" | translate).toUpperCase()}}
-            </button>
-          </mat-card-actions>
-
-        </mat-card>
-
-        <div *ngFor="let vote of sortVotes(game.votes)" class="mx-3 mb-3">
+        <!-- Ongoing Votes -->
+        <div *ngFor="let vote of sortVotes(game.votes)[0]" class="mx-3">
           <app-werewolf-vote [currentPlayer]="currentPlayer" [gameIdentifier]="this.game.gameIdentifier"
-                             [players]="this.game.players" [vote]="vote"
-                             *ngIf="vote.voteState == voteState.ONGOING || !hideVotes"></app-werewolf-vote>
+                             [players]="this.game.players" [vote]="vote"></app-werewolf-vote>
         </div>
+
+        <div class="mt-3 pp-center">
+          <button mat-button (click)="this.hideVotes = true"
+                  *ngIf="!hideVotes">
+            <mat-icon class="material-icons-outlined">visibility_off</mat-icon>
+            {{("general.vote.hideConcluded" | translate).toUpperCase()}}
+          </button>
+          <button mat-button (click)="this.hideVotes = false"
+                  *ngIf="hideVotes">
+            <mat-icon class="material-icons-outlined">visibility</mat-icon>
+            {{("general.vote.showConcluded" | translate).toUpperCase()}}
+          </button>
+        </div>
+
+        <!-- Concluded Votes -->
+        <div *ngIf="!hideVotes" class="mt-3">
+          <div *ngFor="let vote of sortVotes(game.votes)[1]" class="mx-3 mb-3">
+            <app-werewolf-vote [currentPlayer]="currentPlayer" [gameIdentifier]="this.game.gameIdentifier"
+                               [players]="this.game.players" [vote]="vote"></app-werewolf-vote>
+          </div>
+        </div>
+
 
       </div>
     </mat-tab>
