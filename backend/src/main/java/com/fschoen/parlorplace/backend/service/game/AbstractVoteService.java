@@ -313,6 +313,7 @@ public abstract class AbstractVoteService<
 
             // Get outcome
             currentVote.getOutcome().addAll(getOutcome(currentVote));
+            currentVote.setEndTime(Instant.now());
 
             voteRepository.save(currentVote);
 

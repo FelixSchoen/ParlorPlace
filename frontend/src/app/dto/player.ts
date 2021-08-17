@@ -31,7 +31,8 @@ export class PlayerUtil {
   }
 
   public static compareBySeatPosition(a: Player, b: Player): number {
-    if (a.position < b.position) return 0;
+    if (a.position < b.position) return -1;
+    if (a.position == b.position) return 0;
     return 1;
   }
 

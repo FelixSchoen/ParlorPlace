@@ -1,6 +1,7 @@
 import {Component, Input} from '@angular/core';
 import {WerewolfPlayer} from "../../../dto/werewolf";
 import {PlayerState} from "../../../enums/player-state";
+import {PlayerUtil} from "../../../dto/player";
 
 @Component({
   selector: 'app-werewolf-player-list',
@@ -26,7 +27,7 @@ export class WerewolfPlayerListComponent {
       else if (a.playerState == PlayerState.ALIVE && b.playerState == PlayerState.DECEASED)
         return 0
       else
-        return (a.position > b.position) ? 1 : -1
+        return PlayerUtil.compareBySeatPosition(a, b);
     })
     return playersArray
   }

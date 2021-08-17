@@ -219,7 +219,7 @@ public class DatabasePopulator {
                         .lobbyRole(LobbyRole.ROLE_USER)
                         .playerState(PlayerState.ALIVE)
                         .gameRoles(new ArrayList<>())
-                        .position(1)
+                        .position(2)
 
                         .disconnected(false)
                         .build()

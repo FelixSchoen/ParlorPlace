@@ -104,8 +104,10 @@ public class WerewolfGameModerator extends AbstractGameModerator<
         // Process Village Kill
         if (game.getRound() != 0) {
             Optional<WerewolfPlayer> villagersTarget = getLastVoteOfVoteDescriptor(WerewolfVoteDescriptor.VILLAGERS_LYNCH).getOutcome().stream().findFirst();
-            villagersTarget.ifPresent(werewolfPlayer -> handlePlayerDiedEvent(game, werewolfPlayer));
+            villagersTarget.ifPresent(this::handlePlayerDiedEvent);
         }
+
+        game = this.getGame();
 
         game.setRound(game.getRound() + 1);
         game.getLog().add(getLogEntryTemplate(getAllPlayersOfGame()).logType(WerewolfLogType.SLEEP).build());
@@ -161,7 +163,7 @@ public class WerewolfGameModerator extends AbstractGameModerator<
 
         // Process Werewolf Kill
         WerewolfPlayer werewolvesTarget = getLastVoteOfVoteDescriptor(WerewolfVoteDescriptor.WEREWOLVES_KILL).getOutcome().stream().findFirst().orElseThrow();
-        handlePlayerDiedEvent(game, werewolvesTarget);
+        handlePlayerDiedEvent(werewolvesTarget);
     }
 
     private void processDay() throws ExecutionException, InterruptedException {
@@ -215,9 +217,11 @@ public class WerewolfGameModerator extends AbstractGameModerator<
 
     // Utility - Moderation
 
-    private void handlePlayerDiedEvent(WerewolfGame game, WerewolfPlayer target) {
-        target.setPlayerState(PlayerState.DECEASED);
-        game.getLog().add(getPlayerDiedLogEntry(target));
+    private void handlePlayerDiedEvent(WerewolfPlayer target) {
+        WerewolfGame game = getGame();
+        WerewolfPlayer targetInDatabase = game.getPlayers().stream().filter(werewolfPlayer -> werewolfPlayer.getId().equals(target.getId())).findFirst().orElseThrow();
+        targetInDatabase.setPlayerState(PlayerState.DECEASED);
+        game.getLog().add(getPlayerDiedLogEntry(targetInDatabase));
         saveAndBroadcast(game);
         broadcastVoiceLineNotification(getVoiceLineNotification(WerewolfVoiceLineType.DEATH));
         pause(WAIT_TIME_BETWEEN_CONSECUTIVE_EVENTS);
