@@ -2,10 +2,12 @@ import {User} from "./user";
 import {LobbyRole} from "../enums/lobbyrole";
 import {PlayerState} from "../enums/playerstate";
 import {GameRole} from "./gamerole";
+import {CodeName} from "../enums/codename";
 
 export abstract class Player {
   protected constructor(public id: number,
                         public user: User,
+                        public codeName: CodeName,
                         public lobbyRole: LobbyRole,
                         public playerState: PlayerState,
                         public gameRoles: GameRole[],

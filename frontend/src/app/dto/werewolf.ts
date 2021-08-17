@@ -15,6 +15,7 @@ import {VoteType} from "../enums/votetype";
 import {EnumValue} from "@angular/compiler-cli/src/ngtsc/partial_evaluator";
 import {Vote, VoteCollection} from "./vote";
 import {WerewolfLogType} from "../enums/games/werewolflogtype";
+import {CodeName} from "../enums/codename";
 
 export class WerewolfGame extends Game {
   constructor(public id: number,
@@ -34,11 +35,12 @@ export class WerewolfGame extends Game {
 export class WerewolfPlayer extends Player {
   constructor(public id: number,
               public user: User,
+              public codeName: CodeName,
               public lobbyRole: LobbyRole,
               public playerState: PlayerState,
               public gameRoles: WerewolfRole[],
               public position: number) {
-    super(id, user, lobbyRole, playerState, gameRoles, position);
+    super(id, user, codeName, lobbyRole, playerState, gameRoles, position);
   }
 
 }

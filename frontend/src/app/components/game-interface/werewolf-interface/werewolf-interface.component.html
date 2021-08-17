@@ -118,6 +118,20 @@
           <mat-card-content class="pp-center">
 
             <div>
+              <div class="flex-row mt-3">
+                <div class="col">
+                  <div>
+                    <h3>{{"werewolf.pack.standard.codename."+(this.currentPlayer.codeName | lowercase) | translate}}</h3>
+                  </div>
+                </div>
+              </div>
+              <div class="flex-row mt-1">
+                <div class="col">
+                  <div>
+                    {{"general.other.codeNameDescription" | translate}}
+                  </div>
+                </div>
+              </div>
               <div class="flex-row mw-100 mt-5 pp-center">
                 <div class="col icon-container">
                   <mat-icon inline="true"
@@ -133,7 +147,8 @@
               </div>
               <div class="flex-row mt-1">
                 <div class="col">
-                  <div>{{("werewolf.role." + (this.getCurrentRoleTypeCurrentPlayer().valueOf() | internalRepresentation) + ".description") | translate}}</div>
+                  <div>
+                    {{("werewolf.role." + (this.getCurrentRoleTypeCurrentPlayer().valueOf() | internalRepresentation) + ".description") | translate}}</div>
                 </div>
               </div>
             </div>
