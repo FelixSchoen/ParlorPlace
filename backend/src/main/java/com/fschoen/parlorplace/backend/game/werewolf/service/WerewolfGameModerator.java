@@ -1,6 +1,7 @@
 package com.fschoen.parlorplace.backend.game.werewolf.service;
 
 import com.fschoen.parlorplace.backend.enumeration.CodeName;
+import com.fschoen.parlorplace.backend.enumeration.PlayerState;
 import com.fschoen.parlorplace.backend.enumeration.VoteType;
 import com.fschoen.parlorplace.backend.game.werewolf.entity.WerewolfGame;
 import com.fschoen.parlorplace.backend.game.werewolf.entity.WerewolfGameRole;
@@ -9,6 +10,7 @@ import com.fschoen.parlorplace.backend.game.werewolf.entity.WerewolfPlayer;
 import com.fschoen.parlorplace.backend.game.werewolf.entity.WerewolfRuleSet;
 import com.fschoen.parlorplace.backend.game.werewolf.entity.WerewolfVote;
 import com.fschoen.parlorplace.backend.game.werewolf.enumeration.WerewolfLogType;
+import com.fschoen.parlorplace.backend.game.werewolf.enumeration.WerewolfRoleType;
 import com.fschoen.parlorplace.backend.game.werewolf.enumeration.WerewolfVoiceLineType;
 import com.fschoen.parlorplace.backend.game.werewolf.enumeration.WerewolfVoteDescriptor;
 import com.fschoen.parlorplace.backend.game.werewolf.repository.WerewolfGameRepository;
@@ -31,6 +33,8 @@ import java.util.ResourceBundle;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
+import java.util.stream.Collectors;
 
 @Component
 @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
@@ -46,7 +50,14 @@ public class WerewolfGameModerator extends AbstractGameModerator<
         > {
 
     private static final ResourceBundle resourceBundle = ResourceBundle.getBundle("values.werewolf-values");
-    private static final int WAIT_TIME_INITIAL_ROLES = Integer.parseInt(resourceBundle.getString(WerewolfValueIdentifier.WAIT_TIME_INITIAL_ROLES));
+
+    private final int WAIT_TIME_SOCKETS_ESTABLISHED = Integer.parseInt(resourceBundle.getString(WerewolfValueIdentifier.WAIT_TIME_SOCKETS_ESTABLISHED));
+    private final int WAIT_TIME_INITIAL_ROLES = Integer.parseInt(resourceBundle.getString(WerewolfValueIdentifier.WAIT_TIME_INITIAL_ROLES));
+    private final int WAIT_TIME_BETWEEN_CONSECUTIVE_EVENTS = Integer.parseInt(resourceBundle.getString(WerewolfValueIdentifier.WAIT_TIME_BETWEEN_CONSECUTIVE_EVENTS));
+
+    private final int VOTE_TIME_INDIVIDUAL_VOTE = Integer.parseInt(resourceBundle.getString(WerewolfValueIdentifier.VOTE_TIME_INDIVIDUAL_VOTE));
+    private final int VOTE_TIME_GROUP_VOTE = Integer.parseInt(resourceBundle.getString(WerewolfValueIdentifier.VOTE_TIME_GROUP_VOTE));
+    private final int VOTE_TIME_ALL_VOTE = Integer.parseInt(resourceBundle.getString(WerewolfValueIdentifier.VOTE_TIME_ALL_VOTE));
 
     private final WerewolfVoteService voteService;
 
@@ -67,39 +78,91 @@ public class WerewolfGameModerator extends AbstractGameModerator<
         // Start game
         WerewolfGame game = getGame();
         game.getLog().add(getLogEntryTemplate(getAllPlayersOfGame()).logType(WerewolfLogType.START).build());
+
+        // Wait for all players to have established a socket connection
+        pause(WAIT_TIME_SOCKETS_ESTABLISHED);
+
         saveAndBroadcast(game);
+        broadcastVoiceLineNotification(getVoiceLineNotification(WerewolfVoiceLineType.START));
 
-        broadcastVoiceLineNotification(WerewolfVoiceLineClientNotification.builder().voiceLineType(WerewolfVoiceLineType.START).build());
-
-        Thread.sleep(WAIT_TIME_INITIAL_ROLES);
+        // Give all players time to read roles
+        pause(WAIT_TIME_INITIAL_ROLES);
 
         while (this.isGameOngoing()) {
             processTransitionNight();
-
-            // Delete me afterwards
-            System.out.println("Requesting vote");
-            CompletableFuture<WerewolfVote> future = this.voteService.requestVote(this.gameIdentifier,
-                    VoteType.PUBLIC_PUBLIC_PUBLIC,
-                    1,
-                    this.voteService.getSameChoiceCollectionMap(
-                            this.getGame().getPlayers(),
-                            this.getGame().getPlayers(),
-                            1,
-                            true),
-                    WerewolfVoteDescriptor.WEREWOLVES_KILL,
-                    6000);
-            WerewolfVote vote = future.get();
-            System.out.println("Result: " + vote);
+            processNight();
         }
     }
 
     private void processTransitionNight() {
         WerewolfGame game = this.getGame();
         game.getLog().add(getLogEntryTemplate(getAllPlayersOfGame()).logType(WerewolfLogType.SLEEP).build());
+
         saveAndBroadcast(game);
+        broadcastVoiceLineNotification(getVoiceLineNotification(WerewolfVoiceLineType.WEREWOLVES_SLEEP));
+        pause(WAIT_TIME_BETWEEN_CONSECUTIVE_EVENTS);
     }
 
-    // Utility
+    private void processNight() throws ExecutionException, InterruptedException {
+        processWerewolves();
+    }
+
+    private void processWerewolves() throws ExecutionException, InterruptedException {
+        Set<WerewolfPlayer> werewolves = getAlivePlayersOfLastRoleType(WerewolfRoleType.WEREWOLF);
+        Set<WerewolfPlayer> validTargets = getAlivePlayers();
+
+        WerewolfGame game = this.getGame();
+        game.getLog().add(getLogEntryTemplate(werewolves).logType(WerewolfLogType.WAKE).build());
+
+        saveAndSend(game, werewolves);
+        broadcastVoiceLineNotification(getVoiceLineNotification(WerewolfVoiceLineType.WEREWOLVES_WAKE));
+
+        CompletableFuture<WerewolfVote> werewolfVoteFuture = this.voteService.requestVote(
+                this.gameIdentifier,
+                VoteType.PRIVATE_PUBLIC_PUBLIC,
+                1,
+                this.voteService.getSameChoiceCollectionMap(
+                        werewolves,
+                        validTargets,
+                        1,
+                        false),
+                WerewolfVoteDescriptor.WEREWOLVES_KILL,
+                VOTE_TIME_GROUP_VOTE
+                );
+        werewolfVoteFuture.get();
+
+        game.getLog().add(getLogEntryTemplate(werewolves).logType(WerewolfLogType.SLEEP).build());
+
+        saveAndSend(game, werewolves);
+        broadcastVoiceLineNotification(getVoiceLineNotification(WerewolfVoiceLineType.WEREWOLVES_SLEEP));
+        pause(WAIT_TIME_BETWEEN_CONSECUTIVE_EVENTS);
+    }
+
+    // Utility - Game
+
+    private Set<WerewolfPlayer> getAlivePlayers() {
+        WerewolfGame game = this.getGame();
+        return game.getPlayers().stream().filter(player -> player.getPlayerState() == PlayerState.ALIVE).collect(Collectors.toSet());
+    }
+
+    private Set<WerewolfPlayer> getAlivePlayersOfLastRoleType(WerewolfRoleType roleType) {
+        WerewolfGame game = this.getGame();
+        return getAlivePlayers().stream().filter(player -> hasLastRoleType(player, roleType)).collect(Collectors.toSet());
+    }
+
+    private boolean hasLastRoleType(WerewolfPlayer player, WerewolfRoleType roleType) {
+        return player.getGameRoles().get(player.getGameRoles().size() - 1).getWerewolfRoleType() == roleType;
+    }
+
+    // Utility - Moderation
+
+    private void pause(int pauseTime) {
+        try {
+            Thread.sleep(pauseTime);
+        } catch (InterruptedException e) {
+            log.error("Interrupted while pausing game moderator.", e);
+        }
+    }
 
     private WerewolfLogEntry.WerewolfLogEntryBuilder<?, ?> getLogEntryTemplate(Set<WerewolfPlayer> recipients) {
         return WerewolfLogEntry.builder().identifier(UUID.randomUUID()).game(getActiveGame(this.gameIdentifier)).recipients(recipients);

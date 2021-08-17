@@ -1,6 +1,6 @@
 import {Directive, Input, OnChanges, OnDestroy, OnInit, SimpleChanges} from '@angular/core';
-import {Vote, VoteCollection} from "../../../dto/vote";
-import {Player} from "../../../dto/player";
+import {Vote, VoteCollection, VoteUtil} from "../../../dto/vote";
+import {Player, PlayerUtil} from "../../../dto/player";
 import {Subscription, timer} from "rxjs";
 import {Game, GameIdentifier} from "../../../dto/game";
 import {VoteState} from "../../../enums/votestate";
@@ -17,7 +17,7 @@ export abstract class VoteComponent<G extends Game, P extends Player, V extends 
 
   public countDown: Subscription;
   public voteMap: Map<number, C>;
-  public votersData: [P,C][];
+  public votersData: [P, C][];
   public timeRemaining: number;
 
   public selectedOptions: T[];
@@ -45,7 +45,7 @@ export abstract class VoteComponent<G extends Game, P extends Player, V extends 
   }
 
   update(): void {
-    this.voteMap = Vote.toMap<C>(this.vote.voteCollectionMap);
+    this.voteMap = VoteUtil.toMap<C>(this.vote.voteCollectionMap);
     this.votersData = this.getData();
     this.selectedOptions = Array.from(this.voteMap.get(this.currentPlayer.id)!.selection);
   }
@@ -81,6 +81,8 @@ export abstract class VoteComponent<G extends Game, P extends Player, V extends 
 
   protected abstract sendVoteData(voteCollection: C): void;
 
+  public abstract sortSelection(t: T[]): T[];
+
   public getData(): [P, C][] {
     let entries = this.voteMap.entries();
     let data: [P, C][] = [];
@@ -94,7 +96,7 @@ export abstract class VoteComponent<G extends Game, P extends Player, V extends 
       data.push([player, collection]);
     }
 
-    return data.sort((a,b) => (a[0].position > b[0].position) ? 1 : -1);
+    return data.sort((a, b) => PlayerUtil.compareBySeatPosition(a[0], b[0]));
   }
 
   public voterToStringRepresentation(p: Player): string {

@@ -98,7 +98,7 @@ public abstract class AbstractVoteService<
         CompletableFuture<V> completableFuture = new CompletableFuture<>();
         this.futureMap.put(vote.getId(), completableFuture);
 
-        broadcastGameStaleNotification(game, vote);
+        sendGameStaleNotification(game, vote);
 
         VoteConcludeTask voteConcludeTask = new VoteConcludeTask(vote.getId(), (double) durationInSeconds, true, game.getGameIdentifier());
         taskExecutor.execute(voteConcludeTask);
@@ -140,10 +140,11 @@ public abstract class AbstractVoteService<
 
         vote = this.voteRepository.save(vote);
 
-        broadcastGameStaleNotification(game, vote);
+        sendGameStaleNotification(game, vote);
 
         // Setup VoteConcludeTask with grace period
-        if (vote.getVoteCollectionMap().values().stream().allMatch(collection -> (collection.getSelection().size() == collection.getAmountVotes()) || collection.getAbstain())) {
+        if (vote.getVoteCollectionMap().values().stream().allMatch(collection -> (collection.getSelection().size() == collection.getAmountVotes())
+                || (collection.getAbstain() != null && collection.getAbstain()))) {
             VoteConcludeTask voteConcludeTask = new VoteConcludeTask(vote.getId(), GRACE_PERIOD_DURATION, false, game.getGameIdentifier());
             taskExecutor.execute(voteConcludeTask);
         }
@@ -161,10 +162,13 @@ public abstract class AbstractVoteService<
 
     // Utility
 
-    protected void broadcastGameStaleNotification(G game, V vote) {
-        sendGameStaleNotification(game.getGameIdentifier(), vote.getVoteCollectionMap().keySet().stream().map(
-                        playerId -> game.getPlayers().stream().filter(player -> player.getId().equals(playerId)).findFirst().orElseThrow().getUser())
-                .collect(Collectors.toSet()));
+    protected void sendGameStaleNotification(G game, V vote) {
+        sendGameStaleNotification(
+                game.getGameIdentifier(),
+                vote.getVoteCollectionMap().keySet().stream()
+                        .map(playerId -> game.getPlayers().stream()
+                                .filter(player -> player.getId().equals(playerId)).findFirst().orElseThrow())
+                        .collect(Collectors.toSet()));
     }
 
     public Map<Long, C> getSameChoiceCollectionMap(Set<P> voters, Set<T> subjects, int amountVotes, boolean allowAbstain) {
@@ -293,7 +297,7 @@ public abstract class AbstractVoteService<
 
             G currentGame = getActiveGame(gameIdentifier);
 
-            broadcastGameStaleNotification(currentGame, currentVote);
+            sendGameStaleNotification(currentGame, currentVote);
 
             // Complete future
             if (futureMap.containsKey(currentVote.getId())) {

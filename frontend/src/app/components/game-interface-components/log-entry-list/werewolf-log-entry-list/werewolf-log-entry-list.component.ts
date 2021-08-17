@@ -16,6 +16,7 @@ export class WerewolfLogEntryListComponent extends LogEntryListComponent<Werewol
   }
 
   toIconRepresentation(l: WerewolfLogEntry): string {
+    if (l == undefined) return "duotone-unknown";
     return WerewolfLogTypeUtil.toIconRepresentation(l.logType);
   }
 

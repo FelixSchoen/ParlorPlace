@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {VoteComponent} from "../vote.component";
 import {WerewolfGame, WerewolfPlayer, WerewolfVote, WerewolfVoteCollection} from "../../../../dto/werewolf";
-import {Player} from "../../../../dto/player";
+import {Player, PlayerUtil} from "../../../../dto/player";
 import {WerewolfGameService} from "../../../../services/werewolf-game.service";
 import {NotificationService} from "../../../../services/notification.service";
 
@@ -18,6 +18,10 @@ export class WerewolfVoteComponent extends VoteComponent<WerewolfGame, WerewolfP
 
   ngOnInit(): void {
     super.ngOnInit()
+  }
+
+  public sortSelection(t: WerewolfPlayer[]): WerewolfPlayer[] {
+    return PlayerUtil.sort(t);
   }
 
   protected sendVoteData(voteCollection: WerewolfVoteCollection): void {

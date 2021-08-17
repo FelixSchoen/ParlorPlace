@@ -7,6 +7,7 @@ import com.fschoen.parlorplace.backend.controller.dto.game.VoteDTO;
 import com.fschoen.parlorplace.backend.entity.User;
 import com.fschoen.parlorplace.backend.repository.UserRepository;
 
+import java.util.Collection;
 import java.util.Map;
 
 public abstract class VoteExtendedObfuscationService<
@@ -35,4 +36,9 @@ public abstract class VoteExtendedObfuscationService<
         }
     }
 
+    @Override
+    public void obfuscateFor(Collection<V> vs, User user, G g) {
+        super.obfuscateFor(vs, user, g);
+        vs.removeIf(vote -> vote.getVoters().stream().noneMatch(voter -> voter.getUser().getId().equals(user.getId())));
+    }
 }

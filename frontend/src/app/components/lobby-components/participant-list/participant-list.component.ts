@@ -1,5 +1,5 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {Player} from "../../../dto/player";
+import {Player, PlayerUtil} from "../../../dto/player";
 import {CdkDragDrop} from "@angular/cdk/drag-drop";
 
 @Component({
@@ -25,7 +25,7 @@ export class ParticipantListComponent<P extends Player> implements OnInit {
     players: Set<P>
   ): P[] {
     let playersArray = [...players];
-    playersArray.sort((a, b) => (a.position > b.position) ? 1 : -1)
+    playersArray.sort(PlayerUtil.compareBySeatPosition)
     return playersArray
   }
 

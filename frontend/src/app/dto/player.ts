@@ -23,3 +23,17 @@ export abstract class Player {
 
 }
 
+export class PlayerUtil {
+
+  public static sort<P extends Player>(array: P[]): P[] {
+    if (array == undefined) return [];
+    return array.sort(PlayerUtil.compareBySeatPosition)
+  }
+
+  public static compareBySeatPosition(a: Player, b: Player): number {
+    if (a.position < b.position) return 0;
+    return 1;
+  }
+
+}
+

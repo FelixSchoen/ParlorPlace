@@ -29,10 +29,10 @@
   <p>Roles</p>
   <mat-chip-list>
     <mat-chip
-      *ngFor="let role of this.roles"
+      *ngFor="let role of this.roles | distinct"
       [selectable]="false"
       [removable]="false">
-      {{role | titlecase}}
+      {{this.countRole(role)}}x {{role | titlecase}}
     </mat-chip>
   </mat-chip-list>
 </div>

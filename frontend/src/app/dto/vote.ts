@@ -14,6 +14,12 @@ export abstract class Vote<T, C extends VoteCollection<T>> {
                         public endTime: number) {
   }
 
+
+
+}
+
+export class VoteUtil {
+
   public static toMap<C extends VoteCollection<any>>(voteCollectionMap: [number, C][]): Map<number, C> {
     let map = new Map<number, C>();
     for (let entry of Object.entries(voteCollectionMap)) {

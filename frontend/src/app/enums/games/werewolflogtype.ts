@@ -20,6 +20,9 @@ export class WerewolfLogTypeUtil {
   public static toIconRepresentation(type: WerewolfLogType): string {
     let iconString = "";
 
+    if (type == undefined)
+      return "duotone-unknown";
+
     switch (type) {
       case WerewolfLogType.START:
       case WerewolfLogType.END:

@@ -39,22 +39,30 @@ public abstract class BaseGameService<G extends Game<P, ?, ?, ?>, P extends Play
         return games.get(0);
     }
 
+    // Game Stale Notifications
+
     protected G saveAndBroadcast(G game) {
         G savedGame = this.gameRepository.save(game);
         broadcastGameStaleNotification(game.getGameIdentifier());
         return savedGame;
     }
 
+    protected G saveAndSend(G game, Set<P> recipients) {
+        G savedGame = this.gameRepository.save(game);
+        this.sendGameStaleNotification(game.getGameIdentifier(), recipients);
+        return savedGame;
+    }
+
     // Communication
 
-    protected void sendGameStaleNotification(GameIdentifier gameIdentifier, Set<User> recipients) {
-        this.communicationService.sendGameStaleNotification(gameIdentifier, recipients);
+    protected void sendGameStaleNotification(GameIdentifier gameIdentifier, Set<P> recipients) {
+        Set<User> users = recipients.stream().map(Player::getUser).collect(Collectors.toSet());
+        this.communicationService.sendGameStaleNotification(gameIdentifier, users);
     }
 
     protected void broadcastGameStaleNotification(GameIdentifier gameIdentifier) {
         G game = getActiveGame(gameIdentifier);
-        Set<User> usersInGame = game.getPlayers().stream().map(Player::getUser).collect(Collectors.toSet());
-        this.sendGameStaleNotification(gameIdentifier, usersInGame);
+        this.sendGameStaleNotification(gameIdentifier, game.getPlayers());
     }
 
     protected P getPlayerFromUser(GameIdentifier gameIdentifier, User user) {

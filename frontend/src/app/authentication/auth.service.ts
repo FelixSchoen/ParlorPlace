@@ -54,11 +54,9 @@ export class AuthService {
         if (this.isLoggedIn()) {
           this.reauthenticate().subscribe({
               next: () => {
-                console.log("Re-authenticated successfully")
                 this.scheduleReAuthentication();
               },
               error: () => {
-                console.log("Could not re-authenticate");
                 this.tokenService.signout();
                 this.router.navigate([environment.general.ENTRY_URI]).then();
               }
