@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import {AbstractLogService} from "./abstract-log.service";
 import {TranslateService} from "@ngx-translate/core";
 import {WerewolfLogEntry, WerewolfPlayer} from "../dto/werewolf";
-import {WerewolfLogType} from "../enums/games/werewolflogtype";
+import {WerewolfLogType} from "../enums/games/werewolf-log-type";
 import {Observable} from "rxjs";
 import {Player} from "../dto/player";
 

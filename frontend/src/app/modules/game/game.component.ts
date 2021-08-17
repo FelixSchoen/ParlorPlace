@@ -3,11 +3,11 @@ import {GameDirective} from "./game.directive";
 import {WerewolfLobbyComponent} from "../../components/lobby/werewolf-lobby/werewolf-lobby.component";
 import {ActivatedRoute, Router} from "@angular/router";
 import {GameBaseInformation, GameIdentifier} from "../../dto/game";
-import {GameType} from "../../enums/gametype";
+import {GameType} from "../../enums/game-type";
 import {NotificationService} from "../../services/notification.service";
 import {environment} from "../../../environments/environment";
 import {GeneralGameService} from "../../services/general-game.service";
-import {GameState} from "../../enums/gamestate";
+import {GameState} from "../../enums/game-state";
 import {WerewolfInterfaceComponent} from "../../components/game-interface/werewolf-interface/werewolf-interface.component";
 
 export interface GameComponents {

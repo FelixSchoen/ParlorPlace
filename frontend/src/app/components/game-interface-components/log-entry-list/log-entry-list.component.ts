@@ -1,5 +1,5 @@
 import {Directive, Input} from '@angular/core';
-import {LogEntry} from "../../../dto/logentry";
+import {LogEntry} from "../../../dto/log-entry";
 import {AbstractLogService} from "../../../services/abstract-log.service";
 import {Player} from "../../../dto/player";
 

@@ -9,9 +9,9 @@ import {CommunicationService} from "../../services/communication.service";
 import {NotificationService} from "../../services/notification.service";
 import {ActivatedRoute, Router} from "@angular/router";
 import {ClientNotification} from "../../dto/communication";
-import {NotificationType} from "../../enums/notificationtype";
+import {NotificationType} from "../../enums/notification-type";
 import {User} from "../../dto/user";
-import {GameState} from "../../enums/gamestate";
+import {GameState} from "../../enums/game-state";
 
 const WEBSOCKET_URI = environment.WEBSOCKET_BASE_URI + environment.general.WEBSOCKET_GAME_URI;
 const WEBSOCKET_QUEUE_URI = environment.general.WEBSOCKET_QUEUE_PRIMARY_URI;

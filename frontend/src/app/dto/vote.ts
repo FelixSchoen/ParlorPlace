@@ -1,5 +1,5 @@
-import {VoteState} from "../enums/votestate";
-import {VoteType} from "../enums/votetype";
+import {VoteState} from "../enums/vote-state";
+import {VoteType} from "../enums/vote-type";
 import {EnumValue} from "@angular/compiler-cli/src/ngtsc/partial_evaluator";
 
 export abstract class Vote<T, C extends VoteCollection<T>> {

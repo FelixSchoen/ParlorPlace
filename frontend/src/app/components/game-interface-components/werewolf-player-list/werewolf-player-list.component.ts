@@ -1,6 +1,6 @@
 import {Component, Input} from '@angular/core';
 import {WerewolfPlayer} from "../../../dto/werewolf";
-import {PlayerState} from "../../../enums/playerstate";
+import {PlayerState} from "../../../enums/player-state";
 
 @Component({
   selector: 'app-werewolf-player-list',

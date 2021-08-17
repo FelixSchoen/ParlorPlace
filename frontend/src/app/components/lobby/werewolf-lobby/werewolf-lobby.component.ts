@@ -3,7 +3,7 @@ import {LobbyComponent} from "../lobby.component";
 import {ActivatedRoute, Router} from "@angular/router";
 import {NotificationService} from "../../../services/notification.service";
 import {UserService} from "../../../services/user.service";
-import {WerewolfRoleType, WerewolfRoleTypeUtil} from "../../../enums/games/werewolfroletype";
+import {WerewolfRoleType, WerewolfRoleTypeUtil} from "../../../enums/games/werewolf-role-type";
 import {WerewolfGameService} from "../../../services/werewolf-game.service";
 import {CommunicationService} from "../../../services/communication.service";
 import {WerewolfGame, WerewolfLobbyChangeRequest, WerewolfPlayer} from "../../../dto/werewolf";

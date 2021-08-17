@@ -1,22 +1,22 @@
-import {GameState} from "../enums/gamestate";
-import {GameType} from "../enums/gametype";
+import {GameState} from "../enums/game-state";
+import {GameType} from "../enums/game-type";
 import {Game, GameIdentifier} from "./game";
-import {WerewolfRoleType, WerewolfRoleTypeUtil} from "../enums/games/werewolfroletype";
-import {GameRole} from "./gamerole";
+import {WerewolfRoleType, WerewolfRoleTypeUtil} from "../enums/games/werewolf-role-type";
+import {GameRole} from "./game-role";
 import {LobbyChangeRequest} from "./lobby";
 import {User} from "./user";
-import {LobbyRole} from "../enums/lobbyrole";
-import {PlayerState} from "../enums/playerstate";
+import {LobbyRole} from "../enums/lobby-role";
+import {PlayerState} from "../enums/player-state";
 import {Player} from "./player";
-import {RuleSet} from "./ruleset";
-import {LogEntry} from "./logentry";
-import {VoteState} from "../enums/votestate";
-import {VoteType} from "../enums/votetype";
+import {RuleSet} from "./rule-set";
+import {LogEntry} from "./log-entry";
+import {VoteState} from "../enums/vote-state";
+import {VoteType} from "../enums/vote-type";
 import {EnumValue} from "@angular/compiler-cli/src/ngtsc/partial_evaluator";
 import {Vote, VoteCollection} from "./vote";
-import {WerewolfLogType} from "../enums/games/werewolflogtype";
-import {CodeName} from "../enums/codename";
-import {WerewolfFaction} from "../enums/games/werewolffaction";
+import {WerewolfLogType} from "../enums/games/werewolf-log-type";
+import {CodeName} from "../enums/code-name";
+import {WerewolfFaction} from "../enums/games/werewolf-faction";
 
 export class WerewolfGame extends Game {
   constructor(public id: number,

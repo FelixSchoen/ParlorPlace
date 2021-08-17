@@ -1,8 +1,8 @@
 import {User} from "./user";
-import {LobbyRole} from "../enums/lobbyrole";
-import {PlayerState} from "../enums/playerstate";
-import {GameRole} from "./gamerole";
-import {CodeName} from "../enums/codename";
+import {LobbyRole} from "../enums/lobby-role";
+import {PlayerState} from "../enums/player-state";
+import {GameRole} from "./game-role";
+import {CodeName} from "../enums/code-name";
 
 export abstract class Player {
   protected constructor(public id: number,

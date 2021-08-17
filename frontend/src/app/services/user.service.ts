@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import {HttpClient, HttpParams} from "@angular/common/http";
 import {Observable} from "rxjs";
 import {User, UserUpdateRequest} from "../dto/user";
-import {UserRole} from "../enums/userrole";
+import {UserRole} from "../enums/user-role";
 import {environment} from "../../environments/environment";
 
 const USER_URI = environment.BASE_URI + environment.general.USER_API;

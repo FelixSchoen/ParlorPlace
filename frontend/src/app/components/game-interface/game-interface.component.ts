@@ -8,7 +8,7 @@ import {Game} from "../../dto/game";
 import {Player} from "../../dto/player";
 import {GameCommonComponent} from "../game-common/game-common.component";
 import {Vote} from "../../dto/vote";
-import {VoteState} from "../../enums/votestate";
+import {VoteState} from "../../enums/vote-state";
 import * as _ from "lodash/fp";
 
 @Component({
