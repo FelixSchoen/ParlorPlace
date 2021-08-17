@@ -1,6 +1,7 @@
 package com.fschoen.parlorplace.backend.game.werewolf.entity.gamerole;
 
 import com.fschoen.parlorplace.backend.game.werewolf.entity.WerewolfGameRole;
+import com.fschoen.parlorplace.backend.game.werewolf.enumeration.WerewolfFaction;
 import com.fschoen.parlorplace.backend.game.werewolf.enumeration.WerewolfRoleType;
 import lombok.Builder;
 import lombok.Data;
@@ -25,6 +26,11 @@ public class VillagerWerewolfGameRole extends WerewolfGameRole {
     @Column(nullable = false)
     @Builder.Default
     @NotNull
-    protected WerewolfRoleType werewolfRoleType = WerewolfRoleType.VILLAGER;
+    private WerewolfRoleType werewolfRoleType = WerewolfRoleType.VILLAGER;
+
+    @Column(nullable = false)
+    @Builder.Default
+    @NotNull
+    private WerewolfFaction werewolfFaction = WerewolfFaction.VILLAGERS;
 
 }

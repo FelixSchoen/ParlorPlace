@@ -1,5 +1,6 @@
 package com.fschoen.parlorplace.backend.entity;
 
+import com.fschoen.parlorplace.backend.enumeration.VoteDrawStrategy;
 import com.fschoen.parlorplace.backend.enumeration.VoteState;
 import com.fschoen.parlorplace.backend.enumeration.VoteType;
 import lombok.AllArgsConstructor;
@@ -68,6 +69,11 @@ public abstract class Vote<
     @Enumerated
     @NotNull
     protected VoteType voteType;
+
+    @Column(nullable = false)
+    @Enumerated
+    @NotNull
+    protected VoteDrawStrategy voteDrawStrategy;
 
     @ManyToMany(targetEntity = Player.class)
     @JoinTable(

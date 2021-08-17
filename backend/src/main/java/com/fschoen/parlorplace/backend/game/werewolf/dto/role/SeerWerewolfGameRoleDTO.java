@@ -1,8 +1,8 @@
-package com.fschoen.parlorplace.backend.game.werewolf.entity.gamerole;
+package com.fschoen.parlorplace.backend.game.werewolf.dto.role;
 
-import com.fschoen.parlorplace.backend.game.werewolf.entity.WerewolfGameRole;
 import com.fschoen.parlorplace.backend.game.werewolf.enumeration.WerewolfFaction;
 import com.fschoen.parlorplace.backend.game.werewolf.enumeration.WerewolfRoleType;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -10,25 +10,20 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
 import javax.validation.constraints.NotNull;
 
 @NoArgsConstructor
-//@AllArgsConstructor
+@AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-@SuperBuilder(toBuilder = true)
 @ToString(callSuper = true)
+@SuperBuilder(toBuilder = true)
 @Data
-@Entity
-public class SeerWerewolfGameRole extends WerewolfGameRole {
+public class SeerWerewolfGameRoleDTO extends WerewolfGameRoleDTO {
 
-    @Column(nullable = false)
     @Builder.Default
     @NotNull
     private WerewolfRoleType werewolfRoleType = WerewolfRoleType.SEER;
 
-    @Column(nullable = false)
     @Builder.Default
     @NotNull
     private WerewolfFaction werewolfFaction = WerewolfFaction.VILLAGERS;

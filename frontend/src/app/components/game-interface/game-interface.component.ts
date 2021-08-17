@@ -8,7 +8,7 @@ import {Game} from "../../dto/game";
 import {Player} from "../../dto/player";
 import {GameCommonComponent} from "../game-common/game-common.component";
 import {Vote} from "../../dto/vote";
-import {VoteState} from "../../enums/votestate";
+import {VoteState} from "../../enums/vote-state";
 import * as _ from "lodash/fp";
 
 @Component({
@@ -39,7 +39,10 @@ export class GameInterfaceComponent<G extends Game, P extends Player, V extends 
         return 0;
       if (a.voteState == VoteState.CONCLUDED && b.voteState == VoteState.ONGOING)
         return 1;
-      return a.endTime < b.endTime ? 0 : 1;
+      if (a.voteState == VoteState.ONGOING && b.voteState == VoteState.ONGOING)
+        return a.endTime < b.endTime ? 0 : 1;
+      else
+      return a.endTime > b.endTime ? 0 : 1;
     });
 
     return _.partition(function(vote: V){

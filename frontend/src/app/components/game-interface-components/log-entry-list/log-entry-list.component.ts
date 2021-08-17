@@ -1,5 +1,5 @@
 import {Directive, Input} from '@angular/core';
-import {LogEntry} from "../../../dto/logentry";
+import {LogEntry} from "../../../dto/log-entry";
 import {AbstractLogService} from "../../../services/abstract-log.service";
 import {Player} from "../../../dto/player";
 
@@ -13,5 +13,7 @@ export abstract class LogEntryListComponent<L extends LogEntry, P extends Player
 
   protected constructor(public logService: AbstractLogService<L, P>) {
   }
+
+  abstract toIconRepresentation(l: L): string;
 
 }

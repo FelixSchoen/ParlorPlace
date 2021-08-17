@@ -9,9 +9,9 @@ import {CommunicationService} from "../../services/communication.service";
 import {NotificationService} from "../../services/notification.service";
 import {ActivatedRoute, Router} from "@angular/router";
 import {ClientNotification} from "../../dto/communication";
-import {NotificationType} from "../../enums/notificationtype";
+import {NotificationType} from "../../enums/notification-type";
 import {User} from "../../dto/user";
-import {GameState} from "../../enums/gamestate";
+import {GameState} from "../../enums/game-state";
 
 const WEBSOCKET_URI = environment.WEBSOCKET_BASE_URI + environment.general.WEBSOCKET_GAME_URI;
 const WEBSOCKET_QUEUE_URI = environment.general.WEBSOCKET_QUEUE_PRIMARY_URI;
@@ -69,8 +69,14 @@ export abstract class GameCommonComponent<G extends Game, P extends Player> impl
     this.gameService.getGame(this.gameIdentifier).subscribe(
       {
         next: (result: G) => {
-          if (this.game != undefined && this.game.gameState != result.gameState)
-            this.router.navigate([environment.general.GAME_URI + "/" + result.gameIdentifier.token]).then()
+          if (this.game != undefined && this.game.gameState == GameState.LOBBY && result.gameState != GameState.LOBBY) {
+            const currentUrl = this.router.url
+            this.router.navigateByUrl("/", {skipLocationChange: true}).then(() => {
+              this.router.navigate([currentUrl]).then();
+            })
+            return;
+          }
+
           this.game = result
           this.userService.getCurrentUser().subscribe(
             {

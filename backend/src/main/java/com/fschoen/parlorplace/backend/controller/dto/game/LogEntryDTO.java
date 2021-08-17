@@ -21,6 +21,9 @@ public abstract class LogEntryDTO<P extends PlayerDTO<?>> {
     @NotNull
     protected UUID identifier;
 
+    @NotNull
+    protected Set<P> recipients;
+
     @Builder.Default
     @Valid
     @NotNull

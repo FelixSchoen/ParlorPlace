@@ -1,6 +1,7 @@
 <div class="container p-3 h-100">
 
-  <mat-tab-group id="group" dynamicHeight mat-stretch-tabs mat-align-tabs="center" *ngIf="!loading"
+  <mat-tab-group id="group" dynamicHeight mat-stretch-tabs mat-align-tabs="center"
+                 *ngIf="!loading"
                  (selectedTabChange)="selectedTabChange($event)">
 
     <mat-tab>
@@ -10,8 +11,16 @@
 
       <div class="pt-3">
 
+        <!-- Recent Log Card -->
+        <mat-card class="mx-3 log-card" *ngIf="this.game.log.length > 0">
+          <mat-card-content>
+            <app-werewolf-log-entry-list [log]="[this.game.log.reverse()[0]]"
+                                         [players]="this.game.players"></app-werewolf-log-entry-list>
+          </mat-card-content>
+        </mat-card>
+
         <!-- Village Card -->
-        <mat-card class="mx-3 mb-3">
+        <mat-card class="mx-3 mt-3">
           <mat-card-header class="pp-center">
             <mat-card-title>
               {{"werewolf.misc.village" | translate}}
@@ -28,7 +37,7 @@
 
     <mat-tab>
       <ng-template mat-tab-label>
-        <mat-icon class="material-icons">gavel</mat-icon>
+        <mat-icon class="material-icons" matBadge="{{sortVotes(game.votes)[0].length}}" matBadgeSize="small" [matBadgeHidden]="!sortVotes(game.votes)[0].length > 0">gavel</mat-icon>
       </ng-template>
 
       <div class="h-100 pt-3">
@@ -109,6 +118,20 @@
           <mat-card-content class="pp-center">
 
             <div>
+              <div class="flex-row mt-3">
+                <div class="col">
+                  <div>
+                    <h3>{{"werewolf.pack.standard.codename."+(this.currentPlayer.codeName | lowercase) | translate}}</h3>
+                  </div>
+                </div>
+              </div>
+              <div class="flex-row mt-1">
+                <div class="col">
+                  <div>
+                    {{"general.other.codeNameDescription" | translate}}
+                  </div>
+                </div>
+              </div>
               <div class="flex-row mw-100 mt-5 pp-center">
                 <div class="col icon-container">
                   <mat-icon inline="true"
@@ -124,7 +147,8 @@
               </div>
               <div class="flex-row mt-1">
                 <div class="col">
-                  <div>{{("werewolf.role." + (this.getCurrentRoleTypeCurrentPlayer().valueOf() | internalRepresentation) + ".description") | translate}}</div>
+                  <div>
+                    {{("werewolf.role." + (this.getCurrentRoleTypeCurrentPlayer().valueOf() | internalRepresentation) + ".description") | translate}}</div>
                 </div>
               </div>
             </div>

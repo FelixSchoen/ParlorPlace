@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import {AbstractLogService} from "./abstract-log.service";
 import {TranslateService} from "@ngx-translate/core";
 import {WerewolfLogEntry, WerewolfPlayer} from "../dto/werewolf";
-import {WerewolfLogType} from "../enums/games/werewolflogtype";
+import {WerewolfLogType} from "../enums/games/werewolf-log-type";
 import {Observable} from "rxjs";
 import {Player} from "../dto/player";
 
@@ -17,6 +17,7 @@ export class WerewolfLogService extends AbstractLogService<WerewolfLogEntry, Wer
 
   toStringRepresentation(l: WerewolfLogEntry, players: Set<WerewolfPlayer>): Observable<string> {
     let textValue = l.logType.valueOf().toLowerCase();
+
     switch (l.logType) {
       case WerewolfLogType.START:
       case WerewolfLogType.END:
@@ -30,6 +31,7 @@ export class WerewolfLogService extends AbstractLogService<WerewolfLogEntry, Wer
       case WerewolfLogType.VILLAGERS_VOTE:
         return this.translateService.get("werewolf.log." + textValue, {player: Player.toNameRepresentation(l.targets[0].user, players)});
     }
+
     throw new Error("Unknown Werewolf Log Type")
   }
 

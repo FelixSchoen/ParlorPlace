@@ -43,6 +43,9 @@
       "results": "Vote Result",
       "hideConcluded": "Hide concluded",
       "showConcluded": "Show concluded"
+    },
+    "other": {
+      "codeNameDescription": "This is your codename. Using it, you will be called during the game without having your real identity revealed. Keep it secret."
     }
   },
   "module": {
@@ -121,6 +124,38 @@
       "seer_success": "{player} is a Werewolf",
       "seer_failure": "{player} is not a Werewolf",
       "villagers_vote": "The villagers lynch {player}"
+    },
+    "pack": {
+      "standard": {
+        "codename": {
+          "alfa" : "Alfa",
+          "bravo" : "Bravo",
+          "charlie" : "Charlie",
+          "delta" : "Delta",
+          "echo" : "Echo",
+          "foxtrot" : "Foxtrot",
+          "golf" : "Golf",
+          "hotel" : "Hotel",
+          "india" : "India",
+          "juliett" : "Juliett",
+          "kilo" : "Kilo",
+          "lima" : "Lima",
+          "mike" : "Mike",
+          "november" : "November",
+          "oscar" : "Oscar",
+          "papa" : "Papa",
+          "quebec" : "Quebec",
+          "romeo" : "Romeo",
+          "sierra" : "Sierra",
+          "tango" : "Tango",
+          "uniform" : "Uniform",
+          "victor" : "Victor",
+          "whiskey" : "Whiskey",
+          "xray" : "X-Ray",
+          "yankee" : "Yankee",
+          "zulu" : "Zulu"
+        }
+      }
     },
     "misc": {
       "village": "Village",

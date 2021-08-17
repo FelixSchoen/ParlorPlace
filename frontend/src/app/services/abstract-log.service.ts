@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {TranslateService} from "@ngx-translate/core";
-import {LogEntry} from "../dto/logentry";
+import {LogEntry} from "../dto/log-entry";
 import {Observable} from "rxjs";
 import {Player} from "../dto/player";
 
@@ -10,7 +10,6 @@ import {Player} from "../dto/player";
 export abstract class AbstractLogService<L extends LogEntry, P extends Player> {
 
   protected constructor(translateService: TranslateService) {}
-
 
   abstract toStringRepresentation(l: L, players: Set<P>): Observable<string>;
 

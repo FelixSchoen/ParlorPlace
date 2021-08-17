@@ -26,7 +26,7 @@
         <div class="row mt-2">
           <div class="col">
             <mat-chip-list>
-              <mat-chip *ngFor="let subject of this.voteMap.get(currentPlayer.id)?.subjects"
+              <mat-chip *ngFor="let subject of sortSelection(this.voteMap.get(currentPlayer.id)?.subjects)"
                         [selected]="includedInSelection(subject)" (click)="selectOption(subject)">
                 {{subjectToStringRepresentation(subject)}}
               </mat-chip>

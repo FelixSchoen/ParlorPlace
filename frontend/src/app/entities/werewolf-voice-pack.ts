@@ -1,4 +1,4 @@
-import {VoiceLine, VoicePack} from "./voicepack";
+import {VoiceLine, VoicePack} from "./voice-pack";
 
 export class WerewolfVoicePack extends VoicePack {
 
