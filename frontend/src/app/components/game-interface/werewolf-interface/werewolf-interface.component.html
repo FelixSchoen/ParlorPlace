@@ -1,6 +1,7 @@
 <div class="container p-3 h-100">
 
-  <mat-tab-group id="group" dynamicHeight mat-stretch-tabs mat-align-tabs="center" *ngIf="!loading"
+  <mat-tab-group id="group" dynamicHeight mat-stretch-tabs mat-align-tabs="center"
+                 *ngIf="!loading"
                  (selectedTabChange)="selectedTabChange($event)">
 
     <mat-tab>
@@ -89,7 +90,7 @@
 
           <mat-card-content>
 
-            <app-werewolf-log-entry-list [log]="this.game.log.reverse()"
+            <app-werewolf-log-entry-list [log]="this.game.log"
                                          [players]="this.game.players"></app-werewolf-log-entry-list>
 
           </mat-card-content>
