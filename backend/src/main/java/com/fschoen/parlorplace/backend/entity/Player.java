@@ -82,6 +82,10 @@ public abstract class Player<GR extends GameRole> {
     @Min(0)
     protected Integer position;
 
+    @Column
+    @Min(1)
+    protected Integer placement;
+
     @Column(nullable = false)
     @NotNull
     protected Boolean disconnected;
