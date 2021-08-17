@@ -12,7 +12,7 @@
       <div class="pt-3">
 
         <!-- Recent Log Card -->
-        <mat-card class="mx-3 log-card">
+        <mat-card class="mx-3 log-card" *ngIf="this.game.log.length > 0">
           <mat-card-content>
             <app-werewolf-log-entry-list [log]="[this.game.log.reverse()[0]]"
                                          [players]="this.game.players"></app-werewolf-log-entry-list>

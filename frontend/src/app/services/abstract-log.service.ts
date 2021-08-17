@@ -11,7 +11,6 @@ export abstract class AbstractLogService<L extends LogEntry, P extends Player> {
 
   protected constructor(translateService: TranslateService) {}
 
-
   abstract toStringRepresentation(l: L, players: Set<P>): Observable<string>;
 
 }

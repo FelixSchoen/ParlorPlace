@@ -26,6 +26,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -263,7 +264,7 @@ public abstract class AbstractVoteService<
             }
 
             // Sort by votes
-            List<Entry<T, Integer>> sortedCandidates = votes.entrySet().stream().sorted(Map.Entry.comparingByValue(Integer::compareTo)).collect(Collectors.toList());
+            List<Entry<T, Integer>> sortedCandidates = votes.entrySet().stream().sorted(Map.Entry.comparingByValue(Comparator.reverseOrder())).collect(Collectors.toList());
 
             // Create bins of equal votes
             List<List<T>> binList = new ArrayList<>();

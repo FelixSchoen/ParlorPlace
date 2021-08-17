@@ -69,8 +69,15 @@ export abstract class GameCommonComponent<G extends Game, P extends Player> impl
     this.gameService.getGame(this.gameIdentifier).subscribe(
       {
         next: (result: G) => {
-          if (this.game != undefined && this.game.gameState != result.gameState)
-            this.router.navigate([environment.general.GAME_URI + "/" + result.gameIdentifier.token]).then()
+          if (this.game != undefined && this.game.gameState == GameState.LOBBY && result.gameState != GameState.LOBBY) {
+            console.log("Navigated")
+            const currentUrl = this.router.url
+            this.router.navigateByUrl("/", {skipLocationChange: true}).then(() => {
+              this.router.navigate([currentUrl]).then();
+            })
+            return;
+          }
+
           this.game = result
           this.userService.getCurrentUser().subscribe(
             {

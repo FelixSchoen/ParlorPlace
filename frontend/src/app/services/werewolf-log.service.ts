@@ -17,6 +17,7 @@ export class WerewolfLogService extends AbstractLogService<WerewolfLogEntry, Wer
 
   toStringRepresentation(l: WerewolfLogEntry, players: Set<WerewolfPlayer>): Observable<string> {
     let textValue = l.logType.valueOf().toLowerCase();
+
     switch (l.logType) {
       case WerewolfLogType.START:
       case WerewolfLogType.END:
@@ -30,6 +31,7 @@ export class WerewolfLogService extends AbstractLogService<WerewolfLogEntry, Wer
       case WerewolfLogType.VILLAGERS_VOTE:
         return this.translateService.get("werewolf.log." + textValue, {player: Player.toNameRepresentation(l.targets[0].user, players)});
     }
+
     throw new Error("Unknown Werewolf Log Type")
   }
 
