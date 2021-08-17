@@ -16,6 +16,7 @@ import {EnumValue} from "@angular/compiler-cli/src/ngtsc/partial_evaluator";
 import {Vote, VoteCollection} from "./vote";
 import {WerewolfLogType} from "../enums/games/werewolflogtype";
 import {CodeName} from "../enums/codename";
+import {WerewolfFaction} from "../enums/games/werewolffaction";
 
 export class WerewolfGame extends Game {
   constructor(public id: number,
@@ -38,7 +39,7 @@ export class WerewolfPlayer extends Player {
               public codeName: CodeName,
               public lobbyRole: LobbyRole,
               public playerState: PlayerState,
-              public gameRoles: WerewolfRole[],
+              public gameRoles: WerewolfGameRole[],
               public position: number) {
     super(id, user, codeName, lobbyRole, playerState, gameRoles, position);
   }
@@ -87,17 +88,6 @@ export class WerewolfLogEntry extends LogEntry {
   }
 }
 
-export class WerewolfRole extends GameRole {
-  constructor(public id: number,
-              public werewolfRoleType: WerewolfRoleType) {
-    super(id);
-  }
-
-  toIconRepresentation(): string {
-    return WerewolfRoleTypeUtil.toIconRepresentation(this.werewolfRoleType);
-  }
-}
-
 export class WerewolfLobbyChangeRequest extends LobbyChangeRequest {
   constructor(public players: Set<WerewolfPlayer>,
               public ruleSet: WerewolfRuleSet) {
@@ -107,6 +97,60 @@ export class WerewolfLobbyChangeRequest extends LobbyChangeRequest {
   public toJSON(): WerewolfLobbyChangeRequest {
     return Object.assign({}, this, {
       $class: 'WerewolfLobbyChangeRequestDTO'
+    });
+  }
+}
+
+export abstract class WerewolfGameRole extends GameRole {
+  protected constructor(public id: number,
+                        public werewolfRoleType: WerewolfRoleType,
+                        public werewolfFaction: WerewolfFaction) {
+    super(id);
+  }
+
+  toIconRepresentation(): string {
+    return WerewolfRoleTypeUtil.toIconRepresentation(this.werewolfRoleType);
+  }
+}
+
+export class VillagerWerewolfGameRole extends WerewolfGameRole {
+  constructor(public id: number,
+              public werewolfRoleType: WerewolfRoleType,
+              public werewolfFaction: WerewolfFaction) {
+    super(id, werewolfRoleType, werewolfFaction);
+  }
+
+  public toJSON(): VillagerWerewolfGameRole {
+    return Object.assign({}, this, {
+      werewolfRoleType: "VILLAGER"
+    });
+  }
+}
+
+export class WerewolfWerewolfGameRole extends WerewolfGameRole {
+  constructor(public id: number,
+              public werewolfRoleType: WerewolfRoleType,
+              public werewolfFaction: WerewolfFaction) {
+    super(id, werewolfRoleType, werewolfFaction);
+  }
+
+  public toJSON(): VillagerWerewolfGameRole {
+    return Object.assign({}, this, {
+      werewolfRoleType: "WEREWOLF"
+    });
+  }
+}
+
+export class SeerWerewolfGameRole extends WerewolfGameRole {
+  constructor(public id: number,
+              public werewolfRoleType: WerewolfRoleType,
+              public werewolfFaction: WerewolfFaction) {
+    super(id, werewolfRoleType, werewolfFaction);
+  }
+
+  public toJSON(): VillagerWerewolfGameRole {
+    return Object.assign({}, this, {
+      werewolfRoleType: "SEER"
     });
   }
 }

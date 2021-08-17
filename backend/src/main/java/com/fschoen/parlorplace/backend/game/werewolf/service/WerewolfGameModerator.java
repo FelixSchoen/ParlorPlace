@@ -2,6 +2,7 @@ package com.fschoen.parlorplace.backend.game.werewolf.service;
 
 import com.fschoen.parlorplace.backend.enumeration.CodeName;
 import com.fschoen.parlorplace.backend.enumeration.PlayerState;
+import com.fschoen.parlorplace.backend.enumeration.VoteDrawStrategy;
 import com.fschoen.parlorplace.backend.enumeration.VoteType;
 import com.fschoen.parlorplace.backend.game.werewolf.entity.WerewolfGame;
 import com.fschoen.parlorplace.backend.game.werewolf.entity.WerewolfGameRole;
@@ -29,6 +30,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.Set;
 import java.util.UUID;
@@ -101,8 +103,8 @@ public class WerewolfGameModerator extends AbstractGameModerator<
 
         // Process Village Kill
         if (game.getRound() != 0) {
-            WerewolfPlayer villagersTarget = getLastVoteOfVoteDescriptor(WerewolfVoteDescriptor.VILLAGERS_LYNCH).getOutcome().stream().findFirst().orElseThrow();
-            handlePlayerDiedEvent(game, villagersTarget);
+            Optional<WerewolfPlayer> villagersTarget = getLastVoteOfVoteDescriptor(WerewolfVoteDescriptor.VILLAGERS_LYNCH).getOutcome().stream().findFirst();
+            villagersTarget.ifPresent(werewolfPlayer -> handlePlayerDiedEvent(game, werewolfPlayer));
         }
 
         game.setRound(game.getRound() + 1);
@@ -130,6 +132,7 @@ public class WerewolfGameModerator extends AbstractGameModerator<
         CompletableFuture<WerewolfVote> werewolfVoteFuture = this.voteService.requestVote(
                 this.gameIdentifier,
                 VoteType.PRIVATE_PUBLIC_PUBLIC,
+                VoteDrawStrategy.CHOOSE_RANDOM,
                 1,
                 this.voteService.getSameChoiceCollectionMap(
                         werewolves,
@@ -171,19 +174,26 @@ public class WerewolfGameModerator extends AbstractGameModerator<
 
         broadcastVoiceLineNotification(getVoiceLineNotification(WerewolfVoiceLineType.VILLAGERS_VOTE));
 
-        CompletableFuture<WerewolfVote> werewolfVoteFuture = this.voteService.requestVote(
-                this.gameIdentifier,
-                VoteType.PUBLIC_PUBLIC_PUBLIC,
-                1,
-                this.voteService.getSameChoiceCollectionMap(
-                        villagers,
-                        validTargets,
-                        1,
-                        true),
-                WerewolfVoteDescriptor.VILLAGERS_LYNCH,
-                VOTE_TIME_ALL_VOTE
-        );
-        werewolfVoteFuture.get();
+        for (int x = 0; x < 2; x++) {
+            CompletableFuture<WerewolfVote> werewolfVoteFuture = this.voteService.requestVote(
+                    this.gameIdentifier,
+                    VoteType.PUBLIC_PUBLIC_PUBLIC,
+                    VoteDrawStrategy.HARD_NO_OUTCOME,
+                    1,
+                    this.voteService.getSameChoiceCollectionMap(
+                            villagers,
+                            validTargets,
+                            1,
+                            true),
+                    WerewolfVoteDescriptor.VILLAGERS_LYNCH,
+                    VOTE_TIME_ALL_VOTE / (x + 1)
+            );
+            WerewolfVote villagerVote = werewolfVoteFuture.get();
+
+            // Give second chance for vote
+            if (villagerVote.getOutcome().size() > 0)
+                break;
+        }
 
         pause(WAIT_TIME_BETWEEN_CONSECUTIVE_EVENTS);
     }

@@ -6,6 +6,7 @@ import com.fschoen.parlorplace.backend.entity.Player;
 import com.fschoen.parlorplace.backend.entity.User;
 import com.fschoen.parlorplace.backend.entity.Vote;
 import com.fschoen.parlorplace.backend.entity.VoteCollection;
+import com.fschoen.parlorplace.backend.enumeration.VoteDrawStrategy;
 import com.fschoen.parlorplace.backend.enumeration.VoteState;
 import com.fschoen.parlorplace.backend.enumeration.VoteType;
 import com.fschoen.parlorplace.backend.exception.DataConflictException;
@@ -69,7 +70,7 @@ public abstract class AbstractVoteService<
         this.taskExecutor = taskExecutor;
     }
 
-    public CompletableFuture<V> requestVote(GameIdentifier gameIdentifier, VoteType voteType, Integer outcomeAmount, Map<Long, C> voteCollectionMap, D voteDescriptor, int durationInSeconds) {
+    public CompletableFuture<V> requestVote(GameIdentifier gameIdentifier, VoteType voteType, VoteDrawStrategy voteDrawStrategy, Integer outcomeAmount, Map<Long, C> voteCollectionMap, D voteDescriptor, int durationInSeconds) {
         log.info("Starting new Vote for Game: {}", gameIdentifier.getToken());
 
         G game = getActiveGame(gameIdentifier);
@@ -80,6 +81,7 @@ public abstract class AbstractVoteService<
             vote.setGame(game);
             vote.setVoteState(VoteState.ONGOING);
             vote.setVoteType(voteType);
+            vote.setVoteDrawStrategy(voteDrawStrategy);
             vote.setVoters(new HashSet<>() {{
                 addAll(voteCollectionMap.keySet().stream().map(id -> playerRepository.findOneById(id).orElseThrow()).collect(Collectors.toList()));
             }});
@@ -153,6 +155,67 @@ public abstract class AbstractVoteService<
         game = this.getActiveGame(gameIdentifier);
 
         return game;
+    }
+
+    private List<T> getOutcome(V vote) {
+        // Calculate outcome
+        Map<T, Integer> votes = new HashMap<>();
+
+        for (Entry<Long, C> entry : vote.getVoteCollectionMap().entrySet()) {
+            for (T t : entry.getValue().getSelection()) {
+                votes.putIfAbsent(t, 0);
+                votes.put(t, votes.get(t) + 1);
+            }
+
+            // Add non voted-upon at the end of the list
+            for (T t : entry.getValue().getSubjects()) {
+                votes.putIfAbsent(t, 0);
+            }
+        }
+
+        // Sort by votes
+        List<Entry<T, Integer>> sortedCandidates = votes.entrySet().stream().sorted(Map.Entry.comparingByValue(Comparator.reverseOrder())).collect(Collectors.toList());
+
+        // Create bins of equal votes
+        List<List<T>> binList = new ArrayList<>();
+        List<T> currentBin = new ArrayList<>();
+        int currentMaxVotes = sortedCandidates.get(0).getValue();
+
+        for (Entry<T, Integer> entry : sortedCandidates) {
+            if (entry.getValue() < currentMaxVotes) {
+                currentMaxVotes = entry.getValue();
+                binList.add(currentBin);
+                currentBin = new ArrayList<>();
+            }
+            currentBin.add(entry.getKey());
+        }
+
+        binList.add(currentBin);
+
+        // Shuffle bins
+        for (List<T> bin : binList) {
+            Collections.shuffle(bin);
+        }
+
+        // Get top outcomeAmount choices
+        List<T> flatList = binList.stream().flatMap(List::stream).collect(Collectors.toList());
+
+        List<T> resultList = new ArrayList<>();
+
+        while (resultList.size() < vote.getOutcomeAmount() && binList.size() > 0) {
+            List<T> bin = binList.remove(0);
+
+            if (bin.size() > vote.getOutcomeAmount() - resultList.size()) {
+                if (vote.getVoteDrawStrategy() == VoteDrawStrategy.HARD_NO_OUTCOME)
+                    return new ArrayList<>();
+                if (vote.getVoteDrawStrategy() == VoteDrawStrategy.SOFT_NO_OUTCOME)
+                    return resultList;
+            }
+
+            resultList.addAll(bin.stream().limit(vote.getOutcomeAmount() - resultList.size()).collect(Collectors.toList()));
+        }
+
+        return resultList;
     }
 
     // Abstract Methods
@@ -248,51 +311,8 @@ public abstract class AbstractVoteService<
             // Close vote
             currentVote.setVoteState(VoteState.CONCLUDED);
 
-            // Calculate outcome
-            Map<T, Integer> votes = new HashMap<>();
-
-            for (Entry<Long, C> entry : currentVote.getVoteCollectionMap().entrySet()) {
-                for (T t : entry.getValue().getSelection()) {
-                    votes.putIfAbsent(t, 0);
-                    votes.put(t, votes.get(t) + 1);
-                }
-
-                // Add non voted-upon at the end of the list
-                for (T t : entry.getValue().getSubjects()) {
-                    votes.putIfAbsent(t, 0);
-                }
-            }
-
-            // Sort by votes
-            List<Entry<T, Integer>> sortedCandidates = votes.entrySet().stream().sorted(Map.Entry.comparingByValue(Comparator.reverseOrder())).collect(Collectors.toList());
-
-            // Create bins of equal votes
-            List<List<T>> binList = new ArrayList<>();
-            List<T> currentBin = new ArrayList<>();
-            int currentMaxVotes = sortedCandidates.get(0).getValue();
-
-            for (Entry<T, Integer> entry : sortedCandidates) {
-                if (entry.getValue() < currentMaxVotes) {
-                    currentMaxVotes = entry.getValue();
-                    binList.add(currentBin);
-                    currentBin = new ArrayList<>();
-                }
-                currentBin.add(entry.getKey());
-            }
-
-            binList.add(currentBin);
-
-            // Shuffle bins
-            for (List<T> bin : binList) {
-                Collections.shuffle(bin);
-            }
-
-            // Get top outcomeAmount choices
-            List<T> flatList = binList.stream().flatMap(List::stream).collect(Collectors.toList());
-            System.out.println(flatList);
-            currentVote.getOutcome().addAll(flatList.stream().limit(currentVote.getOutcomeAmount()).collect(Collectors.toList()));
-
-            System.out.println(flatList.stream().limit(currentVote.getOutcomeAmount()).collect(Collectors.toList()));
+            // Get outcome
+            currentVote.getOutcome().addAll(getOutcome(currentVote));
 
             voteRepository.save(currentVote);
 

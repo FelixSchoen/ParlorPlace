@@ -70,7 +70,6 @@ export abstract class GameCommonComponent<G extends Game, P extends Player> impl
       {
         next: (result: G) => {
           if (this.game != undefined && this.game.gameState == GameState.LOBBY && result.gameState != GameState.LOBBY) {
-            console.log("Navigated")
             const currentUrl = this.router.url
             this.router.navigateByUrl("/", {skipLocationChange: true}).then(() => {
               this.router.navigate([currentUrl]).then();

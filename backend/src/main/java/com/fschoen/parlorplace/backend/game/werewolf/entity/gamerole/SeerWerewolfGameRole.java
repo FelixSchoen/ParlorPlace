@@ -26,11 +26,11 @@ public class SeerWerewolfGameRole extends WerewolfGameRole {
     @Column(nullable = false)
     @Builder.Default
     @NotNull
-    protected WerewolfRoleType werewolfRoleType = WerewolfRoleType.SEER;
+    private WerewolfRoleType werewolfRoleType = WerewolfRoleType.SEER;
 
     @Column(nullable = false)
     @Builder.Default
     @NotNull
-    protected WerewolfFaction werewolfFaction = WerewolfFaction.VILLAGERS;
+    private WerewolfFaction werewolfFaction = WerewolfFaction.VILLAGERS;
 
 }

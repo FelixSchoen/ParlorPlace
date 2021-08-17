@@ -8,6 +8,7 @@ import com.fschoen.parlorplace.backend.enumeration.GameState;
 import com.fschoen.parlorplace.backend.enumeration.LobbyRole;
 import com.fschoen.parlorplace.backend.enumeration.PlayerState;
 import com.fschoen.parlorplace.backend.enumeration.UserRole;
+import com.fschoen.parlorplace.backend.enumeration.VoteDrawStrategy;
 import com.fschoen.parlorplace.backend.enumeration.VoteState;
 import com.fschoen.parlorplace.backend.enumeration.VoteType;
 import com.fschoen.parlorplace.backend.game.werewolf.entity.WerewolfGame;
@@ -291,6 +292,7 @@ public class DatabasePopulator {
                         .game(werewolfOngoingGame1)
                         .voteState(VoteState.ONGOING)
                         .voteType(VoteType.PUBLIC_PUBLIC_PUBLIC)
+                        .voteDrawStrategy(VoteDrawStrategy.CHOOSE_RANDOM)
                         .voteDescriptor(WerewolfVoteDescriptor.WEREWOLVES_KILL)
                         .voters(new HashSet<>())
                         .endTime(Instant.now().plusSeconds(600))

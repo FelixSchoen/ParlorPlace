@@ -5,17 +5,14 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fschoen.parlorplace.backend.controller.dto.game.GameRoleDTO;
 import com.fschoen.parlorplace.backend.game.werewolf.enumeration.WerewolfFaction;
 import com.fschoen.parlorplace.backend.game.werewolf.enumeration.WerewolfRoleType;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 
-import javax.validation.constraints.NotNull;
-
 @NoArgsConstructor
-@AllArgsConstructor
+//@AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
 @SuperBuilder(toBuilder = true)
@@ -28,10 +25,8 @@ import javax.validation.constraints.NotNull;
 @Data
 public abstract class WerewolfGameRoleDTO extends GameRoleDTO {
 
-    @NotNull
-    protected WerewolfRoleType werewolfRoleType;
+    public abstract WerewolfRoleType getWerewolfRoleType();
 
-    @NotNull
-    protected WerewolfFaction werewolfFaction;
+    public abstract WerewolfFaction getWerewolfFaction();
 
 }

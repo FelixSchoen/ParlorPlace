@@ -30,14 +30,16 @@ export abstract class VoteComponent<G extends Game, P extends Player, V extends 
   }
 
   ngOnInit(): void {
-    this.timeRemaining = (this.vote.endTime * 1000 - new Date().getTime()) / 1000
-    this.countDown = timer(0, 1000).subscribe(() => this.timeRemaining = Math.max(0, this.timeRemaining - 1));
-
+    if (this.vote.voteState == VoteState.ONGOING) {
+      this.timeRemaining = (this.vote.endTime * 1000 - new Date().getTime()) / 1000
+      this.countDown = timer(0, 1000).subscribe(() => this.timeRemaining = Math.max(0, this.timeRemaining - 1));
+    }
     this.update();
   }
 
   ngOnDestroy(): void {
-    this.countDown.unsubscribe();
+    if (this.countDown != undefined)
+      this.countDown.unsubscribe();
   }
 
   ngOnChanges(simpleChanges: SimpleChanges) {

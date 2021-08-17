@@ -1,5 +1,6 @@
 package com.fschoen.parlorplace.backend.controller.dto.game;
 
+import com.fschoen.parlorplace.backend.enumeration.VoteDrawStrategy;
 import com.fschoen.parlorplace.backend.enumeration.VoteState;
 import com.fschoen.parlorplace.backend.enumeration.VoteType;
 import lombok.AllArgsConstructor;
@@ -27,6 +28,9 @@ public abstract class VoteDTO<P extends PlayerDTO<?>, T, C extends VoteCollectio
 
     @NotNull
     protected VoteType voteType;
+
+    @NotNull
+    protected VoteDrawStrategy voteDrawStrategy;
 
     @NotNull
     protected D voteDescriptor;
