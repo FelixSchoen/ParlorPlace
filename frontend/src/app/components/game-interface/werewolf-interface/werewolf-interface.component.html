@@ -37,7 +37,7 @@
 
     <mat-tab>
       <ng-template mat-tab-label>
-        <mat-icon class="material-icons">gavel</mat-icon>
+        <mat-icon class="material-icons" matBadge="{{sortVotes(game.votes)[0].length}}" matBadgeSize="small" [matBadgeHidden]="sortVotes(game.votes)[0].length > 0">gavel</mat-icon>
       </ng-template>
 
       <div class="h-100 pt-3">

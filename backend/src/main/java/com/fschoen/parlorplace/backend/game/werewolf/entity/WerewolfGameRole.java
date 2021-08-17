@@ -1,6 +1,7 @@
 package com.fschoen.parlorplace.backend.game.werewolf.entity;
 
 import com.fschoen.parlorplace.backend.entity.GameRole;
+import com.fschoen.parlorplace.backend.game.werewolf.enumeration.WerewolfFaction;
 import com.fschoen.parlorplace.backend.game.werewolf.enumeration.WerewolfRoleType;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -23,5 +24,7 @@ import javax.persistence.InheritanceType;
 public abstract class WerewolfGameRole extends GameRole {
 
     public abstract WerewolfRoleType getWerewolfRoleType();
+
+    public abstract WerewolfFaction getWerewolfFaction();
 
 }
