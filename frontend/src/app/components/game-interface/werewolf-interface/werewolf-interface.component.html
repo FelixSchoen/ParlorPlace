@@ -10,8 +10,16 @@
 
       <div class="pt-3">
 
+        <!-- Recent Log Card -->
+        <mat-card class="mx-3 log-card">
+          <mat-card-content>
+            <app-werewolf-log-entry-list [log]="[this.game.log.reverse()[0]]"
+                                         [players]="this.game.players"></app-werewolf-log-entry-list>
+          </mat-card-content>
+        </mat-card>
+
         <!-- Village Card -->
-        <mat-card class="mx-3 mb-3">
+        <mat-card class="mx-3 mt-3">
           <mat-card-header class="pp-center">
             <mat-card-title>
               {{"werewolf.misc.village" | translate}}
@@ -81,7 +89,7 @@
 
           <mat-card-content>
 
-            <app-werewolf-log-entry-list [log]="this.game.log"
+            <app-werewolf-log-entry-list [log]="this.game.log.reverse()"
                                          [players]="this.game.players"></app-werewolf-log-entry-list>
 
           </mat-card-content>

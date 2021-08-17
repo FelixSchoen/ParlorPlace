@@ -14,4 +14,6 @@ export abstract class LogEntryListComponent<L extends LogEntry, P extends Player
   protected constructor(public logService: AbstractLogService<L, P>) {
   }
 
+  abstract toIconRepresentation(l: L): string;
+
 }
