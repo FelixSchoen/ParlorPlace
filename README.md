@@ -12,6 +12,7 @@ It is built to support relatively quick and easy addition of other social deduct
 - [ParlorPlace](#ParlorPlace)
   - [Contents](#Contents)
   - [Features](#Features)
+  - [Guide](#Guide)
   - [Prerequisites](#Prerequisites)
   - [Changelog](#Changelog)
 
@@ -37,6 +38,27 @@ Users are able to start ("host") and join existing games, using an identifier ma
 Doing so they will be placed in a game lobby, in which they can see the other participants and the rules of the game to be played.
 The user who started the lobby will have additional privileges, like for example changing the seat position of the players, or editing the rules.
 Furthermore this host user has a special icon next to them, indicating to all other players that they are indeed the host.
+
+#### Playing games
+
+Users are able to play the implemented games (at this point in time the social deduction game "Werewolf") using a simple and intuitive interface.
+They only have to use their phone as a supplement to the overall gameplay, it is not supposed to distract them during the playing process but rather enhance it.
+Logs provide additional information on what has already happened, and an information section provides them with further details about their role.
+
+#### Other
+
+##### Extendability
+
+ParlorPlace was built with extendability in mind; implementing new games or roles is an easy process and takes way less time than implementing these approaches from scratch!
+
+##### Translation
+
+ParlorPlace makes use of a central file that stores almost all the strings used.
+Translating this file into your local language allows for new display languages!
+
+## Guide
+
+To get a better grasp of the application, and especially a visual representation of the different components, visit the following [Page](https://reset.inso.tuwien.ac.at/repo/praktika/ParlorPlace/-/wikis/Guide) in the wiki, detailing these aspects.
 
 ## Prerequisites
 

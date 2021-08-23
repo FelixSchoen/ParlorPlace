@@ -181,6 +181,7 @@ public class DatabasePopulator {
                             add(WerewolfRoleType.WEREWOLF);
                             add(WerewolfRoleType.VILLAGER);
                             add(WerewolfRoleType.VILLAGER);
+                            add(WerewolfRoleType.VILLAGER);
                         }}).build())
                 .round(0)
                 .votes(new ArrayList<>())
@@ -219,6 +220,18 @@ public class DatabasePopulator {
                         .playerState(PlayerState.ALIVE)
                         .gameRoles(new ArrayList<>())
                         .position(2)
+
+                        .disconnected(false)
+                        .build()
+        );
+        werewolfLobbyGame1.getPlayers().add(
+                WerewolfPlayer.builder()
+                        .user(generatedData.getUserCollection().getUser3())
+                        .game(werewolfLobbyGame1)
+                        .lobbyRole(LobbyRole.ROLE_USER)
+                        .playerState(PlayerState.ALIVE)
+                        .gameRoles(new ArrayList<>())
+                        .position(3)
 
                         .disconnected(false)
                         .build()
