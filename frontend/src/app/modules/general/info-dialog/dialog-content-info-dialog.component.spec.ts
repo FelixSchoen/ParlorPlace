@@ -1,20 +1,20 @@
 import {ComponentFixture, TestBed} from '@angular/core/testing';
 
-import {WerewolfLibraryComponent} from './werewolf-library.component';
+import {DialogContentInfoDialog} from './dialog-content-info-dialog.component';
 
-describe('WerewolfLibraryComponent', () => {
-  let component: WerewolfLibraryComponent;
-  let fixture: ComponentFixture<WerewolfLibraryComponent>;
+describe('InfoDialogComponent', () => {
+  let component: DialogContentInfoDialog;
+  let fixture: ComponentFixture<DialogContentInfoDialog>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ WerewolfLibraryComponent ]
+      declarations: [ DialogContentInfoDialog ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(WerewolfLibraryComponent);
+    fixture = TestBed.createComponent(DialogContentInfoDialog);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

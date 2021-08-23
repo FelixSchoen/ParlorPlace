@@ -1,0 +1,28 @@
+<mat-dialog-content class="mat-typography pp-center">
+
+  <div>
+    <div class="flex-row pp-center">
+      <div class="col icon-container mw-icon mh-icon">
+          <mat-icon inline="true"
+                    svgIcon="{{data.iconSelector}}"></mat-icon>
+      </div>
+    </div>
+    <div class="flex-row mt-3 pp-center">
+      <div class="col">
+        <div>
+          <h3>{{this.data.titleKey | translate}}</h3>
+        </div>
+      </div>
+    </div>
+    <div class="flex-row mt-1">
+      <div class="col">
+        <div>{{this.data.descriptionKey | translate}}</div>
+      </div>
+    </div>
+  </div>
+
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="onClose()">{{"general.action.close" | translate}}</button>
+</mat-dialog-actions>

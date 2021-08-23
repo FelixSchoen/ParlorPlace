@@ -4,6 +4,7 @@ import {AbstractGameService} from "../../services/abstract-game.service";
 import {NotificationService} from "../../services/notification.service";
 import {ActivatedRoute, Router} from "@angular/router";
 import {environment} from "../../../environments/environment";
+import {MatDialog} from "@angular/material/dialog";
 
 @Component({
   selector: 'app-game-library',
@@ -20,6 +21,7 @@ export abstract class GameLibraryComponent<G extends Game> implements OnInit {
   protected constructor(
     public gameService: AbstractGameService<G>,
     public notificationService: NotificationService,
+    public dialog: MatDialog,
     public activatedRoute: ActivatedRoute,
     public router: Router,
   ) {

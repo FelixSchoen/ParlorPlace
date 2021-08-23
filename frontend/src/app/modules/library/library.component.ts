@@ -1,14 +1,10 @@
 import {Component, ComponentFactoryResolver, OnInit, ViewChild} from '@angular/core';
 import {GameDirective} from "../game/game.directive";
 import {GameType} from "../../enums/game-type";
-import {WerewolfInterfaceComponent} from "../../components/game-interface/werewolf-interface/werewolf-interface.component";
-import {WerewolfLobbyComponent} from "../../components/lobby/werewolf-lobby/werewolf-lobby.component";
-import {GameComponents} from "../game/game.component";
 import {GeneralGameService} from "../../services/general-game.service";
 import {NotificationService} from "../../services/notification.service";
 import {ActivatedRoute, Router} from "@angular/router";
-import {GameBaseInformation, GameIdentifier} from "../../dto/game";
-import {GameState} from "../../enums/game-state";
+import {GameBaseInformation} from "../../dto/game";
 import {environment} from "../../../environments/environment";
 import {WerewolfLibraryComponent} from "../../components/game-library/werewolf-library/werewolf-library.component";
 

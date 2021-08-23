@@ -35,6 +35,14 @@ export class AppComponent implements OnInit {
         "duotone-info",
         this.domSanitizer.bypassSecurityTrustResourceUrl(duotone_folder + "info-circle.svg")
       );
+      this.matIconRegistry.addSvgIcon(
+        "duotone-victory",
+        this.domSanitizer.bypassSecurityTrustResourceUrl(duotone_folder + "trophy-alt.svg")
+      );
+      this.matIconRegistry.addSvgIcon(
+        "duotone-defeat",
+        this.domSanitizer.bypassSecurityTrustResourceUrl(duotone_folder + "flag-alt.svg")
+      );
     }
 
     // Overlapping
