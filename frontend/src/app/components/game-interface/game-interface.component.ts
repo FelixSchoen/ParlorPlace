@@ -20,8 +20,6 @@ export class GameInterfaceComponent<G extends Game, P extends Player, V extends 
 
   public hideVotes: boolean = true;
 
-  public voteState = VoteState;
-
   constructor(
     public userService: UserService,
     public gameService: AbstractGameService<G>,

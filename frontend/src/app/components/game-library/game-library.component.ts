@@ -36,9 +36,9 @@ export abstract class GameLibraryComponent<G extends Game> implements OnInit {
 
     this.gameService.getIndividualGame(queryIdentifier).subscribe({
       next: (result: G) => {
-        console.log("lel")
         this.game = result;
         this.loading = false;
+        this.openResultDialog();
       },
       error: () => this.router.navigate([environment.general.PROFILE_URI]).then()
     })
@@ -47,5 +47,7 @@ export abstract class GameLibraryComponent<G extends Game> implements OnInit {
   public goHome() {
     this.router.navigate(["/profile"]).then();
   }
+
+  protected abstract openResultDialog(): void;
 
 }

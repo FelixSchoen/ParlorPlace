@@ -101,7 +101,9 @@ export abstract class GameCommonComponent<G extends Game, P extends Player> impl
       this.refreshGame();
     } else if (notification.notificationType == NotificationType.GAME_ENDED_INFORMATION) {
       if (this.game != undefined) {
-        this.router.navigate([environment.general.GAME_INDIVIDUAL_URI + this.game.id]).then();
+        this.router.navigate([environment.general.LIBRARY_URI + this.game.id], {
+          queryParams: {player: this.currentPlayer.id}
+        }).then();
       } else {
         console.error("Game ended but no current game information available")
       }

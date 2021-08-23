@@ -107,13 +107,18 @@ public class WerewolfGameModerator extends AbstractGameModerator<
             log.error("Exception in Game {} has occurred", this.gameIdentifier, e);
         }
 
+        // End the game and determine placements of players
         game = getGame();
-        game.setGameState(GameState.CONCLUDED);
         game.getLog().add(getLogEntryTemplate(getAllPlayersOfGame()).logType(WerewolfLogType.END).build());
+        setPlacements(game);
+        broadcastVoiceLineNotification(getVoiceLineNotification(WerewolfVoiceLineType.END));
+        saveAndBroadcast(game);
 
+        pause(WAIT_TIME_INITIAL_ROLES);
+
+        game.setGameState(GameState.CONCLUDED);
         game = this.gameRepository.save(game);
         sendGameEndedNotification(gameIdentifier, game.getPlayers());
-        broadcastVoiceLineNotification(getVoiceLineNotification(WerewolfVoiceLineType.END));
 
         log.info("Concluded Game {}", this.gameIdentifier);
     }
@@ -254,6 +259,24 @@ public class WerewolfGameModerator extends AbstractGameModerator<
         broadcastVoiceLineNotification(getVoiceLineNotification(WerewolfVoiceLineType.DEATH));
         pause(WAIT_TIME_BETWEEN_CONSECUTIVE_EVENTS);
         checkGameEnded();
+    }
+
+    private void setPlacements(WerewolfGame game) {
+        Set<WerewolfPlayer> players = game.getPlayers();
+
+        int winners = 0;
+
+        for (WerewolfPlayer player : players) {
+            if (getLastRole(player).getWerewolfFaction() == WerewolfFaction.VILLAGERS && checkVillagersWin()
+                    || getLastRole(player).getWerewolfFaction() == WerewolfFaction.WEREWOLVES && checkWerewolvesWin()) {
+                player.setPlacement(1);
+                winners++;
+            }
+
+        }
+
+        int finalWinners = winners;
+        players.stream().filter(player -> player.getPlacement() == null).forEach(player -> player.setPlacement(finalWinners + 1));
     }
 
     private void checkGameEnded() {

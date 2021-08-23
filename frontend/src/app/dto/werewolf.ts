@@ -40,8 +40,9 @@ export class WerewolfPlayer extends Player {
               public lobbyRole: LobbyRole,
               public playerState: PlayerState,
               public gameRoles: WerewolfGameRole[],
-              public position: number) {
-    super(id, user, codeName, lobbyRole, playerState, gameRoles, position);
+              public position: number,
+              public placement: number) {
+    super(id, user, codeName, lobbyRole, playerState, gameRoles, position, placement);
   }
 
 }
