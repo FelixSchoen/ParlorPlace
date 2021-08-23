@@ -51,6 +51,8 @@ public class GeneralGameServiceImplementation extends BaseService implements Gen
     }
 
     public Game<?, ?, ?, ?> getActiveGameBaseInformation(GameIdentifier gameIdentifier) {
+        log.info("User {} obtaining game {}", getPrincipal().getUsername(), gameIdentifier);
+
         List<Game<?, ?, ?, ?>> games = this.gameRepository.findAllByGameIdentifier_TokenAndEndedAt(gameIdentifier.getToken(), null);
 
         if (games.size() == 0)
@@ -62,7 +64,7 @@ public class GeneralGameServiceImplementation extends BaseService implements Gen
     }
 
     public Game<?, ?, ?, ?> getIndividualGameBaseInformation(Long id) {
-        log.info("User {} obtaining game {}", getPrincipal(), id);
+        log.info("User {} obtaining game {}", getPrincipal().getUsername(), id);
 
         Optional<Game<?, ?, ?, ?>> game = this.gameRepository.findById(id);
 

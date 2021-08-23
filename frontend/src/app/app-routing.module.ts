@@ -7,6 +7,7 @@ const routes: Routes = [
   {path: 'entry', loadChildren: () => import("./modules/entry/entry.module").then(m => m.EntryModule)},
   {path: 'profile', loadChildren: () => import("./modules/profile/profile.module").then(m => m.ProfileModule), canActivate: [AuthGuard]},
   {path: 'game', loadChildren: () => import("./modules/game/game.module").then(m => m.GameModule), canActivate: [AuthGuard]},
+  {path: 'library', loadChildren: () => import("./modules/library/library.module").then(m => m.LibraryModule), canActivate: [AuthGuard]},
   {path: 'experimental', loadChildren: () => import("./modules/experimental/experimental.module").then(m => m.ExperimentalModule)},
   {path: '**', redirectTo: 'profile', pathMatch: 'full'},
 ];

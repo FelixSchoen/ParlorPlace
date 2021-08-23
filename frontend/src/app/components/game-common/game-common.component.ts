@@ -56,7 +56,7 @@ export abstract class GameCommonComponent<G extends Game, P extends Player> impl
   }
 
   protected initializeSocket(): void {
-    this.gameService.getGame(this.gameIdentifier).subscribe(
+    this.gameService.getActiveGame(this.gameIdentifier).subscribe(
       {
         next: (result: G) => {
           if (result.gameState != GameState.CONCLUDED)
@@ -66,7 +66,7 @@ export abstract class GameCommonComponent<G extends Game, P extends Player> impl
   }
 
   protected refreshGame(): void {
-    this.gameService.getGame(this.gameIdentifier).subscribe(
+    this.gameService.getActiveGame(this.gameIdentifier).subscribe(
       {
         next: (result: G) => {
           if (this.game != undefined && this.game.gameState == GameState.LOBBY && result.gameState != GameState.LOBBY) {

@@ -42,6 +42,10 @@ import {MatTableModule} from "@angular/material/table";
     WerewolfLogEntryListComponent,
     WerewolfVoteComponent,
   ],
+  exports: [
+    GameDirective,
+    WerewolfPlayerListComponent
+  ],
   imports: [
     CommonModule,
     GeneralModule,

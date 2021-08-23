@@ -1,0 +1,40 @@
+<div class="container p-3 h-100">
+
+  <mat-tab-group id="group" dynamicHeight mat-stretch-tabs mat-align-tabs="center"
+                 *ngIf="!loading">
+
+    <mat-tab>
+      <ng-template mat-tab-label>
+        <mat-icon class="material-icons">home</mat-icon>
+      </ng-template>
+
+      <div class="pt-3">
+
+        <!-- Village Card -->
+        <mat-card class="mx-3 mt-3">
+          <mat-card-header class="pp-center">
+            <mat-card-title>
+              {{"werewolf.misc.village" | translate}}
+            </mat-card-title>
+          </mat-card-header>
+
+          <mat-card-content>
+            <app-werewolf-player-list [players]="this.game.players"></app-werewolf-player-list>
+          </mat-card-content>
+        </mat-card>
+
+        <div class="pp-center mt-1">
+          <button mat-button color="accent" (click)="goHome()">{{"general.action.goHome" | translate}}</button>
+        </div>
+
+      </div>
+    </mat-tab>
+
+  </mat-tab-group>
+
+  <!-- Loading Indicator -->
+  <div class="d-flex justify-content-center align-items-center h-100" *ngIf="loading">
+    <app-loading-indicator [loading]="loading" [errorMessage]="errorMessage"></app-loading-indicator>
+  </div>
+
+</div>
