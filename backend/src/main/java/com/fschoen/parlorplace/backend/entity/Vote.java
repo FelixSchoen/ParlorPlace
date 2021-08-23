@@ -92,8 +92,6 @@ public abstract class Vote<
             inverseJoinColumns = @JoinColumn(name = "collection_id")
     )
     @MapKeyJoinColumn(name = "votecollection_id")
-    @ToString.Exclude
-    @EqualsAndHashCode.Exclude
     @NotNull
     protected Map<Long, C> voteCollectionMap;
 
