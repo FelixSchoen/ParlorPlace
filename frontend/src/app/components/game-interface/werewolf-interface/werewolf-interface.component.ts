@@ -7,7 +7,7 @@ import {CommunicationService} from "../../../services/communication.service";
 import {NotificationService} from "../../../services/notification.service";
 import {ActivatedRoute, Router} from "@angular/router";
 import {WerewolfRoleType} from "../../../enums/games/werewolf-role-type";
-import {LogEntryListComponent} from "../../game-interface-components/log-entry-list/log-entry-list.component";
+import {LogEntryListComponent} from "../../game-common/game-components/log-entry-list/log-entry-list.component";
 
 @Component({
   selector: 'app-werewolf-interface',

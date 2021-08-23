@@ -1,9 +1,9 @@
 import {Directive, Input, OnChanges, OnDestroy, OnInit, SimpleChanges} from '@angular/core';
-import {Vote, VoteCollection, VoteUtil} from "../../../dto/vote";
-import {Player, PlayerUtil} from "../../../dto/player";
+import {Vote, VoteCollection, VoteUtil} from "../../../../dto/vote";
+import {Player, PlayerUtil} from "../../../../dto/player";
 import {Subscription, timer} from "rxjs";
-import {Game, GameIdentifier} from "../../../dto/game";
-import {VoteState} from "../../../enums/vote-state";
+import {Game, GameIdentifier} from "../../../../dto/game";
+import {VoteState} from "../../../../enums/vote-state";
 
 @Directive({
   selector: 'app-vote',

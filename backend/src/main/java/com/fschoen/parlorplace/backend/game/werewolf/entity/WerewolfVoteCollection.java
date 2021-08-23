@@ -33,8 +33,6 @@ public class WerewolfVoteCollection extends VoteCollection<WerewolfPlayer> {
             inverseJoinColumns = @JoinColumn(name = "player_id")
     )
     @LazyCollection(LazyCollectionOption.FALSE)
-    @ToString.Exclude
-    @EqualsAndHashCode.Exclude
     @NotNull
     private Set<WerewolfPlayer> subjects;
 
@@ -44,8 +42,6 @@ public class WerewolfVoteCollection extends VoteCollection<WerewolfPlayer> {
             inverseJoinColumns = @JoinColumn(name = "player_id")
     )
     @LazyCollection(LazyCollectionOption.FALSE)
-    @ToString.Exclude
-    @EqualsAndHashCode.Exclude
     @NotNull
     private Set<WerewolfPlayer> selection;
 

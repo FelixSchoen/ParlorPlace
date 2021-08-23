@@ -1,7 +1,7 @@
 import {Directive, Input} from '@angular/core';
-import {LogEntry} from "../../../dto/log-entry";
-import {AbstractLogService} from "../../../services/abstract-log.service";
-import {Player} from "../../../dto/player";
+import {LogEntry} from "../../../../dto/log-entry";
+import {AbstractLogService} from "../../../../services/abstract-log.service";
+import {Player} from "../../../../dto/player";
 
 @Directive({
   selector: 'app-log-entry-list',

@@ -11,7 +11,8 @@ export abstract class Player {
                         public lobbyRole: LobbyRole,
                         public playerState: PlayerState,
                         public gameRoles: GameRole[],
-                        public position: number) {
+                        public position: number,
+                        public placement: number) {
   }
 
   public static toNameRepresentation(user: User, playersInGame: Set<Player>) {

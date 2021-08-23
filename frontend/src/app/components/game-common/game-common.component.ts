@@ -56,7 +56,7 @@ export abstract class GameCommonComponent<G extends Game, P extends Player> impl
   }
 
   protected initializeSocket(): void {
-    this.gameService.getGame(this.gameIdentifier).subscribe(
+    this.gameService.getActiveGame(this.gameIdentifier).subscribe(
       {
         next: (result: G) => {
           if (result.gameState != GameState.CONCLUDED)
@@ -66,7 +66,7 @@ export abstract class GameCommonComponent<G extends Game, P extends Player> impl
   }
 
   protected refreshGame(): void {
-    this.gameService.getGame(this.gameIdentifier).subscribe(
+    this.gameService.getActiveGame(this.gameIdentifier).subscribe(
       {
         next: (result: G) => {
           if (this.game != undefined && this.game.gameState == GameState.LOBBY && result.gameState != GameState.LOBBY) {
@@ -99,6 +99,14 @@ export abstract class GameCommonComponent<G extends Game, P extends Player> impl
 
     if (notification.notificationType == NotificationType.STALE_GAME_INFORMATION) {
       this.refreshGame();
+    } else if (notification.notificationType == NotificationType.GAME_ENDED_INFORMATION) {
+      if (this.game != undefined) {
+        this.router.navigate([environment.general.LIBRARY_URI + this.game.id], {
+          queryParams: {player: this.currentPlayer.id}
+        }).then();
+      } else {
+        console.error("Game ended but no current game information available")
+      }
     } else {
       console.error("Unknown Notification Type")
     }

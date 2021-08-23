@@ -1,15 +1,18 @@
 package com.fschoen.parlorplace.backend.game.werewolf.service;
 
 import com.fschoen.parlorplace.backend.enumeration.CodeName;
+import com.fschoen.parlorplace.backend.enumeration.GameState;
 import com.fschoen.parlorplace.backend.enumeration.PlayerState;
 import com.fschoen.parlorplace.backend.enumeration.VoteDrawStrategy;
 import com.fschoen.parlorplace.backend.enumeration.VoteType;
+import com.fschoen.parlorplace.backend.exception.GameEndException;
 import com.fschoen.parlorplace.backend.game.werewolf.entity.WerewolfGame;
 import com.fschoen.parlorplace.backend.game.werewolf.entity.WerewolfGameRole;
 import com.fschoen.parlorplace.backend.game.werewolf.entity.WerewolfLogEntry;
 import com.fschoen.parlorplace.backend.game.werewolf.entity.WerewolfPlayer;
 import com.fschoen.parlorplace.backend.game.werewolf.entity.WerewolfRuleSet;
 import com.fschoen.parlorplace.backend.game.werewolf.entity.WerewolfVote;
+import com.fschoen.parlorplace.backend.game.werewolf.enumeration.WerewolfFaction;
 import com.fschoen.parlorplace.backend.game.werewolf.enumeration.WerewolfLogType;
 import com.fschoen.parlorplace.backend.game.werewolf.enumeration.WerewolfRoleType;
 import com.fschoen.parlorplace.backend.game.werewolf.enumeration.WerewolfVoiceLineType;
@@ -28,6 +31,7 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import java.time.Instant;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -41,6 +45,7 @@ import java.util.stream.Collectors;
 @Component
 @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @Slf4j
+@SuppressWarnings("InfiniteLoopStatement")
 public class WerewolfGameModerator extends AbstractGameModerator<
         WerewolfGame,
         WerewolfPlayer,
@@ -90,12 +95,34 @@ public class WerewolfGameModerator extends AbstractGameModerator<
         // Give all players time to read roles
         pause(WAIT_TIME_INITIAL_ROLES);
 
-        while (this.isGameOngoing()) {
-            processTransitionNight();
-            processNight();
-            processTransitionDay();
-            processDay();
+        try {
+            while (true) {
+                processTransitionNight();
+                processNight();
+                processTransitionDay();
+                processDay();
+            }
+        } catch (GameEndException e) {
+            log.info("Game {} has ended", this.gameIdentifier);
+        } catch (Exception e) {
+            log.error("Exception in Game {} has occurred", this.gameIdentifier, e);
         }
+
+        // End the game and determine placements of players
+        game = getGame();
+        game.getLog().add(getLogEntryTemplate(getAllPlayersOfGame()).logType(WerewolfLogType.END).build());
+        setPlacements(game);
+        broadcastVoiceLineNotification(getVoiceLineNotification(WerewolfVoiceLineType.END));
+        saveAndBroadcast(game);
+
+        pause(WAIT_TIME_BETWEEN_CONSECUTIVE_EVENTS);
+
+        game.setGameState(GameState.CONCLUDED);
+        game.setEndedAt(Instant.now());
+        game = this.gameRepository.save(game);
+        sendGameEndedNotification(gameIdentifier, game.getPlayers());
+
+        log.info("Concluded Game {}", this.gameIdentifier);
     }
 
     private void processTransitionNight() {
@@ -200,14 +227,22 @@ public class WerewolfGameModerator extends AbstractGameModerator<
         pause(WAIT_TIME_BETWEEN_CONSECUTIVE_EVENTS);
     }
 
-    // Utility - Game
+    // Utility - Misc
 
     private Set<WerewolfPlayer> getAlivePlayersOfLastRoleType(WerewolfRoleType roleType) {
         return getAlivePlayers().stream().filter(player -> hasLastRoleType(player, roleType)).collect(Collectors.toSet());
     }
 
+    private Set<WerewolfPlayer> getAlivePlayersOfFaction(WerewolfFaction faction) {
+        return getAlivePlayers().stream().filter(player -> getLastRole(player).getWerewolfFaction() == faction).collect(Collectors.toSet());
+    }
+
+    private WerewolfGameRole getLastRole(WerewolfPlayer player) {
+        return player.getGameRoles().get(player.getGameRoles().size() - 1);
+    }
+
     private boolean hasLastRoleType(WerewolfPlayer player, WerewolfRoleType roleType) {
-        return player.getGameRoles().get(player.getGameRoles().size() - 1).getWerewolfRoleType() == roleType;
+        return getLastRole(player).getWerewolfRoleType() == roleType;
     }
 
     private WerewolfVote getLastVoteOfVoteDescriptor(WerewolfVoteDescriptor descriptor) {
@@ -228,9 +263,36 @@ public class WerewolfGameModerator extends AbstractGameModerator<
         checkGameEnded();
     }
 
+    private void setPlacements(WerewolfGame game) {
+        Set<WerewolfPlayer> players = game.getPlayers();
+
+        int winners = 0;
+
+        for (WerewolfPlayer player : players) {
+            if (getLastRole(player).getWerewolfFaction() == WerewolfFaction.VILLAGERS && checkVillagersWin()
+                    || getLastRole(player).getWerewolfFaction() == WerewolfFaction.WEREWOLVES && checkWerewolvesWin()) {
+                player.setPlacement(1);
+                winners++;
+            }
+
+        }
+
+        int finalWinners = winners;
+        players.stream().filter(player -> player.getPlacement() == null).forEach(player -> player.setPlacement(finalWinners + 1));
+    }
+
     private void checkGameEnded() {
-        WerewolfGame game = getGame();
-        //throw new GameEndException();
+        if (checkVillagersWin()
+                || checkWerewolvesWin())
+            throw new GameEndException();
+    }
+
+    private Boolean checkVillagersWin() {
+        return getAlivePlayersOfLastRoleType(WerewolfRoleType.WEREWOLF).size() == 0;
+    }
+
+    private Boolean checkWerewolvesWin() {
+        return getAlivePlayersOfFaction(WerewolfFaction.VILLAGERS).size() <= getAlivePlayersOfFaction(WerewolfFaction.WEREWOLVES).size();
     }
 
     // Utility - Communication

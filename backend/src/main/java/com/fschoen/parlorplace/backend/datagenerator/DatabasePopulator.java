@@ -33,7 +33,6 @@ import org.springframework.stereotype.Component;
 
 import java.time.Instant;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -180,13 +179,13 @@ public class DatabasePopulator {
                 .ruleSet(WerewolfRuleSet.builder()
                         .gameRoleTypes(new ArrayList<>() {{
                             add(WerewolfRoleType.WEREWOLF);
-                            add(WerewolfRoleType.WEREWOLF);
+                            add(WerewolfRoleType.VILLAGER);
                             add(WerewolfRoleType.VILLAGER);
                         }}).build())
                 .round(0)
                 .votes(new ArrayList<>())
                 .log(new ArrayList<>())
-                .startedAt(new Date())
+                .startedAt(Instant.now())
                 .gamePhase(WerewolfGamePhase.START_OF_ROUND)
                 .build();
         werewolfLobbyGame1.getPlayers().add(
@@ -242,7 +241,7 @@ public class DatabasePopulator {
                 .round(0)
                 .votes(new ArrayList<>())
                 .log(new ArrayList<>())
-                .startedAt(new Date())
+                .startedAt(Instant.now())
                 .gamePhase(WerewolfGamePhase.START_OF_ROUND)
                 .build();
         werewolfOngoingGame1.getPlayers().add(

@@ -186,7 +186,7 @@ export class ProfileComponent implements OnInit {
               }
             )
           } else if (result.submitted) {
-            this.generalGameService.getBaseInformation(new GameIdentifier(result.identifier)).subscribe({
+            this.generalGameService.getActiveGameBaseInformation(new GameIdentifier(result.identifier)).subscribe({
               next: (result) => {
                 let gameServiceType = this.gameServiceMap.get(result.gameType);
                 if (gameServiceType == undefined) {

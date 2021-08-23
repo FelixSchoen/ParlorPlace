@@ -1,9 +1,9 @@
 import {Component, OnInit} from '@angular/core';
 import {VoteComponent} from "../vote.component";
-import {WerewolfGame, WerewolfPlayer, WerewolfVote, WerewolfVoteCollection} from "../../../../dto/werewolf";
-import {Player, PlayerUtil} from "../../../../dto/player";
-import {WerewolfGameService} from "../../../../services/werewolf-game.service";
-import {NotificationService} from "../../../../services/notification.service";
+import {WerewolfGame, WerewolfPlayer, WerewolfVote, WerewolfVoteCollection} from "../../../../../dto/werewolf";
+import {Player, PlayerUtil} from "../../../../../dto/player";
+import {WerewolfGameService} from "../../../../../services/werewolf-game.service";
+import {NotificationService} from "../../../../../services/notification.service";
 
 @Component({
   selector: 'app-werewolf-vote',

@@ -46,10 +46,16 @@ export abstract class AbstractGameService<G extends Game> {
     return this.httpClient.post<G>(GAME_URI + this.SPECIFIC_GAME_URI + "start/" + gameIdentifier.token, null);
   }
 
-  public getGame(
+  public getActiveGame(
     gameIdentifier: GameIdentifier
   ): Observable<G> {
-    return this.httpClient.get<G>(GAME_URI + this.SPECIFIC_GAME_URI + gameIdentifier.token);
+    return this.httpClient.get<G>(GAME_URI + this.SPECIFIC_GAME_URI + "identifier/" + gameIdentifier.token);
+  }
+
+  public getIndividualGame(
+    gameId: number
+  ): Observable<G> {
+    return this.httpClient.get<G>(GAME_URI + this.SPECIFIC_GAME_URI + gameId);
   }
 
   public getUserActiveGames(): Observable<G[]> {

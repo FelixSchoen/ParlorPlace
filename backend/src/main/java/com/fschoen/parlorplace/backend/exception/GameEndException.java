@@ -2,6 +2,10 @@ package com.fschoen.parlorplace.backend.exception;
 
 public class GameEndException extends RuntimeException {
 
+    public GameEndException() {
+        super();
+    }
+
     public GameEndException(String message) {
         super(message);
     }
