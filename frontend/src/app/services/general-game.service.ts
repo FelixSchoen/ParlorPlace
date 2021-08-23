@@ -14,10 +14,16 @@ export class GeneralGameService {
   constructor(private httpClient: HttpClient) {
   }
 
-  public getBaseInformation(
+  public getActiveGameBaseInformation(
     gameIdentifier: GameIdentifier
   ): Observable<GameBaseInformation> {
-    return this.httpClient.get<GameBaseInformation>(GAME_GENERAL_URI + "base_info/" + gameIdentifier.token);
+    return this.httpClient.get<GameBaseInformation>(GAME_GENERAL_URI + "active_base_info/" + gameIdentifier.token);
+  }
+
+  public getIndividualGameBaseInformation(
+    id: number
+  ): Observable<GameBaseInformation> {
+    return this.httpClient.get<GameBaseInformation>(GAME_GENERAL_URI + "individual_base_info/" + id);
   }
 
 }

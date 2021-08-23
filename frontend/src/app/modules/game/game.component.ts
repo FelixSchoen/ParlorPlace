@@ -1,7 +1,7 @@
 import {Component, ComponentFactoryResolver, OnInit, ViewChild} from '@angular/core';
 import {GameDirective} from "./game.directive";
 import {WerewolfLobbyComponent} from "../../components/lobby/werewolf-lobby/werewolf-lobby.component";
-import {ActivatedRoute, Router} from "@angular/router";
+import {ActivatedRoute, Router, UrlSegment} from "@angular/router";
 import {GameBaseInformation, GameIdentifier} from "../../dto/game";
 import {GameType} from "../../enums/game-type";
 import {NotificationService} from "../../services/notification.service";
@@ -51,7 +51,7 @@ export class GameComponent implements OnInit {
   private loadComponent(componentIdentifier: string) {
     this.loading = true;
 
-    this.generalGameService.getBaseInformation(new GameIdentifier(componentIdentifier)).subscribe({
+    this.generalGameService.getActiveGameBaseInformation(new GameIdentifier(componentIdentifier)).subscribe({
       next: (gameBaseInformation: GameBaseInformation) => {
         let gameComponent = this.gameComponentMap.get(gameBaseInformation.gameType);
 
@@ -66,8 +66,6 @@ export class GameComponent implements OnInit {
           componentToLoad = gameComponent.lobbyComponent;
         else if (gameBaseInformation.gameState == GameState.ONGOING)
           componentToLoad = gameComponent.mainComponent;
-        else if (gameBaseInformation.gameState == GameState.CONCLUDED)
-          this.router.navigate([environment.general.PROFILE_URI]).then();
         else
           console.error("Unknown game state");
 

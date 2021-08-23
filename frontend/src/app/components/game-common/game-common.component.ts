@@ -99,6 +99,12 @@ export abstract class GameCommonComponent<G extends Game, P extends Player> impl
 
     if (notification.notificationType == NotificationType.STALE_GAME_INFORMATION) {
       this.refreshGame();
+    } else if (notification.notificationType == NotificationType.GAME_ENDED_INFORMATION) {
+      if (this.game != undefined) {
+        this.router.navigate([environment.general.GAME_INDIVIDUAL_URI + this.game.id]).then();
+      } else {
+        console.error("Game ended but no current game information available")
+      }
     } else {
       console.error("Unknown Notification Type")
     }

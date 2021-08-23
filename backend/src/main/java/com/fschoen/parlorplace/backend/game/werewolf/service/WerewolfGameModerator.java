@@ -111,7 +111,8 @@ public class WerewolfGameModerator extends AbstractGameModerator<
         game.setGameState(GameState.CONCLUDED);
         game.getLog().add(getLogEntryTemplate(getAllPlayersOfGame()).logType(WerewolfLogType.END).build());
 
-        saveAndBroadcast(game);
+        game = this.gameRepository.save(game);
+        sendGameEndedNotification(gameIdentifier, game.getPlayers());
         broadcastVoiceLineNotification(getVoiceLineNotification(WerewolfVoiceLineType.END));
 
         log.info("Concluded Game {}", this.gameIdentifier);

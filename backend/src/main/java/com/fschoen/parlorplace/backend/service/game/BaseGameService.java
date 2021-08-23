@@ -4,6 +4,7 @@ import com.fschoen.parlorplace.backend.entity.Game;
 import com.fschoen.parlorplace.backend.entity.GameIdentifier;
 import com.fschoen.parlorplace.backend.entity.Player;
 import com.fschoen.parlorplace.backend.entity.User;
+import com.fschoen.parlorplace.backend.enumeration.NotificationType;
 import com.fschoen.parlorplace.backend.exception.DataConflictException;
 import com.fschoen.parlorplace.backend.exception.GameException;
 import com.fschoen.parlorplace.backend.repository.GameRepository;
@@ -43,7 +44,7 @@ public abstract class BaseGameService<G extends Game<P, ?, ?, ?>, P extends Play
 
     protected G saveAndBroadcast(G game) {
         G savedGame = this.gameRepository.save(game);
-        broadcastGameStaleNotification(game.getGameIdentifier());
+        sendGameStaleNotification(game.getGameIdentifier(), savedGame.getPlayers());
         return savedGame;
     }
 
@@ -57,12 +58,12 @@ public abstract class BaseGameService<G extends Game<P, ?, ?, ?>, P extends Play
 
     protected void sendGameStaleNotification(GameIdentifier gameIdentifier, Set<P> recipients) {
         Set<User> users = recipients.stream().map(Player::getUser).collect(Collectors.toSet());
-        this.communicationService.sendGameStaleNotification(gameIdentifier, users);
+        this.communicationService.sendNotification(gameIdentifier, users, NotificationType.STALE_GAME_INFORMATION, true);
     }
 
-    protected void broadcastGameStaleNotification(GameIdentifier gameIdentifier) {
-        G game = getActiveGame(gameIdentifier);
-        this.sendGameStaleNotification(gameIdentifier, game.getPlayers());
+    protected void sendGameEndedNotification(GameIdentifier gameIdentifier, Set<P> recipients) {
+        Set<User> users = recipients.stream().map(Player::getUser).collect(Collectors.toSet());
+        this.communicationService.sendNotification(gameIdentifier, users, NotificationType.GAME_ENDED_INFORMATION, true);
     }
 
     protected P getPlayerFromUser(GameIdentifier gameIdentifier, User user) {
@@ -72,6 +73,11 @@ public abstract class BaseGameService<G extends Game<P, ?, ?, ?>, P extends Play
     }
 
     // Validation
+
+    protected void validateGameExists(Long id) {
+        if (this.gameRepository.findOneById(id).isEmpty())
+            throw new GameException(Messages.exception(MessageIdentifier.GAME_EXISTS_NOT));
+    }
 
     protected void validateActiveGameExists(GameIdentifier gameIdentifier) throws GameException, DataConflictException {
         List<G> games = this.getActiveGames(gameIdentifier);

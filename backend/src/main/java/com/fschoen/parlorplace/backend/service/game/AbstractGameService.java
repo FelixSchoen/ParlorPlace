@@ -283,6 +283,18 @@ public abstract class AbstractGameService<
     }
 
     /**
+     * Returns the concluded game.
+     *
+     * @param id The id of the game to look for
+     * @return The found game
+     */
+    public G getGame(Long id) {
+        validateGameExists(id);
+
+        return this.gameRepository.findOneById(id).orElseThrow();
+    }
+
+    /**
      * Calls {@link AbstractGameService#getUserActiveGames(User)} with the current principal.
      *
      * @return The active games of the user

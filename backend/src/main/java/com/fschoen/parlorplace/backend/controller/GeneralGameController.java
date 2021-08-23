@@ -30,10 +30,10 @@ public class GeneralGameController {
         this.gameIdentifierMapper = gameIdentifierMapper;
     }
 
-    @GetMapping("/base_info/{identifier}")
-    public ResponseEntity<GameBaseInformationDTO> getGameBaseInformation(@PathVariable("identifier") String identifier) {
+    @GetMapping("/active_base_info/{identifier}")
+    public ResponseEntity<GameBaseInformationDTO> getActiveGameBaseInformation(@PathVariable("identifier") String identifier) {
         GameIdentifier gameIdentifier = new GameIdentifier(identifier);
-        Game<?, ?, ?, ?> game = this.gameService.getGameBaseInformation(gameIdentifier);
+        Game<?, ?, ?, ?> game = this.gameService.getActiveGameBaseInformation(gameIdentifier);
         GameBaseInformationDTO gameBaseInformationDTO = GameBaseInformationDTO.builder()
                 .gameIdentifier(this.gameIdentifierMapper.toDTO(game.getGameIdentifier()))
                 .gameType(game.getGameType())
@@ -42,5 +42,14 @@ public class GeneralGameController {
         return ResponseEntity.status(HttpStatus.OK).body(gameBaseInformationDTO);
     }
 
+    @GetMapping("/individual_base_info/{id}")
+    public ResponseEntity<GameBaseInformationDTO> getIndividualGameBaseInformation(@PathVariable("id") Long id) {
+        Game<?, ?, ?, ?> game = this.gameService.getIndividualGameBaseInformation(id);
+        GameBaseInformationDTO gameBaseInformationDTO = GameBaseInformationDTO.builder()
+                .gameType(game.getGameType())
+                .gameState(game.getGameState()).build();
+
+        return ResponseEntity.status(HttpStatus.OK).body(gameBaseInformationDTO);
+    }
 
 }
