@@ -1,5 +1,5 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {Player, PlayerUtil} from "../../../dto/player";
+import {Player, PlayerUtil} from "../../../../dto/player";
 import {CdkDragDrop} from "@angular/cdk/drag-drop";
 
 @Component({

@@ -31,6 +31,7 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import java.time.Instant;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -114,9 +115,10 @@ public class WerewolfGameModerator extends AbstractGameModerator<
         broadcastVoiceLineNotification(getVoiceLineNotification(WerewolfVoiceLineType.END));
         saveAndBroadcast(game);
 
-        pause(WAIT_TIME_INITIAL_ROLES);
+        pause(WAIT_TIME_BETWEEN_CONSECUTIVE_EVENTS);
 
         game.setGameState(GameState.CONCLUDED);
+        game.setEndedAt(Instant.now());
         game = this.gameRepository.save(game);
         sendGameEndedNotification(gameIdentifier, game.getPlayers());
 

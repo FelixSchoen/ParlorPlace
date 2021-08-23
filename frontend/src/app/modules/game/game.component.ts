@@ -1,6 +1,6 @@
 import {Component, ComponentFactoryResolver, OnInit, ViewChild} from '@angular/core';
 import {GameDirective} from "./game.directive";
-import {WerewolfLobbyComponent} from "../../components/lobby/werewolf-lobby/werewolf-lobby.component";
+import {WerewolfLobbyComponent} from "../../components/game-lobby/werewolf-lobby/werewolf-lobby.component";
 import {ActivatedRoute, Router} from "@angular/router";
 import {GameBaseInformation, GameIdentifier} from "../../dto/game";
 import {GameType} from "../../enums/game-type";

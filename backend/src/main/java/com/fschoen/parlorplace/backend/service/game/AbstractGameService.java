@@ -22,9 +22,9 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.core.task.TaskExecutor;
 
 import java.lang.reflect.InvocationTargetException;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.Date;
 import java.util.EnumSet;
 import java.util.HashSet;
 import java.util.List;
@@ -79,7 +79,7 @@ public abstract class AbstractGameService<
             game.setRound(0);
             game.setVotes(new ArrayList<>());
             game.setLog(new ArrayList<>());
-            game.setStartedAt(new Date());
+            game.setStartedAt(Instant.now());
             game.setGameIdentifier(this.gameIdentifierService.generateValidGameIdentifier());
             game = onInitializeGame(game);
             game = this.gameRepository.save(game);
@@ -313,7 +313,7 @@ public abstract class AbstractGameService<
         User principal = getPrincipal();
         log.info("User {} obtaining active games of User {} of type {}", principal.getUsername(), user.getUsername(), this.getGameClass().getName());
 
-        return this.gameRepository.findAllByUserMember(user);
+        return this.gameRepository.findAllByUserMember(user).stream().filter(game -> game.getGameState() != GameState.CONCLUDED).collect(Collectors.toList());
     }
 
     // Interfaces

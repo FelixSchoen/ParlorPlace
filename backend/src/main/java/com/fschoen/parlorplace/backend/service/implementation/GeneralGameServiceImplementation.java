@@ -16,7 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
-import java.util.Date;
+import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
@@ -45,7 +45,7 @@ public class GeneralGameServiceImplementation extends BaseService implements Gen
         // Remove games ongoing longer than 12 hours
         List<Game<?, ?, ?, ?>> orphanedOngoingGames = gameRepository.findAllByEndedAt(null);
         orphanedOngoingGames = orphanedLobbyGames.stream()
-                .filter(game -> TimeUnit.HOURS.convert(new Date().getTime() - game.getStartedAt().getTime(), TimeUnit.MILLISECONDS) > 12)
+                .filter(game -> TimeUnit.HOURS.convert(Instant.now().getEpochSecond()- game.getStartedAt().getEpochSecond(), TimeUnit.SECONDS) > 12)
                 .collect(Collectors.toList());
         gameRepository.deleteAll(orphanedOngoingGames);
     }

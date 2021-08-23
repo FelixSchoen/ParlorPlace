@@ -1,8 +1,8 @@
 import {Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
-import {Player} from "../../../dto/player";
+import {Player} from "../../../../dto/player";
 import {MatAutocompleteSelectedEvent} from "@angular/material/autocomplete";
 import {FormControl} from "@angular/forms";
-import {removeFromArray} from "../../../utility/utility";
+import {removeFromArray} from "../../../../utility/utility";
 
 @Component({
   selector: 'app-role-selection',

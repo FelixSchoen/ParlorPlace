@@ -11,7 +11,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
-import java.util.Date;
+import java.time.Instant;
 import java.util.List;
 import java.util.Set;
 
@@ -51,9 +51,9 @@ public abstract class GameDTO<PDTO extends PlayerDTO<?>, RSDTO extends RuleSetDT
 
     @NotNull
     @DateTimeFormat
-    protected Date startedAt;
+    protected Instant startedAt;
 
-    protected Date endedAt;
+    protected Instant endedAt;
 
     @Valid
     @NotNull

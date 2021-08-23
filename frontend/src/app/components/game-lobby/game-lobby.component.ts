@@ -12,10 +12,10 @@ import {GameCommonComponent} from "../game-common/game-common.component";
 
 @Component({
   selector: 'app-lobby',
-  templateUrl: './lobby.component.html',
-  styleUrls: ['./lobby.component.css']
+  templateUrl: './game-lobby.component.html',
+  styleUrls: ['./game-lobby.component.css']
 })
-export abstract class LobbyComponent<G extends Game, P extends Player> extends GameCommonComponent<G, P> {
+export abstract class GameLobbyComponent<G extends Game, P extends Player> extends GameCommonComponent<G, P> {
 
   protected constructor(
     public userService: UserService,

@@ -29,7 +29,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
-import java.util.Date;
+import java.time.Instant;
 import java.util.List;
 import java.util.Set;
 
@@ -92,10 +92,10 @@ public abstract class Game<P extends Player<?>, RS extends RuleSet, V extends Vo
     protected List<L> log;
 
     @Column(nullable = false)
-    protected Date startedAt;
+    protected Instant startedAt;
 
     @Column
-    protected Date endedAt;
+    protected Instant endedAt;
 
     public abstract GameType getGameType();
 

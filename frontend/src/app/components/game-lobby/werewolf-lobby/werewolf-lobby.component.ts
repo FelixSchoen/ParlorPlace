@@ -1,5 +1,5 @@
 import {Component} from '@angular/core';
-import {LobbyComponent} from "../lobby.component";
+import {GameLobbyComponent} from "../game-lobby.component";
 import {ActivatedRoute, Router} from "@angular/router";
 import {NotificationService} from "../../../services/notification.service";
 import {UserService} from "../../../services/user.service";
@@ -13,7 +13,7 @@ import {WerewolfGame, WerewolfLobbyChangeRequest, WerewolfPlayer} from "../../..
   templateUrl: './werewolf-lobby.component.html',
   styleUrls: ['./werewolf-lobby.component.scss']
 })
-export class WerewolfLobbyComponent extends LobbyComponent<WerewolfGame, WerewolfPlayer> {
+export class WerewolfLobbyComponent extends GameLobbyComponent<WerewolfGame, WerewolfPlayer> {
 
   public werewolfRoleTypeArray: WerewolfRoleType[] = WerewolfRoleTypeUtil.getArray();
 

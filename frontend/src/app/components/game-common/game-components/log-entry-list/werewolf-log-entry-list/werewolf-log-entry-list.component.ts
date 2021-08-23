@@ -1,8 +1,8 @@
 import {Component} from '@angular/core';
 import {LogEntryListComponent} from "../log-entry-list.component";
-import {WerewolfLogEntry, WerewolfPlayer} from "../../../../dto/werewolf";
-import {WerewolfLogService} from "../../../../services/werewolf-log.service";
-import {WerewolfLogTypeUtil} from "../../../../enums/games/werewolf-log-type";
+import {WerewolfLogEntry, WerewolfPlayer} from "../../../../../dto/werewolf";
+import {WerewolfLogService} from "../../../../../services/werewolf-log.service";
+import {WerewolfLogTypeUtil} from "../../../../../enums/games/werewolf-log-type";
 
 @Component({
   selector: 'app-werewolf-log-entry-list',
