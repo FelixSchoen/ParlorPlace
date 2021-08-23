@@ -180,7 +180,7 @@ public class DatabasePopulator {
                 .ruleSet(WerewolfRuleSet.builder()
                         .gameRoleTypes(new ArrayList<>() {{
                             add(WerewolfRoleType.WEREWOLF);
-                            add(WerewolfRoleType.WEREWOLF);
+                            add(WerewolfRoleType.VILLAGER);
                             add(WerewolfRoleType.VILLAGER);
                         }}).build())
                 .round(0)
