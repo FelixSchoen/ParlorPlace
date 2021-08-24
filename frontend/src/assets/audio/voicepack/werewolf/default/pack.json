@@ -1,10 +1,8 @@
 {
-  "name": "Default",
-  "language": "German",
+  "name": "default",
   "codename": {
     "alfa": [
       {
-        "name": "Alfa",
         "path": [
           "alfa_01.mp3"
         ]

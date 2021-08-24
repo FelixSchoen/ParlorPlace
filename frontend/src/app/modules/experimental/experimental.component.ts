@@ -1,5 +1,7 @@
 import {Component} from "@angular/core";
-import werewolfpack from "../../../assets/audio/voicepack/werewolf/default/de/pack.json"
+import {AudioService} from "../../services/audio.service";
+import {WerewolfVoicePack} from "../../entities/voice-pack";
+import {LoadJsonService} from "../../services/load-json.service";
 
 @Component({
   selector: 'app-experimental',
@@ -8,10 +10,12 @@ import werewolfpack from "../../../assets/audio/voicepack/werewolf/default/de/pa
 })
 export class ExperimentalComponent {
 
+  constructor(public voicelineService: AudioService, public jsonService: LoadJsonService) {
+  }
+
   public action(): void {
-    console.log(werewolfpack)
-    console.log(werewolfpack.name)
-    console.log(werewolfpack.codename.alfa)
+    let pack = new WerewolfVoicePack(this.jsonService, "default", "de");
+    console.log(pack.getCodenameAlfa())
   }
 
 }

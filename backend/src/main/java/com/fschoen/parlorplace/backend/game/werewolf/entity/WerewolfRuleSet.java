@@ -29,7 +29,7 @@ public class WerewolfRuleSet extends RuleSet {
 
     @Column(nullable = false)
     @Builder.Default
-    private String voicepack = "default";
+    private String resourcepack = "default";
 
     @Column(nullable = false)
     @Enumerated

@@ -48,7 +48,9 @@ export class WerewolfPlayer extends Player {
 }
 
 export class WerewolfRuleSet extends RuleSet {
-  constructor(public id: number, public gameRoleTypes: WerewolfRoleType[]) {
+  constructor(public id: number,
+              public voicepack: string,
+              public gameRoleTypes: WerewolfRoleType[]) {
     super(id);
   }
 }
