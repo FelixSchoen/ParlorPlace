@@ -19,6 +19,7 @@ import * as _ from "lodash/fp";
 export class GameInterfaceComponent<G extends Game, P extends Player, V extends Vote<any, any>> extends GameCommonComponent<G, P> {
 
   public hideVotes: boolean = true;
+  public hideSleep: boolean = true;
 
   constructor(
     public userService: UserService,
@@ -44,7 +45,7 @@ export class GameInterfaceComponent<G extends Game, P extends Player, V extends 
     });
 
     return _.partition(function(vote: V){
-      return vote.voteState == VoteState.ONGOING;
+      return vote.voteState == VoteState.ONGOING || (new Date().getTime() - vote.endTime * 1000) / 1000 <= 5;
     }, sorted);
   }
 

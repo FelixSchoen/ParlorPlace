@@ -14,7 +14,7 @@
         <!-- Recent Log Card -->
         <mat-card class="mx-3 log-card" *ngIf="this.game.log.length > 0">
           <mat-card-content>
-            <app-werewolf-log-entry-list [log]="[this.game.log.reverse()[0]]"
+            <app-werewolf-log-entry-list [hideSleep]="false" [log]="[this.game.log.reverse()[0]]"
                                          [players]="this.game.players"></app-werewolf-log-entry-list>
           </mat-card-content>
         </mat-card>
@@ -37,7 +37,9 @@
 
     <mat-tab>
       <ng-template mat-tab-label>
-        <mat-icon class="material-icons" matBadge="{{sortVotes(game.votes)[0].length}}" matBadgeSize="small" [matBadgeHidden]="!sortVotes(game.votes)[0].length > 0">gavel</mat-icon>
+        <mat-icon class="material-icons" matBadge="{{sortVotes(game.votes)[0].length}}" matBadgeSize="small"
+                  [matBadgeHidden]="!sortVotes(game.votes)[0].length > 0">gavel
+        </mat-icon>
       </ng-template>
 
       <div class="h-100 pt-3">
@@ -90,7 +92,21 @@
 
           <mat-card-content>
 
-            <app-werewolf-log-entry-list [log]="this.game.log"
+            <div class="mt-1 pp-center">
+              <button mat-button (click)="this.hideSleep = true"
+                      *ngIf="!hideSleep">
+                <mat-icon class="material-icons-outlined">visibility_off</mat-icon>
+                {{("general.log.hideSleep" | translate).toUpperCase()}}
+              </button>
+              <button mat-button (click)="this.hideSleep = false"
+                      *ngIf="hideSleep">
+                <mat-icon class="material-icons-outlined">visibility</mat-icon>
+                {{("general.log.showSleep" | translate).toUpperCase()}}
+              </button>
+            </div>
+
+            <app-werewolf-log-entry-list [hideSleep]="hideSleep"
+                                         [log]="this.game.log"
                                          [players]="this.game.players"></app-werewolf-log-entry-list>
 
           </mat-card-content>
@@ -121,7 +137,7 @@
               <div class="flex-row mt-3">
                 <div class="col">
                   <div>
-                    <h3>{{"werewolf.pack.standard.codename."+(this.currentPlayer.codeName | lowercase) | translate}}</h3>
+                    <h3>{{"werewolf.pack.standard.codename." + (this.currentPlayer.codeName | lowercase) | translate}}</h3>
                   </div>
                 </div>
               </div>

@@ -45,6 +45,10 @@
       "hideConcluded": "Hide concluded",
       "showConcluded": "Show concluded"
     },
+    "log": {
+      "hideSleep": "Hide sleep",
+      "showSleep": "Show sleep"
+    },
     "other": {
       "victory": "Victory",
       "victoryDescription": "Congratulations! You bested your enemies and won the game!",
