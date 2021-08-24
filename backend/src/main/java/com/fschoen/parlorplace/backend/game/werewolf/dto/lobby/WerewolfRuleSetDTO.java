@@ -22,7 +22,7 @@ public class WerewolfRuleSetDTO extends RuleSetDTO {
 
     @NotNull
     @Builder.Default
-    private String resourcepack = "default";
+    private String resourcePack = "DEFAULT";
 
     @NotNull
     List<WerewolfRoleType> gameRoleTypes;

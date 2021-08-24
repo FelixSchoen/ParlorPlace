@@ -177,7 +177,7 @@ public class DatabasePopulator {
                 .gameState(GameState.LOBBY)
                 .players(new HashSet<>())
                 .ruleSet(WerewolfRuleSet.builder()
-                        .voicepack("default")
+                        .resourcePack("DEFAULT")
                         .gameRoleTypes(new ArrayList<>() {{
                             add(WerewolfRoleType.WEREWOLF);
                             add(WerewolfRoleType.VILLAGER);
@@ -247,7 +247,7 @@ public class DatabasePopulator {
                 .gameState(GameState.ONGOING)
                 .players(new HashSet<>())
                 .ruleSet(WerewolfRuleSet.builder()
-                        .voicepack("default")
+                        .resourcePack("DEFAULT")
                         .gameRoleTypes(new ArrayList<>() {{
                             add(WerewolfRoleType.WEREWOLF);
                             add(WerewolfRoleType.VILLAGER);

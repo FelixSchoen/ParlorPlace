@@ -27,6 +27,8 @@ import {MatBadgeModule} from "@angular/material/badge";
 import {WerewolfLogEntryListComponent} from '../../components/game-common/game-components/log-entry-list/werewolf-log-entry-list/werewolf-log-entry-list.component';
 import {WerewolfVoteComponent} from '../../components/game-common/game-components/vote/werewolf-vote/werewolf-vote.component';
 import {MatTableModule} from "@angular/material/table";
+import {ResourcepackSelectionComponent} from '../../components/game-common/lobby-components/resourcepack-selection/resourcepack-selection.component';
+import {MatSelectModule} from "@angular/material/select";
 
 
 @NgModule({
@@ -41,6 +43,7 @@ import {MatTableModule} from "@angular/material/table";
     WerewolfPlayerListComponent,
     WerewolfLogEntryListComponent,
     WerewolfVoteComponent,
+    ResourcepackSelectionComponent,
   ],
   exports: [
     GameDirective,
@@ -64,6 +67,7 @@ import {MatTableModule} from "@angular/material/table";
     MatTabsModule,
     MatBadgeModule,
     MatTableModule,
+    MatSelectModule,
   ]
 })
 export class GameModule {

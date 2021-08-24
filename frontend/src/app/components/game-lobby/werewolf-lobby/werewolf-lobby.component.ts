@@ -7,6 +7,7 @@ import {WerewolfRoleType, WerewolfRoleTypeUtil} from "../../../enums/games/werew
 import {WerewolfGameService} from "../../../services/werewolf-game.service";
 import {CommunicationService} from "../../../services/communication.service";
 import {WerewolfGame, WerewolfLobbyChangeRequest, WerewolfPlayer} from "../../../dto/werewolf";
+import {WerewolfResourcePack, WerewolfResourcePackUtil} from "../../../enums/games/werewolf-resource-pack";
 
 @Component({
   selector: 'app-werewolf-lobby',
@@ -16,6 +17,7 @@ import {WerewolfGame, WerewolfLobbyChangeRequest, WerewolfPlayer} from "../../..
 export class WerewolfLobbyComponent extends GameLobbyComponent<WerewolfGame, WerewolfPlayer> {
 
   public werewolfRoleTypeArray: WerewolfRoleType[] = WerewolfRoleTypeUtil.getArray();
+  public werewolfResourcePackArray: WerewolfResourcePack[] = WerewolfResourcePackUtil.getArray();
 
   constructor(
     public userService: UserService,
@@ -38,6 +40,11 @@ export class WerewolfLobbyComponent extends GameLobbyComponent<WerewolfGame, Wer
 
   changeRoles(roles: WerewolfRoleType[]): void {
     this.game.ruleSet.gameRoleTypes = roles;
+    this.changeLobby();
+  }
+
+  changePack(pack: WerewolfResourcePack): void {
+    this.game.ruleSet.resourcePack = pack;
     this.changeLobby();
   }
 

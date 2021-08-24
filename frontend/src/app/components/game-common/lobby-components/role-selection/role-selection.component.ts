@@ -14,7 +14,7 @@ export class RoleSelectionComponent<R, P extends Player> implements OnInit {
   @Input() roles: R[];
   @Input() currentPlayer: P;
   @Input() mayEdit: (player: Player) => boolean;
-  @Input() getArray: () => R[];
+  @Input() getArray: R[];
 
   @Output() roleChanged = new EventEmitter<R[]>();
 
@@ -51,7 +51,7 @@ export class RoleSelectionComponent<R, P extends Player> implements OnInit {
   private filter(value: any): R[] {
     const filterValue = value.toLowerCase();
 
-    return this.getArray().filter(role => (String(role)).includes(filterValue));
+    return this.getArray.filter(role => (String(role)).includes(filterValue));
   }
 
   countRole(

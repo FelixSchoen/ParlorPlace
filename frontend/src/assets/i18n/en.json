@@ -25,7 +25,8 @@
       "roles": "Roles",
       "players": "Players",
       "rules": "Rules",
-      "settings": "Settings"
+      "settings": "Settings",
+      "resourcePack": "Resource Pack"
     },
     "validation": {
       "required": "{name} is required",
@@ -134,36 +135,40 @@
       "seer_failure": "{player} is not a Werewolf",
       "villagers_vote": "The villagers lynch {player}"
     },
-    "pack": {
-      "standard": {
+    "resourcepack": {
+      "default": {
+        "name": "Default",
         "codename": {
-          "alfa" : "Alfa",
-          "bravo" : "Bravo",
-          "charlie" : "Charlie",
-          "delta" : "Delta",
-          "echo" : "Echo",
-          "foxtrot" : "Foxtrot",
-          "golf" : "Golf",
-          "hotel" : "Hotel",
-          "india" : "India",
-          "juliett" : "Juliett",
-          "kilo" : "Kilo",
-          "lima" : "Lima",
-          "mike" : "Mike",
-          "november" : "November",
-          "oscar" : "Oscar",
-          "papa" : "Papa",
-          "quebec" : "Quebec",
-          "romeo" : "Romeo",
-          "sierra" : "Sierra",
-          "tango" : "Tango",
-          "uniform" : "Uniform",
-          "victor" : "Victor",
-          "whiskey" : "Whiskey",
-          "xray" : "X-Ray",
-          "yankee" : "Yankee",
-          "zulu" : "Zulu"
+          "alfa": "Alfa",
+          "bravo": "Bravo",
+          "charlie": "Charlie",
+          "delta": "Delta",
+          "echo": "Echo",
+          "foxtrot": "Foxtrot",
+          "golf": "Golf",
+          "hotel": "Hotel",
+          "india": "India",
+          "juliett": "Juliett",
+          "kilo": "Kilo",
+          "lima": "Lima",
+          "mike": "Mike",
+          "november": "November",
+          "oscar": "Oscar",
+          "papa": "Papa",
+          "quebec": "Quebec",
+          "romeo": "Romeo",
+          "sierra": "Sierra",
+          "tango": "Tango",
+          "uniform": "Uniform",
+          "victor": "Victor",
+          "whiskey": "Whiskey",
+          "xray": "X-Ray",
+          "yankee": "Yankee",
+          "zulu": "Zulu"
         }
+      },
+      "old_man_de": {
+        "name": "Old Man (DE)"
       }
     },
     "misc": {

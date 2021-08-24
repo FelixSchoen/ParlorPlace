@@ -2,6 +2,7 @@ import {Component} from "@angular/core";
 import {AudioService} from "../../services/audio.service";
 import {WerewolfVoicePack} from "../../entities/voice-pack";
 import {LoadJsonService} from "../../services/load-json.service";
+import {CodeName} from "../../enums/code-name";
 
 @Component({
   selector: 'app-experimental',
@@ -15,7 +16,7 @@ export class ExperimentalComponent {
 
   public action(): void {
     let pack = new WerewolfVoicePack(this.jsonService, "default", "de");
-    console.log(pack.getCodenameAlfa())
+    console.log(pack.getCodename(CodeName.ALFA))
   }
 
 }

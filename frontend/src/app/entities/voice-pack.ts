@@ -1,4 +1,5 @@
 import {LoadJsonService} from "../services/load-json.service";
+import {CodeName} from "../enums/code-name";
 
 export abstract class VoicePack {
 
@@ -22,10 +23,13 @@ export class WerewolfVoicePack extends VoicePack {
     this.packFile = loadJsonService.loadJson(this.gamePath + packName + "/pack.json").toPromise();
   }
 
-  public async getCodenameAlfa() {
-    for (let entry of await this.packFile.then(value => value.codename.alfa))
-      VoiceLine.fromJson(entry)
-    return this.packFile.then(value => value.codename.alfa)
+  public async getCodename(codeName: CodeName): Promise<VoiceLine[]> {
+    let voiceLineArray: VoiceLine[] = []
+
+    for (let entry of await this.packFile.then(value => value.codename[codeName.valueOf().toLowerCase()]))
+      voiceLineArray.push(VoiceLine.fromJson(entry));
+
+    return voiceLineArray
   }
 
 }
