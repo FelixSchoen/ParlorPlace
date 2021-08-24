@@ -14,7 +14,8 @@ import {User} from "../../dto/user";
 import {GameState} from "../../enums/game-state";
 
 const WEBSOCKET_URI = environment.WEBSOCKET_BASE_URI + environment.general.WEBSOCKET_GAME_URI;
-const WEBSOCKET_QUEUE_URI = environment.general.WEBSOCKET_QUEUE_PRIMARY_URI;
+const WEBSOCKET_QUEUE_PRIMARY_URI = environment.general.WEBSOCKET_QUEUE_PRIMARY_URI;
+const WEBSOCKET_QUEUE_SECONDARY_URI = environment.general.WEBSOCKET_QUEUE_SECONDARY_URI;
 
 @Directive({
   selector: 'app-game-common',
@@ -28,7 +29,8 @@ export abstract class GameCommonComponent<G extends Game, P extends Player> impl
   public currentPlayer: P;
   public game: G;
 
-  protected client: CompatClient;
+  protected primaryClient: CompatClient;
+  protected secondaryClient: CompatClient;
 
   protected constructor(
     public userService: UserService,
@@ -47,7 +49,7 @@ export abstract class GameCommonComponent<G extends Game, P extends Player> impl
   }
 
   ngOnDestroy(): void {
-    this.communicationService.disconnectSocket(this.client);
+    this.communicationService.disconnectSocket(this.primaryClient);
   }
 
   protected initialize(): void {
@@ -59,8 +61,10 @@ export abstract class GameCommonComponent<G extends Game, P extends Player> impl
     this.gameService.getActiveGame(this.gameIdentifier).subscribe(
       {
         next: (result: G) => {
-          if (result.gameState != GameState.CONCLUDED)
-            this.client = this.communicationService.connectSocket(WEBSOCKET_URI, WEBSOCKET_QUEUE_URI + this.gameIdentifier.token, this.subscribeCallback.bind(this));
+          if (result.gameState != GameState.CONCLUDED) {
+            this.primaryClient = this.communicationService.connectSocket(WEBSOCKET_URI, WEBSOCKET_QUEUE_PRIMARY_URI + this.gameIdentifier.token, this.subscribeCallback.bind(this));
+            this.secondaryClient = this.communicationService.connectSocket(WEBSOCKET_URI, WEBSOCKET_QUEUE_SECONDARY_URI + this.gameIdentifier.token, this.subscribeCallback.bind(this));
+          }
         }
       });
   }

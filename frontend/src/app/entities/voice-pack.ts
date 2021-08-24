@@ -2,6 +2,14 @@ export abstract class VoicePack {
 
 }
 
+export abstract class WerewolfVoicePack extends VoicePack {
+
+}
+
+export class DefaultWerewolfVoicePack extends WerewolfVoicePack {
+
+}
+
 export class VoiceLine {
 
   constructor() {
