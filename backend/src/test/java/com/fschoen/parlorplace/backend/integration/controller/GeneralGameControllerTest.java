@@ -19,7 +19,7 @@ public class GeneralGameControllerTest extends BaseIntegrationTest {
         assertThat(werewolfGameDTO.getGameIdentifier()).isNotNull();
 
         Response response = payload("", getToken(existingUser)).pathParam("identifier", werewolfGameDTO.getGameIdentifier().getToken())
-                .get(GENERAL_BASE_URI + "base_info/{identifier}").then().extract().response();
+                .get(GENERAL_BASE_URI + "active_base_info/{identifier}").then().extract().response();
         assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
 
         GameBaseInformationDTO gameBaseInformationDTO = response.getBody().as(GameBaseInformationDTO.class);
@@ -36,7 +36,7 @@ public class GeneralGameControllerTest extends BaseIntegrationTest {
         assertThat(werewolfGameDTO.getGameIdentifier()).isNotNull();
 
         Response response = payload("", getToken(existingUser2)).pathParam("identifier", werewolfGameDTO.getGameIdentifier().getToken())
-                .get(GENERAL_BASE_URI + "base_info/{identifier}").then().extract().response();
+                .get(GENERAL_BASE_URI + "active_base_info/{identifier}").then().extract().response();
         assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
     }
 
