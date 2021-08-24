@@ -1,13 +1,17 @@
 {
-  "name": "default",
+  "name": "old_man",
+  "language": "de",
   "codename": {
-    "alfa": [
-      {
-        "path": [
-          "alfa_01.mp3"
-        ]
-      }
-    ]
+    "alfa": {
+      "name": "Alfa",
+      "voiceline": [
+        {
+          "path": [
+            "alfa_01.mp3"
+          ]
+        }
+      ]
+    }
   },
   "voiceline": {
     "start": [

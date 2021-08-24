@@ -17,7 +17,7 @@ import {Vote, VoteCollection} from "./vote";
 import {WerewolfLogType} from "../enums/games/werewolf-log-type";
 import {CodeName} from "../enums/code-name";
 import {WerewolfFaction} from "../enums/games/werewolf-faction";
-import {WerewolfResourcePack} from "../enums/games/werewolf-resource-pack";
+import {WerewolfResourcePackType} from "../enums/games/werewolf-resource-pack-type";
 
 export class WerewolfGame extends Game {
   constructor(public id: number,
@@ -50,7 +50,7 @@ export class WerewolfPlayer extends Player {
 
 export class WerewolfRuleSet extends RuleSet {
   constructor(public id: number,
-              public resourcePack: WerewolfResourcePack,
+              public resourcePack: WerewolfResourcePackType,
               public gameRoleTypes: WerewolfRoleType[]) {
     super(id);
   }
