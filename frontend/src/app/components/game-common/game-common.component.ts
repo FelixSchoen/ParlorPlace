@@ -50,6 +50,7 @@ export abstract class GameCommonComponent<G extends Game, P extends Player> impl
 
   ngOnDestroy(): void {
     this.communicationService.disconnectSocket(this.primaryClient);
+    this.communicationService.disconnectSocket(this.secondaryClient);
   }
 
   public isLobbyAdmin(player: P) {

@@ -114,12 +114,12 @@ public class WerewolfGameModerator extends AbstractGameModerator<
         // End the game and determine placements of players
         game = getGame();
         game.getLog().add(getLogEntryTemplate(getAllPlayersOfGame()).logType(WerewolfLogType.END).build());
-        setPlacements(game);
         broadcastVoiceLineNotification(getVoiceLineNotification(WerewolfVoiceLineType.END));
         saveAndBroadcast(game);
 
         pause(WAIT_TIME_BETWEEN_CONSECUTIVE_EVENTS);
 
+        setPlacements(game);
         game.setGameState(GameState.CONCLUDED);
         game.setEndedAt(Instant.now());
         game = this.gameRepository.save(game);
