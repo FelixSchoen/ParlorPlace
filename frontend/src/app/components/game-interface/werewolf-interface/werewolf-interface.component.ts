@@ -12,6 +12,7 @@ import {WerewolfResourcePack} from "../../../entities/resource-pack";
 import {LoadJsonService} from "../../../services/load-json.service";
 import {WerewolfResourcePackType} from "../../../enums/games/werewolf-resource-pack-type";
 import {LanguageIdentifier} from "../../../enums/language-identifier";
+import {AudioService} from "../../../services/audio.service";
 
 @Component({
   selector: 'app-werewolf-interface',
@@ -29,11 +30,12 @@ export class WerewolfInterfaceComponent extends GameInterfaceComponent<WerewolfG
     public gameService: WerewolfGameService,
     public communicationService: CommunicationService,
     public notificationService: NotificationService,
+    public audioService: AudioService,
     public loadJsonService: LoadJsonService,
     public activatedRoute: ActivatedRoute,
     public router: Router
   ) {
-    super(userService, gameService, communicationService, notificationService, loadJsonService, activatedRoute, router)
+    super(userService, gameService, communicationService, notificationService, audioService, loadJsonService, activatedRoute, router)
     this.viewedRole = false;
   }
 
@@ -56,5 +58,5 @@ export class WerewolfInterfaceComponent extends GameInterfaceComponent<WerewolfG
     else
       return new WerewolfResourcePack(this.loadJsonService, this.game.ruleSet.resourcePack, LanguageIdentifier.DE)
   }
-  
+
 }

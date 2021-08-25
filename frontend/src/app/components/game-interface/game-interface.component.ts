@@ -12,6 +12,9 @@ import {VoteState} from "../../enums/vote-state";
 import * as _ from "lodash/fp";
 import {ResourcePack} from "../../entities/resource-pack";
 import {LoadJsonService} from "../../services/load-json.service";
+import {ClientNotification, VoiceLineClientNotification} from "../../dto/communication";
+import {NotificationType} from "../../enums/notification-type";
+import {AudioService} from "../../services/audio.service";
 
 @Component({
   selector: 'app-game-interface',
@@ -31,6 +34,7 @@ export abstract class GameInterfaceComponent<G extends Game, P extends Player, V
     public gameService: AbstractGameService<G>,
     public communicationService: CommunicationService,
     public notificationService: NotificationService,
+    public audioService: AudioService,
     public loadJsonService: LoadJsonService,
     public activatedRoute: ActivatedRoute,
     public router: Router,
@@ -65,6 +69,16 @@ export abstract class GameInterfaceComponent<G extends Game, P extends Player, V
   }
 
   protected subscribeSecondaryCallback(payload: any): any {
+    let notification: ClientNotification = JSON.parse(payload.body);
+
+    if (notification.notificationType == NotificationType.VOICE_LINE) {
+      if (this.isLobbyAdmin(this.currentPlayer)) {
+        let voiceLineNotification: VoiceLineClientNotification = JSON.parse(payload.body);
+        this.resourcePack.getVoiceLine(voiceLineNotification.voiceLineType, [...voiceLineNotification.codeNames]).then(value => {
+          this.audioService.playAudio(value.toPathArray());
+        });
+      }
+    }
   }
 
 }

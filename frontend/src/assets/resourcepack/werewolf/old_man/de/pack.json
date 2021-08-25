@@ -282,8 +282,8 @@
       "death": [
         {
           "path": [
-            "death_01",
-            "death_02"
+            "death_01_01",
+            "death_01_02"
           ],
           "order": [
             "file_01",

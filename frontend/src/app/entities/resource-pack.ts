@@ -2,6 +2,8 @@ import {LoadJsonService} from "../services/load-json.service";
 import {CodeName} from "../enums/code-name";
 import {WerewolfResourcePackType} from "../enums/games/werewolf-resource-pack-type";
 import {LanguageIdentifier} from "../enums/language-identifier";
+import {WerewolfVoiceLineType} from "../enums/games/werewolf-voice-line-type";
+import {EnumMember} from "@angular/compiler-cli/src/ngtsc/reflection";
 
 export abstract class ResourcePack {
 
@@ -29,6 +31,10 @@ export abstract class ResourcePack {
   public async getCodeNameRepresentation(codeName: CodeName): Promise<string> {
     return await this.packFile.then(value => value.codename[codeName.valueOf().toLowerCase()].name)
   }
+
+  // Voice Line
+
+  public abstract getVoiceLine(voiceLineType: string, codeNames: CodeName[] | undefined): Promise<VoiceLine>;
 
   // Utility
 
@@ -73,6 +79,16 @@ export abstract class ResourcePack {
     return voiceLines[Math.floor(Math.random() * voiceLines.length)]
   }
 
+  protected voiceLineTypeToPackIdentifier(voiceLineType: string): string[] {
+    let regex = RegExp("([a-zA-Z]+)_([a-zA-Z]+)");
+    let match = voiceLineType.match(regex);
+
+    if (match)
+      return match
+    else
+      throw new Error("Could not extract from Voice Line Type")
+  }
+
 }
 
 export class WerewolfResourcePack extends ResourcePack {
@@ -93,6 +109,32 @@ export class WerewolfResourcePack extends ResourcePack {
 
     this.packPath = this.gamePath + this.packName + "/" + languageIdentifier.toLowerCase() + "/"
     this.packFile = loadJsonService.loadJson(this.packPath + "pack.json").toPromise();
+  }
+
+  public async getVoiceLine(voiceLineType: WerewolfVoiceLineType, codeNames: CodeName[] | undefined): Promise<VoiceLine> {
+    let voiceLinePromise: Promise<VoiceLine[]>;
+
+    switch (voiceLineType) {
+      case WerewolfVoiceLineType.START:
+      case WerewolfVoiceLineType.END:
+      case WerewolfVoiceLineType.DEATH:
+      case WerewolfVoiceLineType.PLAYER_WAKE:
+      case WerewolfVoiceLineType.PLAYER_SLEEP:
+      case WerewolfVoiceLineType.VILLAGE_WAKE:
+      case WerewolfVoiceLineType.VILLAGE_SLEEP:
+      case WerewolfVoiceLineType.VILLAGE_VOTE:
+        voiceLinePromise = this.getVoiceLineArray(codeNames, "voiceline", "general", voiceLineType.toLowerCase())
+        break;
+      case WerewolfVoiceLineType.WEREWOLVES_WAKE:
+      case WerewolfVoiceLineType.WEREWOLVES_SLEEP:
+      case WerewolfVoiceLineType.SEER_WAKE:
+        voiceLinePromise = this.getVoiceLineArray(codeNames, "voiceline", "role", this.voiceLineTypeToPackIdentifier(voiceLineType.toLowerCase())[1], this.voiceLineTypeToPackIdentifier(voiceLineType.toLowerCase())[2])
+        break;
+      default:
+        throw new Error("Unknown Voice Line Type")
+    }
+
+    return this.pickRandom(await voiceLinePromise);
   }
 
   public async getStartVoiceLine(): Promise<VoiceLine> {
