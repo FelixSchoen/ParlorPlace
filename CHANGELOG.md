@@ -19,6 +19,10 @@
 - Implemented post-game screen
   - Shows victors and losers of the game
   - Reveals all roles
+- **Implemented voice lines**
+  - Implemented audio player service
+  - Added voice lines for all existing events
+  - Implemented resource pack selection
 
 ## Changed
 

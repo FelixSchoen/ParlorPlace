@@ -5,12 +5,12 @@ import com.fschoen.parlorplace.backend.game.werewolf.dto.game.WerewolfPlayerDTO;
 import com.fschoen.parlorplace.backend.game.werewolf.dto.game.WerewolfVoteCollectionDTO;
 import com.fschoen.parlorplace.backend.game.werewolf.dto.game.WerewolfVoteDTO;
 import com.fschoen.parlorplace.backend.repository.UserRepository;
-import com.fschoen.parlorplace.backend.service.obfuscation.VoteExtendedObfuscationService;
+import com.fschoen.parlorplace.backend.service.obfuscation.VoteObfuscationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class WerewolfVoteObfuscationService extends VoteExtendedObfuscationService<
+public class WerewolfVoteObfuscationService extends VoteObfuscationService<
         WerewolfVoteDTO,
         WerewolfGameDTO,
         WerewolfPlayerDTO,

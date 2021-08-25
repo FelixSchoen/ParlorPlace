@@ -6,24 +6,24 @@ import com.fschoen.parlorplace.backend.game.werewolf.dto.game.WerewolfLogEntryDT
 import com.fschoen.parlorplace.backend.game.werewolf.dto.game.WerewolfPlayerDTO;
 import com.fschoen.parlorplace.backend.game.werewolf.dto.game.WerewolfVoteDTO;
 import com.fschoen.parlorplace.backend.repository.UserRepository;
-import com.fschoen.parlorplace.backend.service.obfuscation.ExtendedObfuscationService;
 import com.fschoen.parlorplace.backend.service.obfuscation.ObfuscationService;
+import com.fschoen.parlorplace.backend.service.obfuscation.SingleObfuscationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class WerewolfGameObfuscationService extends ObfuscationService<WerewolfGameDTO> {
 
-    private final ExtendedObfuscationService<WerewolfPlayerDTO, WerewolfGameDTO> playerObfuscationService;
-    private final ExtendedObfuscationService<WerewolfVoteDTO, WerewolfGameDTO> voteObfuscationService;
-    private final ExtendedObfuscationService<WerewolfLogEntryDTO, WerewolfGameDTO> logEntryObfuscationService;
+    private final SingleObfuscationService<WerewolfPlayerDTO, WerewolfGameDTO> playerObfuscationService;
+    private final SingleObfuscationService<WerewolfVoteDTO, WerewolfGameDTO> voteObfuscationService;
+    private final SingleObfuscationService<WerewolfLogEntryDTO, WerewolfGameDTO> logEntryObfuscationService;
 
     @Autowired
     public WerewolfGameObfuscationService(
             UserRepository userRepository,
-            ExtendedObfuscationService<WerewolfPlayerDTO, WerewolfGameDTO> playerObfuscationService,
-            ExtendedObfuscationService<WerewolfVoteDTO, WerewolfGameDTO> voteObfuscationService,
-            ExtendedObfuscationService<WerewolfLogEntryDTO, WerewolfGameDTO> logEntryObfuscationService
+            SingleObfuscationService<WerewolfPlayerDTO, WerewolfGameDTO> playerObfuscationService,
+            SingleObfuscationService<WerewolfVoteDTO, WerewolfGameDTO> voteObfuscationService,
+            SingleObfuscationService<WerewolfLogEntryDTO, WerewolfGameDTO> logEntryObfuscationService
     ) {
         super(userRepository);
         this.playerObfuscationService = playerObfuscationService;
