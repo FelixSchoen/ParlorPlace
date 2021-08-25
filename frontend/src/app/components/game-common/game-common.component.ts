@@ -52,6 +52,10 @@ export abstract class GameCommonComponent<G extends Game, P extends Player> impl
     this.communicationService.disconnectSocket(this.primaryClient);
   }
 
+  public isLobbyAdmin(player: P) {
+    return player.lobbyRole == "ROLE_ADMIN"
+  }
+
   protected initialize(): void {
     const queryIdentifier: string = this.activatedRoute.snapshot.params["identifier"];
     this.gameIdentifier = new GameIdentifier(queryIdentifier);
@@ -62,8 +66,8 @@ export abstract class GameCommonComponent<G extends Game, P extends Player> impl
       {
         next: (result: G) => {
           if (result.gameState != GameState.CONCLUDED) {
-            this.primaryClient = this.communicationService.connectSocket(WEBSOCKET_URI, WEBSOCKET_QUEUE_PRIMARY_URI + this.gameIdentifier.token, this.subscribeCallback.bind(this));
-            this.secondaryClient = this.communicationService.connectSocket(WEBSOCKET_URI, WEBSOCKET_QUEUE_SECONDARY_URI + this.gameIdentifier.token, this.subscribeCallback.bind(this));
+            this.primaryClient = this.communicationService.connectSocket(WEBSOCKET_URI, WEBSOCKET_QUEUE_PRIMARY_URI + this.gameIdentifier.token, this.subscribePrimaryCallback.bind(this));
+            this.secondaryClient = this.communicationService.connectSocket(WEBSOCKET_URI, WEBSOCKET_QUEUE_SECONDARY_URI + this.gameIdentifier.token, this.subscribeSecondaryCallback.bind(this));
           }
         }
       });
@@ -88,6 +92,7 @@ export abstract class GameCommonComponent<G extends Game, P extends Player> impl
                 this.currentPlayer = <P>[...this.game.players].filter(function (player) {
                   return player.user.id == user.id;
                 })[0];
+                this.loadedGameCallback();
                 this.loading = false;
               }
             }
@@ -98,7 +103,11 @@ export abstract class GameCommonComponent<G extends Game, P extends Player> impl
     )
   }
 
-  protected subscribeCallback(payload: any) {
+  // Callbacks
+
+  protected abstract loadedGameCallback(): void;
+
+  protected subscribePrimaryCallback(payload: any) {
     let notification: ClientNotification = JSON.parse(payload.body);
 
     if (notification.notificationType == NotificationType.STALE_GAME_INFORMATION) {
@@ -116,5 +125,7 @@ export abstract class GameCommonComponent<G extends Game, P extends Player> impl
     }
 
   }
+
+  protected abstract subscribeSecondaryCallback(payload: any): any;
 
 }

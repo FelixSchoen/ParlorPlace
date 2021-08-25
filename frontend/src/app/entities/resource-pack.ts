@@ -1,6 +1,7 @@
 import {LoadJsonService} from "../services/load-json.service";
 import {CodeName} from "../enums/code-name";
 import {WerewolfResourcePackType} from "../enums/games/werewolf-resource-pack-type";
+import {LanguageIdentifier} from "../enums/language-identifier";
 
 export abstract class ResourcePack {
 
@@ -13,6 +14,8 @@ export abstract class ResourcePack {
   protected packFile: Promise<any>;
   protected defaultPackName: string;
 
+  public abstract getCodeNameRepresentation(codeName: CodeName): Promise<string>;
+
 }
 
 export class WerewolfResourcePack extends ResourcePack {
@@ -21,17 +24,17 @@ export class WerewolfResourcePack extends ResourcePack {
   defaultPackName = "old_man"
 
   constructor(protected loadJsonService: LoadJsonService,
-              packIdentifier: string,
-              languageIdentifier: string) {
+              packIdentifier: WerewolfResourcePackType,
+              languageIdentifier: LanguageIdentifier) {
     super(loadJsonService);
 
     if (packIdentifier.toUpperCase() == WerewolfResourcePackType.DEFAULT.valueOf()
       || !(packIdentifier.toUpperCase() in WerewolfResourcePackType)) {
       this.packName = this.defaultPackName;
     } else
-      this.packName = packIdentifier
+      this.packName = packIdentifier.toLowerCase()
 
-    this.packFile = loadJsonService.loadJson(this.gamePath + this.packName + "/pack.json").toPromise();
+    this.packFile = loadJsonService.loadJson(this.gamePath + this.packName + "/" + languageIdentifier.toLowerCase() + "/pack.json").toPromise();
   }
 
   public async getCodeNameRepresentation(codeName: CodeName): Promise<string> {

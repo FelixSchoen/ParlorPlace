@@ -1,0 +1,301 @@
+{
+  "name": "old_man",
+  "language": "de",
+  "codename": {
+    "alfa": {
+      "name": "Alfa",
+      "voiceline": [
+        {
+          "path": [
+            "alfa_01.mp3"
+          ]
+        }
+      ]
+    },
+    "bravo": {
+      "name": "Bravo",
+      "voiceline": [
+        {
+          "path": [
+            "bravo_01.mp3"
+          ]
+        }
+      ]
+    },
+    "charlie": {
+      "name": "Charlie",
+      "voiceline": [
+        {
+          "path": [
+            "charlie_01.mp3"
+          ]
+        }
+      ]
+    },
+    "delta": {
+      "name": "Delta",
+      "voiceline": [
+        {
+          "path": [
+            "delta_01.mp3"
+          ]
+        }
+      ]
+    },
+    "echo": {
+      "name": "Echo",
+      "voiceline": [
+        {
+          "path": [
+            "echo_01.mp3"
+          ]
+        }
+      ]
+    },
+    "foxtrot": {
+      "name": "Foxtrot",
+      "voiceline": [
+        {
+          "path": [
+            "foxtrot_01.mp3"
+          ]
+        }
+      ]
+    },
+    "golf": {
+      "name": "Golf",
+      "voiceline": [
+        {
+          "path": [
+            "golf_01.mp3"
+          ]
+        }
+      ]
+    },
+    "hotel": {
+      "name": "Hotel",
+      "voiceline": [
+        {
+          "path": [
+            "hotel_01.mp3"
+          ]
+        }
+      ]
+    },
+    "india": {
+      "name": "India",
+      "voiceline": [
+        {
+          "path": [
+            "india_01.mp3"
+          ]
+        }
+      ]
+    },
+    "juliett": {
+      "name": "Juliett",
+      "voiceline": [
+        {
+          "path": [
+            "juliett_01.mp3"
+          ]
+        }
+      ]
+    },
+    "kilo": {
+      "name": "Kilo",
+      "voiceline": [
+        {
+          "path": [
+            "kilo_01.mp3"
+          ]
+        }
+      ]
+    },
+    "lima": {
+      "name": "Lima",
+      "voiceline": [
+        {
+          "path": [
+            "lima_01.mp3"
+          ]
+        }
+      ]
+    },
+    "mike": {
+      "name": "Mike",
+      "voiceline": [
+        {
+          "path": [
+            "mike_01.mp3"
+          ]
+        }
+      ]
+    },
+    "november": {
+      "name": "November",
+      "voiceline": [
+        {
+          "path": [
+            "november_01.mp3"
+          ]
+        }
+      ]
+    },
+    "oscar": {
+      "name": "Oscar",
+      "voiceline": [
+        {
+          "path": [
+            "oscar_01.mp3"
+          ]
+        }
+      ]
+    },
+    "papa": {
+      "name": "Papa",
+      "voiceline": [
+        {
+          "path": [
+            "papa_01.mp3"
+          ]
+        }
+      ]
+    },
+    "quebec": {
+      "name": "Quebec",
+      "voiceline": [
+        {
+          "path": [
+            "quebec_01.mp3"
+          ]
+        }
+      ]
+    },
+    "romeo": {
+      "name": "Romeo",
+      "voiceline": [
+        {
+          "path": [
+            "romeo_01.mp3"
+          ]
+        }
+      ]
+    },
+    "sierra": {
+      "name": "Sierra",
+      "voiceline": [
+        {
+          "path": [
+            "sierra_01.mp3"
+          ]
+        }
+      ]
+    },
+    "tango": {
+      "name": "Tango",
+      "voiceline": [
+        {
+          "path": [
+            "tango_01.mp3"
+          ]
+        }
+      ]
+    },
+    "uniform": {
+      "name": "Uniform",
+      "voiceline": [
+        {
+          "path": [
+            "uniform_01.mp3"
+          ]
+        }
+      ]
+    },
+    "victor": {
+      "name": "Victor",
+      "voiceline": [
+        {
+          "path": [
+            "victor_01.mp3"
+          ]
+        }
+      ]
+    },
+    "whiskey": {
+      "name": "Whiskey",
+      "voiceline": [
+        {
+          "path": [
+            "whiskey_01.mp3"
+          ]
+        }
+      ]
+    },
+    "xray": {
+      "name": "X-Ray",
+      "voiceline": [
+        {
+          "path": [
+            "xray_01.mp3"
+          ]
+        }
+      ]
+    },
+    "yankee": {
+      "name": "Yankee",
+      "voiceline": [
+        {
+          "path": [
+            "yankee_01.mp3"
+          ]
+        }
+      ]
+    },
+    "zulu": {
+      "name": "Zulu",
+      "voiceline": [
+        {
+          "path": [
+            "zulu_01.mp3"
+          ]
+        }
+      ]
+    }
+  },
+  "voiceline": {
+    "start": [
+      {
+        "path": [
+          "start_01"
+        ],
+        "order": [
+          "file_01"
+        ]
+      }
+    ],
+    "end": [
+      {
+        "path": [
+          "end_01"
+        ],
+        "order": [
+          "file_01"
+        ]
+      }
+    ],
+    "death": [
+      {
+        "path": [
+          "death_01_01",
+          "death_01_02"
+        ],
+        "order": [
+          "file_01",
+          "codename_01",
+          "file_02"
+        ]
+      }
+    ]
+  }
+}

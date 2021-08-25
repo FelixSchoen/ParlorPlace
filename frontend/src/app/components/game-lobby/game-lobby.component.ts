@@ -52,8 +52,12 @@ export abstract class GameLobbyComponent<G extends Game, P extends Player> exten
     this.changeLobby();
   }
 
-  public isLobbyAdmin(player: P) {
-    return player.lobbyRole == "ROLE_ADMIN"
+  // Callbacks
+
+  protected loadedGameCallback() {
+  }
+
+  protected subscribeSecondaryCallback(payload: any): any {
   }
 
 }
