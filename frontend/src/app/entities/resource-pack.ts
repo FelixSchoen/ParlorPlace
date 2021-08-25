@@ -23,7 +23,7 @@ export abstract class ResourcePack {
   // Code name
 
   public async getCodeNameVoiceLine(codeName: CodeName): Promise<VoiceLine> {
-    return this.pickRandom(await this.getVoiceLineArray("codename", codeName.valueOf().toLowerCase(), "voiceline"));
+    return this.pickRandom(await this.getVoiceLineArray(undefined, "codename", codeName.valueOf().toLowerCase(), "voiceline"));
   }
 
   public async getCodeNameRepresentation(codeName: CodeName): Promise<string> {
@@ -32,17 +32,24 @@ export abstract class ResourcePack {
 
   // Utility
 
-  public async getVoiceLineArray(...identifiers: string[]): Promise<VoiceLine[]> {
+  public async getVoiceLineArray(codeNames: CodeName[] | undefined, ...identifiers: string[]): Promise<VoiceLine[]> {
     let voiceLineArray: VoiceLine[] = [];
     let voiceLinePath: string = "";
 
     let pointer: any = await this.packFile.then(value => value);
+    let isCodename: boolean = identifiers[0] == "codename"
 
     // Add path to voice line
-    identifiers.forEach((entry, index) => {
-      if (index != identifiers.length - 1)
-        voiceLinePath += (entry + "/");
-    })
+    if (!isCodename) {
+      identifiers.forEach((entry, index) => {
+        if (index != identifiers.length - 1)
+          voiceLinePath += (entry + "/");
+      })
+    } else {
+      // Special case for code names
+      voiceLinePath += "voiceline/codename/"
+    }
+
 
     // Derive actual entry from JSON structure
     for (let identifier of identifiers) {
@@ -51,7 +58,12 @@ export abstract class ResourcePack {
 
     // Add all given voice lines
     for (let entry of pointer) {
-      voiceLineArray.push(VoiceLine.fromJson(this.packPath, voiceLinePath, this, entry))
+      let voiceLine: VoiceLine = VoiceLine.fromJson(this.packPath, voiceLinePath, this, entry);
+
+      if (codeNames != undefined)
+        await voiceLine.primeWithCodeNames(codeNames);
+
+      voiceLineArray.push(voiceLine)
     }
 
     return voiceLineArray;
@@ -84,7 +96,11 @@ export class WerewolfResourcePack extends ResourcePack {
   }
 
   public async getStartVoiceLine(): Promise<VoiceLine> {
-    return this.pickRandom(await this.getVoiceLineArray("voiceline", "general", "start"));
+    return this.pickRandom(await this.getVoiceLineArray(undefined, "voiceline", "general", "start"));
+  }
+
+  public async getSeerWakeVoiceLine(codeName: CodeName): Promise<VoiceLine> {
+    return this.pickRandom(await this.getVoiceLineArray([codeName], "voiceline", "role", "seer", "wake"));
   }
 
 }

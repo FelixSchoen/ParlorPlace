@@ -7,7 +7,7 @@
       "voiceline": [
         {
           "path": [
-            "voiceline/codename/alfa_01.mp3"
+            "alfa_01"
           ]
         }
       ]
@@ -17,7 +17,7 @@
       "voiceline": [
         {
           "path": [
-            "voiceline/codename/bravo_01.mp3"
+            "bravo_01"
           ]
         }
       ]
@@ -27,7 +27,7 @@
       "voiceline": [
         {
           "path": [
-            "voiceline/codename/charlie_01.mp3"
+            "charlie_01"
           ]
         }
       ]
@@ -37,7 +37,7 @@
       "voiceline": [
         {
           "path": [
-            "voiceline/codename/delta_01.mp3"
+            "delta_01"
           ]
         }
       ]
@@ -47,7 +47,7 @@
       "voiceline": [
         {
           "path": [
-            "voiceline/codename/echo_01.mp3"
+            "echo_01"
           ]
         }
       ]
@@ -57,7 +57,7 @@
       "voiceline": [
         {
           "path": [
-            "voiceline/codename/foxtrot_01.mp3"
+            "foxtrot_01"
           ]
         }
       ]
@@ -67,7 +67,7 @@
       "voiceline": [
         {
           "path": [
-            "voiceline/codename/golf_01.mp3"
+            "golf_01"
           ]
         }
       ]
@@ -77,7 +77,7 @@
       "voiceline": [
         {
           "path": [
-            "voiceline/codename/hotel_01.mp3"
+            "hotel_01"
           ]
         }
       ]
@@ -87,7 +87,7 @@
       "voiceline": [
         {
           "path": [
-            "voiceline/codename/india_01.mp3"
+            "india_01"
           ]
         }
       ]
@@ -97,7 +97,7 @@
       "voiceline": [
         {
           "path": [
-            "voiceline/codename/juliett_01.mp3"
+            "juliett_01"
           ]
         }
       ]
@@ -107,7 +107,7 @@
       "voiceline": [
         {
           "path": [
-            "voiceline/codename/kilo_01.mp3"
+            "kilo_01"
           ]
         }
       ]
@@ -117,7 +117,7 @@
       "voiceline": [
         {
           "path": [
-            "voiceline/codename/lima_01.mp3"
+            "lima_01"
           ]
         }
       ]
@@ -127,7 +127,7 @@
       "voiceline": [
         {
           "path": [
-            "voiceline/codename/mike_01.mp3"
+            "mike_01"
           ]
         }
       ]
@@ -137,7 +137,7 @@
       "voiceline": [
         {
           "path": [
-            "voiceline/codename/november_01.mp3"
+            "november_01"
           ]
         }
       ]
@@ -147,7 +147,7 @@
       "voiceline": [
         {
           "path": [
-            "voiceline/codename/oscar_01.mp3"
+            "oscar_01"
           ]
         }
       ]
@@ -157,7 +157,7 @@
       "voiceline": [
         {
           "path": [
-            "voiceline/codename/papa_01.mp3"
+            "papa_01"
           ]
         }
       ]
@@ -167,7 +167,7 @@
       "voiceline": [
         {
           "path": [
-            "voiceline/codename/quebec_01.mp3"
+            "quebec_01"
           ]
         }
       ]
@@ -177,7 +177,7 @@
       "voiceline": [
         {
           "path": [
-            "voiceline/codename/romeo_01.mp3"
+            "romeo_01"
           ]
         }
       ]
@@ -187,7 +187,7 @@
       "voiceline": [
         {
           "path": [
-            "voiceline/codename/sierra_01.mp3"
+            "sierra_01"
           ]
         }
       ]
@@ -197,7 +197,7 @@
       "voiceline": [
         {
           "path": [
-            "voiceline/codename/tango_01.mp3"
+            "tango_01"
           ]
         }
       ]
@@ -207,7 +207,7 @@
       "voiceline": [
         {
           "path": [
-            "voiceline/codename/uniform_01.mp3"
+            "uniform_01"
           ]
         }
       ]
@@ -217,7 +217,7 @@
       "voiceline": [
         {
           "path": [
-            "voiceline/codename/victor_01.mp3"
+            "victor_01"
           ]
         }
       ]
@@ -227,7 +227,7 @@
       "voiceline": [
         {
           "path": [
-            "voiceline/codename/whiskey_01.mp3"
+            "whiskey_01"
           ]
         }
       ]
@@ -237,7 +237,7 @@
       "voiceline": [
         {
           "path": [
-            "voiceline/codename/xray_01.mp3"
+            "xray_01"
           ]
         }
       ]
@@ -247,7 +247,7 @@
       "voiceline": [
         {
           "path": [
-            "voiceline/codename/yankee_01.mp3"
+            "yankee_01"
           ]
         }
       ]
@@ -257,7 +257,7 @@
       "voiceline": [
         {
           "path": [
-            "voiceline/codename/zulu_01.mp3"
+            "zulu_01"
           ]
         }
       ]
