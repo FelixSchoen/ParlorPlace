@@ -63,6 +63,7 @@ public class WerewolfGameModerator extends AbstractGameModerator<
     private final int WAIT_TIME_SOCKETS_ESTABLISHED = Integer.parseInt(resourceBundle.getString(WerewolfValueIdentifier.WAIT_TIME_SOCKETS_ESTABLISHED));
     private final int WAIT_TIME_INITIAL_ROLES = Integer.parseInt(resourceBundle.getString(WerewolfValueIdentifier.WAIT_TIME_INITIAL_ROLES));
     private final int WAIT_TIME_BETWEEN_CONSECUTIVE_EVENTS = Integer.parseInt(resourceBundle.getString(WerewolfValueIdentifier.WAIT_TIME_BETWEEN_CONSECUTIVE_EVENTS));
+    private final int WAIT_TIME_NEW_INFORMATION = Integer.parseInt(resourceBundle.getString(WerewolfValueIdentifier.WAIT_TIME_NEW_INFORMATION));
 
     private final int VOTE_TIME_INDIVIDUAL_VOTE = Integer.parseInt(resourceBundle.getString(WerewolfValueIdentifier.VOTE_TIME_INDIVIDUAL_VOTE));
     private final int VOTE_TIME_GROUP_VOTE = Integer.parseInt(resourceBundle.getString(WerewolfValueIdentifier.VOTE_TIME_GROUP_VOTE));
@@ -196,7 +197,7 @@ public class WerewolfGameModerator extends AbstractGameModerator<
         Set<WerewolfPlayer> validTargets = getAlivePlayers();
         validTargets.remove(seer);
 
-        processNightPreVote(seerSet, WerewolfVoiceLineType.SEER_WAKE);
+        processNightPreVote(seerSet, WerewolfVoiceLineType.SEER_WAKE, seer);
 
         CompletableFuture<WerewolfVote> seerVoteFuture = this.voteService.requestVote(
                 this.gameIdentifier,
@@ -219,11 +220,16 @@ public class WerewolfGameModerator extends AbstractGameModerator<
 
         WerewolfGame game = this.getGame();
         if (hasLastRoleType(seerTarget, WerewolfRoleType.WEREWOLF)) {
-            game.getLog().add(getLogEntryTemplate(seerSet).logType(WerewolfLogType.SEER_SUCCESS).build());
+            game.getLog().add(getLogEntryTemplate(seerSet).logType(WerewolfLogType.SEER_SUCCESS).targets(new HashSet<>() {{
+                add(seerTarget);
+            }}).build());
         } else {
-            game.getLog().add(getLogEntryTemplate(seerSet).logType(WerewolfLogType.SEER_FAILURE).build());
+            game.getLog().add(getLogEntryTemplate(seerSet).logType(WerewolfLogType.SEER_FAILURE).targets(new HashSet<>() {{
+                add(seerTarget);
+            }}).build());
         }
         saveAndSend(game, seerSet);
+        pause(WAIT_TIME_NEW_INFORMATION);
 
         // --- Logic End ---
 
@@ -302,12 +308,12 @@ public class WerewolfGameModerator extends AbstractGameModerator<
 
     // Utility - Moderation
 
-    private void processNightPreVote(Set<WerewolfPlayer> playerSet, WerewolfVoiceLineType voiceLineType) {
+    private void processNightPreVote(Set<WerewolfPlayer> playerSet, WerewolfVoiceLineType voiceLineType, WerewolfPlayer... players) {
         WerewolfGame game = this.getGame();
         game.getLog().add(getLogEntryTemplate(playerSet).logType(WerewolfLogType.WAKE).build());
 
         saveAndSend(game, playerSet);
-        broadcastVoiceLineNotification(getVoiceLineNotification(voiceLineType));
+        broadcastVoiceLineNotification(getVoiceLineNotification(voiceLineType, Arrays.stream(players).map(Player::getCodeName).toArray(CodeName[]::new)));
     }
 
     private void processNightPostVote(Set<WerewolfPlayer> playerSet, WerewolfVoiceLineType voiceLineType, WerewolfPlayer... players) {

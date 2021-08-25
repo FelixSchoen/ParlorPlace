@@ -63,3 +63,80 @@ default WerewolfGameRole fromDTO(WerewolfGameRoleDTO gameRoleDTO) {
     }
 }
 ```
+
+**Note**: This approach *could* potentially change in the future, as MapStruct perhaps will include an automatic approach for subtype mapping (see the corresponding [GitHub Issue](https://github.com/mapstruct/mapstruct/pull/2512)).
+
+If the role stores information (such as e.g. if it has already performed an action), obfuscation needs to be added. For this, edit `WerewolfGameRoleObfuscationService`. The following snippet shows where to insert the obfuscation logic:
+
+```
+switch (werewolfGameRoleDTO.getWerewolfRoleType()) {
+    case ROLE -> {
+        [Remove sensitive information here]
+    }
+    [...]
+}
+```
+
+### Game Moderator
+
+Next up modify the game moderator. Start by creating new methods for the newly created role, e.g. like this:
+
+```
+    private void processRole(WerewolfPlayer role) {
+      [Logic]
+    }
+```
+
+It is important to note that this method must be included either in the `processNight()` or `processDay()` (or any equivalent) method, in order to be processed.
+
+In order to create a new vote, `WerewolfVoteDescriptor`s have to be created as well.
+Furthermore, if necessary, create additional `WerewolfLogType`s.
+
+### Frontend
+
+In order to adjust the frontend, we have to start by implementing the corresponding files to the ones just created for the backend.
+
+Start by creating a new `WerewolfGameRole` in `werewolf.ts`. After that, adjust `WerewolfLogType`, `WerewolfRoleType`, `WerewolfVoteDescriptor`.
+
+For `WerewolfRoleType`, make sure to add an icon conforming to the string value of the role.
+Icons are defined in `app.component.ts`.
+
+For `WerewolfLogType`, add a new case to the switch, like this:
+
+```
+switch (type) {
+  case WerewolfLogType.ROLE_ACTION:
+  iconString = "action";
+  break;
+```
+
+Furthermore, add fitting `WerewolfVoiceLineType`s - keep in mind that the actual voice line files have to be added as well, more on that later.
+
+For localization, adjust `en.json` (and all equivalent files).
+Add an entry in the `role` section, and entries for every newly created log type.
+
+**Careful:** The key values must equal to the values given by the enumeration, as access to the localization fields is done in this way:
+
+```
+(this.getCurrentRoleTypeCurrentPlayer().valueOf() | internalRepresentation) + ".name") | translate
+(this.getCurrentRoleTypeCurrentPlayer().valueOf() | internalRepresentation) + ".description") | translate
+```
+
+Similarly, for the vote descriptor be sure to fit the pattern determined by the following snippet (e.g. `SEER_SEE` would turn into `werewolf.vote.seer.see`):
+
+```
+{{getTranslationKey(vote.voteDescriptor) | translate}}
+
+[...]
+
+getTranslationKey(e: Object): string {
+  return "werewolf.vote." + e.valueOf().toString().toLowerCase().replace("_", ".");
+}
+```
+
+#### Voicelines
+
+For voicelines, be sure to match the path given by the `WerewolfVoiceLineType`.
+This works in similar fashion as above: Replace `_` by `.`, and insert the role voicelines under `voiceline.role`.
+Be sure to adjust `getVoiceLine()` in `WerewolfResourcePack`, in order to match the voice line with the correct path (in case `voiceline.role` is not fitting for example).
+Make sure not to mix up the `source` and `target` property in the backend, when sending voicelines.

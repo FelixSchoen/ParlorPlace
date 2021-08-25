@@ -295,8 +295,8 @@
       "player_wake": [
         {
           "path": [
-            "player_wake_01",
-            "player_wake_02"
+            "player_wake_01_01",
+            "player_wake_01_02"
           ],
           "order": [
             "file_01",
@@ -308,7 +308,7 @@
       "player_sleep": [
         {
           "path": [
-            "player_wake_01"
+            "player_sleep_01"
           ],
           "order": [
             "codename_01",
