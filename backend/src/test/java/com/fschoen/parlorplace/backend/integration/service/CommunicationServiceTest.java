@@ -22,9 +22,9 @@ public class CommunicationServiceTest extends BaseIntegrationTest {
     @Test
     public void sendMessage_ToNonConnectedUsers_ResultsInNoException() {
         User user = this.generatedData.getUserCollection().getUser1();
-        this.sut.sendGameStaleNotification(new GameIdentifier("TEST"), new HashSet<>() {{
+        this.sut.sendNotification(new GameIdentifier("TEST"), new HashSet<>() {{
             add(user);
-        }});
+        }}, NotificationType.STALE_GAME_INFORMATION, true);
     }
 
     @Test
@@ -36,10 +36,10 @@ public class CommunicationServiceTest extends BaseIntegrationTest {
         StompSession sessionUser1 = connectNotification(user1, gameIdentifier);
         StompSession sessionUser2 = connectNotification(user2, gameIdentifier);
 
-        this.sut.sendGameStaleNotification(gameIdentifier, new HashSet<>() {{
+        this.sut.sendNotification(gameIdentifier, new HashSet<>() {{
             add(user1);
             add(user2);
-        }});
+        }}, NotificationType.STALE_GAME_INFORMATION, true);
 
         ClientNotification notificationUser1 = waitNotification(user1, 1).get(0);
         ClientNotification notificationUser2 = waitNotification(user2, 1).get(0);

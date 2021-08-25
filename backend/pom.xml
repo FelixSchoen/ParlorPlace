@@ -10,7 +10,7 @@
     </parent>
     <groupId>com.fschoen</groupId>
     <artifactId>backend</artifactId>
-    <version>v0.4</version>
+    <version>v1.0-alpha1</version>
     <name>backend</name>
     <description>Backend for ParlorPlace</description>
     <properties>

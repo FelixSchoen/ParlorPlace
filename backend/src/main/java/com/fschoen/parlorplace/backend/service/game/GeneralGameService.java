@@ -5,6 +5,8 @@ import com.fschoen.parlorplace.backend.entity.GameIdentifier;
 
 public interface GeneralGameService {
 
-    Game<?, ?, ?, ?> getGameBaseInformation(GameIdentifier gameIdentifier);
+    Game<?, ?, ?, ?> getActiveGameBaseInformation(GameIdentifier gameIdentifier);
+
+    Game<?, ?, ?, ?> getIndividualGameBaseInformation(Long id);
 
 }

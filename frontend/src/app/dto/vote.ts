@@ -1,5 +1,5 @@
-import {VoteState} from "../enums/votestate";
-import {VoteType} from "../enums/votetype";
+import {VoteState} from "../enums/vote-state";
+import {VoteType} from "../enums/vote-type";
 import {EnumValue} from "@angular/compiler-cli/src/ngtsc/partial_evaluator";
 
 export abstract class Vote<T, C extends VoteCollection<T>> {
@@ -13,6 +13,12 @@ export abstract class Vote<T, C extends VoteCollection<T>> {
                         public outcomeAmount: number,
                         public endTime: number) {
   }
+
+
+
+}
+
+export class VoteUtil {
 
   public static toMap<C extends VoteCollection<any>>(voteCollectionMap: [number, C][]): Map<number, C> {
     let map = new Map<number, C>();

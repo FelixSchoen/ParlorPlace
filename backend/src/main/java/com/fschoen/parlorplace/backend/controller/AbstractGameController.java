@@ -134,10 +134,20 @@ public abstract class AbstractGameController<
         return ResponseEntity.status(HttpStatus.OK).body(gameDTO);
     }
 
-    @GetMapping("/{identifier}")
-    public ResponseEntity<GDTO> getGame(@PathVariable("identifier") String identifier) {
+    @GetMapping("/identifier/{identifier}")
+    public ResponseEntity<GDTO> getActiveGame(@PathVariable("identifier") String identifier) {
         GameIdentifier gameIdentifier = new GameIdentifier(identifier);
         G game = this.gameService.getGame(gameIdentifier);
+
+        GDTO gameDTO = gameMapper.toDTO(game);
+        gameObfuscationService.obfuscate(gameDTO);
+
+        return ResponseEntity.status(HttpStatus.OK).body(gameDTO);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<GDTO> getIndividualGame(@PathVariable("id") Long id) {
+        G game = this.gameService.getGame(id);
 
         GDTO gameDTO = gameMapper.toDTO(game);
         gameObfuscationService.obfuscate(gameDTO);

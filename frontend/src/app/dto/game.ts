@@ -1,8 +1,8 @@
-import {GameType} from "../enums/gametype";
-import {GameState} from "../enums/gamestate";
+import {GameType} from "../enums/game-type";
+import {GameState} from "../enums/game-state";
 import {Player} from "./player";
-import {RuleSet} from "./ruleset";
-import {LogEntry} from "./logentry";
+import {RuleSet} from "./rule-set";
+import {LogEntry} from "./log-entry";
 import {Vote} from "./vote";
 
 export abstract class Game {

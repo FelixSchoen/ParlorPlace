@@ -30,9 +30,6 @@ public abstract class PlayerDTO<GRDTO extends GameRoleDTO> {
     protected CodeName codeName;
 
     @NotNull
-    protected Boolean disconnected;
-
-    @NotNull
     protected LobbyRole lobbyRole;
 
     @NotNull
@@ -45,5 +42,11 @@ public abstract class PlayerDTO<GRDTO extends GameRoleDTO> {
     @NotNull
     @Min(0)
     protected Integer position;
+
+    @Min(1)
+    protected Integer placement;
+
+    @NotNull
+    protected Boolean disconnected;
 
 }

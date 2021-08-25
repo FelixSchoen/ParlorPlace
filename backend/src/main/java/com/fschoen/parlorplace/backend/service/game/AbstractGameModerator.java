@@ -6,6 +6,7 @@ import com.fschoen.parlorplace.backend.entity.GameRole;
 import com.fschoen.parlorplace.backend.entity.LogEntry;
 import com.fschoen.parlorplace.backend.entity.Player;
 import com.fschoen.parlorplace.backend.entity.RuleSet;
+import com.fschoen.parlorplace.backend.enumeration.PlayerState;
 import com.fschoen.parlorplace.backend.repository.GameRepository;
 import com.fschoen.parlorplace.backend.repository.LogEntryRepository;
 import com.fschoen.parlorplace.backend.repository.UserRepository;
@@ -40,15 +41,28 @@ public abstract class AbstractGameModerator<
 
     protected abstract Boolean isGameOngoing();
 
-    // Utility
+    // Utility - Game
 
     protected G getGame() {
         return this.getActiveGame(this.gameIdentifier);
     }
 
+    protected Set<P> getAlivePlayers() {
+        G game = this.getGame();
+        return game.getPlayers().stream().filter(player -> player.getPlayerState() == PlayerState.ALIVE).collect(Collectors.toSet());
+    }
+
     protected Set<P> getAllPlayersOfGame() {
         G game = getActiveGame(gameIdentifier);
         return game.getPlayers();
+    }
+
+    protected void pause(int pauseTime) {
+        try {
+            Thread.sleep(pauseTime);
+        } catch (InterruptedException e) {
+            log.error("Interrupted while pausing game moderator.", e);
+        }
     }
 
     // Communication

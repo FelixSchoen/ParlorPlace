@@ -4,3 +4,14 @@
   min-height: 35%;
   min-width: 35%;
 }
+
+.log-card {
+  padding: 0 0 0.5vh;
+}
+
+:host ::ng-deep .mat-tab-header {
+  top: 0;
+  z-index: 1000;
+  position: sticky;
+  position: -webkit-sticky; /* macOS/iOS Safari */
+}

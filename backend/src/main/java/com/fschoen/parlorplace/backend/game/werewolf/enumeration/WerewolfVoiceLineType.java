@@ -3,12 +3,14 @@ package com.fschoen.parlorplace.backend.game.werewolf.enumeration;
 public enum WerewolfVoiceLineType {
     START,
     END,
-    SLEEP,
-    WAKE,
     DEATH,
-    VILLAGE_SLEEP,
+    // For future purposes, such as the Doppelganger, etc.
+    PLAYER_WAKE,
+    PLAYER_SLEEP,
     VILLAGE_WAKE,
+    VILLAGE_SLEEP,
+    VILLAGE_VOTE,
     WEREWOLVES_WAKE,
-    SEER_WAKE,
-    VILLAGERS_VOTE
+    WEREWOLVES_SLEEP,
+    SEER_WAKE
 }

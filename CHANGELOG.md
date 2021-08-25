@@ -4,10 +4,30 @@
 - [v0.2 (2021-07-22)](#v0.2)
 - [v0.3 (2021-08-05)](#v0.3)
 - [v0.4 (2021-08-16)](#v0.4)
+- [v1.0-alpha1 (2021-08-25)](#v0.5)
 
 ---
 
-## v0.4
+## v1.0-alpha1
+<a name="v1.0-alpha1"></a>
+
+## Added
+
+- **Finished vote framework**
+- **Implemented werewolf game moderator**
+  - Full games can be played for the roles that have been implemented
+- Implemented post-game screen
+  - Shows victors and losers of the game
+  - Reveals all roles
+- **Implemented voice lines**
+  - Implemented audio player service
+  - Added voice lines for all existing events
+  - Implemented resource pack selection
+- **Implemented seer**
+
+---
+
+## v0.4 (2021-08-16)
 <a name="v0.4"></a>
 
 ## Added
@@ -39,7 +59,7 @@
 
 ---
 
-## v0.3
+## v0.3 (2021-08-05)
 <a name="v0.3"></a>
 
 ## Added

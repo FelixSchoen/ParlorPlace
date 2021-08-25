@@ -1,25 +1,36 @@
 package com.fschoen.parlorplace.backend.game.werewolf.dto.role;
 
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fschoen.parlorplace.backend.controller.dto.game.GameRoleDTO;
+import com.fschoen.parlorplace.backend.game.werewolf.enumeration.WerewolfFaction;
 import com.fschoen.parlorplace.backend.game.werewolf.enumeration.WerewolfRoleType;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 
-import javax.validation.constraints.NotNull;
-
 @NoArgsConstructor
-@AllArgsConstructor
+//@AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-@SuperBuilder(toBuilder = true)
 @ToString(callSuper = true)
+@SuperBuilder(toBuilder = true)
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "werewolfRoleType")
+@JsonSubTypes({
+        @JsonSubTypes.Type(value = VillagerWerewolfGameRoleDTO.class, name = "VILLAGER"),
+        @JsonSubTypes.Type(value = WerewolfWerewolfGameRoleDTO.class, name = "WEREWOLF"),
+        @JsonSubTypes.Type(value = SeerWerewolfGameRoleDTO.class, name = "SEER")}
+)
 @Data
-public class WerewolfGameRoleDTO extends GameRoleDTO {
+public abstract class WerewolfGameRoleDTO extends GameRoleDTO {
 
-    @NotNull
-    private WerewolfRoleType werewolfRoleType;
+    public abstract WerewolfRoleType getWerewolfRoleType();
+
+    public abstract WerewolfFaction getWerewolfFaction();
+
+    public abstract void setWerewolfRoleType(WerewolfRoleType werewolfRoleType);
+
+    public abstract void setWerewolfFaction(WerewolfFaction werewolfFaction);
 
 }

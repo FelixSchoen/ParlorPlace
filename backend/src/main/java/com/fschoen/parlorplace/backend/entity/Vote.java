@@ -1,5 +1,6 @@
 package com.fschoen.parlorplace.backend.entity;
 
+import com.fschoen.parlorplace.backend.enumeration.VoteDrawStrategy;
 import com.fschoen.parlorplace.backend.enumeration.VoteState;
 import com.fschoen.parlorplace.backend.enumeration.VoteType;
 import lombok.AllArgsConstructor;
@@ -8,11 +9,14 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import lombok.experimental.SuperBuilder;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -20,6 +24,7 @@ import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.MapKeyJoinColumn;
 import javax.persistence.OneToMany;
@@ -65,14 +70,28 @@ public abstract class Vote<
     @NotNull
     protected VoteType voteType;
 
-    @OneToMany(targetEntity = VoteCollection.class, cascade = CascadeType.ALL, orphanRemoval = true)
+    @Column(nullable = false)
+    @Enumerated
+    @NotNull
+    protected VoteDrawStrategy voteDrawStrategy;
+
+    @ManyToMany(targetEntity = Player.class)
+    @JoinTable(
+            joinColumns = @JoinColumn(name = "vote_id"),
+            inverseJoinColumns = @JoinColumn(name = "player_id")
+    )
+    @LazyCollection(LazyCollectionOption.FALSE)
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    @NotNull
+    protected Set<P> voters;
+
+    @OneToMany(targetEntity = VoteCollection.class, cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     @JoinTable(
             joinColumns = @JoinColumn(name = "vote_id"),
             inverseJoinColumns = @JoinColumn(name = "collection_id")
     )
     @MapKeyJoinColumn(name = "votecollection_id")
-    @ToString.Exclude
-    @EqualsAndHashCode.Exclude
     @NotNull
     protected Map<Long, C> voteCollectionMap;
 

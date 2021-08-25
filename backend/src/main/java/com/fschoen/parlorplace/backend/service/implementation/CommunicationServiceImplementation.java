@@ -29,25 +29,16 @@ public class CommunicationServiceImplementation implements CommunicationService 
         this.messagingTemplate = messagingTemplate;
     }
 
-    public void sendGameStaleNotification(GameIdentifier gameIdentifier, Set<User> recipients) {
-        ClientNotification notification = ClientNotification.builder().notificationType(NotificationType.STALE_GAME_INFORMATION).build();
+    public void sendNotification(GameIdentifier gameIdentifier, Set<User> recipients, NotificationType notificationType, Boolean primaryUri) {
+        ClientNotification notification = ClientNotification.builder().notificationType(notificationType).build();
+
+        String destinationUri = primaryUri ? PRIMARY_DESTINATION_URI : SECONDARY_DESTINATION_URI;
+
         for (User user : recipients) {
             try {
-                send(user.getUsername(), PRIMARY_DESTINATION_URI + gameIdentifier.getToken(), notification);
+                send(user.getUsername(), destinationUri + gameIdentifier.getToken(), notification);
             } catch (MessagingException e) {
                 log.error("Could not send Game Stale Notification for User {}", user.getUsername(), e);
-            }
-        }
-    }
-
-    @Override
-    public void sendLogsStaleNotification(GameIdentifier gameIdentifier, Set<User> recipients) {
-        ClientNotification notification = ClientNotification.builder().notificationType(NotificationType.STALE_LOGS_INFORMATION).build();
-        for (User user : recipients) {
-            try {
-                send(user.getUsername(), SECONDARY_DESTINATION_URI + gameIdentifier.getToken(), notification);
-            } catch (MessagingException e) {
-                log.error("Could not send Logs Stale Notification for User {}", user.getUsername(), e);
             }
         }
     }
@@ -58,7 +49,7 @@ public class CommunicationServiceImplementation implements CommunicationService 
             try {
                 send(user.getUsername(), SECONDARY_DESTINATION_URI + gameIdentifier.getToken(), notification);
             } catch (MessagingException e) {
-                log.error("Could not send Logs Stale Notification for User {}", user.getUsername(), e);
+                log.error("Could not send Voice Line Notification for User {}", user.getUsername(), e);
             }
         }
     }
