@@ -201,7 +201,7 @@ public class WerewolfGameModerator extends AbstractGameModerator<
         Set<WerewolfPlayer> villagers = getAlivePlayers();
         Set<WerewolfPlayer> validTargets = getAlivePlayers();
 
-        broadcastVoiceLineNotification(getVoiceLineNotification(WerewolfVoiceLineType.VILLAGERS_VOTE));
+        broadcastVoiceLineNotification(getVoiceLineNotification(WerewolfVoiceLineType.VILLAGE_VOTE));
 
         for (int x = 0; x < 2; x++) {
             CompletableFuture<WerewolfVote> werewolfVoteFuture = this.voteService.requestVote(

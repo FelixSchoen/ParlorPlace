@@ -19,7 +19,7 @@ export class ExperimentalComponent {
   public action(): void {
     let pack = new WerewolfResourcePack(this.jsonService, WerewolfResourcePackType.OLD_MAN, LanguageIdentifier.DE);
 
-    let voiceLine = pack.getSeerWakeVoiceLine(CodeName.BRAVO);
+    let voiceLine = pack.getStartVoiceLine();
 
     voiceLine.then(value => this.voicelineService.playAudio(value.toPathArray()))
   }

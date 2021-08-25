@@ -269,9 +269,6 @@
         {
           "path": [
             "start_01"
-          ],
-          "order": [
-            "file_01"
           ]
         }
       ],
@@ -279,14 +276,85 @@
         {
           "path": [
             "end_01"
+          ]
+        }
+      ],
+      "death": [
+        {
+          "path": [
+            "death_01",
+            "death_02"
           ],
           "order": [
+            "file_01",
+            "codename_01",
+            "file_02"
+          ]
+        }
+      ],
+      "player_wake": [
+        {
+          "path": [
+            "player_wake_01",
+            "player_wake_02"
+          ],
+          "order": [
+            "file_01",
+            "codename_01",
+            "file_02"
+          ]
+        }
+      ],
+      "player_sleep": [
+        {
+          "path": [
+            "player_wake_01"
+          ],
+          "order": [
+            "codename_01",
             "file_01"
+          ]
+        }
+      ],
+      "village_wake": [
+        {
+          "path": [
+            "village_wake_01"
+          ]
+        }
+      ],
+      "village_sleep": [
+        {
+          "path": [
+            "village_sleep_01"
+          ]
+        }
+      ],
+      "village_vote": [
+        {
+          "path": [
+            "village_vote_01"
           ]
         }
       ]
     },
     "role": {
+      "werewolves": {
+        "wake": [
+          {
+            "path": [
+              "wake_01"
+            ]
+          }
+        ],
+        "sleep": [
+          {
+            "path": [
+              "sleep_01"
+            ]
+          }
+        ]
+      },
       "seer": {
         "wake": [
           {
