@@ -7,4 +7,5 @@ export const environmentGeneral = {
   LIBRARY_URI: "library/",
   WEBSOCKET_GAME_URI: "communication/game",
   WEBSOCKET_QUEUE_PRIMARY_URI: "/user/queue/game/primary/",
+  WEBSOCKET_QUEUE_SECONDARY_URI: "/user/queue/game/secondary/",
 }

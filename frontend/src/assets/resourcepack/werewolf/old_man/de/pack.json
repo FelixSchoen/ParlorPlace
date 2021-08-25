@@ -1,0 +1,375 @@
+{
+  "name": "old_man",
+  "language": "de",
+  "codename": {
+    "alfa": {
+      "name": "Ananas",
+      "voiceline": [
+        {
+          "path": [
+            "alfa_01"
+          ]
+        }
+      ]
+    },
+    "bravo": {
+      "name": "Blaubarschbube",
+      "voiceline": [
+        {
+          "path": [
+            "bravo_01"
+          ]
+        }
+      ]
+    },
+    "charlie": {
+      "name": "Cäsar",
+      "voiceline": [
+        {
+          "path": [
+            "charlie_01"
+          ]
+        }
+      ]
+    },
+    "delta": {
+      "name": "Dambo",
+      "voiceline": [
+        {
+          "path": [
+            "delta_01"
+          ]
+        }
+      ]
+    },
+    "echo": {
+      "name": "Ehrenmann",
+      "voiceline": [
+        {
+          "path": [
+            "echo_01"
+          ]
+        }
+      ]
+    },
+    "foxtrot": {
+      "name": "Fagott",
+      "voiceline": [
+        {
+          "path": [
+            "foxtrot_01"
+          ]
+        }
+      ]
+    },
+    "golf": {
+      "name": "Gammler",
+      "voiceline": [
+        {
+          "path": [
+            "golf_01"
+          ]
+        }
+      ]
+    },
+    "hotel": {
+      "name": "Horst",
+      "voiceline": [
+        {
+          "path": [
+            "hotel_01"
+          ]
+        }
+      ]
+    },
+    "india": {
+      "name": "Illegal",
+      "voiceline": [
+        {
+          "path": [
+            "india_01"
+          ]
+        }
+      ]
+    },
+    "juliett": {
+      "name": "Jörg",
+      "voiceline": [
+        {
+          "path": [
+            "juliett_01"
+          ]
+        }
+      ]
+    },
+    "kilo": {
+      "name": "Kevin",
+      "voiceline": [
+        {
+          "path": [
+            "kilo_01"
+          ]
+        }
+      ]
+    },
+    "lima": {
+      "name": "Ligma",
+      "voiceline": [
+        {
+          "path": [
+            "lima_01"
+          ]
+        }
+      ]
+    },
+    "mike": {
+      "name": "Meerjungfraumann",
+      "voiceline": [
+        {
+          "path": [
+            "mike_01"
+          ]
+        }
+      ]
+    },
+    "november": {
+      "name": "Nase",
+      "voiceline": [
+        {
+          "path": [
+            "november_01"
+          ]
+        }
+      ]
+    },
+    "oscar": {
+      "name": "Oboe",
+      "voiceline": [
+        {
+          "path": [
+            "oscar_01"
+          ]
+        }
+      ]
+    },
+    "papa": {
+      "name": "Pokemon",
+      "voiceline": [
+        {
+          "path": [
+            "papa_01"
+          ]
+        }
+      ]
+    },
+    "quebec": {
+      "name": "Quassel",
+      "voiceline": [
+        {
+          "path": [
+            "quebec_01"
+          ]
+        }
+      ]
+    },
+    "romeo": {
+      "name": "Reported",
+      "voiceline": [
+        {
+          "path": [
+            "romeo_01"
+          ]
+        }
+      ]
+    },
+    "sierra": {
+      "name": "Superball",
+      "voiceline": [
+        {
+          "path": [
+            "sierra_01"
+          ]
+        }
+      ]
+    },
+    "tango": {
+      "name": "Tagesbann",
+      "voiceline": [
+        {
+          "path": [
+            "tango_01"
+          ]
+        }
+      ]
+    },
+    "uniform": {
+      "name": "Unfair",
+      "voiceline": [
+        {
+          "path": [
+            "uniform_01"
+          ]
+        }
+      ]
+    },
+    "victor": {
+      "name": "Verfügung",
+      "voiceline": [
+        {
+          "path": [
+            "victor_01"
+          ]
+        }
+      ]
+    },
+    "whiskey": {
+      "name": "Walze",
+      "voiceline": [
+        {
+          "path": [
+            "whiskey_01"
+          ]
+        }
+      ]
+    },
+    "xray": {
+      "name": "Xenon",
+      "voiceline": [
+        {
+          "path": [
+            "xray_01"
+          ]
+        }
+      ]
+    },
+    "yankee": {
+      "name": "Yachtclub",
+      "voiceline": [
+        {
+          "path": [
+            "yankee_01"
+          ]
+        }
+      ]
+    },
+    "zulu": {
+      "name": "Zappenduster",
+      "voiceline": [
+        {
+          "path": [
+            "zulu_01"
+          ]
+        }
+      ]
+    }
+  },
+  "voiceline": {
+    "general": {
+      "start": [
+        {
+          "path": [
+            "start_01"
+          ]
+        }
+      ],
+      "end": [
+        {
+          "path": [
+            "end_01"
+          ]
+        }
+      ],
+      "death": [
+        {
+          "path": [
+            "death_01_01",
+            "death_01_02"
+          ],
+          "order": [
+            "file_01",
+            "codename_01",
+            "file_02"
+          ]
+        }
+      ],
+      "player_wake": [
+        {
+          "path": [
+            "player_wake_01",
+            "player_wake_02"
+          ],
+          "order": [
+            "file_01",
+            "codename_01",
+            "file_02"
+          ]
+        }
+      ],
+      "player_sleep": [
+        {
+          "path": [
+            "player_wake_01"
+          ],
+          "order": [
+            "codename_01",
+            "file_01"
+          ]
+        }
+      ],
+      "village_wake": [
+        {
+          "path": [
+            "village_wake_01"
+          ]
+        }
+      ],
+      "village_sleep": [
+        {
+          "path": [
+            "village_sleep_01"
+          ]
+        }
+      ],
+      "village_vote": [
+        {
+          "path": [
+            "village_vote_01"
+          ]
+        }
+      ]
+    },
+    "role": {
+      "werewolves": {
+        "wake": [
+          {
+            "path": [
+              "wake_01"
+            ]
+          }
+        ],
+        "sleep": [
+          {
+            "path": [
+              "sleep_01"
+            ]
+          }
+        ]
+      },
+      "seer": {
+        "wake": [
+          {
+            "path": [
+              "wake_01_01",
+              "wake_01_02"
+            ],
+            "order": [
+              "file_01",
+              "codename_01",
+              "file_02"
+            ]
+          }
+        ]
+      }
+    }
+  }
+}

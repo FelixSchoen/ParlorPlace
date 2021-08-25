@@ -1,0 +1,10 @@
+<mat-form-field class="w-100" appearance="standard">
+  <mat-label>{{"general.attribute.resourcePack" | translate}}</mat-label>
+
+  <mat-select [disabled]="!mayEdit(currentPlayer)" [value]="this.pack" (selectionChange)="selectPack($event)">
+    <mat-option *ngFor="let pack of this.getArray" [value]="pack">
+      {{(this.gameIdentifier + ".resourcepack." + pack.toString().toLowerCase() + ".name") | translate}}
+    </mat-option>
+  </mat-select>
+
+</mat-form-field>

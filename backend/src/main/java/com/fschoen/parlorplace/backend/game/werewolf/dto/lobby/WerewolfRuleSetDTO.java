@@ -2,6 +2,7 @@ package com.fschoen.parlorplace.backend.game.werewolf.dto.lobby;
 
 import com.fschoen.parlorplace.backend.controller.dto.game.RuleSetDTO;
 import com.fschoen.parlorplace.backend.game.werewolf.enumeration.WerewolfRoleType;
+import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -18,6 +19,10 @@ import java.util.List;
 @ToString(callSuper = true)
 @Data
 public class WerewolfRuleSetDTO extends RuleSetDTO {
+
+    @NotNull
+    @Builder.Default
+    private String resourcePack = "DEFAULT";
 
     @NotNull
     List<WerewolfRoleType> gameRoleTypes;

@@ -4,6 +4,7 @@
                  *ngIf="!loading"
                  (selectedTabChange)="selectedTabChange($event)">
 
+    <!-- Main Tab -->
     <mat-tab>
       <ng-template mat-tab-label>
         <mat-icon class="material-icons">home</mat-icon>
@@ -35,6 +36,7 @@
       </div>
     </mat-tab>
 
+    <!-- Vote Tab -->
     <mat-tab>
       <ng-template mat-tab-label>
         <mat-icon class="material-icons" matBadge="{{sortVotes(game.votes)[0].length}}" matBadgeSize="small"
@@ -45,12 +47,12 @@
       <div class="h-100 pt-3">
 
         <!-- Ongoing Votes -->
-        <div *ngFor="let vote of sortVotes(game.votes)[0]" class="mx-3">
+        <div *ngFor="let vote of sortVotes(game.votes)[0]" class="mx-3 mb-3">
           <app-werewolf-vote [currentPlayer]="currentPlayer" [gameIdentifier]="this.game.gameIdentifier"
                              [players]="this.game.players" [vote]="vote"></app-werewolf-vote>
         </div>
 
-        <div class="mt-3 pp-center">
+        <div class="pp-center">
           <button mat-button (click)="this.hideVotes = true"
                   *ngIf="!hideVotes">
             <mat-icon class="material-icons-outlined">visibility_off</mat-icon>
@@ -75,6 +77,7 @@
       </div>
     </mat-tab>
 
+    <!-- Log Tab -->
     <mat-tab>
       <ng-template mat-tab-label>
         <mat-icon class="material-icons">format_list_bulleted</mat-icon>
@@ -115,6 +118,7 @@
       </div>
     </mat-tab>
 
+    <!-- Info Tab -->
     <mat-tab>
       <ng-template mat-tab-label>
         <mat-icon class="material-icons" matBadge="‎" matBadgeSize="small" [matBadgeHidden]="this.viewedRole">info
@@ -137,7 +141,7 @@
               <div class="flex-row mt-3">
                 <div class="col">
                   <div>
-                    <h3>{{"werewolf.pack.standard.codename." + (this.currentPlayer.codeName | lowercase) | translate}}</h3>
+                    <h3>{{this.codeName | async}}</h3>
                   </div>
                 </div>
               </div>

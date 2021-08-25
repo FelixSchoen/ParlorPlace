@@ -1,7 +1,9 @@
 package com.fschoen.parlorplace.backend.utility.communication;
 
 import com.fschoen.parlorplace.backend.enumeration.CodeName;
+import com.fschoen.parlorplace.backend.enumeration.NotificationType;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -16,6 +18,10 @@ import java.util.Set;
 @SuperBuilder(toBuilder = true)
 @Data
 public abstract class VoiceLineClientNotification extends ClientNotification {
+
+    @NotNull
+    @Builder.Default
+    protected NotificationType notificationType = NotificationType.VOICE_LINE;
 
     @NotNull
     private Set<CodeName> codeNames;

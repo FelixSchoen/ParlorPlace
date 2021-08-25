@@ -189,8 +189,8 @@ public class WerewolfGameModerator extends AbstractGameModerator<
         pause(WAIT_TIME_BETWEEN_CONSECUTIVE_EVENTS);
 
         // Process Werewolf Kill
-        WerewolfPlayer werewolvesTarget = getLastVoteOfVoteDescriptor(WerewolfVoteDescriptor.WEREWOLVES_KILL).getOutcome().stream().findFirst().orElseThrow();
-        handlePlayerDiedEvent(werewolvesTarget);
+        Optional<WerewolfPlayer> werewolvesTarget = getLastVoteOfVoteDescriptor(WerewolfVoteDescriptor.WEREWOLVES_KILL).getOutcome().stream().findFirst();
+        werewolvesTarget.ifPresent(this::handlePlayerDiedEvent);
     }
 
     private void processDay() throws ExecutionException, InterruptedException {
@@ -201,7 +201,7 @@ public class WerewolfGameModerator extends AbstractGameModerator<
         Set<WerewolfPlayer> villagers = getAlivePlayers();
         Set<WerewolfPlayer> validTargets = getAlivePlayers();
 
-        broadcastVoiceLineNotification(getVoiceLineNotification(WerewolfVoiceLineType.VILLAGERS_VOTE));
+        broadcastVoiceLineNotification(getVoiceLineNotification(WerewolfVoiceLineType.VILLAGE_VOTE));
 
         for (int x = 0; x < 2; x++) {
             CompletableFuture<WerewolfVote> werewolfVoteFuture = this.voteService.requestVote(
@@ -258,7 +258,7 @@ public class WerewolfGameModerator extends AbstractGameModerator<
         targetInDatabase.setPlayerState(PlayerState.DECEASED);
         game.getLog().add(getPlayerDiedLogEntry(targetInDatabase));
         saveAndBroadcast(game);
-        broadcastVoiceLineNotification(getVoiceLineNotification(WerewolfVoiceLineType.DEATH));
+        broadcastVoiceLineNotification(getVoiceLineNotification(WerewolfVoiceLineType.DEATH, target.getCodeName()));
         pause(WAIT_TIME_BETWEEN_CONSECUTIVE_EVENTS);
         checkGameEnded();
     }
