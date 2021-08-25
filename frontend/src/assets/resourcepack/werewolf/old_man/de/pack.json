@@ -7,7 +7,7 @@
       "voiceline": [
         {
           "path": [
-            "codename/alfa_01.mp3"
+            "voiceline/codename/alfa_01.mp3"
           ]
         }
       ]
@@ -17,7 +17,7 @@
       "voiceline": [
         {
           "path": [
-            "codename/bravo_01.mp3"
+            "voiceline/codename/bravo_01.mp3"
           ]
         }
       ]
@@ -27,7 +27,7 @@
       "voiceline": [
         {
           "path": [
-            "codename/charlie_01.mp3"
+            "voiceline/codename/charlie_01.mp3"
           ]
         }
       ]
@@ -37,7 +37,7 @@
       "voiceline": [
         {
           "path": [
-            "codename/delta_01.mp3"
+            "voiceline/codename/delta_01.mp3"
           ]
         }
       ]
@@ -47,7 +47,7 @@
       "voiceline": [
         {
           "path": [
-            "codename/echo_01.mp3"
+            "voiceline/codename/echo_01.mp3"
           ]
         }
       ]
@@ -57,7 +57,7 @@
       "voiceline": [
         {
           "path": [
-            "codename/foxtrot_01.mp3"
+            "voiceline/codename/foxtrot_01.mp3"
           ]
         }
       ]
@@ -67,7 +67,7 @@
       "voiceline": [
         {
           "path": [
-            "codename/golf_01.mp3"
+            "voiceline/codename/golf_01.mp3"
           ]
         }
       ]
@@ -77,7 +77,7 @@
       "voiceline": [
         {
           "path": [
-            "codename/hotel_01.mp3"
+            "voiceline/codename/hotel_01.mp3"
           ]
         }
       ]
@@ -87,7 +87,7 @@
       "voiceline": [
         {
           "path": [
-            "codename/india_01.mp3"
+            "voiceline/codename/india_01.mp3"
           ]
         }
       ]
@@ -97,7 +97,7 @@
       "voiceline": [
         {
           "path": [
-            "codename/juliett_01.mp3"
+            "voiceline/codename/juliett_01.mp3"
           ]
         }
       ]
@@ -107,7 +107,7 @@
       "voiceline": [
         {
           "path": [
-            "codename/kilo_01.mp3"
+            "voiceline/codename/kilo_01.mp3"
           ]
         }
       ]
@@ -117,7 +117,7 @@
       "voiceline": [
         {
           "path": [
-            "codename/lima_01.mp3"
+            "voiceline/codename/lima_01.mp3"
           ]
         }
       ]
@@ -127,7 +127,7 @@
       "voiceline": [
         {
           "path": [
-            "codename/mike_01.mp3"
+            "voiceline/codename/mike_01.mp3"
           ]
         }
       ]
@@ -137,7 +137,7 @@
       "voiceline": [
         {
           "path": [
-            "codename/november_01.mp3"
+            "voiceline/codename/november_01.mp3"
           ]
         }
       ]
@@ -147,7 +147,7 @@
       "voiceline": [
         {
           "path": [
-            "codename/oscar_01.mp3"
+            "voiceline/codename/oscar_01.mp3"
           ]
         }
       ]
@@ -157,7 +157,7 @@
       "voiceline": [
         {
           "path": [
-            "codename/papa_01.mp3"
+            "voiceline/codename/papa_01.mp3"
           ]
         }
       ]
@@ -167,7 +167,7 @@
       "voiceline": [
         {
           "path": [
-            "codename/quebec_01.mp3"
+            "voiceline/codename/quebec_01.mp3"
           ]
         }
       ]
@@ -177,7 +177,7 @@
       "voiceline": [
         {
           "path": [
-            "codename/romeo_01.mp3"
+            "voiceline/codename/romeo_01.mp3"
           ]
         }
       ]
@@ -187,7 +187,7 @@
       "voiceline": [
         {
           "path": [
-            "codename/sierra_01.mp3"
+            "voiceline/codename/sierra_01.mp3"
           ]
         }
       ]
@@ -197,7 +197,7 @@
       "voiceline": [
         {
           "path": [
-            "codename/tango_01.mp3"
+            "voiceline/codename/tango_01.mp3"
           ]
         }
       ]
@@ -207,7 +207,7 @@
       "voiceline": [
         {
           "path": [
-            "codename/uniform_01.mp3"
+            "voiceline/codename/uniform_01.mp3"
           ]
         }
       ]
@@ -217,7 +217,7 @@
       "voiceline": [
         {
           "path": [
-            "codename/victor_01.mp3"
+            "voiceline/codename/victor_01.mp3"
           ]
         }
       ]
@@ -227,7 +227,7 @@
       "voiceline": [
         {
           "path": [
-            "codename/whiskey_01.mp3"
+            "voiceline/codename/whiskey_01.mp3"
           ]
         }
       ]
@@ -237,7 +237,7 @@
       "voiceline": [
         {
           "path": [
-            "codename/xray_01.mp3"
+            "voiceline/codename/xray_01.mp3"
           ]
         }
       ]
@@ -247,7 +247,7 @@
       "voiceline": [
         {
           "path": [
-            "codename/yankee_01.mp3"
+            "voiceline/codename/yankee_01.mp3"
           ]
         }
       ]
@@ -257,45 +257,51 @@
       "voiceline": [
         {
           "path": [
-            "codename/zulu_01.mp3"
+            "voiceline/codename/zulu_01.mp3"
           ]
         }
       ]
     }
   },
   "voiceline": {
-    "start": [
-      {
-        "path": [
-          "start_01"
-        ],
-        "order": [
-          "file_01"
+    "general": {
+      "start": [
+        {
+          "path": [
+            "start_01"
+          ],
+          "order": [
+            "file_01"
+          ]
+        }
+      ],
+      "end": [
+        {
+          "path": [
+            "end_01"
+          ],
+          "order": [
+            "file_01"
+          ]
+        }
+      ]
+    },
+    "role": {
+      "seer": {
+        "wake": [
+          {
+            "path": [
+              "wake_01_01",
+              "wake_01_02"
+            ],
+            "order": [
+              "file_01",
+              "codename_01",
+              "file_02"
+            ]
+          }
         ]
       }
-    ],
-    "end": [
-      {
-        "path": [
-          "end_01"
-        ],
-        "order": [
-          "file_01"
-        ]
-      }
-    ],
-    "death": [
-      {
-        "path": [
-          "death_01_01",
-          "death_01_02"
-        ],
-        "order": [
-          "file_01",
-          "codename_01",
-          "file_02"
-        ]
-      }
-    ]
+    }
   }
 }
