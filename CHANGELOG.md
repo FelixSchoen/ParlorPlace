@@ -4,12 +4,12 @@
 - [v0.2 (2021-07-22)](#v0.2)
 - [v0.3 (2021-08-05)](#v0.3)
 - [v0.4 (2021-08-16)](#v0.4)
-- [v0.5 (2021-08-xx)](#v0.5)
+- [v1.0-alpha1 (2021-08-25)](#v0.5)
 
 ---
 
-## v0.5
-<a name="v0.5"></a>
+## v1.0-alpha1
+<a name="v1.0-alpha1"></a>
 
 ## Added
 
@@ -23,8 +23,7 @@
   - Implemented audio player service
   - Added voice lines for all existing events
   - Implemented resource pack selection
-
-## Changed
+- **Implemented seer**
 
 ---
 
