@@ -1,5 +1,6 @@
 package com.fschoen.parlorplace.backend.game.werewolf.service;
 
+import com.fschoen.parlorplace.backend.entity.Player;
 import com.fschoen.parlorplace.backend.enumeration.CodeName;
 import com.fschoen.parlorplace.backend.enumeration.GameState;
 import com.fschoen.parlorplace.backend.enumeration.PlayerState;
@@ -32,6 +33,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import java.time.Instant;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -61,6 +63,7 @@ public class WerewolfGameModerator extends AbstractGameModerator<
     private final int WAIT_TIME_SOCKETS_ESTABLISHED = Integer.parseInt(resourceBundle.getString(WerewolfValueIdentifier.WAIT_TIME_SOCKETS_ESTABLISHED));
     private final int WAIT_TIME_INITIAL_ROLES = Integer.parseInt(resourceBundle.getString(WerewolfValueIdentifier.WAIT_TIME_INITIAL_ROLES));
     private final int WAIT_TIME_BETWEEN_CONSECUTIVE_EVENTS = Integer.parseInt(resourceBundle.getString(WerewolfValueIdentifier.WAIT_TIME_BETWEEN_CONSECUTIVE_EVENTS));
+    private final int WAIT_TIME_NEW_INFORMATION = Integer.parseInt(resourceBundle.getString(WerewolfValueIdentifier.WAIT_TIME_NEW_INFORMATION));
 
     private final int VOTE_TIME_INDIVIDUAL_VOTE = Integer.parseInt(resourceBundle.getString(WerewolfValueIdentifier.VOTE_TIME_INDIVIDUAL_VOTE));
     private final int VOTE_TIME_GROUP_VOTE = Integer.parseInt(resourceBundle.getString(WerewolfValueIdentifier.VOTE_TIME_GROUP_VOTE));
@@ -111,12 +114,12 @@ public class WerewolfGameModerator extends AbstractGameModerator<
         // End the game and determine placements of players
         game = getGame();
         game.getLog().add(getLogEntryTemplate(getAllPlayersOfGame()).logType(WerewolfLogType.END).build());
-        setPlacements(game);
         broadcastVoiceLineNotification(getVoiceLineNotification(WerewolfVoiceLineType.END));
         saveAndBroadcast(game);
 
         pause(WAIT_TIME_BETWEEN_CONSECUTIVE_EVENTS);
 
+        setPlacements(game);
         game.setGameState(GameState.CONCLUDED);
         game.setEndedAt(Instant.now());
         game = this.gameRepository.save(game);
@@ -146,6 +149,7 @@ public class WerewolfGameModerator extends AbstractGameModerator<
 
     private void processNight() throws ExecutionException, InterruptedException {
         processWerewolves();
+        processAllSeers();
     }
 
     private void processWerewolves() throws ExecutionException, InterruptedException {
@@ -178,6 +182,58 @@ public class WerewolfGameModerator extends AbstractGameModerator<
         saveAndSend(game, werewolves);
         broadcastVoiceLineNotification(getVoiceLineNotification(WerewolfVoiceLineType.WEREWOLVES_SLEEP));
         pause(WAIT_TIME_BETWEEN_CONSECUTIVE_EVENTS);
+    }
+
+    private void processAllSeers() throws ExecutionException, InterruptedException {
+        Set<WerewolfPlayer> seers = getAlivePlayersOfLastRoleType(WerewolfRoleType.SEER);
+        for (WerewolfPlayer seer : seers)
+            processSeer(seer);
+    }
+
+    private void processSeer(WerewolfPlayer seer) throws ExecutionException, InterruptedException {
+        Set<WerewolfPlayer> seerSet = new HashSet<>() {{
+            add(seer);
+        }};
+        Set<WerewolfPlayer> validTargets = getAlivePlayers();
+        validTargets.remove(seer);
+
+        processNightPreVote(seerSet, WerewolfVoiceLineType.SEER_WAKE, seer);
+
+        CompletableFuture<WerewolfVote> seerVoteFuture = this.voteService.requestVote(
+                this.gameIdentifier,
+                VoteType.PRIVATE_PUBLIC_PUBLIC,
+                VoteDrawStrategy.CHOOSE_RANDOM,
+                1,
+                this.voteService.getSameChoiceCollectionMap(
+                        seerSet,
+                        validTargets,
+                        1,
+                        false),
+                WerewolfVoteDescriptor.SEER_SEE,
+                VOTE_TIME_INDIVIDUAL_VOTE
+        );
+        WerewolfVote seerVote = seerVoteFuture.get();
+
+        WerewolfPlayer seerTarget = seerVote.getOutcome().stream().findFirst().orElseThrow();
+
+        // --- Logic Start ---
+
+        WerewolfGame game = this.getGame();
+        if (hasLastRoleType(seerTarget, WerewolfRoleType.WEREWOLF)) {
+            game.getLog().add(getLogEntryTemplate(seerSet).logType(WerewolfLogType.SEER_SUCCESS).targets(new HashSet<>() {{
+                add(seerTarget);
+            }}).build());
+        } else {
+            game.getLog().add(getLogEntryTemplate(seerSet).logType(WerewolfLogType.SEER_FAILURE).targets(new HashSet<>() {{
+                add(seerTarget);
+            }}).build());
+        }
+        saveAndSend(game, seerSet);
+        pause(WAIT_TIME_NEW_INFORMATION);
+
+        // --- Logic End ---
+
+        processNightPostVote(seerSet, WerewolfVoiceLineType.PLAYER_SLEEP, seer);
     }
 
     private void processTransitionDay() {
@@ -251,6 +307,23 @@ public class WerewolfGameModerator extends AbstractGameModerator<
     }
 
     // Utility - Moderation
+
+    private void processNightPreVote(Set<WerewolfPlayer> playerSet, WerewolfVoiceLineType voiceLineType, WerewolfPlayer... players) {
+        WerewolfGame game = this.getGame();
+        game.getLog().add(getLogEntryTemplate(playerSet).logType(WerewolfLogType.WAKE).build());
+
+        saveAndSend(game, playerSet);
+        broadcastVoiceLineNotification(getVoiceLineNotification(voiceLineType, Arrays.stream(players).map(Player::getCodeName).toArray(CodeName[]::new)));
+    }
+
+    private void processNightPostVote(Set<WerewolfPlayer> playerSet, WerewolfVoiceLineType voiceLineType, WerewolfPlayer... players) {
+        WerewolfGame game = this.getGame();
+        game.getLog().add(getLogEntryTemplate(playerSet).logType(WerewolfLogType.SLEEP).build());
+
+        saveAndSend(game, playerSet);
+        broadcastVoiceLineNotification(getVoiceLineNotification(voiceLineType, Arrays.stream(players).map(Player::getCodeName).toArray(CodeName[]::new)));
+        pause(WAIT_TIME_BETWEEN_CONSECUTIVE_EVENTS);
+    }
 
     private void handlePlayerDiedEvent(WerewolfPlayer target) {
         WerewolfGame game = getGame();

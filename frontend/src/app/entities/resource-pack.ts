@@ -136,14 +136,6 @@ export class WerewolfResourcePack extends ResourcePack {
     return this.pickRandom(await voiceLinePromise);
   }
 
-  public async getStartVoiceLine(): Promise<VoiceLine> {
-    return this.pickRandom(await this.getVoiceLineArray(undefined, "voiceline", "general", "start"));
-  }
-
-  public async getSeerWakeVoiceLine(codeName: CodeName): Promise<VoiceLine> {
-    return this.pickRandom(await this.getVoiceLineArray([codeName], "voiceline", "role", "seer", "wake"));
-  }
-
 }
 
 export class VoiceLine {

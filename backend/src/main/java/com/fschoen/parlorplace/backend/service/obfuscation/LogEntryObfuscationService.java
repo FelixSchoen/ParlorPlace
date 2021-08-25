@@ -8,16 +8,16 @@ import com.fschoen.parlorplace.backend.repository.UserRepository;
 
 import java.util.Collection;
 
-public abstract class LogEntryExtendedObfuscationService<
+public abstract class LogEntryObfuscationService<
         L extends LogEntryDTO<P>,
         G extends GameDTO<?, ?, ?, ?>,
         P extends PlayerDTO<?>,
-        POServ extends PlayerExtendedObfuscationService<P, G>
-        > extends ExtendedObfuscationService<L, G> {
+        POServ extends PlayerObfuscationService<P, G, ?>
+        > extends SingleObfuscationService<L, G> {
 
     private final POServ playerObfuscationService;
 
-    public LogEntryExtendedObfuscationService(UserRepository userRepository, POServ playerObfuscationService) {
+    public LogEntryObfuscationService(UserRepository userRepository, POServ playerObfuscationService) {
         super(userRepository);
         this.playerObfuscationService = playerObfuscationService;
     }

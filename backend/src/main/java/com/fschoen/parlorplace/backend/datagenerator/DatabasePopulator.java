@@ -180,7 +180,7 @@ public class DatabasePopulator {
                         .resourcePack("DEFAULT")
                         .gameRoleTypes(new ArrayList<>() {{
                             add(WerewolfRoleType.WEREWOLF);
-                            add(WerewolfRoleType.VILLAGER);
+                            add(WerewolfRoleType.SEER);
                             add(WerewolfRoleType.VILLAGER);
                             add(WerewolfRoleType.VILLAGER);
                         }}).build())

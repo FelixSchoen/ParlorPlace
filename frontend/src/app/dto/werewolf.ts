@@ -138,7 +138,7 @@ export class WerewolfWerewolfGameRole extends WerewolfGameRole {
     super(id, werewolfRoleType, werewolfFaction);
   }
 
-  public toJSON(): VillagerWerewolfGameRole {
+  public toJSON(): WerewolfWerewolfGameRole {
     return Object.assign({}, this, {
       werewolfRoleType: "WEREWOLF"
     });
@@ -152,7 +152,7 @@ export class SeerWerewolfGameRole extends WerewolfGameRole {
     super(id, werewolfRoleType, werewolfFaction);
   }
 
-  public toJSON(): VillagerWerewolfGameRole {
+  public toJSON(): SeerWerewolfGameRole {
     return Object.assign({}, this, {
       werewolfRoleType: "SEER"
     });

@@ -6,9 +6,9 @@ import com.fschoen.parlorplace.backend.repository.UserRepository;
 import java.util.Collection;
 import java.util.Collections;
 
-public abstract class ExtendedObfuscationService<T, U> extends ObfuscationService<T> {
+public abstract class SingleObfuscationService<T, U> extends ObfuscationService<T> {
 
-    public ExtendedObfuscationService(UserRepository userRepository) {
+    public SingleObfuscationService(UserRepository userRepository) {
         super(userRepository);
     }
 
@@ -18,6 +18,7 @@ public abstract class ExtendedObfuscationService<T, U> extends ObfuscationServic
      * @param t    The object to obfuscate
      * @param user The user to obfuscate the object for
      */
+    @Override
     public void obfuscateFor(T t, User user) {
         this.obfuscateFor(t, user, null);
     }
