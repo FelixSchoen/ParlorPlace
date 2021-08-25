@@ -1,50 +1,51 @@
-import {Injectable, OnDestroy} from '@angular/core';
+import {Injectable} from '@angular/core';
 
 @Injectable({
   providedIn: 'root'
 })
-export class AudioService implements OnDestroy {
+export class AudioService {
 
-  private readonly audio;
-  private pathArray: string[] = [];
+  private pathQueue: string[][] = [];
+  private startable: boolean = true;
 
   constructor() {
-    this.audio = new Audio();
   }
 
-  ngOnDestroy(): void {
-    if (this.audio != undefined) {
-      this.audio.pause();
-      this.audio.currentTime = 0;
+  public queueAudio(pathArray: string[]): void {
+    this.pathQueue.push(pathArray);
+
+    if (this.startable) {
+      this.startNextInQueue();
     }
   }
 
-  public playAudio(pathArray: string[]): void {
-    this.pathArray = this.pathArray.concat(pathArray);
-
-    console.log(this.pathArray)
-
-    if (this.audio.paused) {
-      console.log("was paused")
-      this.play()
+  private startNextInQueue() {
+    let path: string[] | undefined = this.pathQueue.shift();
+    if (path != undefined) {
+      let audio = new Audio();
+      this.startable = false;
+      this.play(audio, path);
     }
   }
 
-  public play(): void {
-    let voiceline = this.pathArray.shift();
+  private play(audio: HTMLAudioElement, pathArray: string[]) {
+    let voiceline = pathArray.shift();
+
     if (voiceline != undefined) {
-      this.audio.src = voiceline;
-      this.audio.load();
-      this.audio.play();
-    }
+      audio.src = voiceline;
+      audio.load();
+      audio.play().then();
 
-    this.audio.addEventListener("ended", () => {
-      console.log("Ended playing: " + this.pathArray)
-      console.log(this.pathArray)
-      if (this.pathArray.length > 0) {
-        this.play();
-      }
-    })
+      audio.addEventListener("ended", () => {
+        if (pathArray.length > 0) {
+          this.play(audio, pathArray);
+        } else if (this.pathQueue.length > 0) {
+          this.startNextInQueue();
+        } else {
+          this.startable = true;
+        }
+      })
+    }
   }
 
 }

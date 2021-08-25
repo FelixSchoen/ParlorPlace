@@ -1,7 +1,6 @@
 import {NotificationType} from "../enums/notification-type";
 import {CodeName} from "../enums/code-name";
 import {WerewolfVoiceLineType} from "../enums/games/werewolf-voice-line-type";
-import {EnumMember} from "@angular/compiler-cli/src/ngtsc/reflection";
 
 export class ClientNotification {
   constructor(public notificationType: NotificationType) {

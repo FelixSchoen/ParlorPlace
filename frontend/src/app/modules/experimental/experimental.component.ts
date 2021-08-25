@@ -4,7 +4,6 @@ import {WerewolfResourcePack} from "../../entities/resource-pack";
 import {LoadJsonService} from "../../services/load-json.service";
 import {WerewolfResourcePackType} from "../../enums/games/werewolf-resource-pack-type";
 import {LanguageIdentifier} from "../../enums/language-identifier";
-import {CodeName} from "../../enums/code-name";
 
 @Component({
   selector: 'app-experimental',
@@ -21,7 +20,7 @@ export class ExperimentalComponent {
 
     let voiceLine = pack.getStartVoiceLine();
 
-    voiceLine.then(value => this.voicelineService.playAudio(value.toPathArray()))
+    voiceLine.then(value => this.voicelineService.queueAudio(value.toPathArray()))
   }
 
 }

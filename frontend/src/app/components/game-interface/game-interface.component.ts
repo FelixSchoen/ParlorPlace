@@ -75,7 +75,7 @@ export abstract class GameInterfaceComponent<G extends Game, P extends Player, V
       if (this.isLobbyAdmin(this.currentPlayer)) {
         let voiceLineNotification: VoiceLineClientNotification = JSON.parse(payload.body);
         this.resourcePack.getVoiceLine(voiceLineNotification.voiceLineType, [...voiceLineNotification.codeNames]).then(value => {
-          this.audioService.playAudio(value.toPathArray());
+          this.audioService.queueAudio(value.toPathArray());
         });
       }
     }

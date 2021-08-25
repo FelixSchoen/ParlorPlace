@@ -3,7 +3,6 @@ import {CodeName} from "../enums/code-name";
 import {WerewolfResourcePackType} from "../enums/games/werewolf-resource-pack-type";
 import {LanguageIdentifier} from "../enums/language-identifier";
 import {WerewolfVoiceLineType} from "../enums/games/werewolf-voice-line-type";
-import {EnumMember} from "@angular/compiler-cli/src/ngtsc/reflection";
 
 export abstract class ResourcePack {
 
