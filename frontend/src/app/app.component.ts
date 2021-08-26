@@ -78,6 +78,10 @@ export class AppComponent implements OnInit {
         "duotone-witch",
         this.domSanitizer.bypassSecurityTrustResourceUrl(duotone_folder + "hat-witch.svg")
       );
+      this.matIconRegistry.addSvgIcon(
+        "duotone-cupid",
+        this.domSanitizer.bypassSecurityTrustResourceUrl(duotone_folder + "heart-broken.svg")
+      );
     }
 
   }

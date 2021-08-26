@@ -172,7 +172,7 @@ export class ProfileComponent implements OnInit {
           if (result.host) {
             let gameServiceType = this.gameServiceMap.get(result.gameType);
             if (gameServiceType == undefined) {
-              console.error("Game service could not be found");
+              console.error();
               return;
             }
 
@@ -190,7 +190,7 @@ export class ProfileComponent implements OnInit {
               next: (result) => {
                 let gameServiceType = this.gameServiceMap.get(result.gameType);
                 if (gameServiceType == undefined) {
-                  console.error("Game service could not be found");
+                  console.error();
                   return;
                 }
                 let gameService = this.injector.get(gameServiceType);

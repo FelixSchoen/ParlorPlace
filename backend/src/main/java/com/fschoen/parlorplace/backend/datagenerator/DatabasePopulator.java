@@ -182,7 +182,7 @@ public class DatabasePopulator {
                             add(WerewolfRoleType.WEREWOLF);
                             add(WerewolfRoleType.SEER);
                             add(WerewolfRoleType.WITCH);
-                            add(WerewolfRoleType.VILLAGER);
+                            add(WerewolfRoleType.CUPID);
                         }}).build())
                 .round(0)
                 .votes(new ArrayList<>())

@@ -2,12 +2,14 @@ package com.fschoen.parlorplace.backend.game.werewolf.mapper;
 
 import com.fschoen.parlorplace.backend.controller.mapper.GameRoleMapper;
 import com.fschoen.parlorplace.backend.exception.NotImplementedException;
+import com.fschoen.parlorplace.backend.game.werewolf.dto.role.CupidWerewolfGameRoleDTO;
 import com.fschoen.parlorplace.backend.game.werewolf.dto.role.SeerWerewolfGameRoleDTO;
 import com.fschoen.parlorplace.backend.game.werewolf.dto.role.VillagerWerewolfGameRoleDTO;
 import com.fschoen.parlorplace.backend.game.werewolf.dto.role.WerewolfGameRoleDTO;
 import com.fschoen.parlorplace.backend.game.werewolf.dto.role.WerewolfWerewolfGameRoleDTO;
 import com.fschoen.parlorplace.backend.game.werewolf.dto.role.WitchWerewolfGameRoleDTO;
 import com.fschoen.parlorplace.backend.game.werewolf.entity.WerewolfGameRole;
+import com.fschoen.parlorplace.backend.game.werewolf.entity.gamerole.CupidWerewolfGameRole;
 import com.fschoen.parlorplace.backend.game.werewolf.entity.gamerole.SeerWerewolfGameRole;
 import com.fschoen.parlorplace.backend.game.werewolf.entity.gamerole.VillagerWerewolfGameRole;
 import com.fschoen.parlorplace.backend.game.werewolf.entity.gamerole.WerewolfWerewolfGameRole;
@@ -25,6 +27,8 @@ public interface WerewolfGameRoleMapper extends GameRoleMapper<WerewolfGameRole,
 
     WitchWerewolfGameRoleDTO toDTO(WitchWerewolfGameRole gameRole);
 
+    CupidWerewolfGameRoleDTO toDTO(CupidWerewolfGameRole gameRole);
+
     default WerewolfGameRoleDTO toDTO(WerewolfGameRole gameRole) {
         switch (gameRole.getWerewolfRoleType()) {
             case VILLAGER -> {
@@ -39,6 +43,9 @@ public interface WerewolfGameRoleMapper extends GameRoleMapper<WerewolfGameRole,
             case WITCH -> {
                 return toDTO((WitchWerewolfGameRole) gameRole);
             }
+            case CUPID -> {
+                return toDTO((CupidWerewolfGameRole) gameRole);
+            }
             default -> throw new NotImplementedException("Unknown Game Role for mapping");
         }
     }
@@ -50,6 +57,8 @@ public interface WerewolfGameRoleMapper extends GameRoleMapper<WerewolfGameRole,
     SeerWerewolfGameRole fromDTO(SeerWerewolfGameRoleDTO gameRole);
 
     WitchWerewolfGameRole fromDTO(WitchWerewolfGameRoleDTO gameRole);
+
+    CupidWerewolfGameRole fromDTO(CupidWerewolfGameRoleDTO gameRole);
 
     default WerewolfGameRole fromDTO(WerewolfGameRoleDTO gameRoleDTO) {
         switch (gameRoleDTO.getWerewolfRoleType()) {
@@ -64,6 +73,9 @@ public interface WerewolfGameRoleMapper extends GameRoleMapper<WerewolfGameRole,
             }
             case WITCH -> {
                 return fromDTO((WitchWerewolfGameRoleDTO) gameRoleDTO);
+            }
+            case CUPID -> {
+                return fromDTO((CupidWerewolfGameRoleDTO) gameRoleDTO);
             }
             default -> throw new NotImplementedException("Unknown Game Role for mapping");
         }

@@ -6,10 +6,12 @@ public enum WerewolfLogType {
     SLEEP,
     WAKE,
     DEATH,
+    VILLAGERS_VOTE,
     WEREWOLVES_VOTE,
     SEER_SUCCESS,
     SEER_FAILURE,
     WITCH_HEAL,
     WITCH_KILL,
-    VILLAGERS_VOTE
+    CUPID_LINK,
+    LOVERS_LOVE,
 }

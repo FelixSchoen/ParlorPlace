@@ -384,6 +384,37 @@
             ]
           }
         ]
+      },
+      "cupid": {
+        "wake": [
+          {
+            "path": [
+              "wake_01_01",
+              "wake_01_02"
+            ],
+            "order": [
+              "file_01",
+              "codename_01",
+              "file_02"
+            ]
+          }
+        ]
+      },
+      "lovers": {
+        "wake": [
+          {
+            "path": [
+              "wake_01"
+            ]
+          }
+        ],
+        "sleep": [
+          {
+            "path": [
+              "sleep_01"
+            ]
+          }
+        ]
       }
     }
   }

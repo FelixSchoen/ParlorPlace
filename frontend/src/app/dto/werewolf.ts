@@ -175,3 +175,18 @@ export class WitchWerewolfGameRole extends WerewolfGameRole {
     });
   }
 }
+
+export class CupidWerewolfGameRole extends WerewolfGameRole {
+  constructor(public id: number,
+              public werewolfRoleType: WerewolfRoleType,
+              public werewolfFaction: WerewolfFaction,
+              public hasLinked: boolean) {
+    super(id, werewolfRoleType, werewolfFaction);
+  }
+
+  public toJSON(): CupidWerewolfGameRole {
+    return Object.assign({}, this, {
+      werewolfRoleType: "CUPID"
+    });
+  }
+}

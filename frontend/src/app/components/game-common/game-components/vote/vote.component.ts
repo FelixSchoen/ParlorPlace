@@ -4,6 +4,7 @@ import {Player, PlayerUtil} from "../../../../dto/player";
 import {Subscription, timer} from "rxjs";
 import {Game, GameIdentifier} from "../../../../dto/game";
 import {VoteState} from "../../../../enums/vote-state";
+import _ from "lodash";
 
 @Directive({
   selector: 'app-vote',
@@ -49,6 +50,7 @@ export abstract class VoteComponent<G extends Game, P extends Player, V extends 
   update(): void {
     this.voteMap = VoteUtil.toMap<C>(this.vote.voteCollectionMap);
     this.votersData = this.getData();
+
     this.selectedOptions = Array.from(this.voteMap.get(this.currentPlayer.id)!.selection);
   }
 
@@ -58,13 +60,21 @@ export abstract class VoteComponent<G extends Game, P extends Player, V extends 
 
     voteCollection.abstain = false;
 
-    this.selectedOptions.push(t);
-    if (this.selectedOptions.length > voteCollection.amountVotes) {
-      let removedElement = this.selectedOptions.shift();
-      voteCollection.selection = voteCollection.selection.filter(obj => obj != removedElement);
+    let indexOfElement = _.findIndex(this.selectedOptions, (a, b) => {
+      return _.isEqual(this.selectedOptions[0], t)
+    });
+
+    if (indexOfElement > -1) {
+      this.selectedOptions.splice(indexOfElement, 1);
+    } else {
+      this.selectedOptions.push(t);
     }
 
-    voteCollection.selection.push(t);
+    if (this.selectedOptions.length > voteCollection.amountVotes) {
+      this.selectedOptions.shift();
+    }
+
+    voteCollection.selection = this.selectedOptions;
 
     this.sendVoteData(voteCollection);
   }
@@ -83,7 +93,7 @@ export abstract class VoteComponent<G extends Game, P extends Player, V extends 
 
   protected abstract sendVoteData(voteCollection: C): void;
 
-  public abstract sortSelection(t: T[]): T[];
+  public abstract sortSelection(t: T[] | undefined): T[];
 
   public getData(): [P, C][] {
     let entries = this.voteMap.entries();

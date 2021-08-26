@@ -31,7 +31,10 @@ export class WerewolfLogService extends AbstractLogService<WerewolfLogEntry, Wer
       case WerewolfLogType.WITCH_HEAL:
       case WerewolfLogType.WITCH_KILL:
       case WerewolfLogType.VILLAGERS_VOTE:
+      case WerewolfLogType.LOVERS_LOVE:
         return this.translateService.get("werewolf.log." + textValue, {player: Player.toNameRepresentation(l.targets[0].user, players)});
+      case WerewolfLogType.CUPID_LINK:
+        return this.translateService.get("werewolf.log." + textValue, {player1: Player.toNameRepresentation(l.targets[0].user, players), player2: Player.toNameRepresentation(l.targets[1].user, players)});
     }
 
     throw new Error("Unknown Werewolf Log Type")

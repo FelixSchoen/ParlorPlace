@@ -5,6 +5,7 @@ export enum WerewolfRoleType {
   WEREWOLF = "WEREWOLF",
   SEER = "SEER",
   WITCH = "WITCH",
+  CUPID = "CUPID",
 }
 
 @Injectable({
@@ -16,7 +17,7 @@ export class WerewolfRoleTypeUtil {
   }
 
   public static getArray(): WerewolfRoleType[] {
-    return [WerewolfRoleType.VILLAGER, WerewolfRoleType.WEREWOLF, WerewolfRoleType.SEER, WerewolfRoleType.WITCH]
+    return [WerewolfRoleType.VILLAGER, WerewolfRoleType.WEREWOLF, WerewolfRoleType.SEER, WerewolfRoleType.WITCH, WerewolfRoleType.CUPID]
   }
 
   public static toIconRepresentation(type: WerewolfRoleType): string {

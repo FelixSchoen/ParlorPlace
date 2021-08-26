@@ -6,12 +6,14 @@ export enum WerewolfLogType {
   SLEEP = "SLEEP",
   WAKE = "WAKE",
   DEATH = "DEATH",
+  VILLAGERS_VOTE = "VILLAGERS_VOTE",
   WEREWOLVES_VOTE = "WEREWOLVES_VOTE",
   SEER_SUCCESS = "SEER_SUCCESS",
   SEER_FAILURE = "SEER_FAILURE",
   WITCH_HEAL = "WITCH_HEAL",
   WITCH_KILL = "WITCH_KILL",
-  VILLAGERS_VOTE = "VILLAGERS_VOTE"
+  CUPID_LINK = "CUPID_LINK",
+  LOVERS_LOVE = "LOVERS_LOVE"
 }
 
 @Injectable({
@@ -37,6 +39,9 @@ export class WerewolfLogTypeUtil {
       case WerewolfLogType.DEATH:
         iconString = "death";
         break;
+      case WerewolfLogType.VILLAGERS_VOTE:
+        iconString = "villager";
+        break;
       case WerewolfLogType.WEREWOLVES_VOTE:
         iconString = "werewolf";
         break;
@@ -48,8 +53,9 @@ export class WerewolfLogTypeUtil {
       case WerewolfLogType.WITCH_KILL:
         iconString = "witch";
         break;
-      case WerewolfLogType.VILLAGERS_VOTE:
-        iconString = "villager";
+      case WerewolfLogType.CUPID_LINK:
+      case WerewolfLogType.LOVERS_LOVE:
+        iconString = "cupid";
         break;
       default:
         iconString = "unknown";

@@ -13,5 +13,8 @@ public enum WerewolfVoiceLineType {
     WEREWOLVES_WAKE,
     WEREWOLVES_SLEEP,
     SEER_WAKE,
-    WITCH_WAKE
+    WITCH_WAKE,
+    CUPID_WAKE,
+    LOVERS_WAKE,
+    LOVERS_SLEEP,
 }

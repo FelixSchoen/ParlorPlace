@@ -20,7 +20,7 @@ export class WerewolfVoteComponent extends VoteComponent<WerewolfGame, WerewolfP
     super.ngOnInit()
   }
 
-  public sortSelection(t: WerewolfPlayer[]): WerewolfPlayer[] {
+  public sortSelection(t: WerewolfPlayer[] | undefined): WerewolfPlayer[] {
     return PlayerUtil.sort(t);
   }
 
@@ -39,7 +39,7 @@ export class WerewolfVoteComponent extends VoteComponent<WerewolfGame, WerewolfP
   }
 
   includedInSelection(s: WerewolfPlayer): boolean {
-    let array = this.voteMap.get(this.currentPlayer.id)?.selection
+    let array = this.voteMap.get(this.currentPlayer.id)!.selection
     if (array == undefined)
       return false;
     return array.some(entry => entry.id == s.id);
