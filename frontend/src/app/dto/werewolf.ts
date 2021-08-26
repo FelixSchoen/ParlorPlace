@@ -106,6 +106,7 @@ export class WerewolfLobbyChangeRequest extends LobbyChangeRequest {
 }
 
 export abstract class WerewolfGameRole extends GameRole {
+
   protected constructor(public id: number,
                         public werewolfRoleType: WerewolfRoleType,
                         public werewolfFaction: WerewolfFaction) {
@@ -155,6 +156,22 @@ export class SeerWerewolfGameRole extends WerewolfGameRole {
   public toJSON(): SeerWerewolfGameRole {
     return Object.assign({}, this, {
       werewolfRoleType: "SEER"
+    });
+  }
+}
+
+export class WitchWerewolfGameRole extends WerewolfGameRole {
+  constructor(public id: number,
+              public werewolfRoleType: WerewolfRoleType,
+              public werewolfFaction: WerewolfFaction,
+              public hasHealed: boolean,
+              public hasKilled: boolean) {
+    super(id, werewolfRoleType, werewolfFaction);
+  }
+
+  public toJSON(): WitchWerewolfGameRole {
+    return Object.assign({}, this, {
+      werewolfRoleType: "WITCH"
     });
   }
 }

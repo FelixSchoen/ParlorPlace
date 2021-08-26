@@ -181,7 +181,7 @@ public class DatabasePopulator {
                         .gameRoleTypes(new ArrayList<>() {{
                             add(WerewolfRoleType.WEREWOLF);
                             add(WerewolfRoleType.SEER);
-                            add(WerewolfRoleType.VILLAGER);
+                            add(WerewolfRoleType.WITCH);
                             add(WerewolfRoleType.VILLAGER);
                         }}).build())
                 .round(0)
@@ -309,6 +309,7 @@ public class DatabasePopulator {
                         .voteDrawStrategy(VoteDrawStrategy.CHOOSE_RANDOM)
                         .voteDescriptor(WerewolfVoteDescriptor.WEREWOLVES_KILL)
                         .voters(new HashSet<>())
+                        .round(1)
                         .endTime(Instant.now().plusSeconds(600))
                         .voteCollectionMap(new HashMap<>())
                         .outcome(new HashSet<>())

@@ -9,6 +9,8 @@ export enum WerewolfLogType {
   WEREWOLVES_VOTE = "WEREWOLVES_VOTE",
   SEER_SUCCESS = "SEER_SUCCESS",
   SEER_FAILURE = "SEER_FAILURE",
+  WITCH_HEAL = "WITCH_HEAL",
+  WITCH_KILL = "WITCH_KILL",
   VILLAGERS_VOTE = "VILLAGERS_VOTE"
 }
 
@@ -41,6 +43,10 @@ export class WerewolfLogTypeUtil {
       case WerewolfLogType.SEER_SUCCESS:
       case WerewolfLogType.SEER_FAILURE:
         iconString = "seer";
+        break;
+      case WerewolfLogType.WITCH_HEAL:
+      case WerewolfLogType.WITCH_KILL:
+        iconString = "witch";
         break;
       case WerewolfLogType.VILLAGERS_VOTE:
         iconString = "villager";

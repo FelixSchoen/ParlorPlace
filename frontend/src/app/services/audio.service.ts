@@ -29,23 +29,29 @@ export class AudioService {
     }
   }
 
+  // TODO Add audio files for
+  // TODO Witch
   private play(audio: HTMLAudioElement, pathArray: string[]) {
     let voiceline = pathArray.shift();
 
     if (voiceline != undefined) {
-      audio.src = voiceline;
-      audio.load();
-      audio.play().then();
+      try {
+        audio.src = voiceline;
+        audio.load();
+        audio.play().then();
 
-      audio.addEventListener("ended", () => {
-        if (pathArray.length > 0) {
-          this.play(audio, pathArray);
-        } else if (this.pathQueue.length > 0) {
-          this.startNextInQueue();
-        } else {
-          this.startable = true;
-        }
-      })
+        audio.addEventListener("ended", () => {
+          if (pathArray.length > 0) {
+            this.play(audio, pathArray);
+          } else if (this.pathQueue.length > 0) {
+            this.startNextInQueue();
+          } else {
+            this.startable = true;
+          }
+        })
+      } catch (e) {
+        console.error("Could not play audio for '" + voiceline + "', skipping playback")
+      }
     }
   }
 

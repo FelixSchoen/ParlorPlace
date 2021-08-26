@@ -9,6 +9,7 @@ import com.fschoen.parlorplace.backend.game.werewolf.entity.WerewolfRuleSet;
 import com.fschoen.parlorplace.backend.game.werewolf.entity.gamerole.SeerWerewolfGameRole;
 import com.fschoen.parlorplace.backend.game.werewolf.entity.gamerole.VillagerWerewolfGameRole;
 import com.fschoen.parlorplace.backend.game.werewolf.entity.gamerole.WerewolfWerewolfGameRole;
+import com.fschoen.parlorplace.backend.game.werewolf.entity.gamerole.WitchWerewolfGameRole;
 import com.fschoen.parlorplace.backend.game.werewolf.enumeration.WerewolfGamePhase;
 import com.fschoen.parlorplace.backend.game.werewolf.enumeration.WerewolfRoleType;
 import com.fschoen.parlorplace.backend.game.werewolf.repository.WerewolfGameRepository;
@@ -47,6 +48,7 @@ public class WerewolfGameService extends AbstractGameService<
         put(WerewolfRoleType.VILLAGER, VillagerWerewolfGameRole.class);
         put(WerewolfRoleType.WEREWOLF, WerewolfWerewolfGameRole.class);
         put(WerewolfRoleType.SEER, SeerWerewolfGameRole.class);
+        put(WerewolfRoleType.WITCH, WitchWerewolfGameRole.class);
     }};
 
     @Autowired

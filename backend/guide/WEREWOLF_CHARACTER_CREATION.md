@@ -30,6 +30,24 @@ This excerpt shows an example class representing a new role:
   }
 ```
 
+Do not forget to add an entry in the GameRoleClasses map:
+
+```
+private static final Map<WerewolfRoleType, Class<? extends WerewolfGameRole>> werewolfGameRoleClasses = new HashMap<>() {{
+    put(WerewolfRoleType.ROLE, RoleWerewolfGameRole.class);
+}};
+```
+
+Adjust the JSON mapping of the `WerewolfGameRoleDTO`s as follows:
+
+```
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "werewolfRoleType")
+@JsonSubTypes({
+        @JsonSubTypes.Type(value = RoleWerewolfGameRoleDTO.class, name = "ROLE"),
+        [...]}
+)
+```
+
 Furthermore, matching `DTO`s and `WerewolfRoleType`s have to be created, in order to accommodate the new role.
 A special case (not described in this guide) would be the creation of a new faction (say e.g. for the Lovers).
 This should still be pretty straightforward.
@@ -98,9 +116,6 @@ In order to adjust the frontend, we have to start by implementing the correspond
 
 Start by creating a new `WerewolfGameRole` in `werewolf.ts`. After that, adjust `WerewolfLogType`, `WerewolfRoleType`, `WerewolfVoteDescriptor`.
 
-For `WerewolfRoleType`, make sure to add an icon conforming to the string value of the role.
-Icons are defined in `app.component.ts`.
-
 For `WerewolfLogType`, add a new case to the switch, like this:
 
 ```
@@ -109,6 +124,10 @@ switch (type) {
   iconString = "action";
   break;
 ```
+
+For `WerewolfRoleType`, make sure to add an icon conforming to the string value of the role.
+Icons are defined in `app.component.ts`.
+Furthermore, add the role to the array in `WerewolfRoleTypeUtil`.
 
 Furthermore, add fitting `WerewolfVoiceLineType`s - keep in mind that the actual voice line files have to be added as well, more on that later.
 
@@ -132,6 +151,13 @@ Similarly, for the vote descriptor be sure to fit the pattern determined by the 
 getTranslationKey(e: Object): string {
   return "werewolf.vote." + e.valueOf().toString().toLowerCase().replace("_", ".");
 }
+```
+
+For the log types, edit `WerewolfLogService` to implement representations of the newly created logs like this:
+
+```
+case WerewolfLogType.ROLE:
+        return this.translateService.get("werewolf.log." + textValue, {player: Player.toNameRepresentation(l.targets[0].user, players)});
 ```
 
 #### Voicelines
