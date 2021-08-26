@@ -9,6 +9,7 @@ import com.fschoen.parlorplace.backend.entity.RuleSet;
 import com.fschoen.parlorplace.backend.enumeration.PlayerState;
 import com.fschoen.parlorplace.backend.repository.GameRepository;
 import com.fschoen.parlorplace.backend.repository.LogEntryRepository;
+import com.fschoen.parlorplace.backend.repository.PlayerRepository;
 import com.fschoen.parlorplace.backend.repository.UserRepository;
 import com.fschoen.parlorplace.backend.service.CommunicationService;
 import com.fschoen.parlorplace.backend.utility.communication.VoiceLineClientNotification;
@@ -26,25 +27,38 @@ public abstract class AbstractGameModerator<
         GR extends GameRole,
         L extends LogEntry<P>,
         GRepo extends GameRepository<G>,
+        PRepo extends PlayerRepository<P>,
         LRepo extends LogEntryRepository<L>
         > extends BaseGameService<G, P, GRepo> implements Runnable {
 
     @Setter
     protected GameIdentifier gameIdentifier;
 
+    protected PRepo playerRepository;
     protected LRepo logEntryRepository;
 
-    public AbstractGameModerator(CommunicationService communicationService, UserRepository userRepository, GRepo gameRepository, LRepo logEntryRepository) {
+    public AbstractGameModerator(CommunicationService communicationService, UserRepository userRepository, GRepo gameRepository, PRepo playerRepository, LRepo logEntryRepository) {
         super(communicationService, userRepository, gameRepository);
+        this.playerRepository = playerRepository;
         this.logEntryRepository = logEntryRepository;
     }
 
-    protected abstract Boolean isGameOngoing();
-
     // Utility - Game
+
+    protected G save(P player) {
+        G game = getGame();
+        if (!game.getPlayers().remove(player))
+            return null;
+        game.getPlayers().add(player);
+        return this.gameRepository.save(game);
+    }
 
     protected G getGame() {
         return this.getActiveGame(this.gameIdentifier);
+    }
+
+    protected Integer getCurrentRound() {
+        return getGame().getRound();
     }
 
     protected Set<P> getAlivePlayers() {
