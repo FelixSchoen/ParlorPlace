@@ -12,5 +12,6 @@ public enum WerewolfVoiceLineType {
     VILLAGE_VOTE,
     WEREWOLVES_WAKE,
     WEREWOLVES_SLEEP,
-    SEER_WAKE
+    SEER_WAKE,
+    WITCH_WAKE
 }

@@ -1,10 +1,10 @@
 import {Injectable} from "@angular/core";
-import {TitleCasePipe} from "@angular/common";
 
 export enum WerewolfRoleType {
   VILLAGER = "VILLAGER",
   WEREWOLF = "WEREWOLF",
-  SEER = "SEER"
+  SEER = "SEER",
+  WITCH = "WITCH",
 }
 
 @Injectable({
@@ -16,11 +16,7 @@ export class WerewolfRoleTypeUtil {
   }
 
   public static getArray(): WerewolfRoleType[] {
-    return [WerewolfRoleType.VILLAGER, WerewolfRoleType.WEREWOLF, WerewolfRoleType.SEER]
-  }
-
-  public static toStringRepresentation(type: WerewolfRoleType): string {
-    return new TitleCasePipe().transform(type.valueOf())
+    return [WerewolfRoleType.VILLAGER, WerewolfRoleType.WEREWOLF, WerewolfRoleType.SEER, WerewolfRoleType.WITCH]
   }
 
   public static toIconRepresentation(type: WerewolfRoleType): string {

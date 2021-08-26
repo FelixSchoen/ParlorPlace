@@ -6,6 +6,7 @@ import com.fschoen.parlorplace.backend.enumeration.PlayerState;
 import com.fschoen.parlorplace.backend.game.werewolf.dto.game.WerewolfGameDTO;
 import com.fschoen.parlorplace.backend.game.werewolf.dto.game.WerewolfPlayerDTO;
 import com.fschoen.parlorplace.backend.game.werewolf.dto.role.WerewolfGameRoleDTO;
+import com.fschoen.parlorplace.backend.game.werewolf.dto.role.WitchWerewolfGameRoleDTO;
 import com.fschoen.parlorplace.backend.repository.UserRepository;
 import com.fschoen.parlorplace.backend.service.obfuscation.GameRoleObfuscationService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,8 +33,12 @@ public class WerewolfGameRoleObfuscationService extends GameRoleObfuscationServi
         }
 
         switch (werewolfGameRoleDTO.getWerewolfRoleType()) {
-            case SEER -> {
+            case WITCH -> {
                 // For future roles: Able to remove information (e.g. for witch - has already healed?)
+                WitchWerewolfGameRoleDTO witchWerewolfGameRoleDTO = (WitchWerewolfGameRoleDTO) werewolfGameRoleDTO;
+                witchWerewolfGameRoleDTO.setHasHealed(null);
+                witchWerewolfGameRoleDTO.setHasKilled(null);
+                break;
             }
         }
 

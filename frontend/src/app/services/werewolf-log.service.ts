@@ -28,6 +28,8 @@ export class WerewolfLogService extends AbstractLogService<WerewolfLogEntry, Wer
       case WerewolfLogType.WEREWOLVES_VOTE:
       case WerewolfLogType.SEER_SUCCESS:
       case WerewolfLogType.SEER_FAILURE:
+      case WerewolfLogType.WITCH_HEAL:
+      case WerewolfLogType.WITCH_KILL:
       case WerewolfLogType.VILLAGERS_VOTE:
         return this.translateService.get("werewolf.log." + textValue, {player: Player.toNameRepresentation(l.targets[0].user, players)});
     }

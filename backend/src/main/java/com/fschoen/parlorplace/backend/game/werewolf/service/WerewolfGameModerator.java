@@ -7,12 +7,14 @@ import com.fschoen.parlorplace.backend.enumeration.PlayerState;
 import com.fschoen.parlorplace.backend.enumeration.VoteDrawStrategy;
 import com.fschoen.parlorplace.backend.enumeration.VoteType;
 import com.fschoen.parlorplace.backend.exception.GameEndException;
+import com.fschoen.parlorplace.backend.exception.GameException;
 import com.fschoen.parlorplace.backend.game.werewolf.entity.WerewolfGame;
 import com.fschoen.parlorplace.backend.game.werewolf.entity.WerewolfGameRole;
 import com.fschoen.parlorplace.backend.game.werewolf.entity.WerewolfLogEntry;
 import com.fschoen.parlorplace.backend.game.werewolf.entity.WerewolfPlayer;
 import com.fschoen.parlorplace.backend.game.werewolf.entity.WerewolfRuleSet;
 import com.fschoen.parlorplace.backend.game.werewolf.entity.WerewolfVote;
+import com.fschoen.parlorplace.backend.game.werewolf.entity.gamerole.WitchWerewolfGameRole;
 import com.fschoen.parlorplace.backend.game.werewolf.enumeration.WerewolfFaction;
 import com.fschoen.parlorplace.backend.game.werewolf.enumeration.WerewolfLogType;
 import com.fschoen.parlorplace.backend.game.werewolf.enumeration.WerewolfRoleType;
@@ -20,6 +22,7 @@ import com.fschoen.parlorplace.backend.game.werewolf.enumeration.WerewolfVoiceLi
 import com.fschoen.parlorplace.backend.game.werewolf.enumeration.WerewolfVoteDescriptor;
 import com.fschoen.parlorplace.backend.game.werewolf.repository.WerewolfGameRepository;
 import com.fschoen.parlorplace.backend.game.werewolf.repository.WerewolfLogEntryRepository;
+import com.fschoen.parlorplace.backend.game.werewolf.repository.WerewolfPlayerRepository;
 import com.fschoen.parlorplace.backend.game.werewolf.utility.WerewolfValueIdentifier;
 import com.fschoen.parlorplace.backend.game.werewolf.utility.WerewolfVoiceLineClientNotification;
 import com.fschoen.parlorplace.backend.repository.UserRepository;
@@ -36,7 +39,7 @@ import java.time.Instant;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Optional;
+import java.util.Objects;
 import java.util.ResourceBundle;
 import java.util.Set;
 import java.util.UUID;
@@ -55,6 +58,7 @@ public class WerewolfGameModerator extends AbstractGameModerator<
         WerewolfGameRole,
         WerewolfLogEntry,
         WerewolfGameRepository,
+        WerewolfPlayerRepository,
         WerewolfLogEntryRepository
         > {
 
@@ -72,14 +76,9 @@ public class WerewolfGameModerator extends AbstractGameModerator<
     private final WerewolfVoteService voteService;
 
     @Autowired
-    public WerewolfGameModerator(WerewolfVoteService voteService, CommunicationService communicationService, UserRepository userRepository, WerewolfGameRepository gameRepository, WerewolfLogEntryRepository logEntryRepository) {
-        super(communicationService, userRepository, gameRepository, logEntryRepository);
+    public WerewolfGameModerator(WerewolfVoteService voteService, CommunicationService communicationService, UserRepository userRepository, WerewolfGameRepository gameRepository, WerewolfPlayerRepository playerRepository, WerewolfLogEntryRepository logEntryRepository) {
+        super(communicationService, userRepository, gameRepository, playerRepository, logEntryRepository);
         this.voteService = voteService;
-    }
-
-    @Override
-    protected Boolean isGameOngoing() {
-        return true;
     }
 
     @SneakyThrows
@@ -133,8 +132,11 @@ public class WerewolfGameModerator extends AbstractGameModerator<
 
         // Process Village Kill
         if (game.getRound() != 0) {
-            Optional<WerewolfPlayer> villagersTarget = getLastVoteOfVoteDescriptor(WerewolfVoteDescriptor.VILLAGERS_LYNCH).getOutcome().stream().findFirst();
-            villagersTarget.ifPresent(this::handlePlayerDiedEvent);
+            for (WerewolfVote vote : getVotesInRoundOfVoteDescriptor(getCurrentRound(), WerewolfVoteDescriptor.VILLAGERS_LYNCH)) {
+                for (WerewolfPlayer target : vote.getOutcome()) {
+                    handlePlayerDiedEvent(target);
+                }
+            }
         }
 
         game = this.getGame();
@@ -149,6 +151,7 @@ public class WerewolfGameModerator extends AbstractGameModerator<
 
     private void processNight() throws ExecutionException, InterruptedException {
         processWerewolves();
+        processAllWitches();
         processAllSeers();
     }
 
@@ -156,11 +159,7 @@ public class WerewolfGameModerator extends AbstractGameModerator<
         Set<WerewolfPlayer> werewolves = getAlivePlayersOfLastRoleType(WerewolfRoleType.WEREWOLF);
         Set<WerewolfPlayer> validTargets = getAlivePlayers();
 
-        WerewolfGame game = this.getGame();
-        game.getLog().add(getLogEntryTemplate(werewolves).logType(WerewolfLogType.WAKE).build());
-
-        saveAndSend(game, werewolves);
-        broadcastVoiceLineNotification(getVoiceLineNotification(WerewolfVoiceLineType.WEREWOLVES_WAKE));
+        processNightPreVote(werewolves, WerewolfVoiceLineType.WEREWOLVES_WAKE);
 
         CompletableFuture<WerewolfVote> werewolfVoteFuture = this.voteService.requestVote(
                 this.gameIdentifier,
@@ -173,15 +172,102 @@ public class WerewolfGameModerator extends AbstractGameModerator<
                         1,
                         false),
                 WerewolfVoteDescriptor.WEREWOLVES_KILL,
+                getCurrentRound(),
                 VOTE_TIME_GROUP_VOTE
         );
         werewolfVoteFuture.get();
 
-        game.getLog().add(getLogEntryTemplate(werewolves).logType(WerewolfLogType.SLEEP).build());
+        processNightPostVote(werewolves, WerewolfVoiceLineType.WEREWOLVES_SLEEP);
+    }
 
-        saveAndSend(game, werewolves);
-        broadcastVoiceLineNotification(getVoiceLineNotification(WerewolfVoiceLineType.WEREWOLVES_SLEEP));
-        pause(WAIT_TIME_BETWEEN_CONSECUTIVE_EVENTS);
+    private void processAllWitches() throws ExecutionException, InterruptedException {
+        Set<WerewolfPlayer> witches = getAlivePlayersOfLastRoleType(WerewolfRoleType.WITCH);
+        for (WerewolfPlayer witch : witches)
+            processWitch(witch);
+    }
+
+    private void processWitch(WerewolfPlayer witch) throws ExecutionException, InterruptedException {
+        Set<WerewolfPlayer> witchSet = new HashSet<>() {{
+            add(witch);
+        }};
+
+        processNightPreVote(witchSet, WerewolfVoiceLineType.WITCH_WAKE, witch);
+
+        // --- Logic Start ---
+
+        Instant startTime = Instant.now();
+
+        WitchWerewolfGameRole witchWerewolfGameRole = (WitchWerewolfGameRole) getLastRole(witch);
+
+        if (!witchWerewolfGameRole.getHasHealed()) {
+            Set<WerewolfPlayer> validHealTargets = new HashSet<>();
+            getVotesInRoundOfVoteDescriptor(getCurrentRound(), WerewolfVoteDescriptor.WEREWOLVES_KILL).forEach(vote -> validHealTargets.addAll(vote.getOutcome()));
+
+            CompletableFuture<WerewolfVote> witchHealVoteFuture = this.voteService.requestVote(
+                    this.gameIdentifier,
+                    VoteType.PRIVATE_PUBLIC_PUBLIC,
+                    VoteDrawStrategy.HARD_NO_OUTCOME,
+                    1,
+                    this.voteService.getSameChoiceCollectionMap(
+                            witchSet,
+                            validHealTargets,
+                            1,
+                            true),
+                    WerewolfVoteDescriptor.WITCH_HEAL,
+                    getCurrentRound(),
+                    VOTE_TIME_INDIVIDUAL_VOTE
+            );
+            WerewolfVote witchHealVote = witchHealVoteFuture.get();
+
+            if (witchHealVote.getOutcome().size() > 0) {
+                WerewolfPlayer witchHealTarget = witchHealVote.getOutcome().stream().findAny().orElseThrow();
+                witchWerewolfGameRole.setHasHealed(true);
+                WerewolfGame game = save(witch);
+                if (game == null) {
+                    throw new GameException("Could not save witch");
+                }
+
+                game.getLog().add(getLogEntryTemplate(witchSet).logType(WerewolfLogType.WITCH_HEAL).targets(new HashSet<>() {{
+                    add(witchHealTarget);
+                }}).build());
+                saveAndSend(game, witchSet);
+            }
+        }
+
+        if (!witchWerewolfGameRole.getHasKilled()) {
+            Set<WerewolfPlayer> validKillTargets = getAlivePlayers();
+
+            CompletableFuture<WerewolfVote> witchHealVoteFuture = this.voteService.requestVote(
+                    this.gameIdentifier,
+                    VoteType.PRIVATE_PUBLIC_PUBLIC,
+                    VoteDrawStrategy.HARD_NO_OUTCOME,
+                    1,
+                    this.voteService.getSameChoiceCollectionMap(
+                            witchSet,
+                            validKillTargets,
+                            1,
+                            true),
+                    WerewolfVoteDescriptor.WITCH_KILL,
+                    getCurrentRound(),
+                    VOTE_TIME_INDIVIDUAL_VOTE
+            );
+            WerewolfVote witchHealVote = witchHealVoteFuture.get();
+
+            if (witchHealVote.getOutcome().size() > 0) {
+                WerewolfPlayer witchKillTarget = witchHealVote.getOutcome().stream().findAny().orElseThrow();
+                witchWerewolfGameRole.setHasKilled(true);
+                WerewolfGame game = save(witch);
+
+                game.getLog().add(getLogEntryTemplate(witchSet).logType(WerewolfLogType.WITCH_KILL).targets(new HashSet<>() {{
+                    add(witchKillTarget);
+                }}).build());
+                saveAndSend(game, witchSet);
+            }
+        }
+
+        // --- Logic End ---
+
+        processNightPostVote(witchSet, WerewolfVoiceLineType.PLAYER_SLEEP, witch);
     }
 
     private void processAllSeers() throws ExecutionException, InterruptedException {
@@ -210,6 +296,7 @@ public class WerewolfGameModerator extends AbstractGameModerator<
                         1,
                         false),
                 WerewolfVoteDescriptor.SEER_SEE,
+                getCurrentRound(),
                 VOTE_TIME_INDIVIDUAL_VOTE
         );
         WerewolfVote seerVote = seerVoteFuture.get();
@@ -245,8 +332,15 @@ public class WerewolfGameModerator extends AbstractGameModerator<
         pause(WAIT_TIME_BETWEEN_CONSECUTIVE_EVENTS);
 
         // Process Werewolf Kill
-        Optional<WerewolfPlayer> werewolvesTarget = getLastVoteOfVoteDescriptor(WerewolfVoteDescriptor.WEREWOLVES_KILL).getOutcome().stream().findFirst();
-        werewolvesTarget.ifPresent(this::handlePlayerDiedEvent);
+        for (WerewolfVote werewolfVote : getVotesInRoundOfVoteDescriptor(getCurrentRound(), WerewolfVoteDescriptor.WEREWOLVES_KILL)) {
+            for (WerewolfPlayer target : werewolfVote.getOutcome()) {
+                Set<WerewolfPlayer> witchHealTargets = new HashSet<>();
+                getVotesInRoundOfVoteDescriptor(getCurrentRound(), WerewolfVoteDescriptor.WITCH_HEAL).forEach(witchHealVote -> witchHealTargets.addAll(witchHealVote.getOutcome()));
+
+                if (!witchHealTargets.contains(target))
+                    handlePlayerDiedEvent(target);
+            }
+        }
     }
 
     private void processDay() throws ExecutionException, InterruptedException {
@@ -271,6 +365,7 @@ public class WerewolfGameModerator extends AbstractGameModerator<
                             1,
                             true),
                     WerewolfVoteDescriptor.VILLAGERS_LYNCH,
+                    getCurrentRound(),
                     VOTE_TIME_ALL_VOTE / (x + 1)
             );
             WerewolfVote villagerVote = werewolfVoteFuture.get();
@@ -301,9 +396,9 @@ public class WerewolfGameModerator extends AbstractGameModerator<
         return getLastRole(player).getWerewolfRoleType() == roleType;
     }
 
-    private WerewolfVote getLastVoteOfVoteDescriptor(WerewolfVoteDescriptor descriptor) {
+    private Set<WerewolfVote> getVotesInRoundOfVoteDescriptor(Integer round, WerewolfVoteDescriptor descriptor) {
         WerewolfGame game = getGame();
-        return game.getVotes().stream().filter(vote -> vote.getVoteDescriptor() == descriptor).reduce((first, second) -> second).orElseThrow();
+        return game.getVotes().stream().filter(vote -> (vote.getVoteDescriptor() == descriptor && Objects.equals(vote.getRound(), round))).collect(Collectors.toSet());
     }
 
     // Utility - Moderation
@@ -328,12 +423,15 @@ public class WerewolfGameModerator extends AbstractGameModerator<
     private void handlePlayerDiedEvent(WerewolfPlayer target) {
         WerewolfGame game = getGame();
         WerewolfPlayer targetInDatabase = game.getPlayers().stream().filter(werewolfPlayer -> werewolfPlayer.getId().equals(target.getId())).findFirst().orElseThrow();
-        targetInDatabase.setPlayerState(PlayerState.DECEASED);
-        game.getLog().add(getPlayerDiedLogEntry(targetInDatabase));
-        saveAndBroadcast(game);
-        broadcastVoiceLineNotification(getVoiceLineNotification(WerewolfVoiceLineType.DEATH, target.getCodeName()));
-        pause(WAIT_TIME_BETWEEN_CONSECUTIVE_EVENTS);
-        checkGameEnded();
+
+        if (targetInDatabase.getPlayerState() == PlayerState.ALIVE) {
+            targetInDatabase.setPlayerState(PlayerState.DECEASED);
+            game.getLog().add(getPlayerDiedLogEntry(targetInDatabase));
+            saveAndBroadcast(game);
+            broadcastVoiceLineNotification(getVoiceLineNotification(WerewolfVoiceLineType.DEATH, target.getCodeName()));
+            pause(WAIT_TIME_BETWEEN_CONSECUTIVE_EVENTS);
+            checkGameEnded();
+        }
     }
 
     private void setPlacements(WerewolfGame game) {

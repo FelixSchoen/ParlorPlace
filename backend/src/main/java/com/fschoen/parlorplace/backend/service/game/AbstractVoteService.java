@@ -70,7 +70,7 @@ public abstract class AbstractVoteService<
         this.taskExecutor = taskExecutor;
     }
 
-    public CompletableFuture<V> requestVote(GameIdentifier gameIdentifier, VoteType voteType, VoteDrawStrategy voteDrawStrategy, Integer outcomeAmount, Map<Long, C> voteCollectionMap, D voteDescriptor, int durationInSeconds) {
+    public CompletableFuture<V> requestVote(GameIdentifier gameIdentifier, VoteType voteType, VoteDrawStrategy voteDrawStrategy, Integer outcomeAmount, Map<Long, C> voteCollectionMap, D voteDescriptor, Integer round, Integer durationInSeconds) {
         log.info("Starting new Vote for Game: {}", gameIdentifier.getToken());
 
         G game = getActiveGame(gameIdentifier);
@@ -89,6 +89,7 @@ public abstract class AbstractVoteService<
             vote.setOutcome(new HashSet<>());
             vote.setOutcomeAmount(outcomeAmount);
             vote.setVoteDescriptor(voteDescriptor);
+            vote.setRound(round);
             vote.setEndTime(Instant.now().plusSeconds(durationInSeconds));
         } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
             throw new DataConflictException(Messages.exception(MessageIdentifier.VOTE_TYPE_MISMATCH), e);

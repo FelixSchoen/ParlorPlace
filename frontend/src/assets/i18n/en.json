@@ -97,6 +97,10 @@
       "seer": {
         "name": "Seer",
         "description": "You choose 1 player every night. You learn whether the player is a Werewolf or not."
+      },
+      "witch": {
+        "name": "Witch",
+        "description": "You heal or kill 1 player during the night. You can do both of these actions only once per game."
       }
     },
     "faction": {
@@ -122,6 +126,10 @@
       },
       "seer": {
         "see": "Who do you want to check?"
+      },
+      "witch": {
+        "heal": "Who do you want to heal?",
+        "kill": "Who do you want to poison?"
       }
     },
     "log": {
@@ -133,6 +141,8 @@
       "werewolves_vote": "The werewolves savage {player}",
       "seer_success": "{player} is a Werewolf",
       "seer_failure": "{player} is not a Werewolf",
+      "witch_heal": "You heal {player}",
+      "witch_kill": "You poison {player}",
       "villagers_vote": "The villagers lynch {player}"
     },
     "resourcepack": {
