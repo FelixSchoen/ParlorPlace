@@ -531,7 +531,7 @@ public class WerewolfGameModerator extends AbstractGameModerator<
                     bearTamerSet.stream().map(Player::getCodeName).toArray(CodeName[]::new)));
         }
 
-        saveAndSend(game, bearTamerSet);
+        saveAndBroadcast(game);
         pause(WAIT_TIME_NEW_INFORMATION);
 
         // --- Logic End ---

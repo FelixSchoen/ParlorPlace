@@ -148,6 +148,22 @@ public class DatabasePopulator {
         userCollection.setUser3(userRepository.save(user3));
         passwordCollection.put(user3, "password");
 
+        //user3
+        Set<Role> rolesUser4 = new HashSet<>() {{
+            add(Role.builder().role(UserRole.ROLE_USER).build());
+        }};
+        User user4 = User.builder()
+                .username("User4")
+                .nickname("User4")
+                .password("$2a$10$G7E1tKKajd3S8/ORM17isOTCH0To0VkAnTjY7R4gkcgNpyLG/.tJC")
+                .email("user4@mail.com")
+                .roles(rolesUser4)
+                .build();
+        user4.getRoles().forEach(role -> role.setUser(user4));
+
+        userCollection.setUser4(userRepository.save(user4));
+        passwordCollection.put(user4, "password");
+
         //non existant user1
         Set<Role> rolesneUser1 = new HashSet<>() {{
             add(Role.builder().role(UserRole.ROLE_USER).build());
@@ -180,9 +196,10 @@ public class DatabasePopulator {
                         .resourcePack("DEFAULT")
                         .gameRoleTypes(new ArrayList<>() {{
                             add(WerewolfRoleType.WEREWOLF);
-                            add(WerewolfRoleType.SEER);
+                            add(WerewolfRoleType.VILLAGER);
+                            add(WerewolfRoleType.VILLAGER);
                             add(WerewolfRoleType.WITCH);
-                            add(WerewolfRoleType.CUPID);
+                            add(WerewolfRoleType.BEAR_TAMER);
                         }}).build())
                 .round(0)
                 .votes(new ArrayList<>())
@@ -209,7 +226,6 @@ public class DatabasePopulator {
                         .playerState(PlayerState.ALIVE)
                         .gameRoles(new ArrayList<>())
                         .position(1)
-
                         .disconnected(false)
                         .build()
         );
@@ -221,7 +237,6 @@ public class DatabasePopulator {
                         .playerState(PlayerState.ALIVE)
                         .gameRoles(new ArrayList<>())
                         .position(2)
-
                         .disconnected(false)
                         .build()
         );
@@ -233,7 +248,17 @@ public class DatabasePopulator {
                         .playerState(PlayerState.ALIVE)
                         .gameRoles(new ArrayList<>())
                         .position(3)
-
+                        .disconnected(false)
+                        .build()
+        );
+        werewolfLobbyGame1.getPlayers().add(
+                WerewolfPlayer.builder()
+                        .user(generatedData.getUserCollection().getUser4())
+                        .game(werewolfLobbyGame1)
+                        .lobbyRole(LobbyRole.ROLE_USER)
+                        .playerState(PlayerState.ALIVE)
+                        .gameRoles(new ArrayList<>())
+                        .position(4)
                         .disconnected(false)
                         .build()
         );
