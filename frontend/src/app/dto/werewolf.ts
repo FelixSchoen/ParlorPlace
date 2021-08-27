@@ -219,3 +219,17 @@ export class LycanthropeWerewolfGameRole extends WerewolfGameRole {
     });
   }
 }
+
+export class BearTamerWerewolfGameRole extends WerewolfGameRole {
+  constructor(public id: number,
+              public werewolfRoleType: WerewolfRoleType,
+              public werewolfFaction: WerewolfFaction,) {
+    super(id, werewolfRoleType, werewolfFaction);
+  }
+
+  public toJSON(): BearTamerWerewolfGameRole {
+    return Object.assign({}, this, {
+      werewolfRoleType: "BEAR_TAMER"
+    });
+  }
+}

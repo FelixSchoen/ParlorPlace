@@ -155,20 +155,20 @@
               <div class="flex-row mw-100 mt-5 pp-center">
                 <div class="col icon-container">
                   <mat-icon inline="true"
-                            svgIcon="duotone-{{this.getCurrentRoleTypeCurrentPlayer().valueOf() | internalRepresentation}}"></mat-icon>
+                            svgIcon="{{this.werewolfRoleTypeUtil.toIconRepresentation(this.getCurrentRoleTypeCurrentPlayer())}}"></mat-icon>
                 </div>
               </div>
               <div class="flex-row mt-5">
                 <div class="col">
                   <div>
-                    <h3>{{("werewolf.role." + (this.getCurrentRoleTypeCurrentPlayer().valueOf() | internalRepresentation) + ".name") | translate}}</h3>
+                    <h3>{{("werewolf.role." + this.werewolfRoleTypeUtil.toInternalRepresentation(this.getCurrentRoleTypeCurrentPlayer()) + ".name") | translate}}</h3>
                   </div>
                 </div>
               </div>
               <div class="flex-row mt-1">
                 <div class="col">
                   <div>
-                    {{("werewolf.role." + (this.getCurrentRoleTypeCurrentPlayer().valueOf() | internalRepresentation) + ".description") | translate}}</div>
+                    {{("werewolf.role." + this.werewolfRoleTypeUtil.toInternalRepresentation(this.getCurrentRoleTypeCurrentPlayer()) + ".description") | translate}}</div>
                 </div>
               </div>
             </div>

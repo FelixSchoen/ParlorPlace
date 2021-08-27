@@ -23,6 +23,7 @@ public class GeneratedData {
         private User user1;
         private User user2;
         private User user3;
+        private User user4;
 
         private User neUser1; // non existent user
     }

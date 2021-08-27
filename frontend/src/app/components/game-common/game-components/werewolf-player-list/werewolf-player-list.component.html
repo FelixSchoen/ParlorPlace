@@ -1,9 +1,12 @@
 <mat-list>
   <mat-list-item *ngFor="let player of sortPlayers(this.players)">
 
-    <mat-icon *ngIf="player.playerState == playerState.ALIVE && game.gameState != gameState.CONCLUDED" mat-list-icon svgIcon="duotone-unknown"></mat-icon>
-    <mat-icon *ngIf="player.gameRoles.length > 0 && (player.playerState == playerState.DECEASED || game.gameState == gameState.CONCLUDED)" mat-list-icon
-              svgIcon="duotone-{{player.gameRoles[player.gameRoles.length-1].werewolfRoleType.valueOf() | internalRepresentation }}"></mat-icon>
+    <mat-icon *ngIf="player.playerState == playerState.ALIVE && game.gameState != gameState.CONCLUDED" mat-list-icon
+              svgIcon="duotone-unknown"></mat-icon>
+    <mat-icon
+      *ngIf="player.gameRoles.length > 0 && (player.playerState == playerState.DECEASED || game.gameState == gameState.CONCLUDED)"
+      mat-list-icon
+      svgIcon="{{this.werewolfRoleTypeUtil.toIconRepresentation(player.gameRoles[player.gameRoles.length-1].werewolfRoleType)}}"></mat-icon>
     <h3 matLine>
       {{player.user.nickname}}
     </h3>

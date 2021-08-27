@@ -3,6 +3,7 @@ import {WerewolfGame, WerewolfPlayer} from "../../../../dto/werewolf";
 import {PlayerState} from "../../../../enums/player-state";
 import {PlayerUtil} from "../../../../dto/player";
 import {GameState} from "../../../../enums/game-state";
+import {WerewolfRoleTypeUtil} from "../../../../enums/games/werewolf-role-type";
 
 @Component({
   selector: 'app-werewolf-player-list',
@@ -16,6 +17,8 @@ export class WerewolfPlayerListComponent {
 
   public gameState = GameState;
   public playerState = PlayerState;
+
+  public werewolfRoleTypeUtil = WerewolfRoleTypeUtil;
 
   constructor() {
   }

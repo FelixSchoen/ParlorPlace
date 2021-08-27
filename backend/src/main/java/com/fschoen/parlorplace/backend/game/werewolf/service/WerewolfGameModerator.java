@@ -445,15 +445,18 @@ public class WerewolfGameModerator extends AbstractGameModerator<
         // --- Logic Start ---
 
         WerewolfGame game = this.getGame();
+
         if (hasLastRoleType(seerTarget, WerewolfRoleType.WEREWOLF) || hasLastRoleType(seerTarget, WerewolfRoleType.LYCANTHROPE)) {
             game.getLog().add(getLogEntryTemplate(seerSet).logType(WerewolfLogType.SEER_SUCCESS).targets(new HashSet<>() {{
                 add(seerTarget);
             }}).build());
+
         } else {
             game.getLog().add(getLogEntryTemplate(seerSet).logType(WerewolfLogType.SEER_FAILURE).targets(new HashSet<>() {{
                 add(seerTarget);
             }}).build());
         }
+
         saveAndSend(game, seerSet);
         pause(WAIT_TIME_NEW_INFORMATION);
 
@@ -497,7 +500,41 @@ public class WerewolfGameModerator extends AbstractGameModerator<
     }
 
     private void processDay() throws ExecutionException, InterruptedException {
+        processAllBearTamers();
         processVillagers();
+    }
+
+    private void processAllBearTamers() {
+        Set<WerewolfPlayer> bearTamers = getAlivePlayersOfLastRoleType(WerewolfRoleType.BEAR_TAMER);
+        for (WerewolfPlayer bearTamer : bearTamers)
+            processBearTamer(bearTamer);
+    }
+
+    private void processBearTamer(WerewolfPlayer bearTamer) {
+        Set<WerewolfPlayer> bearTamerSet = new HashSet<>() {{
+            add(bearTamer);
+        }};
+
+        // --- Logic Start ---
+
+        WerewolfGame game = this.getGame();
+        Set<WerewolfPlayer> neighbours = getAliveNeighbours(bearTamer);
+
+        if (neighbours.stream().anyMatch(
+                neighbour -> hasLastRoleType(neighbour, WerewolfRoleType.WEREWOLF) || hasLastRoleType(neighbour, WerewolfRoleType.LYCANTHROPE))) {
+            game.getLog().add(getLogEntryTemplate(getAllPlayersOfGame()).logType(WerewolfLogType.BEAR_TAMER_GROWL).build());
+            broadcastVoiceLineNotification(getVoiceLineNotification(WerewolfVoiceLineType.BEAR_TAMER_GROWL,
+                    bearTamerSet.stream().map(Player::getCodeName).toArray(CodeName[]::new)));
+        } else {
+            game.getLog().add(getLogEntryTemplate(getAllPlayersOfGame()).logType(WerewolfLogType.BEAR_TAMER_SILENT).build());
+            broadcastVoiceLineNotification(getVoiceLineNotification(WerewolfVoiceLineType.BEAR_TAMER_SILENT,
+                    bearTamerSet.stream().map(Player::getCodeName).toArray(CodeName[]::new)));
+        }
+
+        saveAndBroadcast(game);
+        pause(WAIT_TIME_NEW_INFORMATION);
+
+        // --- Logic End ---
     }
 
     private void processVillagers() throws ExecutionException, InterruptedException {

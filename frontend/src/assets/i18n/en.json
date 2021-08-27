@@ -113,6 +113,10 @@
       "lycanthrope": {
         "name": "Lycanthrope",
         "description": "You are a normal villager, but the seer sees you as a werewolf."
+      },
+      "bearTamer": {
+        "name": "Bear Tamer",
+        "description": "You are a normal villager. Each morning, your bear either growls if one of your direct alive neighbours is a werewolf, or stays silent otherwise."
       }
     },
     "faction": {
@@ -164,7 +168,9 @@
       "villagers_vote": "The villagers lynch {player}",
       "cupid_link": "You make {player1} and {player2} fall in love",
       "lovers_love": "You fall in love with {player}",
-      "bodyguard_protect": "You protect {player}"
+      "bodyguard_protect": "You protect {player}",
+      "bear_tamer_growl": "The bear growls",
+      "bear_tamer_silent": "The bear stays silent"
     },
     "resourcepack": {
       "default": {

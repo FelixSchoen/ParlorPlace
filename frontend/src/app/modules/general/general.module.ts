@@ -7,7 +7,6 @@ import {LoadingIndicatorComponent} from "./loading-indicator/loading-indicator.c
 import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
 import {DistinctPipe} from "../../pipes/distinct.pipe";
 import {HttpClientModule} from "@angular/common/http";
-import {InternalRepresentationPipe} from "../../pipes/internal-representation.pipe";
 import {TranslateModule} from "@ngx-translate/core";
 import {FormatTimePipe} from "../../pipes/format-time.pipe";
 import {DialogContentInfoDialog} from './info-dialog/dialog-content-info-dialog.component';
@@ -21,7 +20,6 @@ import {MatButtonModule} from "@angular/material/button";
     GeneralComponent,
     LoadingIndicatorComponent,
     DistinctPipe,
-    InternalRepresentationPipe,
     FormatTimePipe,
     DialogContentInfoDialog,
   ],
@@ -39,7 +37,6 @@ import {MatButtonModule} from "@angular/material/button";
     TranslateModule,
     LoadingIndicatorComponent,
     DistinctPipe,
-    InternalRepresentationPipe,
     FormatTimePipe,
   ]
 })

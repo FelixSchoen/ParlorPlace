@@ -90,6 +90,10 @@ export class AppComponent implements OnInit {
         "duotone-lycanthrope",
         this.domSanitizer.bypassSecurityTrustResourceUrl(duotone_folder + "dog.svg")
       );
+      this.matIconRegistry.addSvgIcon(
+        "duotone-bearTamer",
+        this.domSanitizer.bypassSecurityTrustResourceUrl(duotone_folder + "staff.svg")
+      );
     }
 
   }

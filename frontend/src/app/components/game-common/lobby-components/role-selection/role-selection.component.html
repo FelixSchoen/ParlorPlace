@@ -7,7 +7,7 @@
       [selectable]="false"
       [removable]="true"
       (removed)="removeRole(role)">
-      {{this.countRole(role)}}x {{role | titlecase}}
+      {{this.countRole(role)}}x {{(this.translationPrefix + this.internalRepresentation(role) + ".name") | translate}}
       <mat-icon matChipRemove>cancel</mat-icon>
     </mat-chip>
   </mat-chip-list>
@@ -20,7 +20,7 @@
   <mat-autocomplete #roleAutocomplete="matAutocomplete"
                     (optionSelected)="selectAutocomplete($event)">
     <mat-option *ngFor="let role of this.getArray" [value]="role">
-      {{role | titlecase}}
+      {{(this.translationPrefix + this.internalRepresentation(role) + ".name") | translate}}
     </mat-option>
   </mat-autocomplete>
 </mat-form-field>
@@ -32,7 +32,7 @@
       *ngFor="let role of this.roles | distinct"
       [selectable]="false"
       [removable]="false">
-      {{this.countRole(role)}}x {{role | titlecase}}
+      {{this.countRole(role)}}x {{(this.translationPrefix + this.internalRepresentation(role) + ".name") | translate}}
     </mat-chip>
   </mat-chip-list>
 </div>
