@@ -430,6 +430,22 @@
             ]
           }
         ]
+      },
+      "bearTamer": {
+        "growl": [
+          {
+            "path": [
+              "growl_01"
+            ]
+          }
+        ],
+        "silent": [
+          {
+            "path": [
+              "silent_01"
+            ]
+          }
+        ]
       }
     }
   }

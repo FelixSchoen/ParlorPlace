@@ -522,11 +522,11 @@ public class WerewolfGameModerator extends AbstractGameModerator<
 
         if (neighbours.stream().anyMatch(
                 neighbour -> hasLastRoleType(neighbour, WerewolfRoleType.WEREWOLF) || hasLastRoleType(neighbour, WerewolfRoleType.LYCANTHROPE))) {
-            game.getLog().add(getLogEntryTemplate(bearTamerSet).logType(WerewolfLogType.BEAR_TAMER_GROWL).build());
+            game.getLog().add(getLogEntryTemplate(getAllPlayersOfGame()).logType(WerewolfLogType.BEAR_TAMER_GROWL).build());
             broadcastVoiceLineNotification(getVoiceLineNotification(WerewolfVoiceLineType.BEAR_TAMER_GROWL,
                     bearTamerSet.stream().map(Player::getCodeName).toArray(CodeName[]::new)));
         } else {
-            game.getLog().add(getLogEntryTemplate(bearTamerSet).logType(WerewolfLogType.BEAR_TAMER_SILENT).build());
+            game.getLog().add(getLogEntryTemplate(getAllPlayersOfGame()).logType(WerewolfLogType.BEAR_TAMER_SILENT).build());
             broadcastVoiceLineNotification(getVoiceLineNotification(WerewolfVoiceLineType.BEAR_TAMER_SILENT,
                     bearTamerSet.stream().map(Player::getCodeName).toArray(CodeName[]::new)));
         }
