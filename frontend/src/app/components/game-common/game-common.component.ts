@@ -12,6 +12,7 @@ import {ClientNotification} from "../../dto/communication";
 import {NotificationType} from "../../enums/notification-type";
 import {User} from "../../dto/user";
 import {GameState} from "../../enums/game-state";
+import {WerewolfRoleTypeUtil} from "../../enums/games/werewolf-role-type";
 
 const WEBSOCKET_URI = environment.WEBSOCKET_BASE_URI + environment.general.WEBSOCKET_GAME_URI;
 const WEBSOCKET_QUEUE_PRIMARY_URI = environment.general.WEBSOCKET_QUEUE_PRIMARY_URI;
@@ -31,6 +32,8 @@ export abstract class GameCommonComponent<G extends Game, P extends Player> impl
 
   protected primaryClient: CompatClient;
   protected secondaryClient: CompatClient;
+
+  public werewolfRoleTypeUtil = WerewolfRoleTypeUtil;
 
   protected constructor(
     public userService: UserService,
@@ -119,10 +122,10 @@ export abstract class GameCommonComponent<G extends Game, P extends Player> impl
           queryParams: {player: this.currentPlayer.id}
         }).then();
       } else {
-        console.error("Game ended but no current game information available")
+        console.error()
       }
     } else {
-      console.error("Unknown Notification Type")
+      console.error()
     }
 
   }

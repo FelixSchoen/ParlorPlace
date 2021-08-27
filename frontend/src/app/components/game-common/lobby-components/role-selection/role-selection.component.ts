@@ -16,6 +16,9 @@ export class RoleSelectionComponent<R, P extends Player> implements OnInit {
   @Input() mayEdit: (player: Player) => boolean;
   @Input() getArray: R[];
 
+  @Input() translationPrefix: string;
+  @Input() internalRepresentation: (r: R) => string;
+
   @Output() roleChanged = new EventEmitter<R[]>();
 
   @ViewChild('roleInput') roleInput: ElementRef<HTMLInputElement>;

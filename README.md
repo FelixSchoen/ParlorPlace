@@ -18,8 +18,6 @@ It is built to support relatively quick and easy addition of other social deduct
 
 ## Features
 
-Note: This section will be updated over time.
-
 #### User Account Management
 
 Users are able to securely sign up for the service, using a username, a password and a valid e-mail address, which can be used in the future to recover access to an account.

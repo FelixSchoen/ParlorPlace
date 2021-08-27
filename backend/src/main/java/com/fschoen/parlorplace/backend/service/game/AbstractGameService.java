@@ -39,7 +39,7 @@ public abstract class AbstractGameService<
         RS extends RuleSet,
         GR extends GameRole,
         GRepo extends GameRepository<G>,
-        M extends AbstractGameModerator<G, P, RS, GR, ?, GRepo, ?>
+        M extends AbstractGameModerator<G, P, RS, GR, ?, GRepo, ?, ?>
         > extends BaseGameService<G, P, GRepo> {
 
     protected final GameIdentifierService gameIdentifierService;

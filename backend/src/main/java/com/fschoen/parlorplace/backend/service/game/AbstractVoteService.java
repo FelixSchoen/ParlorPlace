@@ -11,6 +11,7 @@ import com.fschoen.parlorplace.backend.enumeration.VoteState;
 import com.fschoen.parlorplace.backend.enumeration.VoteType;
 import com.fschoen.parlorplace.backend.exception.DataConflictException;
 import com.fschoen.parlorplace.backend.exception.VoteException;
+import com.fschoen.parlorplace.backend.game.werewolf.utility.WerewolfValueIdentifier;
 import com.fschoen.parlorplace.backend.repository.GameRepository;
 import com.fschoen.parlorplace.backend.repository.PlayerRepository;
 import com.fschoen.parlorplace.backend.repository.UserRepository;
@@ -33,6 +34,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.ResourceBundle;
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
@@ -60,7 +62,9 @@ public abstract class AbstractVoteService<
 
     private final TaskExecutor taskExecutor;
 
-    private static final double GRACE_PERIOD_DURATION = 1.5;
+    private static final ResourceBundle resourceBundle = ResourceBundle.getBundle("values.werewolf-values");
+
+    private static final long VOTE_GRACE_PERIOD_DURATION = Integer.parseInt(resourceBundle.getString(WerewolfValueIdentifier.VOTE_GRACE_PERIOD_DURATION));
 
     public AbstractVoteService(CommunicationService communicationService, UserRepository userRepository, GRepo gameRepository, PRepo playerRepository, VRepo voteRepository, TaskExecutor taskExecutor) {
         super(communicationService, userRepository, gameRepository);
@@ -70,7 +74,7 @@ public abstract class AbstractVoteService<
         this.taskExecutor = taskExecutor;
     }
 
-    public CompletableFuture<V> requestVote(GameIdentifier gameIdentifier, VoteType voteType, VoteDrawStrategy voteDrawStrategy, Integer outcomeAmount, Map<Long, C> voteCollectionMap, D voteDescriptor, int durationInSeconds) {
+    public CompletableFuture<V> requestVote(GameIdentifier gameIdentifier, VoteType voteType, VoteDrawStrategy voteDrawStrategy, Integer outcomeAmount, Map<Long, C> voteCollectionMap, D voteDescriptor, Integer round, Integer durationInSeconds) {
         log.info("Starting new Vote for Game: {}", gameIdentifier.getToken());
 
         G game = getActiveGame(gameIdentifier);
@@ -89,6 +93,7 @@ public abstract class AbstractVoteService<
             vote.setOutcome(new HashSet<>());
             vote.setOutcomeAmount(outcomeAmount);
             vote.setVoteDescriptor(voteDescriptor);
+            vote.setRound(round);
             vote.setEndTime(Instant.now().plusSeconds(durationInSeconds));
         } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
             throw new DataConflictException(Messages.exception(MessageIdentifier.VOTE_TYPE_MISMATCH), e);
@@ -103,7 +108,7 @@ public abstract class AbstractVoteService<
 
         sendGameStaleNotification(game, vote);
 
-        VoteConcludeTask voteConcludeTask = new VoteConcludeTask(vote.getId(), (double) durationInSeconds, true, game.getGameIdentifier());
+        VoteConcludeTask voteConcludeTask = new VoteConcludeTask(vote.getId(), (long) (durationInSeconds * 1000), true, game.getGameIdentifier());
         taskExecutor.execute(voteConcludeTask);
 
         return completableFuture;
@@ -148,7 +153,7 @@ public abstract class AbstractVoteService<
         // Setup VoteConcludeTask with grace period
         if (vote.getVoteCollectionMap().values().stream().allMatch(collection -> (collection.getSelection().size() == collection.getAmountVotes())
                 || (collection.getAbstain() != null && collection.getAbstain()))) {
-            VoteConcludeTask voteConcludeTask = new VoteConcludeTask(vote.getId(), GRACE_PERIOD_DURATION, false, game.getGameIdentifier());
+            VoteConcludeTask voteConcludeTask = new VoteConcludeTask(vote.getId(), VOTE_GRACE_PERIOD_DURATION, false, game.getGameIdentifier());
             taskExecutor.execute(voteConcludeTask);
         }
 
@@ -162,15 +167,16 @@ public abstract class AbstractVoteService<
         Map<T, Integer> votes = new HashMap<>();
 
         for (Entry<Long, C> entry : vote.getVoteCollectionMap().entrySet()) {
-            for (T t : entry.getValue().getSelection()) {
-                votes.putIfAbsent(t, 0);
-                votes.put(t, votes.get(t) + 1);
-            }
-
             // Add non voted-upon at the end of the list
             for (T t : entry.getValue().getSubjects()) {
                 votes.putIfAbsent(t, 0);
             }
+
+            // Add votes for all selections
+            for (T t : entry.getValue().getSelection()) {
+                votes.put(t, votes.get(t) + 1);
+            }
+
         }
 
         // Sort by votes
@@ -197,15 +203,14 @@ public abstract class AbstractVoteService<
             Collections.shuffle(bin);
         }
 
-        // Get top outcomeAmount choices
-        List<T> flatList = binList.stream().flatMap(List::stream).collect(Collectors.toList());
-
         List<T> resultList = new ArrayList<>();
 
         while (resultList.size() < vote.getOutcomeAmount() && binList.size() > 0) {
             List<T> bin = binList.remove(0);
 
-            if (bin.size() > vote.getOutcomeAmount() - resultList.size()) {
+            int amountVotes = votes.get(bin.get(0));
+
+            if (bin.size() > vote.getOutcomeAmount() - resultList.size() || amountVotes == 0) {
                 if (vote.getVoteDrawStrategy() == VoteDrawStrategy.HARD_NO_OUTCOME)
                     return new ArrayList<>();
                 if (vote.getVoteDrawStrategy() == VoteDrawStrategy.SOFT_NO_OUTCOME)
@@ -284,7 +289,7 @@ public abstract class AbstractVoteService<
     private class VoteConcludeTask implements Runnable {
 
         private final Long voteId;
-        private final Double sleepDurationSeconds;
+        private final Long sleepDurationSeconds;
         private final Boolean forceClose;
 
         private final GameIdentifier gameIdentifier;
@@ -297,7 +302,7 @@ public abstract class AbstractVoteService<
             V initialVote = voteRepository.findOneById(voteId).orElseThrow();
             if (initialVote.getVoteState().equals(VoteState.CONCLUDED)) return;
 
-            Thread.sleep((long) (sleepDurationSeconds * 1000));
+            Thread.sleep(sleepDurationSeconds);
 
             log.info("Trying to conclude Vote {}", voteId);
 

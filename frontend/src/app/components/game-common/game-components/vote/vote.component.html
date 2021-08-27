@@ -26,8 +26,8 @@
         <div class="row mt-2">
           <div class="col">
             <mat-chip-list>
-              <mat-chip *ngFor="let subject of sortSelection(this.voteMap.get(currentPlayer.id)?.subjects)"
-                        [selected]="includedInSelection(subject)" (click)="selectOption(subject)">
+              <mat-chip *ngFor="let subject of this.subjects, let i = index"
+                        [selected]="this.isSelected[i]" (click)="selectOption(subject)">
                 {{subjectToStringRepresentation(subject)}}
               </mat-chip>
               <mat-chip *ngIf="this.voteMap.get(currentPlayer.id)?.allowAbstain" color="accent"
@@ -67,7 +67,7 @@
                   {{"general.vote.abstained" | translate}}
                 </div>
                 <mat-chip-list *ngIf="!element[1].abstain">
-                  <span *ngFor="let selection of element[1].selection">
+                  <span *ngFor="let selection of sortSelection(element[1].selection)">
                     <mat-chip>{{subjectToStringRepresentation(selection)}}</mat-chip>
                   </span>
                 </mat-chip-list>

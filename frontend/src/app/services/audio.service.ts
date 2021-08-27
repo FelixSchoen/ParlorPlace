@@ -1,4 +1,5 @@
 import {Injectable} from '@angular/core';
+import {HttpClient} from "@angular/common/http";
 
 @Injectable({
   providedIn: 'root'
@@ -9,7 +10,7 @@ export class AudioService {
   private pathQueue: string[][] = [];
   private startable: boolean = true;
 
-  constructor() {
+  constructor(public httpClient: HttpClient) {
   }
 
   public queueAudio(pathArray: string[]): void {
@@ -33,16 +34,24 @@ export class AudioService {
     let voiceline = pathArray.shift();
 
     if (voiceline != undefined) {
-      audio.src = voiceline;
-      audio.load();
-      audio.play().then();
+      this.httpClient.get(voiceline, {observe: 'response', responseType: 'blob'}).subscribe({
+        next: () => {
+          audio.src = voiceline!;
+          audio.load();
+          audio.play().then();
 
-      audio.addEventListener("ended", () => {
-        if (pathArray.length > 0) {
-          this.play(audio, pathArray);
-        } else if (this.pathQueue.length > 0) {
-          this.startNextInQueue();
-        } else {
+          audio.addEventListener("ended", () => {
+            if (pathArray.length > 0) {
+              this.play(audio, pathArray);
+            } else if (this.pathQueue.length > 0) {
+              this.startNextInQueue();
+            } else {
+              this.startable = true;
+            }
+          })
+        },
+        error: () => {
+          console.error("Could not load audio file: " + voiceline)
           this.startable = true;
         }
       })

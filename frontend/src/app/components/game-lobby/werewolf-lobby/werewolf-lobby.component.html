@@ -58,6 +58,8 @@
                                 [currentPlayer]="currentPlayer"
                                 [mayEdit]="isLobbyAdmin"
                                 [getArray]="werewolfRoleTypeArray"
+                                [translationPrefix]="'werewolf.role.'"
+                                [internalRepresentation]="this.werewolfRoleTypeUtil.toInternalRepresentation"
                                 (roleChanged)="changeRoles($event)"></app-role-selection>
 
             <div class="mt-5">

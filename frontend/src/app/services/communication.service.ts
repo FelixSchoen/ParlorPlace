@@ -28,7 +28,7 @@ export class CommunicationService {
       function () {
         client.subscribe(subscribeUrl, subscribeCallback);
       }, function (error: string) {
-        console.error("Error with client communication: ", error);
+        console.error(error);
       });
 
     return client;

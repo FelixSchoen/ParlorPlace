@@ -106,6 +106,7 @@ export class WerewolfLobbyChangeRequest extends LobbyChangeRequest {
 }
 
 export abstract class WerewolfGameRole extends GameRole {
+
   protected constructor(public id: number,
                         public werewolfRoleType: WerewolfRoleType,
                         public werewolfFaction: WerewolfFaction) {
@@ -155,6 +156,80 @@ export class SeerWerewolfGameRole extends WerewolfGameRole {
   public toJSON(): SeerWerewolfGameRole {
     return Object.assign({}, this, {
       werewolfRoleType: "SEER"
+    });
+  }
+}
+
+export class WitchWerewolfGameRole extends WerewolfGameRole {
+  constructor(public id: number,
+              public werewolfRoleType: WerewolfRoleType,
+              public werewolfFaction: WerewolfFaction,
+              public hasHealed: boolean,
+              public hasKilled: boolean) {
+    super(id, werewolfRoleType, werewolfFaction);
+  }
+
+  public toJSON(): WitchWerewolfGameRole {
+    return Object.assign({}, this, {
+      werewolfRoleType: "WITCH"
+    });
+  }
+}
+
+export class CupidWerewolfGameRole extends WerewolfGameRole {
+  constructor(public id: number,
+              public werewolfRoleType: WerewolfRoleType,
+              public werewolfFaction: WerewolfFaction,
+              public hasLinked: boolean) {
+    super(id, werewolfRoleType, werewolfFaction);
+  }
+
+  public toJSON(): CupidWerewolfGameRole {
+    return Object.assign({}, this, {
+      werewolfRoleType: "CUPID"
+    });
+  }
+}
+
+export class BodyguardWerewolfGameRole extends WerewolfGameRole {
+  constructor(public id: number,
+              public werewolfRoleType: WerewolfRoleType,
+              public werewolfFaction: WerewolfFaction,
+              public lastProtected: WerewolfPlayer) {
+    super(id, werewolfRoleType, werewolfFaction);
+  }
+
+  public toJSON(): BodyguardWerewolfGameRole {
+    return Object.assign({}, this, {
+      werewolfRoleType: "BODYGUARD"
+    });
+  }
+}
+
+export class LycanthropeWerewolfGameRole extends WerewolfGameRole {
+  constructor(public id: number,
+              public werewolfRoleType: WerewolfRoleType,
+              public werewolfFaction: WerewolfFaction,) {
+    super(id, werewolfRoleType, werewolfFaction);
+  }
+
+  public toJSON(): LycanthropeWerewolfGameRole {
+    return Object.assign({}, this, {
+      werewolfRoleType: "LYCANTHROPE"
+    });
+  }
+}
+
+export class BearTamerWerewolfGameRole extends WerewolfGameRole {
+  constructor(public id: number,
+              public werewolfRoleType: WerewolfRoleType,
+              public werewolfFaction: WerewolfFaction,) {
+    super(id, werewolfRoleType, werewolfFaction);
+  }
+
+  public toJSON(): BearTamerWerewolfGameRole {
+    return Object.assign({}, this, {
+      werewolfRoleType: "BEAR_TAMER"
     });
   }
 }

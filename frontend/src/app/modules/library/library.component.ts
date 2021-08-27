@@ -49,7 +49,7 @@ export class LibraryComponent implements OnInit {
         let gameComponent = this.gameComponentMap.get(gameBaseInformation.gameType);
 
         if (gameComponent == undefined) {
-          console.error("Unknown game type");
+          console.error();
           return;
         }
 

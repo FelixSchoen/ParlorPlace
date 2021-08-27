@@ -74,6 +74,26 @@ export class AppComponent implements OnInit {
         "duotone-seer",
         this.domSanitizer.bypassSecurityTrustResourceUrl(duotone_folder + "eye.svg")
       );
+      this.matIconRegistry.addSvgIcon(
+        "duotone-witch",
+        this.domSanitizer.bypassSecurityTrustResourceUrl(duotone_folder + "hat-witch.svg")
+      );
+      this.matIconRegistry.addSvgIcon(
+        "duotone-cupid",
+        this.domSanitizer.bypassSecurityTrustResourceUrl(duotone_folder + "heart-broken.svg")
+      );
+      this.matIconRegistry.addSvgIcon(
+        "duotone-bodyguard",
+        this.domSanitizer.bypassSecurityTrustResourceUrl(duotone_folder + "shield-alt.svg")
+      );
+      this.matIconRegistry.addSvgIcon(
+        "duotone-lycanthrope",
+        this.domSanitizer.bypassSecurityTrustResourceUrl(duotone_folder + "dog.svg")
+      );
+      this.matIconRegistry.addSvgIcon(
+        "duotone-bearTamer",
+        this.domSanitizer.bypassSecurityTrustResourceUrl(duotone_folder + "staff.svg")
+      );
     }
 
   }

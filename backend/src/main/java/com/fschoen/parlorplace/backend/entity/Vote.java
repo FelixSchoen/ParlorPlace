@@ -100,6 +100,10 @@ public abstract class Vote<
     protected Integer outcomeAmount;
 
     @Column(nullable = false)
+    @NotNull
+    protected Integer round;
+
+    @Column(nullable = false)
     protected Instant endTime;
 
     public abstract Set<T> getOutcome();

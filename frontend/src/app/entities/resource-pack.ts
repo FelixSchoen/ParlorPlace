@@ -3,6 +3,7 @@ import {CodeName} from "../enums/code-name";
 import {WerewolfResourcePackType} from "../enums/games/werewolf-resource-pack-type";
 import {LanguageIdentifier} from "../enums/language-identifier";
 import {WerewolfVoiceLineType} from "../enums/games/werewolf-voice-line-type";
+import {WerewolfRoleTypeUtil} from "../enums/games/werewolf-role-type";
 
 export abstract class ResourcePack {
 
@@ -79,7 +80,7 @@ export abstract class ResourcePack {
   }
 
   protected voiceLineTypeToPackIdentifier(voiceLineType: string): string[] {
-    let regex = RegExp("([a-zA-Z]+)_([a-zA-Z]+)");
+    let regex = RegExp("([a-zA-Z_]+)_([a-zA-Z]+)");
     let match = voiceLineType.match(regex);
 
     if (match)
@@ -127,7 +128,18 @@ export class WerewolfResourcePack extends ResourcePack {
       case WerewolfVoiceLineType.WEREWOLVES_WAKE:
       case WerewolfVoiceLineType.WEREWOLVES_SLEEP:
       case WerewolfVoiceLineType.SEER_WAKE:
-        voiceLinePromise = this.getVoiceLineArray(codeNames, "voiceline", "role", this.voiceLineTypeToPackIdentifier(voiceLineType.toLowerCase())[1], this.voiceLineTypeToPackIdentifier(voiceLineType.toLowerCase())[2])
+      case WerewolfVoiceLineType.WITCH_WAKE:
+      case WerewolfVoiceLineType.CUPID_WAKE:
+      case WerewolfVoiceLineType.LOVERS_WAKE:
+      case WerewolfVoiceLineType.LOVERS_SLEEP:
+      case WerewolfVoiceLineType.BODYGUARD_WAKE:
+      case WerewolfVoiceLineType.BEAR_TAMER_GROWL:
+      case WerewolfVoiceLineType.BEAR_TAMER_SILENT:
+        voiceLinePromise = this.getVoiceLineArray(codeNames,
+          "voiceline",
+          "role",
+          WerewolfRoleTypeUtil.toInternalRepresentation(this.voiceLineTypeToPackIdentifier(voiceLineType.toLowerCase())[1]),
+          this.voiceLineTypeToPackIdentifier(voiceLineType.toLowerCase())[2])
         break;
       default:
         throw new Error("Unknown Voice Line Type")

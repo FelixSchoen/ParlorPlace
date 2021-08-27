@@ -30,9 +30,27 @@ This excerpt shows an example class representing a new role:
   }
 ```
 
+Do not forget to add an entry in the `GameRoleClasses` map in `WerewolfGameService`:
+
+```
+private static final Map<WerewolfRoleType, Class<? extends WerewolfGameRole>> werewolfGameRoleClasses = new HashMap<>() {{
+    put(WerewolfRoleType.ROLE, RoleWerewolfGameRole.class);
+}};
+```
+
 Furthermore, matching `DTO`s and `WerewolfRoleType`s have to be created, in order to accommodate the new role.
 A special case (not described in this guide) would be the creation of a new faction (say e.g. for the Lovers).
 This should still be pretty straightforward.
+
+Adjust the JSON mapping of the `WerewolfGameRoleDTO`s as follows:
+
+```
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "werewolfRoleType")
+@JsonSubTypes({
+        @JsonSubTypes.Type(value = RoleWerewolfGameRoleDTO.class, name = "ROLE"),
+        [...]}
+)
+```
 
 The next step is to modify the `WerewolfGameRoleMapper`. Add new entries similar to the code shown below:
 
@@ -98,9 +116,6 @@ In order to adjust the frontend, we have to start by implementing the correspond
 
 Start by creating a new `WerewolfGameRole` in `werewolf.ts`. After that, adjust `WerewolfLogType`, `WerewolfRoleType`, `WerewolfVoteDescriptor`.
 
-For `WerewolfRoleType`, make sure to add an icon conforming to the string value of the role.
-Icons are defined in `app.component.ts`.
-
 For `WerewolfLogType`, add a new case to the switch, like this:
 
 ```
@@ -110,6 +125,10 @@ switch (type) {
   break;
 ```
 
+For `WerewolfRoleType`, make sure to add an icon conforming to the string value of the role.
+Icons are defined in `app.component.ts`.
+Furthermore, add the role to the array in `WerewolfRoleTypeUtil`.
+
 Furthermore, add fitting `WerewolfVoiceLineType`s - keep in mind that the actual voice line files have to be added as well, more on that later.
 
 For localization, adjust `en.json` (and all equivalent files).
@@ -118,8 +137,23 @@ Add an entry in the `role` section, and entries for every newly created log type
 **Careful:** The key values must equal to the values given by the enumeration, as access to the localization fields is done in this way:
 
 ```
-(this.getCurrentRoleTypeCurrentPlayer().valueOf() | internalRepresentation) + ".name") | translate
-(this.getCurrentRoleTypeCurrentPlayer().valueOf() | internalRepresentation) + ".description") | translate
+("werewolf.role." + this.werewolfRoleTypeUtil.toInternalRepresentation(this.getCurrentRoleTypeCurrentPlayer()) + ".name") | translate
+("werewolf.role." + this.werewolfRoleTypeUtil.toInternalRepresentation(this.getCurrentRoleTypeCurrentPlayer()) + ".description") | translate
+```
+
+where
+
+```
+public static toInternalRepresentation(type: WerewolfRoleType): string {
+  let parts: string[] = type.toLowerCase().split("_")
+  let finalString: string = "" + parts.shift();
+
+  for (let part of parts) {
+    finalString += part.charAt(0).toUpperCase() + part.slice(1);
+  }
+
+  return finalString;
+}
 ```
 
 Similarly, for the vote descriptor be sure to fit the pattern determined by the following snippet (e.g. `SEER_SEE` would turn into `werewolf.vote.seer.see`):
@@ -134,9 +168,17 @@ getTranslationKey(e: Object): string {
 }
 ```
 
+For the log types, edit `WerewolfLogService` to implement representations of the newly created logs like this:
+
+```
+case WerewolfLogType.ROLE:
+        return this.translateService.get("werewolf.log." + textValue, {player: Player.toNameRepresentation(l.targets[0].user, players)});
+```
+
+Make sure not to mix up the `source` and `target` property in the backend, when sending logs.
+
 #### Voicelines
 
-For voicelines, be sure to match the path given by the `WerewolfVoiceLineType`.
+For voicelines, edit `pack.json` and be sure to match the path given by the `WerewolfVoiceLineType`.
 This works in similar fashion as above: Replace `_` by `.`, and insert the role voicelines under `voiceline.role`.
 Be sure to adjust `getVoiceLine()` in `WerewolfResourcePack`, in order to match the voice line with the correct path (in case `voiceline.role` is not fitting for example).
-Make sure not to mix up the `source` and `target` property in the backend, when sending voicelines.

@@ -4,11 +4,46 @@
 - [v0.2 (2021-07-22)](#v0.2)
 - [v0.3 (2021-08-05)](#v0.3)
 - [v0.4 (2021-08-16)](#v0.4)
-- [v1.0-alpha1 (2021-08-25)](#v0.5)
+- [v1.0-alpha1 (2021-08-25)](#v1.0-alpha1)
+- [v1.0-alpha2 (2021-08-27)](#v1.0-alpha2)
 
 ---
 
-## v1.0-alpha1
+## v1.0-alpha2 (27-08-2021)
+<a name="v1.0-alpha2"></a>
+
+## Added
+
+- **Implemented witch**
+  - New role: witch
+  - Can heal and/or kill one player, each once per game
+- **Implemented cupid**
+  - New role: cupid
+  - At the start of the game, links two players which then fall in love
+  - If one of them dies, the other one dies as well
+  - They cannot vote against each other in the lynching vote
+- **Implemented bodyguard**
+  - New role: bodyguard
+  - Can protect one player each night, that cannot be killed by the werewolves
+  - Cannot choose the same player on two consecutive nights
+- **Implemented lycanthrope**
+  - Is a normal villager
+  - The seer sees them as a werewolf
+- **Implement bear tamer**
+  - Each morning, the bear growls if there is at least one werewolf adjacent to the bear tamer
+  - Otherwise it stays silent
+- Missing voicelines
+
+## Fixed
+
+- Vote component with more than one selection
+  - Previously, deselecting was not possible, and an exception would get thrown when selecting more than one option
+- Calculation of vote outcome
+- Winner determination
+
+---
+
+## v1.0-alpha1 (25-08-2021)
 <a name="v1.0-alpha1"></a>
 
 ## Added

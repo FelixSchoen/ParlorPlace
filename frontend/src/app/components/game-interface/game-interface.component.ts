@@ -51,10 +51,10 @@ export abstract class GameInterfaceComponent<G extends Game, P extends Player, V
       if (a.voteState == VoteState.ONGOING && b.voteState == VoteState.ONGOING)
         return a.endTime < b.endTime ? 0 : 1;
       else
-      return a.endTime > b.endTime ? 0 : 1;
+        return a.endTime > b.endTime ? 0 : 1;
     });
 
-    return _.partition(function(vote: V){
+    return _.partition(function (vote: V) {
       return vote.voteState == VoteState.ONGOING || (new Date().getTime() - vote.endTime * 1000) / 1000 <= 5;
     }, sorted);
   }
@@ -78,6 +78,8 @@ export abstract class GameInterfaceComponent<G extends Game, P extends Player, V
           this.audioService.queueAudio(value.toPathArray());
         });
       }
+    } else if (notification.notificationType == NotificationType.PLAYER_NOTIFICATION) {
+      navigator.vibrate([100, 30, 100, 30, 100])
     }
   }
 

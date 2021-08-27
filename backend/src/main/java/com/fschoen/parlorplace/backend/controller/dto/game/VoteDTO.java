@@ -49,6 +49,9 @@ public abstract class VoteDTO<P extends PlayerDTO<?>, T, C extends VoteCollectio
     protected Integer outcomeAmount;
 
     @NotNull
+    protected Integer round;
+
+    @NotNull
     protected Instant endTime;
 
 }
