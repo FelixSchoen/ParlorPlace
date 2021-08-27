@@ -115,6 +115,7 @@ public abstract class AbstractGameService<
         validateActiveGameExists(gameIdentifier);
         validateActiveGameStateLobby(gameIdentifier);
         validateUserNotInSpecificActiveGame(gameIdentifier, user);
+        validateGameNotMaximumPlayers(gameIdentifier);
 
         G game = getActiveGame(gameIdentifier);
         P player;
@@ -372,6 +373,13 @@ public abstract class AbstractGameService<
 
         if (!player.getLobbyRole().equals(LobbyRole.ROLE_ADMIN))
             throw new GameException(Messages.exception(MessageIdentifier.AUTHORIZATION_UNAUTHORIZED));
+    }
+
+    protected void validateGameNotMaximumPlayers(GameIdentifier gameIdentifier) throws GameException {
+        G game = this.getActiveGame(gameIdentifier);
+
+        if (game.getPlayers().size() >= CodeName.class.getEnumConstants().length)
+            throw new GameException(Messages.exception(MessageIdentifier.GAME_PLAYERS_AMOUNT_OVERFLOW));
     }
 
 }
