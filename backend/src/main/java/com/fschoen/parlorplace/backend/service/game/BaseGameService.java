@@ -69,7 +69,8 @@ public abstract class BaseGameService<G extends Game<P, ?, ?, ?>, P extends Play
     protected P getPlayerFromUser(GameIdentifier gameIdentifier, User user) {
         G game = getActiveGame(gameIdentifier);
 
-        return game.getPlayers().stream().filter(player -> player.getUser().equals(user)).findFirst().orElseThrow();
+        return game.getPlayers().stream().filter(player -> player.getUser().equals(user)).findFirst().orElseThrow(
+                () -> new GameException(Messages.exception(MessageIdentifier.USER_PLAYER_MISMATCH)));
     }
 
     // Validation

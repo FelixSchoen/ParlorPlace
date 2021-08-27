@@ -168,7 +168,9 @@ public abstract class AbstractGameService<
             validateUserLobbyAdmin(gameIdentifier, principal);
 
         G game = getActiveGame(gameIdentifier);
-        P player = game.getPlayers().stream().filter(playerCandidate -> playerCandidate.getUser().equals(user)).findFirst().orElseThrow();
+        P player = game.getPlayers().stream().filter(playerCandidate -> playerCandidate.getUser().equals(user)).findFirst().orElseThrow(
+                () -> new GameException(Messages.exception(MessageIdentifier.USER_PLAYER_MISMATCH))
+        );
 
         if (game.getGameState().equals(GameState.LOBBY)) {
             game.getPlayers().remove(player);
@@ -179,7 +181,9 @@ public abstract class AbstractGameService<
             }
 
             if (game.getPlayers().stream().noneMatch(playerCandidate -> playerCandidate.getLobbyRole().equals(LobbyRole.ROLE_ADMIN))) {
-                game.getPlayers().stream().findAny().orElseThrow().setLobbyRole(LobbyRole.ROLE_ADMIN);
+                game.getPlayers().stream().findAny().orElseThrow(
+                        () -> new GameException(Messages.exception(MessageIdentifier.PLAYER_EXISTS_NOT))
+                ).setLobbyRole(LobbyRole.ROLE_ADMIN);
             }
 
             saveAndBroadcast(game);
@@ -291,7 +295,9 @@ public abstract class AbstractGameService<
     public G getGame(Long id) {
         validateGameExists(id);
 
-        return this.gameRepository.findOneById(id).orElseThrow();
+        return this.gameRepository.findOneById(id).orElseThrow(
+                () -> new GameException(Messages.exception(MessageIdentifier.GAME_EXISTS_NOT))
+        );
     }
 
     /**
