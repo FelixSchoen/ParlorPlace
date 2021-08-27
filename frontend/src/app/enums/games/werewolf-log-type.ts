@@ -13,7 +13,8 @@ export enum WerewolfLogType {
   WITCH_HEAL = "WITCH_HEAL",
   WITCH_KILL = "WITCH_KILL",
   CUPID_LINK = "CUPID_LINK",
-  LOVERS_LOVE = "LOVERS_LOVE"
+  LOVERS_LOVE = "LOVERS_LOVE",
+  BODYGUARD_PROTECT = "BODYGUARD_PROTECT",
 }
 
 @Injectable({
@@ -56,6 +57,9 @@ export class WerewolfLogTypeUtil {
       case WerewolfLogType.CUPID_LINK:
       case WerewolfLogType.LOVERS_LOVE:
         iconString = "cupid";
+        break;
+      case WerewolfLogType.BODYGUARD_PROTECT:
+        iconString = "bodyguard";
         break;
       default:
         iconString = "unknown";

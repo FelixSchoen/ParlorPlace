@@ -5,6 +5,7 @@ import com.fschoen.parlorplace.backend.enumeration.GameState;
 import com.fschoen.parlorplace.backend.enumeration.PlayerState;
 import com.fschoen.parlorplace.backend.game.werewolf.dto.game.WerewolfGameDTO;
 import com.fschoen.parlorplace.backend.game.werewolf.dto.game.WerewolfPlayerDTO;
+import com.fschoen.parlorplace.backend.game.werewolf.dto.role.BodyguardWerewolfGameRoleDTO;
 import com.fschoen.parlorplace.backend.game.werewolf.dto.role.CupidWerewolfGameRoleDTO;
 import com.fschoen.parlorplace.backend.game.werewolf.dto.role.WerewolfGameRoleDTO;
 import com.fschoen.parlorplace.backend.game.werewolf.dto.role.WitchWerewolfGameRoleDTO;
@@ -42,6 +43,10 @@ public class WerewolfGameRoleObfuscationService extends GameRoleObfuscationServi
             case CUPID -> {
                 CupidWerewolfGameRoleDTO cupidWerewolfGameRoleDTO = (CupidWerewolfGameRoleDTO) werewolfGameRoleDTO;
                 cupidWerewolfGameRoleDTO.setHasLinked(null);
+            }
+            case BODYGUARD -> {
+                BodyguardWerewolfGameRoleDTO bodyguardWerewolfGameRoleDTO = (BodyguardWerewolfGameRoleDTO) werewolfGameRoleDTO;
+                bodyguardWerewolfGameRoleDTO.setLastProtected(null);
             }
         }
 

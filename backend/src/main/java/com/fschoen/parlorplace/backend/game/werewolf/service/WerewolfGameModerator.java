@@ -14,6 +14,7 @@ import com.fschoen.parlorplace.backend.game.werewolf.entity.WerewolfPlayer;
 import com.fschoen.parlorplace.backend.game.werewolf.entity.WerewolfRuleSet;
 import com.fschoen.parlorplace.backend.game.werewolf.entity.WerewolfVote;
 import com.fschoen.parlorplace.backend.game.werewolf.entity.WerewolfVoteCollection;
+import com.fschoen.parlorplace.backend.game.werewolf.entity.gamerole.BodyguardWerewolfGameRole;
 import com.fschoen.parlorplace.backend.game.werewolf.entity.gamerole.CupidWerewolfGameRole;
 import com.fschoen.parlorplace.backend.game.werewolf.entity.gamerole.WitchWerewolfGameRole;
 import com.fschoen.parlorplace.backend.game.werewolf.enumeration.WerewolfFaction;
@@ -157,6 +158,7 @@ public class WerewolfGameModerator extends AbstractGameModerator<
 
     private void processNight() throws ExecutionException, InterruptedException {
         processAllCupids();
+        processAllBodyguards();
         processWerewolves();
         processAllWitches();
         processAllSeers();
@@ -242,6 +244,55 @@ public class WerewolfGameModerator extends AbstractGameModerator<
         pause(WAIT_TIME_NEW_INFORMATION);
 
         processNightPostVote(cupidTargets, WerewolfVoiceLineType.LOVERS_SLEEP);
+    }
+
+    private void processAllBodyguards() throws ExecutionException, InterruptedException {
+        Set<WerewolfPlayer> bodyguards = getAlivePlayersOfLastRoleType(WerewolfRoleType.BODYGUARD);
+        for (WerewolfPlayer bodyguard : bodyguards)
+            processBodyguard(bodyguard);
+    }
+
+    private void processBodyguard(WerewolfPlayer bodyguard) throws ExecutionException, InterruptedException {
+        Set<WerewolfPlayer> bodyguardSet = new HashSet<>() {{
+            add(bodyguard);
+        }};
+
+        processNightPreVote(bodyguardSet, WerewolfVoiceLineType.BODYGUARD_WAKE, bodyguard);
+
+        BodyguardWerewolfGameRole bodyguardWerewolfGameRole = (BodyguardWerewolfGameRole) getLastRole(bodyguard);
+        Set<WerewolfPlayer> validProtectTargets = getAlivePlayers();
+        validProtectTargets.remove(bodyguardWerewolfGameRole.getLastProtected());
+
+        CompletableFuture<WerewolfVote> bodyguardVoteFuture = this.voteService.requestVote(
+                this.gameIdentifier,
+                VoteType.PRIVATE_PUBLIC_PUBLIC,
+                VoteDrawStrategy.CHOOSE_RANDOM,
+                1,
+                this.voteService.getSameChoiceCollectionMap(
+                        bodyguardSet,
+                        validProtectTargets,
+                        1,
+                        false),
+                WerewolfVoteDescriptor.BODYGUARD_PROTECT,
+                getCurrentRound(),
+                VOTE_TIME_INDIVIDUAL_VOTE
+        );
+        WerewolfVote bodyguardProtectVote = bodyguardVoteFuture.get();
+
+        // --- Logic Start ---
+
+        WerewolfPlayer bodyguardProtectTarget = bodyguardProtectVote.getOutcome().stream().findAny().orElseThrow();
+        bodyguardWerewolfGameRole.setLastProtected(bodyguardProtectTarget);
+        WerewolfGame game = save(bodyguard);
+
+        game.getLog().add(getLogEntryTemplate(bodyguardSet).logType(WerewolfLogType.BODYGUARD_PROTECT).targets(new HashSet<>() {{
+            add(bodyguardProtectTarget);
+        }}).build());
+        saveAndSend(game, bodyguardSet);
+
+        // --- Logic End ---
+
+        processNightPostVote(bodyguardSet, WerewolfVoiceLineType.PLAYER_SLEEP, bodyguard);
     }
 
     private void processWerewolves() throws ExecutionException, InterruptedException {
@@ -424,10 +475,15 @@ public class WerewolfGameModerator extends AbstractGameModerator<
         // Process Werewolf Kill
         for (WerewolfVote werewolfVote : getVotesInRoundOfVoteDescriptor(getCurrentRound(), WerewolfVoteDescriptor.WEREWOLVES_KILL)) {
             for (WerewolfPlayer target : werewolfVote.getOutcome()) {
+                // Witch
                 Set<WerewolfPlayer> witchHealTargets = new HashSet<>();
                 getVotesInRoundOfVoteDescriptor(getCurrentRound(), WerewolfVoteDescriptor.WITCH_HEAL).forEach(witchHealVote -> witchHealTargets.addAll(witchHealVote.getOutcome()));
 
-                if (!witchHealTargets.contains(target))
+                // Bodyguard
+                Set<WerewolfPlayer> bodyguardProtectTargets = new HashSet<>();
+                getVotesInRoundOfVoteDescriptor(getCurrentRound(), WerewolfVoteDescriptor.BODYGUARD_PROTECT).forEach(bodyguardProtectVote -> bodyguardProtectTargets.addAll(bodyguardProtectVote.getOutcome()));
+
+                if (!witchHealTargets.contains(target) && !bodyguardProtectTargets.contains(target))
                     handlePlayerDiedEvent(target);
             }
         }
@@ -602,8 +658,8 @@ public class WerewolfGameModerator extends AbstractGameModerator<
     }
 
     private Boolean checkVillagersWin() {
-        return getAlivePlayersOfLastRoleType(WerewolfRoleType.WEREWOLF).size() == 0
-                && getAlivePlayersOfFaction(WerewolfFaction.LOVERS).size() == 0;
+        return getAlivePlayersOfLastRoleType(WerewolfRoleType.WEREWOLF).isEmpty()
+                && getAlivePlayersOfFaction(WerewolfFaction.LOVERS).isEmpty();
     }
 
     private Boolean checkWerewolvesWin() {

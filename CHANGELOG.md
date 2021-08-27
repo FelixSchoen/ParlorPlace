@@ -8,7 +8,35 @@
 
 ---
 
-## v1.0-alpha1
+## v1.0-alpha2 (27-08-2021)
+<a name="v1.0-alpha2"></a>
+
+## Added
+
+- **Implemented witch**
+  - New role: witch
+  - Can heal and/or kill one player, each once per game
+- **Implemented cupid**
+  - New role: cupid
+  - At the start of the game, links two players which then fall in love
+  - If one of them dies, the other one dies as well
+  - They cannot vote against each other in the lynching vote
+- **Implement bodyguard**
+  - New role: bodyguard
+  - Can protect one player each night, that cannot be killed by the werewolves
+  - Cannot choose the same player on two consecutive nights
+- Missing voicelines
+
+## Fixed
+
+- Vote component with more than one selection
+  - Previously, deselecting was not possible, and an exception would get thrown when selecting more than one option
+- Calculation of vote outcome
+- Winner determination
+
+---
+
+## v1.0-alpha1 (25-08-2021)
 <a name="v1.0-alpha1"></a>
 
 ## Added

@@ -30,7 +30,7 @@ This excerpt shows an example class representing a new role:
   }
 ```
 
-Do not forget to add an entry in the GameRoleClasses map:
+Do not forget to add an entry in the `GameRoleClasses` map in `WerewolfGameService`:
 
 ```
 private static final Map<WerewolfRoleType, Class<? extends WerewolfGameRole>> werewolfGameRoleClasses = new HashMap<>() {{
@@ -160,9 +160,10 @@ case WerewolfLogType.ROLE:
         return this.translateService.get("werewolf.log." + textValue, {player: Player.toNameRepresentation(l.targets[0].user, players)});
 ```
 
+Make sure not to mix up the `source` and `target` property in the backend, when sending logs.
+
 #### Voicelines
 
 For voicelines, edit `pack.json` and be sure to match the path given by the `WerewolfVoiceLineType`.
 This works in similar fashion as above: Replace `_` by `.`, and insert the role voicelines under `voiceline.role`.
 Be sure to adjust `getVoiceLine()` in `WerewolfResourcePack`, in order to match the voice line with the correct path (in case `voiceline.role` is not fitting for example).
-Make sure not to mix up the `source` and `target` property in the backend, when sending voicelines.
