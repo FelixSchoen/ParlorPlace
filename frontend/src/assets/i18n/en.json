@@ -105,6 +105,10 @@
       "cupid": {
         "name": "Cupid",
         "description": "You select 2 players, which will fall in love. If one of them dies, the other one will perish as well."
+      },
+      "bodyguard": {
+        "name": "Bodyguard",
+        "description": "You choose 1 player per night, which cannot be killed by the werewolves this night. You cannot choose the same player on two consecutive nights."
       }
     },
     "faction": {
@@ -137,6 +141,9 @@
       },
       "cupid": {
         "link": "Who do you want to fall in love?"
+      },
+      "bodyguard": {
+        "protect": "Who do you want to protect?"
       }
     },
     "log": {
@@ -152,7 +159,8 @@
       "witch_kill": "You poison {player}",
       "villagers_vote": "The villagers lynch {player}",
       "cupid_link": "You make {player1} and {player2} fall in love",
-      "lovers_love": "You fall in love with {player}"
+      "lovers_love": "You fall in love with {player}",
+      "bodyguard_protect": "You protect {player}"
     },
     "resourcepack": {
       "default": {

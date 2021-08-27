@@ -82,6 +82,10 @@ export class AppComponent implements OnInit {
         "duotone-cupid",
         this.domSanitizer.bypassSecurityTrustResourceUrl(duotone_folder + "heart-broken.svg")
       );
+      this.matIconRegistry.addSvgIcon(
+        "duotone-bodyguard",
+        this.domSanitizer.bypassSecurityTrustResourceUrl(duotone_folder + "shield-alt.svg")
+      );
     }
 
   }

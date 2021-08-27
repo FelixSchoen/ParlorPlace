@@ -14,4 +14,5 @@ public enum WerewolfLogType {
     WITCH_KILL,
     CUPID_LINK,
     LOVERS_LOVE,
+    BODYGUARD_PROTECT,
 }
