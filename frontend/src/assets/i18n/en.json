@@ -109,6 +109,10 @@
       "bodyguard": {
         "name": "Bodyguard",
         "description": "You choose 1 player per night, which cannot be killed by the werewolves this night. You cannot choose the same player on two consecutive nights."
+      },
+      "lycanthrope": {
+        "name": "Lycanthrope",
+        "description": "You are a normal villager, but the seer sees you as a werewolf."
       }
     },
     "faction": {

@@ -7,6 +7,7 @@ export enum WerewolfRoleType {
   WITCH = "WITCH",
   CUPID = "CUPID",
   BODYGUARD = "BODYGUARD",
+  LYCANTHROPE = "LYCANTHROPE"
 }
 
 @Injectable({
@@ -23,7 +24,8 @@ export class WerewolfRoleTypeUtil {
       WerewolfRoleType.SEER,
       WerewolfRoleType.WITCH,
       WerewolfRoleType.CUPID,
-      WerewolfRoleType.BODYGUARD]
+      WerewolfRoleType.BODYGUARD,
+      WerewolfRoleType.LYCANTHROPE,]
   }
 
   public static toIconRepresentation(type: WerewolfRoleType): string {

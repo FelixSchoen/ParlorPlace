@@ -86,6 +86,10 @@ export class AppComponent implements OnInit {
         "duotone-bodyguard",
         this.domSanitizer.bypassSecurityTrustResourceUrl(duotone_folder + "shield-alt.svg")
       );
+      this.matIconRegistry.addSvgIcon(
+        "duotone-lycanthrope",
+        this.domSanitizer.bypassSecurityTrustResourceUrl(duotone_folder + "dog.svg")
+      );
     }
 
   }
