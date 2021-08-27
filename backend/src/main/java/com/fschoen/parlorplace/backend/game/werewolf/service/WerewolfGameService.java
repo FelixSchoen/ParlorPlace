@@ -6,6 +6,7 @@ import com.fschoen.parlorplace.backend.game.werewolf.entity.WerewolfGame;
 import com.fschoen.parlorplace.backend.game.werewolf.entity.WerewolfGameRole;
 import com.fschoen.parlorplace.backend.game.werewolf.entity.WerewolfPlayer;
 import com.fschoen.parlorplace.backend.game.werewolf.entity.WerewolfRuleSet;
+import com.fschoen.parlorplace.backend.game.werewolf.entity.gamerole.CupidWerewolfGameRole;
 import com.fschoen.parlorplace.backend.game.werewolf.entity.gamerole.SeerWerewolfGameRole;
 import com.fschoen.parlorplace.backend.game.werewolf.entity.gamerole.VillagerWerewolfGameRole;
 import com.fschoen.parlorplace.backend.game.werewolf.entity.gamerole.WerewolfWerewolfGameRole;
@@ -49,6 +50,7 @@ public class WerewolfGameService extends AbstractGameService<
         put(WerewolfRoleType.WEREWOLF, WerewolfWerewolfGameRole.class);
         put(WerewolfRoleType.SEER, SeerWerewolfGameRole.class);
         put(WerewolfRoleType.WITCH, WitchWerewolfGameRole.class);
+        put(WerewolfRoleType.CUPID, CupidWerewolfGameRole.class);
     }};
 
     @Autowired

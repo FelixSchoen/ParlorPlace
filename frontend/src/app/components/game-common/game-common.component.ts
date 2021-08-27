@@ -119,10 +119,10 @@ export abstract class GameCommonComponent<G extends Game, P extends Player> impl
           queryParams: {player: this.currentPlayer.id}
         }).then();
       } else {
-        console.error("Game ended but no current game information available")
+        console.error()
       }
     } else {
-      console.error("Unknown Notification Type")
+      console.error()
     }
 
   }

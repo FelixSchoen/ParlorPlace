@@ -27,4 +27,8 @@ public abstract class WerewolfGameRole extends GameRole {
 
     public abstract WerewolfFaction getWerewolfFaction();
 
+    public abstract void setWerewolfRoleType(WerewolfRoleType werewolfRoleType);
+
+    public abstract void setWerewolfFaction(WerewolfFaction werewolfFaction);
+
 }

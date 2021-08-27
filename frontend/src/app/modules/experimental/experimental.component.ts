@@ -9,10 +9,12 @@ import {LoadJsonService} from "../../services/load-json.service";
 })
 export class ExperimentalComponent {
 
-  constructor(public voicelineService: AudioService, public jsonService: LoadJsonService) {
+  constructor(public audioService: AudioService, public jsonService: LoadJsonService) {
   }
 
   public action(): void {
+    this.audioService.queueAudio(["asdf", "fdsa"])
+    console.log("asdf")
     // let pack = new WerewolfResourcePack(this.jsonService, WerewolfResourcePackType.OLD_MAN, LanguageIdentifier.DE);
     //
     // let voiceLine = pack.getStartVoiceLine();

@@ -56,7 +56,7 @@ export class GameComponent implements OnInit {
         let gameComponent = this.gameComponentMap.get(gameBaseInformation.gameType);
 
         if (gameComponent == undefined) {
-          console.error("Unknown game type");
+          console.error();
           return;
         }
 
@@ -67,7 +67,7 @@ export class GameComponent implements OnInit {
         else if (gameBaseInformation.gameState == GameState.ONGOING)
           componentToLoad = gameComponent.mainComponent;
         else
-          console.error("Unknown game state");
+          console.error();
 
         const componentFactory = this.componentFactoryResolver.resolveComponentFactory(componentToLoad);
 

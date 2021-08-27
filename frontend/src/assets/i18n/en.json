@@ -101,6 +101,10 @@
       "witch": {
         "name": "Witch",
         "description": "You heal or kill 1 player during the night. You can do both of these actions only once per game."
+      },
+      "cupid": {
+        "name": "Cupid",
+        "description": "You select 2 players, which will fall in love. If one of them dies, the other one will perish as well."
       }
     },
     "faction": {
@@ -130,6 +134,9 @@
       "witch": {
         "heal": "Who do you want to heal?",
         "kill": "Who do you want to poison?"
+      },
+      "cupid": {
+        "link": "Who do you want to fall in love?"
       }
     },
     "log": {
@@ -143,7 +150,9 @@
       "seer_failure": "{player} is not a Werewolf",
       "witch_heal": "You heal {player}",
       "witch_kill": "You poison {player}",
-      "villagers_vote": "The villagers lynch {player}"
+      "villagers_vote": "The villagers lynch {player}",
+      "cupid_link": "You make {player1} and {player2} fall in love",
+      "lovers_love": "You fall in love with {player}"
     },
     "resourcepack": {
       "default": {

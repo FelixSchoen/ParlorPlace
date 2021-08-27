@@ -6,6 +6,7 @@ import com.fschoen.parlorplace.backend.entity.GameRole;
 import com.fschoen.parlorplace.backend.entity.LogEntry;
 import com.fschoen.parlorplace.backend.entity.Player;
 import com.fschoen.parlorplace.backend.entity.RuleSet;
+import com.fschoen.parlorplace.backend.enumeration.NotificationType;
 import com.fschoen.parlorplace.backend.enumeration.PlayerState;
 import com.fschoen.parlorplace.backend.repository.GameRepository;
 import com.fschoen.parlorplace.backend.repository.LogEntryRepository;
@@ -83,6 +84,10 @@ public abstract class AbstractGameModerator<
 
     protected void broadcastVoiceLineNotification(VoiceLineClientNotification notification) {
         this.communicationService.sendVoiceLineNotification(this.gameIdentifier, this.getAllPlayersOfGame().stream().map(Player::getUser).collect(Collectors.toSet()), notification);
+    }
+
+    protected void sendPlayerNotificationNotification(Set<P> recipients) {
+        this.communicationService.sendNotification(this.gameIdentifier, recipients.stream().map(Player::getUser).collect(Collectors.toSet()), NotificationType.PLAYER_NOTIFICATION, false);
     }
 
 }

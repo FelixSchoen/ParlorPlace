@@ -5,6 +5,7 @@ import com.fschoen.parlorplace.backend.enumeration.GameState;
 import com.fschoen.parlorplace.backend.enumeration.PlayerState;
 import com.fschoen.parlorplace.backend.game.werewolf.dto.game.WerewolfGameDTO;
 import com.fschoen.parlorplace.backend.game.werewolf.dto.game.WerewolfPlayerDTO;
+import com.fschoen.parlorplace.backend.game.werewolf.dto.role.CupidWerewolfGameRoleDTO;
 import com.fschoen.parlorplace.backend.game.werewolf.dto.role.WerewolfGameRoleDTO;
 import com.fschoen.parlorplace.backend.game.werewolf.dto.role.WitchWerewolfGameRoleDTO;
 import com.fschoen.parlorplace.backend.repository.UserRepository;
@@ -34,11 +35,13 @@ public class WerewolfGameRoleObfuscationService extends GameRoleObfuscationServi
 
         switch (werewolfGameRoleDTO.getWerewolfRoleType()) {
             case WITCH -> {
-                // For future roles: Able to remove information (e.g. for witch - has already healed?)
                 WitchWerewolfGameRoleDTO witchWerewolfGameRoleDTO = (WitchWerewolfGameRoleDTO) werewolfGameRoleDTO;
                 witchWerewolfGameRoleDTO.setHasHealed(null);
                 witchWerewolfGameRoleDTO.setHasKilled(null);
-                break;
+            }
+            case CUPID -> {
+                CupidWerewolfGameRoleDTO cupidWerewolfGameRoleDTO = (CupidWerewolfGameRoleDTO) werewolfGameRoleDTO;
+                cupidWerewolfGameRoleDTO.setHasLinked(null);
             }
         }
 

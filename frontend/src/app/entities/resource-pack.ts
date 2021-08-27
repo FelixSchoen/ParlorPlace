@@ -128,6 +128,9 @@ export class WerewolfResourcePack extends ResourcePack {
       case WerewolfVoiceLineType.WEREWOLVES_SLEEP:
       case WerewolfVoiceLineType.SEER_WAKE:
       case WerewolfVoiceLineType.WITCH_WAKE:
+      case WerewolfVoiceLineType.CUPID_WAKE:
+      case WerewolfVoiceLineType.LOVERS_WAKE:
+      case WerewolfVoiceLineType.LOVERS_SLEEP:
         voiceLinePromise = this.getVoiceLineArray(codeNames, "voiceline", "role", this.voiceLineTypeToPackIdentifier(voiceLineType.toLowerCase())[1], this.voiceLineTypeToPackIdentifier(voiceLineType.toLowerCase())[2])
         break;
       default:

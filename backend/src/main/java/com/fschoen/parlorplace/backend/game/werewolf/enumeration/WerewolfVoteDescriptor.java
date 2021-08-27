@@ -5,5 +5,6 @@ public enum WerewolfVoteDescriptor {
     WEREWOLVES_KILL,
     SEER_SEE,
     WITCH_HEAL,
-    WITCH_KILL
+    WITCH_KILL,
+    CUPID_LINK,
 }
