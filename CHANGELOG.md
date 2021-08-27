@@ -29,7 +29,7 @@
 - **Implemented lycanthrope**
   - Is a normal villager
   - The seer sees them as a werewolf
-- **Implement bear tamer**
+- **Implemented bear tamer**
   - Each morning, the bear growls if there is at least one werewolf adjacent to the bear tamer
   - Otherwise it stays silent
 - Missing voicelines
