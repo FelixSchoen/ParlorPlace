@@ -137,8 +137,23 @@ Add an entry in the `role` section, and entries for every newly created log type
 **Careful:** The key values must equal to the values given by the enumeration, as access to the localization fields is done in this way:
 
 ```
-(this.getCurrentRoleTypeCurrentPlayer().valueOf() | internalRepresentation) + ".name") | translate
-(this.getCurrentRoleTypeCurrentPlayer().valueOf() | internalRepresentation) + ".description") | translate
+("werewolf.role." + this.werewolfRoleTypeUtil.toInternalRepresentation(this.getCurrentRoleTypeCurrentPlayer()) + ".name") | translate
+("werewolf.role." + this.werewolfRoleTypeUtil.toInternalRepresentation(this.getCurrentRoleTypeCurrentPlayer()) + ".description") | translate
+```
+
+where
+
+```
+public static toInternalRepresentation(type: WerewolfRoleType): string {
+  let parts: string[] = type.toLowerCase().split("_")
+  let finalString: string = "" + parts.shift();
+
+  for (let part of parts) {
+    finalString += part.charAt(0).toUpperCase() + part.slice(1);
+  }
+
+  return finalString;
+}
 ```
 
 Similarly, for the vote descriptor be sure to fit the pattern determined by the following snippet (e.g. `SEER_SEE` would turn into `werewolf.vote.seer.see`):

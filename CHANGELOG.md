@@ -22,13 +22,16 @@
   - At the start of the game, links two players which then fall in love
   - If one of them dies, the other one dies as well
   - They cannot vote against each other in the lynching vote
-- **Implement bodyguard**
+- **Implemented bodyguard**
   - New role: bodyguard
   - Can protect one player each night, that cannot be killed by the werewolves
   - Cannot choose the same player on two consecutive nights
-- **Implement lycanthrope**
+- **Implemented lycanthrope**
   - Is a normal villager
   - The seer sees them as a werewolf
+- **Implement bear tamer**
+  - Each morning, the bear growls if there is at least one werewolf adjacent to the bear tamer
+  - Otherwise it stays silent
 - Missing voicelines
 
 ## Fixed
