@@ -21,7 +21,9 @@ export abstract class VoteComponent<G extends Game, P extends Player, V extends 
   public votersData: [P, C][];
   public timeRemaining: number;
 
+  public subjects: T[];
   public selectedOptions: T[];
+  public isSelected: boolean[];
 
   public voteState = VoteState;
   public displayedColumns: string[] = ["player", "selection"]
@@ -51,7 +53,16 @@ export abstract class VoteComponent<G extends Game, P extends Player, V extends 
     this.voteMap = VoteUtil.toMap<C>(this.vote.voteCollectionMap);
     this.votersData = this.getData();
 
+    this.subjects = this.sortSelection(this.voteMap.get(this.currentPlayer.id)!.subjects);
     this.selectedOptions = Array.from(this.voteMap.get(this.currentPlayer.id)!.selection);
+
+    let isSelected: boolean[] = [];
+
+    for (let option of this.subjects) {
+      isSelected.push(this.includedInSelection(option))
+    }
+
+    this.isSelected = isSelected;
   }
 
   public selectOption(t: T) {
@@ -60,8 +71,8 @@ export abstract class VoteComponent<G extends Game, P extends Player, V extends 
 
     voteCollection.abstain = false;
 
-    let indexOfElement = _.findIndex(this.selectedOptions, (a, b) => {
-      return _.isEqual(this.selectedOptions[0], t)
+    let indexOfElement = _.findIndex(this.selectedOptions, (a) => {
+      return _.isEqual(a, t)
     });
 
     if (indexOfElement > -1) {

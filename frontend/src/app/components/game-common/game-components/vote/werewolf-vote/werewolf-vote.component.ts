@@ -4,6 +4,7 @@ import {WerewolfGame, WerewolfPlayer, WerewolfVote, WerewolfVoteCollection} from
 import {Player, PlayerUtil} from "../../../../../dto/player";
 import {WerewolfGameService} from "../../../../../services/werewolf-game.service";
 import {NotificationService} from "../../../../../services/notification.service";
+import _ from "lodash";
 
 @Component({
   selector: 'app-werewolf-vote',
@@ -39,10 +40,13 @@ export class WerewolfVoteComponent extends VoteComponent<WerewolfGame, WerewolfP
   }
 
   includedInSelection(s: WerewolfPlayer): boolean {
-    let array = this.voteMap.get(this.currentPlayer.id)!.selection
-    if (array == undefined)
-      return false;
-    return array.some(entry => entry.id == s.id);
+    return _.findIndex(this.selectedOptions, (a) => {
+      return _.isEqual(a, s)
+    }) > -1;
+    // let array = this.voteMap.get(this.currentPlayer.id)!.selection
+    // if (array == undefined)
+    //   return false;
+    // return array.some(entry => entry.id == s.id);
   }
 
 }

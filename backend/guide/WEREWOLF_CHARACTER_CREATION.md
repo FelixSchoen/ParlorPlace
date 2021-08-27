@@ -38,6 +38,10 @@ private static final Map<WerewolfRoleType, Class<? extends WerewolfGameRole>> we
 }};
 ```
 
+Furthermore, matching `DTO`s and `WerewolfRoleType`s have to be created, in order to accommodate the new role.
+A special case (not described in this guide) would be the creation of a new faction (say e.g. for the Lovers).
+This should still be pretty straightforward.
+
 Adjust the JSON mapping of the `WerewolfGameRoleDTO`s as follows:
 
 ```
@@ -47,10 +51,6 @@ Adjust the JSON mapping of the `WerewolfGameRoleDTO`s as follows:
         [...]}
 )
 ```
-
-Furthermore, matching `DTO`s and `WerewolfRoleType`s have to be created, in order to accommodate the new role.
-A special case (not described in this guide) would be the creation of a new faction (say e.g. for the Lovers).
-This should still be pretty straightforward.
 
 The next step is to modify the `WerewolfGameRoleMapper`. Add new entries similar to the code shown below:
 
@@ -162,7 +162,7 @@ case WerewolfLogType.ROLE:
 
 #### Voicelines
 
-For voicelines, be sure to match the path given by the `WerewolfVoiceLineType`.
+For voicelines, edit `pack.json` and be sure to match the path given by the `WerewolfVoiceLineType`.
 This works in similar fashion as above: Replace `_` by `.`, and insert the role voicelines under `voiceline.role`.
 Be sure to adjust `getVoiceLine()` in `WerewolfResourcePack`, in order to match the voice line with the correct path (in case `voiceline.role` is not fitting for example).
 Make sure not to mix up the `source` and `target` property in the backend, when sending voicelines.
