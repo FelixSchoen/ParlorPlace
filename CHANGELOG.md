@@ -25,6 +25,9 @@
   - New role: bodyguard
   - Can protect one player each night, that cannot be killed by the werewolves
   - Cannot choose the same player on two consecutive nights
+- **Implement lycanthrope**
+  - Is a normal villager
+  - The seer sees them as a werewolf
 - Missing voicelines
 
 ## Fixed

@@ -445,7 +445,7 @@ public class WerewolfGameModerator extends AbstractGameModerator<
         // --- Logic Start ---
 
         WerewolfGame game = this.getGame();
-        if (hasLastRoleType(seerTarget, WerewolfRoleType.WEREWOLF)) {
+        if (hasLastRoleType(seerTarget, WerewolfRoleType.WEREWOLF) || hasLastRoleType(seerTarget, WerewolfRoleType.LYCANTHROPE)) {
             game.getLog().add(getLogEntryTemplate(seerSet).logType(WerewolfLogType.SEER_SUCCESS).targets(new HashSet<>() {{
                 add(seerTarget);
             }}).build());
