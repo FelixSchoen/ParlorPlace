@@ -17,5 +17,7 @@ public enum WerewolfVoiceLineType {
     CUPID_WAKE,
     LOVERS_WAKE,
     LOVERS_SLEEP,
-    BODYGUARD_WAKE
+    BODYGUARD_WAKE,
+    BEAR_TAMER_GROWL,
+    BEAR_TAMER_SILENT,
 }

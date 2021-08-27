@@ -24,7 +24,8 @@ import lombok.experimental.SuperBuilder;
         @JsonSubTypes.Type(value = WitchWerewolfGameRoleDTO.class, name = "WITCH"),
         @JsonSubTypes.Type(value = CupidWerewolfGameRoleDTO.class, name = "CUPID"),
         @JsonSubTypes.Type(value = BodyguardWerewolfGameRoleDTO.class, name = "BODYGUARD"),
-        @JsonSubTypes.Type(value = LycanthropeWerewolfGameRoleDTO.class, name = "LYCANTHROPE")}
+        @JsonSubTypes.Type(value = LycanthropeWerewolfGameRoleDTO.class, name = "LYCANTHROPE"),
+        @JsonSubTypes.Type(value = BearTamerWerewolfGameRoleDTO.class, name = "BEAR_TAMER")}
 )
 @Data
 public abstract class WerewolfGameRoleDTO extends GameRoleDTO {

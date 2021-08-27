@@ -15,4 +15,6 @@ public enum WerewolfLogType {
     CUPID_LINK,
     LOVERS_LOVE,
     BODYGUARD_PROTECT,
+    BEAR_TAMER_GROWL,
+    BEAR_TAMER_SILENT,
 }

@@ -17,6 +17,8 @@ import com.fschoen.parlorplace.backend.utility.communication.VoiceLineClientNoti
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -70,6 +72,46 @@ public abstract class AbstractGameModerator<
     protected Set<P> getAllPlayersOfGame() {
         G game = getActiveGame(gameIdentifier);
         return game.getPlayers();
+    }
+
+    protected P getPlayerByPosition(int position) {
+        Optional<P> playerOptional = getAllPlayersOfGame().stream().filter(player -> player.getPosition() == position).findFirst();
+        return playerOptional.orElse(null);
+    }
+
+    protected Set<P> getAliveNeighbours(P player) {
+        int amountPlayers = getAllPlayersOfGame().size();
+        int position = player.getPosition();
+
+        P leftNeighbour = null;
+        int leftPosition = (position + 1) % amountPlayers;
+        while (leftNeighbour == null) {
+            P leftPlayer = getPlayerByPosition(leftPosition);
+            if (leftPlayer.getPlayerState() == PlayerState.DECEASED) {
+                leftPosition = (leftPosition + 1) % amountPlayers;
+                continue;
+            }
+            leftNeighbour = leftPlayer;
+        }
+
+        P rightNeighbour = null;
+        int rightPosition = (position - 1) % amountPlayers;
+        while (rightNeighbour == null) {
+            P rightPlayer = getPlayerByPosition(rightPosition);
+            if (rightPlayer.getPlayerState() == PlayerState.DECEASED) {
+                rightPosition = (rightPosition - 1) % amountPlayers;
+                continue;
+            }
+            rightNeighbour = rightPlayer;
+        }
+
+        P finalLeftNeighbour = leftNeighbour;
+        P finalRightNeighbour = rightNeighbour;
+
+        return new HashSet<>() {{
+            add(finalLeftNeighbour);
+            add(finalRightNeighbour);
+        }};
     }
 
     protected void pause(int pauseTime) {

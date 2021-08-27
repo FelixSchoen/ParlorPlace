@@ -8,4 +8,5 @@ public enum WerewolfRoleType {
     CUPID,
     BODYGUARD,
     LYCANTHROPE,
+    BEAR_TAMER,
 }
