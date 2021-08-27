@@ -30,9 +30,6 @@ export class AudioService {
     }
   }
 
-  // TODO Add audio files for
-  // TODO Witch
-  // TODO Cupid
   private play(audio: HTMLAudioElement, pathArray: string[]) {
     let voiceline = pathArray.shift();
 
