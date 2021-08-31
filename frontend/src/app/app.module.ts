@@ -13,6 +13,7 @@ import {AppComponent} from "./app.component";
 import {MatSnackBarModule} from "@angular/material/snack-bar";
 import {OverlayContainer} from "@angular/cdk/overlay";
 import {TranslateMessageFormatCompiler} from "ngx-translate-messageformat-compiler";
+import {HashLocationStrategy, LocationStrategy} from "@angular/common";
 
 @NgModule({
   declarations: [
@@ -36,7 +37,10 @@ import {TranslateMessageFormatCompiler} from "ngx-translate-messageformat-compil
     }),
     MatSnackBarModule,
   ],
-  providers: [authInterceptorProviders],
+  providers: [authInterceptorProviders,{
+    provide: LocationStrategy,
+    useClass: HashLocationStrategy
+  }],
   exports: [],
   bootstrap: [AppComponent]
 })
