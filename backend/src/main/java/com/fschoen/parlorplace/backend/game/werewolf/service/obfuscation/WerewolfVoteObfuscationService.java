@@ -6,11 +6,11 @@ import com.fschoen.parlorplace.backend.game.werewolf.dto.game.WerewolfGameDTO;
 import com.fschoen.parlorplace.backend.game.werewolf.dto.game.WerewolfPlayerWerewolfVoteDTO;
 import com.fschoen.parlorplace.backend.game.werewolf.dto.game.WerewolfVoteDTO;
 import com.fschoen.parlorplace.backend.repository.UserRepository;
-import com.fschoen.parlorplace.backend.service.obfuscation.SingleObfuscationService;
+import com.fschoen.parlorplace.backend.service.obfuscation.VoteObfuscationService;
 import org.springframework.stereotype.Service;
 
 @Service
-public class WerewolfVoteObfuscationService extends SingleObfuscationService<
+public class WerewolfVoteObfuscationService extends VoteObfuscationService<
         WerewolfVoteDTO<?,?>,
         WerewolfGameDTO> {
 

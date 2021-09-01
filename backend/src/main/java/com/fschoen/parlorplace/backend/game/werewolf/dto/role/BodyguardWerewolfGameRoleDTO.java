@@ -29,8 +29,4 @@ public class BodyguardWerewolfGameRoleDTO extends WerewolfGameRoleDTO {
     @NotNull
     private WerewolfFaction werewolfFaction = WerewolfFaction.VILLAGERS;
 
-    @EqualsAndHashCode.Exclude
-    @ToString.Exclude
-    protected WerewolfPlayerDTO lastProtected;
-
 }

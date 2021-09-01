@@ -24,11 +24,10 @@ import {WerewolfInterfaceComponent} from '../../components/game-interface/werewo
 import {WerewolfPlayerListComponent} from '../../components/game-common/interface-components/werewolf-player-list/werewolf-player-list.component';
 import {MatBadgeModule} from "@angular/material/badge";
 import {WerewolfLogEntryListComponent} from '../../components/game-common/interface-components/log-entry-list/werewolf-log-entry-list/werewolf-log-entry-list.component';
-import {WerewolfPlayerWerewolfVoteComponent} from '../../components/game-common/interface-components/vote/werewolf-vote/werewolf-player-werewolf-vote/werewolf-player-werewolf-vote.component';
+import {WerewolfPlayerWerewolfVoteComponent} from '../../components/game-common/interface-components/vote/werewolf-player-werewolf-vote/werewolf-player-werewolf-vote.component';
 import {MatTableModule} from "@angular/material/table";
 import {ResourcepackSelectionComponent} from '../../components/game-common/lobby-components/resourcepack-selection/resourcepack-selection.component';
 import {MatSelectModule} from "@angular/material/select";
-import {WerewolfVoteComponent} from '../../components/game-common/interface-components/vote/werewolf-vote/werewolf-vote.component';
 
 
 @NgModule({
@@ -41,7 +40,6 @@ import {WerewolfVoteComponent} from '../../components/game-common/interface-comp
     WerewolfInterfaceComponent,
     WerewolfPlayerListComponent,
     WerewolfLogEntryListComponent,
-    WerewolfVoteComponent,
     WerewolfPlayerWerewolfVoteComponent,
     ResourcepackSelectionComponent,
   ],

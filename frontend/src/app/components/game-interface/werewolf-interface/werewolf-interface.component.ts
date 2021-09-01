@@ -1,6 +1,12 @@
 import {Component, ViewChild} from '@angular/core';
 import {GameInterfaceComponent} from "../game-interface.component";
-import {WerewolfGame, WerewolfLogEntry, WerewolfPlayer, WerewolfPlayerWerewolfVote} from "../../../dto/werewolf";
+import {
+  WerewolfGame,
+  WerewolfLogEntry,
+  WerewolfPlayer,
+  WerewolfPlayerWerewolfVote,
+  WerewolfVote
+} from "../../../dto/werewolf";
 import {UserService} from "../../../services/user.service";
 import {WerewolfGameService} from "../../../services/werewolf-game.service";
 import {CommunicationService} from "../../../services/communication.service";
@@ -16,6 +22,7 @@ import {AudioService} from "../../../services/audio.service";
 import {WerewolfLogType} from "../../../enums/games/werewolf-log-type";
 import _ from "lodash";
 import {WerewolfVoteIdentifier} from "../../../enums/games/werewolf-vote-identifier";
+import {TabTitleService} from "../../../services/tab-title.service";
 
 @Component({
   selector: 'app-werewolf-interface',
@@ -34,6 +41,9 @@ export class WerewolfInterfaceComponent extends GameInterfaceComponent<WerewolfG
   public viewedLog: boolean = true;
   public viewedRole: boolean;
 
+  public activeVotes: WerewolfVote<any, any>[];
+  public concludedVotes: WerewolfVote<any, any>[];
+
   private previousLog: WerewolfLogEntry[] = [];
   // Defines for which type of log a badge should be shown under the log tab
   private logsWithNewInformation: WerewolfLogType[] = [
@@ -48,6 +58,7 @@ export class WerewolfInterfaceComponent extends GameInterfaceComponent<WerewolfG
     public gameService: WerewolfGameService,
     public communicationService: CommunicationService,
     public notificationService: NotificationService,
+    public tabTitleService: TabTitleService,
     public audioService: AudioService,
     public loadJsonService: LoadJsonService,
     public activatedRoute: ActivatedRoute,
@@ -86,10 +97,17 @@ export class WerewolfInterfaceComponent extends GameInterfaceComponent<WerewolfG
   protected loadedGameCallback() {
     super.loadedGameCallback();
 
+    this.activeVotes = this.sortVotes(this.game.votes)[0];
+    this.concludedVotes = this.sortVotes(this.game.votes)[1];
+
+    this.tabTitleService.setNotification(this.activeVotes.length);
+
     let missing = this.game.log.filter(item => _.findIndex(this.previousLog, (a) => {
       return _.isEqual(a, item)
     }) < 0);
+
     let showNotification = (missing.some(item => this.logsWithNewInformation.includes(item.logType)) && (this.activeTab != WerewolfInterfaceComponent.LOG_TAB));
+
     this.viewedLog = !showNotification;
 
     this.previousLog = this.game.log;
