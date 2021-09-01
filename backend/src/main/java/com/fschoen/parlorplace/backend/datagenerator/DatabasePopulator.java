@@ -14,9 +14,9 @@ import com.fschoen.parlorplace.backend.enumeration.VoteType;
 import com.fschoen.parlorplace.backend.game.werewolf.entity.WerewolfGame;
 import com.fschoen.parlorplace.backend.game.werewolf.entity.WerewolfLogEntry;
 import com.fschoen.parlorplace.backend.game.werewolf.entity.WerewolfPlayer;
+import com.fschoen.parlorplace.backend.game.werewolf.entity.WerewolfPlayerVoteCollection;
+import com.fschoen.parlorplace.backend.game.werewolf.entity.WerewolfPlayerWerewolfVote;
 import com.fschoen.parlorplace.backend.game.werewolf.entity.WerewolfRuleSet;
-import com.fschoen.parlorplace.backend.game.werewolf.entity.WerewolfVote;
-import com.fschoen.parlorplace.backend.game.werewolf.entity.WerewolfVoteCollection;
 import com.fschoen.parlorplace.backend.game.werewolf.entity.gamerole.VillagerWerewolfGameRole;
 import com.fschoen.parlorplace.backend.game.werewolf.entity.gamerole.WerewolfWerewolfGameRole;
 import com.fschoen.parlorplace.backend.game.werewolf.enumeration.WerewolfGamePhase;
@@ -196,10 +196,10 @@ public class DatabasePopulator {
                         .resourcePack("DEFAULT")
                         .gameRoleTypes(new ArrayList<>() {{
                             add(WerewolfRoleType.WEREWOLF);
-                            add(WerewolfRoleType.VILLAGER);
-                            add(WerewolfRoleType.VILLAGER);
+                            add(WerewolfRoleType.SEER);
                             add(WerewolfRoleType.WITCH);
-                            add(WerewolfRoleType.BEAR_TAMER);
+                            add(WerewolfRoleType.CUPID);
+                            add(WerewolfRoleType.BODYGUARD);
                         }}).build())
                 .round(0)
                 .votes(new ArrayList<>())
@@ -327,7 +327,7 @@ public class DatabasePopulator {
             p.getGameRoles().forEach(werewolfGameRole -> werewolfGameRole.setPlayer(p));
         }
         werewolfOngoingGame1.getVotes().add(
-                WerewolfVote.builder()
+                WerewolfPlayerWerewolfVote.builder()
                         .game(werewolfOngoingGame1)
                         .voteState(VoteState.ONGOING)
                         .voteType(VoteType.PUBLIC_PUBLIC_PUBLIC)
@@ -352,8 +352,8 @@ public class DatabasePopulator {
 
         for (WerewolfPlayer p : werewolfOngoingGame1.getPlayers()) {
             werewolfOngoingGame1.getVotes().get(0).getVoters().add(p);
-            werewolfOngoingGame1.getVotes().get(0).getVoteCollectionMap().put(p.getId(),
-                    WerewolfVoteCollection.builder()
+            ((WerewolfPlayerWerewolfVote)werewolfOngoingGame1.getVotes().get(0)).getVoteCollectionMap().put(p.getId(),
+                    WerewolfPlayerVoteCollection.builder()
                             .amountVotes(1)
                             .allowAbstain(false)
                             .subjects(new HashSet<>() {{

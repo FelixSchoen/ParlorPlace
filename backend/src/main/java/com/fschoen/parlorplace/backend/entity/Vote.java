@@ -46,7 +46,8 @@ public abstract class Vote<
         P extends Player<?>,
         T,
         C extends VoteCollection<T>,
-        D extends Enum<D>> {
+        D extends Enum<D>,
+        E extends Enum<E>> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "seq_vote_id")
@@ -111,8 +112,13 @@ public abstract class Vote<
     public abstract void setOutcome(Set<T> tSet);
 
     // TODO Not ideal, I would have preferred to have this as a field, but since enums cannot inherit I cannot specify a supertype using targetEntity=
-    public abstract D getVoteDescriptor();
 
-    public abstract void setVoteDescriptor(D d);
+    public abstract D getVoteIdentifier();
+
+    public abstract void setVoteIdentifier(D d);
+
+    public abstract E getVoteDescriptor();
+
+    public abstract void setVoteDescriptor(E e);
 
 }

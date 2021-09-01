@@ -1,20 +1,30 @@
-import {Component, OnInit} from '@angular/core';
-import {VoteComponent} from "../vote.component";
-import {WerewolfGame, WerewolfPlayer, WerewolfVote, WerewolfVoteCollection} from "../../../../../dto/werewolf";
+import {ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit} from '@angular/core';
+import {
+  WerewolfGame,
+  WerewolfPlayer,
+  WerewolfPlayerVoteCollection,
+  WerewolfPlayerWerewolfVote
+} from "../../../../../dto/werewolf";
 import {Player, PlayerUtil} from "../../../../../dto/player";
 import {WerewolfGameService} from "../../../../../services/werewolf-game.service";
 import {NotificationService} from "../../../../../services/notification.service";
 import _ from "lodash";
+import {VoteComponent} from "../vote.component";
 
 @Component({
-  selector: 'app-werewolf-vote',
+  selector: 'app-werewolf-player-werewolf-vote',
   templateUrl: '../vote.component.html',
-  styleUrls: ['../vote.component.scss']
+  styleUrls: ['../vote.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class WerewolfVoteComponent extends VoteComponent<WerewolfGame, WerewolfPlayer, WerewolfVote, WerewolfPlayer, WerewolfVoteCollection> implements OnInit {
+export class WerewolfPlayerWerewolfVoteComponent extends VoteComponent<WerewolfGame, WerewolfPlayer, WerewolfPlayerWerewolfVote, WerewolfPlayer, WerewolfPlayerVoteCollection> implements OnInit {
 
-  constructor(public gameService: WerewolfGameService, public notificationService: NotificationService) {
-    super();
+  constructor(
+    public ref: ChangeDetectorRef,
+    public gameService: WerewolfGameService,
+    public notificationService: NotificationService
+  ) {
+    super(ref);
   }
 
   ngOnInit(): void {
@@ -25,7 +35,7 @@ export class WerewolfVoteComponent extends VoteComponent<WerewolfGame, WerewolfP
     return PlayerUtil.sort(t);
   }
 
-  protected sendVoteData(voteCollection: WerewolfVoteCollection): void {
+  protected sendVoteData(voteCollection: WerewolfPlayerVoteCollection): void {
     this.gameService.vote(this.gameIdentifier, this.vote.id, voteCollection).subscribe({
       error: error => this.notificationService.showError(error.error)
     });
@@ -43,10 +53,6 @@ export class WerewolfVoteComponent extends VoteComponent<WerewolfGame, WerewolfP
     return _.findIndex(this.selectedOptions, (a) => {
       return _.isEqual(a, s)
     }) > -1;
-    // let array = this.voteMap.get(this.currentPlayer.id)!.selection
-    // if (array == undefined)
-    //   return false;
-    // return array.some(entry => entry.id == s.id);
   }
 
 }

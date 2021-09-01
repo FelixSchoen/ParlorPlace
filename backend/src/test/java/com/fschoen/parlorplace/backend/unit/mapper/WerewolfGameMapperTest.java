@@ -18,7 +18,7 @@ import com.fschoen.parlorplace.backend.game.werewolf.mapper.WerewolfGameMapperIm
 import com.fschoen.parlorplace.backend.game.werewolf.mapper.WerewolfGameRoleMapperImpl;
 import com.fschoen.parlorplace.backend.game.werewolf.mapper.WerewolfLogEntryMapperImpl;
 import com.fschoen.parlorplace.backend.game.werewolf.mapper.WerewolfPlayerMapperImpl;
-import com.fschoen.parlorplace.backend.game.werewolf.mapper.WerewolfVoteCollectionMapperImpl;
+import com.fschoen.parlorplace.backend.game.werewolf.mapper.WerewolfPlayerVoteCollectionMapperImpl;
 import com.fschoen.parlorplace.backend.game.werewolf.mapper.WerewolfVoteMapperImpl;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -33,7 +33,7 @@ import java.util.Set;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes = {WerewolfGameMapperImpl.class, WerewolfPlayerMapperImpl.class, WerewolfGameRoleMapperImpl.class, WerewolfVoteMapperImpl.class, WerewolfVoteCollectionMapperImpl.class, WerewolfLogEntryMapperImpl.class, UserMapperImpl.class, RoleMapperImpl.class, GameIdentifierMapperImpl.class})
+@SpringBootTest(classes = {WerewolfGameMapperImpl.class, WerewolfPlayerMapperImpl.class, WerewolfGameRoleMapperImpl.class, WerewolfVoteMapperImpl.class, WerewolfPlayerVoteCollectionMapperImpl.class, WerewolfLogEntryMapperImpl.class, UserMapperImpl.class, RoleMapperImpl.class, GameIdentifierMapperImpl.class})
 public class WerewolfGameMapperTest {
 
     @Autowired

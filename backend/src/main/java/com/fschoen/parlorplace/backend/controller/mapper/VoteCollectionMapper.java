@@ -6,7 +6,7 @@ import com.fschoen.parlorplace.backend.entity.VoteCollection;
 import java.util.List;
 import java.util.Map;
 
-public interface VoteCollectionMapper<C extends VoteCollection<?>, CDTO extends VoteCollectionDTO<?, ?>, K, KDTO> {
+public interface VoteCollectionMapper<C extends VoteCollection<?>, CDTO extends VoteCollectionDTO<?>, K, KDTO> {
 
     CDTO toDTO(C collection);
 
