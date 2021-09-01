@@ -8,6 +8,7 @@ import com.fschoen.parlorplace.backend.game.werewolf.dto.game.WerewolfVoteDTO;
 import com.fschoen.parlorplace.backend.repository.UserRepository;
 import com.fschoen.parlorplace.backend.service.obfuscation.ObfuscationService;
 import com.fschoen.parlorplace.backend.service.obfuscation.SingleObfuscationService;
+import com.fschoen.parlorplace.backend.service.obfuscation.VoteObfuscationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,7 +23,7 @@ public class WerewolfGameObfuscationService extends ObfuscationService<WerewolfG
     public WerewolfGameObfuscationService(
             UserRepository userRepository,
             SingleObfuscationService<WerewolfPlayerDTO, WerewolfGameDTO> playerObfuscationService,
-            SingleObfuscationService<WerewolfVoteDTO<?, ?>, WerewolfGameDTO> voteObfuscationService,
+            VoteObfuscationService<WerewolfVoteDTO<?, ?>, WerewolfGameDTO> voteObfuscationService,
             SingleObfuscationService<WerewolfLogEntryDTO, WerewolfGameDTO> logEntryObfuscationService
     ) {
         super(userRepository);

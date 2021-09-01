@@ -196,10 +196,10 @@ public class DatabasePopulator {
                         .resourcePack("DEFAULT")
                         .gameRoleTypes(new ArrayList<>() {{
                             add(WerewolfRoleType.WEREWOLF);
-                            add(WerewolfRoleType.VILLAGER);
-                            add(WerewolfRoleType.VILLAGER);
+                            add(WerewolfRoleType.SEER);
                             add(WerewolfRoleType.WITCH);
-                            add(WerewolfRoleType.BEAR_TAMER);
+                            add(WerewolfRoleType.CUPID);
+                            add(WerewolfRoleType.BODYGUARD);
                         }}).build())
                 .round(0)
                 .votes(new ArrayList<>())

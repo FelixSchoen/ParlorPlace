@@ -20,9 +20,10 @@ import com.fschoen.parlorplace.backend.game.werewolf.entity.gamerole.SeerWerewol
 import com.fschoen.parlorplace.backend.game.werewolf.entity.gamerole.VillagerWerewolfGameRole;
 import com.fschoen.parlorplace.backend.game.werewolf.entity.gamerole.WerewolfWerewolfGameRole;
 import com.fschoen.parlorplace.backend.game.werewolf.entity.gamerole.WitchWerewolfGameRole;
+import org.mapstruct.Context;
 import org.mapstruct.Mapper;
 
-@Mapper(componentModel = "spring", uses = {WerewolfPlayerMapper.class})
+@Mapper(componentModel = "spring")
 public interface WerewolfGameRoleMapper extends GameRoleMapper<WerewolfGameRole, WerewolfGameRoleDTO> {
 
     VillagerWerewolfGameRoleDTO toDTO(VillagerWerewolfGameRole gameRole);

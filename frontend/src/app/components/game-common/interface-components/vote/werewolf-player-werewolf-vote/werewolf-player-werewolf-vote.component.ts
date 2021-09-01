@@ -1,28 +1,30 @@
-import {Component, OnInit} from '@angular/core';
+import {ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit} from '@angular/core';
 import {
   WerewolfGame,
   WerewolfPlayer,
   WerewolfPlayerVoteCollection,
   WerewolfPlayerWerewolfVote
-} from "../../../../../../dto/werewolf";
-import {Player, PlayerUtil} from "../../../../../../dto/player";
-import {WerewolfGameService} from "../../../../../../services/werewolf-game.service";
-import {NotificationService} from "../../../../../../services/notification.service";
+} from "../../../../../dto/werewolf";
+import {Player, PlayerUtil} from "../../../../../dto/player";
+import {WerewolfGameService} from "../../../../../services/werewolf-game.service";
+import {NotificationService} from "../../../../../services/notification.service";
 import _ from "lodash";
-import {VoteComponent} from "../../vote.component";
+import {VoteComponent} from "../vote.component";
 
 @Component({
   selector: 'app-werewolf-player-werewolf-vote',
-  templateUrl: '../../vote.component.html',
-  styleUrls: ['../../vote.component.scss']
+  templateUrl: '../vote.component.html',
+  styleUrls: ['../vote.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class WerewolfPlayerWerewolfVoteComponent extends VoteComponent<WerewolfGame, WerewolfPlayer, WerewolfPlayerWerewolfVote, WerewolfPlayer, WerewolfPlayerVoteCollection> implements OnInit {
 
   constructor(
+    public ref: ChangeDetectorRef,
     public gameService: WerewolfGameService,
     public notificationService: NotificationService
   ) {
-    super();
+    super(ref);
   }
 
   ngOnInit(): void {

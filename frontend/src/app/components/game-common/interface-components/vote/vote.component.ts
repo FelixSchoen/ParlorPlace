@@ -1,11 +1,10 @@
-import {ComponentFactoryResolver, Directive, Input, OnChanges, OnDestroy, OnInit, SimpleChanges} from '@angular/core';
+import {ChangeDetectorRef, Directive, Input, OnChanges, OnDestroy, OnInit, SimpleChanges} from '@angular/core';
 import {Vote, VoteCollection, VoteUtil} from "../../../../dto/vote";
 import {Player, PlayerUtil} from "../../../../dto/player";
 import {Subscription, timer} from "rxjs";
 import {Game, GameIdentifier} from "../../../../dto/game";
 import {VoteState} from "../../../../enums/vote-state";
 import _ from "lodash";
-import {ComponentHost} from "../../../../modules/game/component-host.directive";
 
 @Directive({
   selector: 'app-vote',
@@ -29,7 +28,7 @@ export abstract class VoteComponent<G extends Game, P extends Player, V extends 
   public voteState = VoteState;
   public displayedColumns: string[] = ["player", "selection"]
 
-  protected constructor() {
+  protected constructor(public ref: ChangeDetectorRef) {
 
   }
 
@@ -59,27 +58,17 @@ export abstract class VoteComponent<G extends Game, P extends Player, V extends 
       isSelected.push(this.includedInSelection(option))
     }
 
+    if (this.countDown != undefined)
+      this.countDown.unsubscribe();
+
     if (this.vote.voteState == VoteState.ONGOING) {
       this.timeRemaining = (this.vote.endTime * 1000 - new Date().getTime()) / 1000
       this.countDown = timer(0, 1000).subscribe(() => this.timeRemaining = Math.max(0, this.timeRemaining - 1));
     }
 
     this.isSelected = isSelected;
+    this.ref.markForCheck();
   }
-
-  // protected loadComponentIntoHost(componentToLoad: any, componentHost: ComponentHost) {
-  //   if (componentToLoad == undefined) {
-  //     console.error();
-  //     return;
-  //   }
-  //
-  //   const componentFactory = this.componentFactoryResolver.resolveComponentFactory(componentToLoad);
-  //   const viewContainerRef = componentHost.viewContainerRef;
-  //
-  //   viewContainerRef.clear();
-  //   viewContainerRef.createComponent(componentFactory);
-  // }
-
   public selectOption(t: T) {
     let voteCollection = this.voteMap.get(this.currentPlayer.id);
     if (voteCollection == undefined) return;
