@@ -4,7 +4,6 @@ import com.fschoen.parlorplace.backend.game.werewolf.entity.WerewolfGame;
 import com.fschoen.parlorplace.backend.game.werewolf.entity.WerewolfPlayer;
 import com.fschoen.parlorplace.backend.game.werewolf.entity.WerewolfPlayerVoteCollection;
 import com.fschoen.parlorplace.backend.game.werewolf.entity.WerewolfPlayerWerewolfVote;
-import com.fschoen.parlorplace.backend.game.werewolf.entity.WerewolfVote;
 import com.fschoen.parlorplace.backend.game.werewolf.enumeration.WerewolfVoteDescriptor;
 import com.fschoen.parlorplace.backend.game.werewolf.repository.WerewolfGameRepository;
 import com.fschoen.parlorplace.backend.game.werewolf.repository.WerewolfPlayerRepository;

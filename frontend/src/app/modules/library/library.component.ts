@@ -1,5 +1,5 @@
 import {Component, ComponentFactoryResolver, OnInit, ViewChild} from '@angular/core';
-import {GameDirective} from "../game/game.directive";
+import {ComponentHost} from "../game/component-host.directive";
 import {GameType} from "../../enums/game-type";
 import {GeneralGameService} from "../../services/general-game.service";
 import {NotificationService} from "../../services/notification.service";
@@ -15,7 +15,7 @@ import {WerewolfLibraryComponent} from "../../components/game-library/werewolf-l
 })
 export class LibraryComponent implements OnInit {
 
-  @ViewChild(GameDirective, {static: true}) gameHost!: GameDirective;
+  @ViewChild(ComponentHost, {static: true}) gameHost!: ComponentHost;
 
   public loading: boolean = true;
   public errorMessage: string = "";

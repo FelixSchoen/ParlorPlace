@@ -1,5 +1,5 @@
 import {Component, ComponentFactoryResolver, OnInit, ViewChild} from '@angular/core';
-import {GameDirective} from "./game.directive";
+import {ComponentHost} from "./component-host.directive";
 import {WerewolfLobbyComponent} from "../../components/game-lobby/werewolf-lobby/werewolf-lobby.component";
 import {ActivatedRoute, Router} from "@angular/router";
 import {GameBaseInformation, GameIdentifier} from "../../dto/game";
@@ -22,7 +22,7 @@ export interface GameComponents {
 })
 export class GameComponent implements OnInit {
 
-  @ViewChild(GameDirective, {static: true}) gameHost!: GameDirective;
+  @ViewChild(ComponentHost, {static: true}) gameHost!: ComponentHost;
 
   public loading: boolean = true;
   public errorMessage: string = "";

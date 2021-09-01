@@ -1,6 +1,6 @@
 import {Component, ViewChild} from '@angular/core';
 import {GameInterfaceComponent} from "../game-interface.component";
-import {WerewolfGame, WerewolfLogEntry, WerewolfPlayer, WerewolfVote} from "../../../dto/werewolf";
+import {WerewolfGame, WerewolfLogEntry, WerewolfPlayer, WerewolfPlayerWerewolfVote} from "../../../dto/werewolf";
 import {UserService} from "../../../services/user.service";
 import {WerewolfGameService} from "../../../services/werewolf-game.service";
 import {CommunicationService} from "../../../services/communication.service";
@@ -15,13 +15,14 @@ import {LanguageIdentifier} from "../../../enums/language-identifier";
 import {AudioService} from "../../../services/audio.service";
 import {WerewolfLogType} from "../../../enums/games/werewolf-log-type";
 import _ from "lodash";
+import {WerewolfVoteIdentifier} from "../../../enums/games/werewolf-vote-identifier";
 
 @Component({
   selector: 'app-werewolf-interface',
   templateUrl: './werewolf-interface.component.html',
   styleUrls: ['./werewolf-interface.component.scss']
 })
-export class WerewolfInterfaceComponent extends GameInterfaceComponent<WerewolfGame, WerewolfPlayer, WerewolfVote, WerewolfResourcePack> {
+export class WerewolfInterfaceComponent extends GameInterfaceComponent<WerewolfGame, WerewolfPlayer, WerewolfPlayerWerewolfVote, WerewolfResourcePack> {
 
   public static LOG_TAB = 2;
   public static INFO_TAB = 3;
@@ -39,6 +40,8 @@ export class WerewolfInterfaceComponent extends GameInterfaceComponent<WerewolfG
     WerewolfLogType.SEER_SUCCESS,
     WerewolfLogType.SEER_FAILURE,
     WerewolfLogType.LOVERS_LOVE]
+
+  public werewolfVoteIdentifier = WerewolfVoteIdentifier;
 
   constructor(
     public userService: UserService,

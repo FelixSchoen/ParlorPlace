@@ -1,6 +1,6 @@
 package com.fschoen.parlorplace.backend.game.werewolf.dto.role;
 
-import com.fschoen.parlorplace.backend.game.werewolf.entity.WerewolfPlayer;
+import com.fschoen.parlorplace.backend.game.werewolf.dto.game.WerewolfPlayerDTO;
 import com.fschoen.parlorplace.backend.game.werewolf.enumeration.WerewolfFaction;
 import com.fschoen.parlorplace.backend.game.werewolf.enumeration.WerewolfRoleType;
 import lombok.AllArgsConstructor;
@@ -31,6 +31,6 @@ public class BodyguardWerewolfGameRoleDTO extends WerewolfGameRoleDTO {
 
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
-    protected WerewolfPlayer lastProtected;
+    protected WerewolfPlayerDTO lastProtected;
 
 }
