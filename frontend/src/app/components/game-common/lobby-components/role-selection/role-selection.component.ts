@@ -3,6 +3,9 @@ import {Player} from "../../../../dto/player";
 import {MatAutocompleteSelectedEvent} from "@angular/material/autocomplete";
 import {FormControl} from "@angular/forms";
 import {removeFromArray} from "../../../../utility/utility";
+import {Observable, of} from "rxjs";
+import {TranslateService} from "@ngx-translate/core";
+import {debounceTime, distinctUntilChanged, startWith, switchMap} from "rxjs/operators";
 
 @Component({
   selector: 'app-role-selection',
@@ -24,11 +27,20 @@ export class RoleSelectionComponent<R, P extends Player> implements OnInit {
   @ViewChild('roleInput') roleInput: ElementRef<HTMLInputElement>;
 
   public roleControl = new FormControl();
+  public filteredOptions: Observable<R[]>;
 
-  constructor() {
+  constructor(
+    private translateService: TranslateService
+  ) {
   }
 
   ngOnInit(): void {
+    this.filteredOptions = this.roleControl.valueChanges.pipe(
+      startWith(""),
+      debounceTime(300),
+      distinctUntilChanged(),
+      switchMap(term => term ? term.length < 1 ? of(this.getArray) : this.getRolesFiltered(term) : of(this.getArray))
+    )
   }
 
   removeRole(
@@ -47,14 +59,21 @@ export class RoleSelectionComponent<R, P extends Player> implements OnInit {
       this.roles.push(roleToAdd);
 
     this.roleInput.nativeElement.value = "";
-    this.roleControl.setValue(null);
+    this.roleControl.setValue("");
     this.roleChanged.emit(this.roles);
   }
 
-  private filter(value: any): R[] {
-    const filterValue = value.toLowerCase();
+  displayRole(
+    role: R
+  ): Observable<string> {
+    return this.translateService.get((this.translationPrefix + this.internalRepresentation(role) + ".name"))
+  }
 
-    return this.getArray.filter(role => (String(role)).includes(filterValue));
+  private getRolesFiltered(
+    value: any
+  ): Observable<R[]> {
+    const filterValue = value.toLowerCase();
+    return of(this.getArray.filter(role => this.translateService.instant((this.translationPrefix + this.internalRepresentation(role) + ".name")).toLowerCase().includes(filterValue)))
   }
 
   countRole(

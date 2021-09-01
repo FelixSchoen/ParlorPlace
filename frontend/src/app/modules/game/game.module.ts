@@ -21,10 +21,10 @@ import {RoleSelectionComponent} from "../../components/game-common/lobby-compone
 import {ParticipantListComponent} from "../../components/game-common/lobby-components/participant-list/participant-list.component";
 import {GeneralModule} from "../general/general.module";
 import {WerewolfInterfaceComponent} from '../../components/game-interface/werewolf-interface/werewolf-interface.component';
-import {WerewolfPlayerListComponent} from '../../components/game-common/game-components/werewolf-player-list/werewolf-player-list.component';
+import {WerewolfPlayerListComponent} from '../../components/game-common/interface-components/werewolf-player-list/werewolf-player-list.component';
 import {MatBadgeModule} from "@angular/material/badge";
-import {WerewolfLogEntryListComponent} from '../../components/game-common/game-components/log-entry-list/werewolf-log-entry-list/werewolf-log-entry-list.component';
-import {WerewolfVoteComponent} from '../../components/game-common/game-components/vote/werewolf-vote/werewolf-vote.component';
+import {WerewolfLogEntryListComponent} from '../../components/game-common/interface-components/log-entry-list/werewolf-log-entry-list/werewolf-log-entry-list.component';
+import {WerewolfVoteComponent} from '../../components/game-common/interface-components/vote/werewolf-vote/werewolf-vote.component';
 import {MatTableModule} from "@angular/material/table";
 import {ResourcepackSelectionComponent} from '../../components/game-common/lobby-components/resourcepack-selection/resourcepack-selection.component';
 import {MatSelectModule} from "@angular/material/select";
