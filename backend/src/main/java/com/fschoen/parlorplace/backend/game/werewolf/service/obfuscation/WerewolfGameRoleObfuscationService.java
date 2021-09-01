@@ -44,10 +44,6 @@ public class WerewolfGameRoleObfuscationService extends GameRoleObfuscationServi
                 CupidWerewolfGameRoleDTO cupidWerewolfGameRoleDTO = (CupidWerewolfGameRoleDTO) werewolfGameRoleDTO;
                 cupidWerewolfGameRoleDTO.setHasLinked(null);
             }
-            case BODYGUARD -> {
-                BodyguardWerewolfGameRoleDTO bodyguardWerewolfGameRoleDTO = (BodyguardWerewolfGameRoleDTO) werewolfGameRoleDTO;
-                bodyguardWerewolfGameRoleDTO.setLastProtected(null);
-            }
         }
 
         if (werewolfPlayerDTO != null && werewolfPlayerDTO.getPlayerState() == PlayerState.DECEASED) {

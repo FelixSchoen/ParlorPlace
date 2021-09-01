@@ -18,6 +18,7 @@ import {WerewolfLogType} from "../enums/games/werewolf-log-type";
 import {CodeName} from "../enums/code-name";
 import {WerewolfFaction} from "../enums/games/werewolf-faction";
 import {WerewolfResourcePackType} from "../enums/games/werewolf-resource-pack-type";
+import {WerewolfVoteIdentifier} from "../enums/games/werewolf-vote-identifier";
 
 export class WerewolfGame extends Game {
   constructor(public id: number,
@@ -25,7 +26,7 @@ export class WerewolfGame extends Game {
               public players: Set<WerewolfPlayer>,
               public ruleSet: WerewolfRuleSet,
               public round: number,
-              public votes: WerewolfVote[],
+              public votes: WerewolfPlayerWerewolfVote[],
               public log: WerewolfLogEntry[],
               public startedAt: string,
               public endedAt: string | null,
@@ -56,22 +57,41 @@ export class WerewolfRuleSet extends RuleSet {
   }
 }
 
-export class WerewolfVote extends Vote<WerewolfPlayer, WerewolfVoteCollection> {
+export class WerewolfVote<T, C extends VoteCollection<T>> extends Vote<WerewolfPlayer, T, C> {
 
   constructor(public id: number,
               public voteState: VoteState,
               public voteType: VoteType,
+              public voteIdentifier: WerewolfVoteIdentifier,
               public voteDescriptor: EnumValue,
-              public voteCollectionMap: [number, WerewolfVoteCollection][],
-              public outcome: Set<WerewolfPlayer>,
+              public voters: Set<WerewolfPlayer>,
+              public voteCollectionMap: [number, C][],
+              public outcome: Set<T>,
               public outcomeAmount: number,
               public endTime: number) {
-    super(id, voteState, voteType, voteDescriptor, voteCollectionMap, outcome, outcomeAmount, endTime);
+    super(id, voteState, voteType, voteDescriptor, voters, voteCollectionMap, outcome, outcomeAmount, endTime);
   }
 
 }
 
-export class WerewolfVoteCollection extends VoteCollection<WerewolfPlayer> {
+export class WerewolfPlayerWerewolfVote extends WerewolfVote<WerewolfPlayer, WerewolfPlayerVoteCollection> {
+
+  constructor(public id: number,
+              public voteState: VoteState,
+              public voteType: VoteType,
+              public voteIdentifier: WerewolfVoteIdentifier,
+              public voteDescriptor: EnumValue,
+              public voters: Set<WerewolfPlayer>,
+              public voteCollectionMap: [number, WerewolfPlayerVoteCollection][],
+              public outcome: Set<WerewolfPlayer>,
+              public outcomeAmount: number,
+              public endTime: number) {
+    super(id, voteState, voteType, voteIdentifier, voteDescriptor, voters, voteCollectionMap, outcome, outcomeAmount, endTime);
+  }
+
+}
+
+export class WerewolfPlayerVoteCollection extends VoteCollection<WerewolfPlayer> {
 
   constructor(public amountVotes: number,
               public allowAbstain: boolean,

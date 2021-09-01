@@ -13,7 +13,7 @@ export abstract class Game {
                         public players: Set<Player>,
                         public ruleSet: RuleSet,
                         public round: number,
-                        public votes: Vote<any, any>[],
+                        public votes: Vote<any, any, any>[],
                         public log: LogEntry[],
                         public startedAt: string,
                         public endedAt: string | null) {

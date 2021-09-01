@@ -1,13 +1,11 @@
 package com.fschoen.parlorplace.backend.controller.mapper;
 
-import com.fschoen.parlorplace.backend.controller.dto.game.PlayerDTO;
 import com.fschoen.parlorplace.backend.controller.dto.game.VoteDTO;
-import com.fschoen.parlorplace.backend.entity.Player;
 import com.fschoen.parlorplace.backend.entity.Vote;
 
 import java.util.List;
 
-public interface VoteMapper<V extends Vote<P, ?, ?, ?>, VDTO extends VoteDTO<PDTO, ?, ?, ?>, P extends Player<?>, PDTO extends PlayerDTO<?>> {
+public interface VoteMapper<V extends Vote<?, ?, ?, ?, ?>, VDTO extends VoteDTO<?, ?, ?, ?, ?>> {
 
     VDTO toDTO(V vote);
 
