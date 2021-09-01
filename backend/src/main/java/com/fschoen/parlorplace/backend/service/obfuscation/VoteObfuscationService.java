@@ -12,10 +12,10 @@ import java.util.Collection;
 import java.util.Map;
 
 public abstract class VoteObfuscationService<
-        V extends VoteDTO<P, ?, C, ?>,
+        V extends VoteDTO<P, ?, C, ?, ?>,
         G extends GameDTO<?, ?, ?, ?>,
         P extends PlayerDTO<?>,
-        C extends VoteCollectionDTO<P, ?>,
+        C extends VoteCollectionDTO<?>,
         POServ extends PlayerObfuscationService<P, G, ?>,
         COServ extends VoteCollectionObfuscationService<C, ?, G, P, ?>
         > extends SingleObfuscationService<V, G> {

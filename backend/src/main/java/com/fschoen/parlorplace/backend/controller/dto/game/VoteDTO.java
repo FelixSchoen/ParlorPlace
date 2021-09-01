@@ -18,7 +18,12 @@ import java.util.Set;
 @AllArgsConstructor
 @SuperBuilder(toBuilder = true)
 @Data
-public abstract class VoteDTO<P extends PlayerDTO<?>, T, C extends VoteCollectionDTO<P, T>, D extends Enum<D>> {
+public abstract class VoteDTO<
+        P extends PlayerDTO<?>,
+        T,
+        C extends VoteCollectionDTO<T>,
+        D extends Enum<D>,
+        E extends Enum<E>> {
 
     @NotNull
     protected Long id;
@@ -33,7 +38,10 @@ public abstract class VoteDTO<P extends PlayerDTO<?>, T, C extends VoteCollectio
     protected VoteDrawStrategy voteDrawStrategy;
 
     @NotNull
-    protected D voteDescriptor;
+    protected D voteIdentifier;
+
+    @NotNull
+    protected E voteDescriptor;
 
     @NotNull
     protected Set<P> voters;

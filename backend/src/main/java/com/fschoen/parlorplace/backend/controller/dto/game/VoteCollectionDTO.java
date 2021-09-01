@@ -12,7 +12,7 @@ import java.util.Set;
 @AllArgsConstructor
 @SuperBuilder(toBuilder = true)
 @Data
-public abstract class VoteCollectionDTO<P extends PlayerDTO<?>, T> {
+public abstract class VoteCollectionDTO<T> {
 
     @NotNull
     protected Integer amountVotes;

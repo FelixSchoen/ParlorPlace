@@ -18,7 +18,7 @@ import java.util.Set;
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
 @Data
-public class WerewolfVoteCollectionDTO extends VoteCollectionDTO<WerewolfPlayerDTO, WerewolfPlayerDTO> {
+public class WerewolfPlayerVoteCollectionDTO extends VoteCollectionDTO<WerewolfPlayerDTO> {
 
     @Valid
     @NotNull

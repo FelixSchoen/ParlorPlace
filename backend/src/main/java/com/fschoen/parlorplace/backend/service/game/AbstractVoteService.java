@@ -43,8 +43,8 @@ import java.util.stream.Collectors;
 
 @Slf4j
 public abstract class AbstractVoteService<
-        V extends Vote<P, T, C, D>,
-        G extends Game<P, ?, V, ?>,
+        V extends Vote<P, T, C, ?, D>,
+        G extends Game<P, ?, ? super V, ?>,
         P extends Player<?>,
         T,
         C extends VoteCollection<T>,
