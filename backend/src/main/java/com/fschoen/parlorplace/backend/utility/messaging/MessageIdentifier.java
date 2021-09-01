@@ -32,6 +32,7 @@ public class MessageIdentifier {
     public static final String GAME_STATE_ENDED = "game.state.ended";
     public static final String GAME_MODIFY_INVALID = "game.modify.invalid";
     public static final String GAME_ROLES_AMOUNT_MISMATCH = "game.roles.amount.mismatch";
+    public static final String GAME_PLAYERS_AMOUNT_UNDERFLOW = "game.players.amount.underflow";
     public static final String GAME_PLAYERS_AMOUNT_OVERFLOW = "game.players.amount.overflow";
     public static final String ROLE_TYPE_MISMATCH = "role.type.mismatch";
     public static final String ROLE_EXISTS_NOT = "role.exists.not";
