@@ -4,6 +4,7 @@ import com.fschoen.parlorplace.backend.entity.User;
 import com.fschoen.parlorplace.backend.game.werewolf.dto.game.WerewolfGameDTO;
 import com.fschoen.parlorplace.backend.game.werewolf.dto.game.WerewolfLogEntryDTO;
 import com.fschoen.parlorplace.backend.game.werewolf.dto.game.WerewolfPlayerDTO;
+import com.fschoen.parlorplace.backend.game.werewolf.dto.game.WerewolfPlayerWerewolfVoteDTO;
 import com.fschoen.parlorplace.backend.game.werewolf.dto.game.WerewolfVoteDTO;
 import com.fschoen.parlorplace.backend.repository.UserRepository;
 import com.fschoen.parlorplace.backend.service.obfuscation.ObfuscationService;
@@ -15,14 +16,14 @@ import org.springframework.stereotype.Service;
 public class WerewolfGameObfuscationService extends ObfuscationService<WerewolfGameDTO> {
 
     private final SingleObfuscationService<WerewolfPlayerDTO, WerewolfGameDTO> playerObfuscationService;
-    private final SingleObfuscationService<WerewolfVoteDTO, WerewolfGameDTO> voteObfuscationService;
+    private final SingleObfuscationService<WerewolfVoteDTO<?, ?>, WerewolfGameDTO> voteObfuscationService;
     private final SingleObfuscationService<WerewolfLogEntryDTO, WerewolfGameDTO> logEntryObfuscationService;
 
     @Autowired
     public WerewolfGameObfuscationService(
             UserRepository userRepository,
             SingleObfuscationService<WerewolfPlayerDTO, WerewolfGameDTO> playerObfuscationService,
-            SingleObfuscationService<WerewolfVoteDTO, WerewolfGameDTO> voteObfuscationService,
+            SingleObfuscationService<WerewolfVoteDTO<?, ?>, WerewolfGameDTO> voteObfuscationService,
             SingleObfuscationService<WerewolfLogEntryDTO, WerewolfGameDTO> logEntryObfuscationService
     ) {
         super(userRepository);

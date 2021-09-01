@@ -18,7 +18,7 @@ import javax.validation.constraints.NotNull;
 @ToString(callSuper = true)
 @SuperBuilder(toBuilder = true)
 @Data
-public class WerewolfGameDTO extends GameDTO<WerewolfPlayerDTO, WerewolfRuleSetDTO, WerewolfVoteDTO, WerewolfLogEntryDTO> {
+public class WerewolfGameDTO extends GameDTO<WerewolfPlayerDTO, WerewolfRuleSetDTO, WerewolfVoteDTO<?, ?>, WerewolfLogEntryDTO> {
 
     @NotNull
     private GameType gameType = GameType.WEREWOLF;
