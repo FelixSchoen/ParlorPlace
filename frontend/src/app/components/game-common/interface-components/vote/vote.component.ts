@@ -1,15 +1,16 @@
-import {Directive, Input, OnChanges, OnDestroy, OnInit, SimpleChanges} from '@angular/core';
+import {ComponentFactoryResolver, Directive, Input, OnChanges, OnDestroy, OnInit, SimpleChanges} from '@angular/core';
 import {Vote, VoteCollection, VoteUtil} from "../../../../dto/vote";
 import {Player, PlayerUtil} from "../../../../dto/player";
 import {Subscription, timer} from "rxjs";
 import {Game, GameIdentifier} from "../../../../dto/game";
 import {VoteState} from "../../../../enums/vote-state";
 import _ from "lodash";
+import {ComponentHost} from "../../../../modules/game/component-host.directive";
 
 @Directive({
   selector: 'app-vote',
 })
-export abstract class VoteComponent<G extends Game, P extends Player, V extends Vote<T, C>, T, C extends VoteCollection<T>> implements OnInit, OnDestroy, OnChanges {
+export abstract class VoteComponent<G extends Game, P extends Player, V extends Vote<P, T, C>, T, C extends VoteCollection<T>> implements OnInit, OnDestroy, OnChanges {
 
   @Input() public currentPlayer: P;
   @Input() public gameIdentifier: GameIdentifier;
@@ -33,10 +34,6 @@ export abstract class VoteComponent<G extends Game, P extends Player, V extends 
   }
 
   ngOnInit(): void {
-    if (this.vote.voteState == VoteState.ONGOING) {
-      this.timeRemaining = (this.vote.endTime * 1000 - new Date().getTime()) / 1000
-      this.countDown = timer(0, 1000).subscribe(() => this.timeRemaining = Math.max(0, this.timeRemaining - 1));
-    }
     this.update();
   }
 
@@ -62,8 +59,26 @@ export abstract class VoteComponent<G extends Game, P extends Player, V extends 
       isSelected.push(this.includedInSelection(option))
     }
 
+    if (this.vote.voteState == VoteState.ONGOING) {
+      this.timeRemaining = (this.vote.endTime * 1000 - new Date().getTime()) / 1000
+      this.countDown = timer(0, 1000).subscribe(() => this.timeRemaining = Math.max(0, this.timeRemaining - 1));
+    }
+
     this.isSelected = isSelected;
   }
+
+  // protected loadComponentIntoHost(componentToLoad: any, componentHost: ComponentHost) {
+  //   if (componentToLoad == undefined) {
+  //     console.error();
+  //     return;
+  //   }
+  //
+  //   const componentFactory = this.componentFactoryResolver.resolveComponentFactory(componentToLoad);
+  //   const viewContainerRef = componentHost.viewContainerRef;
+  //
+  //   viewContainerRef.clear();
+  //   viewContainerRef.createComponent(componentFactory);
+  // }
 
   public selectOption(t: T) {
     let voteCollection = this.voteMap.get(this.currentPlayer.id);

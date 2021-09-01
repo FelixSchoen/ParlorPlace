@@ -21,7 +21,7 @@ import {AudioService} from "../../services/audio.service";
   templateUrl: './game-interface.component.html',
   styleUrls: ['./game-interface.component.scss']
 })
-export abstract class GameInterfaceComponent<G extends Game, P extends Player, V extends Vote<any, any>, RP extends ResourcePack> extends GameCommonComponent<G, P> {
+export abstract class GameInterfaceComponent<G extends Game, P extends Player, V extends Vote<any, any, any>, RP extends ResourcePack> extends GameCommonComponent<G, P> {
 
   public hideVotes: boolean = true;
   public hideSleep: boolean = true;

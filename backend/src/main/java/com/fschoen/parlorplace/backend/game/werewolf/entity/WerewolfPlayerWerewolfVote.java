@@ -1,8 +1,6 @@
 package com.fschoen.parlorplace.backend.game.werewolf.entity;
 
 import com.fschoen.parlorplace.backend.entity.Player;
-import com.fschoen.parlorplace.backend.entity.Vote;
-import com.fschoen.parlorplace.backend.game.werewolf.enumeration.WerewolfVoteDescriptor;
 import com.fschoen.parlorplace.backend.game.werewolf.enumeration.WerewolfVoteIdentifier;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

@@ -48,8 +48,13 @@
 
         <!-- Ongoing Votes -->
         <div *ngFor="let vote of sortVotes(game.votes)[0]" class="mx-3 mb-3">
-          <app-werewolf-vote [currentPlayer]="currentPlayer" [gameIdentifier]="this.game.gameIdentifier"
-                             [players]="this.game.players" [vote]="vote"></app-werewolf-vote>
+          <div [ngSwitch]="vote.voteIdentifier">
+            <div *ngSwitchCase="werewolfVoteIdentifier.PLAYER_VOTE">
+              <app-werewolf-player-werewolf-vote [currentPlayer]="currentPlayer" [gameIdentifier]="this.game.gameIdentifier"
+                                 [players]="this.game.players" [vote]="vote"></app-werewolf-player-werewolf-vote>
+            </div>
+          </div>
+
         </div>
 
         <div class="pp-center">
@@ -68,8 +73,8 @@
         <!-- Concluded Votes -->
         <div *ngIf="!hideVotes" class="mt-3">
           <div *ngFor="let vote of sortVotes(game.votes)[1]" class="mx-3 mb-3">
-            <app-werewolf-vote [currentPlayer]="currentPlayer" [gameIdentifier]="this.game.gameIdentifier"
-                               [players]="this.game.players" [vote]="vote"></app-werewolf-vote>
+            <app-werewolf-player-werewolf-vote [currentPlayer]="currentPlayer" [gameIdentifier]="this.game.gameIdentifier"
+                                               [players]="this.game.players" [vote]="vote"></app-werewolf-player-werewolf-vote>
           </div>
         </div>
 

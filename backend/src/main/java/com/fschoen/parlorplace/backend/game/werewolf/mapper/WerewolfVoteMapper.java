@@ -8,7 +8,7 @@ import com.fschoen.parlorplace.backend.game.werewolf.entity.WerewolfPlayerWerewo
 import com.fschoen.parlorplace.backend.game.werewolf.entity.WerewolfVote;
 import org.mapstruct.Mapper;
 
-@Mapper(componentModel = "spring", uses = {WerewolfPlayerMapper.class, WerewolfVoteCollectionMapper.class})
+@Mapper(componentModel = "spring", uses = {WerewolfPlayerMapper.class, WerewolfPlayerVoteCollectionMapper.class})
 public interface WerewolfVoteMapper extends VoteMapper<WerewolfVote<?, ?>, WerewolfVoteDTO<?, ?>> {
 
     WerewolfPlayerWerewolfVoteDTO toDTO(WerewolfPlayerWerewolfVote vote);

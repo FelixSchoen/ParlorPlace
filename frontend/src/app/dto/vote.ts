@@ -1,13 +1,15 @@
 import {VoteState} from "../enums/vote-state";
 import {VoteType} from "../enums/vote-type";
 import {EnumValue} from "@angular/compiler-cli/src/ngtsc/partial_evaluator";
+import {Player} from "./player";
 
-export abstract class Vote<T, C extends VoteCollection<T>> {
+export abstract class Vote<P extends Player, T, C extends VoteCollection<T>> {
 
   protected constructor(public id: number,
                         public voteState: VoteState,
                         public voteType: VoteType,
                         public voteDescriptor: EnumValue,
+                        public voters: Set<P>,
                         public voteCollectionMap: [number, C][],
                         public outcome: Set<T>,
                         public outcomeAmount: number,

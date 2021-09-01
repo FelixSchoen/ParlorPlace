@@ -1,9 +1,9 @@
 import {Directive, ViewContainerRef} from '@angular/core';
 
 @Directive({
-  selector: '[gameHost]'
+  selector: '[componentHost]'
 })
-export class GameDirective {
+export class ComponentHost {
 
   constructor(public viewContainerRef: ViewContainerRef) { }
 

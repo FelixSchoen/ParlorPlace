@@ -13,7 +13,7 @@ import com.fschoen.parlorplace.backend.game.werewolf.entity.WerewolfRuleSet;
 import com.fschoen.parlorplace.backend.game.werewolf.mapper.WerewolfGameMapper;
 import com.fschoen.parlorplace.backend.game.werewolf.mapper.WerewolfPlayerMapper;
 import com.fschoen.parlorplace.backend.game.werewolf.mapper.WerewolfRuleSetMapper;
-import com.fschoen.parlorplace.backend.game.werewolf.mapper.WerewolfVoteCollectionMapper;
+import com.fschoen.parlorplace.backend.game.werewolf.mapper.WerewolfPlayerVoteCollectionMapper;
 import com.fschoen.parlorplace.backend.game.werewolf.repository.WerewolfGameRepository;
 import com.fschoen.parlorplace.backend.game.werewolf.service.WerewolfGameModerator;
 import com.fschoen.parlorplace.backend.game.werewolf.service.WerewolfPlayerWerewolfVoteService;
@@ -40,7 +40,7 @@ public class WerewolfGameController extends AbstractGameController<
 
     private final WerewolfPlayerWerewolfVoteService voteService;
 
-    private final WerewolfVoteCollectionMapper voteCollectionMapper;
+    private final WerewolfPlayerVoteCollectionMapper voteCollectionMapper;
 
     @Autowired
     public WerewolfGameController(
@@ -51,7 +51,7 @@ public class WerewolfGameController extends AbstractGameController<
             WerewolfGameMapper gameMapper,
             WerewolfPlayerMapper playerMapper,
             WerewolfRuleSetMapper ruleSetMapper,
-            WerewolfVoteCollectionMapper voteCollectionMapper
+            WerewolfPlayerVoteCollectionMapper voteCollectionMapper
     ) {
         super(gameService, gameObfuscationService, userMapper, gameMapper, playerMapper, ruleSetMapper);
         this.voteService = voteService;

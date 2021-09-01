@@ -22,7 +22,7 @@ import com.fschoen.parlorplace.backend.game.werewolf.entity.gamerole.WerewolfWer
 import com.fschoen.parlorplace.backend.game.werewolf.entity.gamerole.WitchWerewolfGameRole;
 import org.mapstruct.Mapper;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", uses = {WerewolfPlayerMapper.class})
 public interface WerewolfGameRoleMapper extends GameRoleMapper<WerewolfGameRole, WerewolfGameRoleDTO> {
 
     VillagerWerewolfGameRoleDTO toDTO(VillagerWerewolfGameRole gameRole);

@@ -1,52 +1,65 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, Input, OnInit, ViewChild} from '@angular/core';
 import {VoteComponent} from "../vote.component";
-import {WerewolfGame, WerewolfPlayer, WerewolfVote, WerewolfVoteCollection} from "../../../../../dto/werewolf";
-import {Player, PlayerUtil} from "../../../../../dto/player";
-import {WerewolfGameService} from "../../../../../services/werewolf-game.service";
-import {NotificationService} from "../../../../../services/notification.service";
-import _ from "lodash";
+import {WerewolfGame, WerewolfPlayer, WerewolfVote} from "../../../../../dto/werewolf";
+import {VoteCollection} from "../../../../../dto/vote";
+import {ComponentHost} from "../../../../../modules/game/component-host.directive";
+import {WerewolfVoteIdentifier} from "../../../../../enums/games/werewolf-vote-identifier";
 
 @Component({
   selector: 'app-werewolf-vote',
-  templateUrl: '../vote.component.html',
-  styleUrls: ['../vote.component.scss']
+  templateUrl: './werewolf-vote.component.html',
+  styleUrls: ['./werewolf-vote.component.scss']
 })
-export class WerewolfVoteComponent extends VoteComponent<WerewolfGame, WerewolfPlayer, WerewolfVote, WerewolfPlayer, WerewolfVoteCollection> implements OnInit {
+export class WerewolfVoteComponent<V extends WerewolfVote<T, C>, T, C extends VoteCollection<T>> extends VoteComponent<WerewolfGame, WerewolfPlayer, V, T, C> implements OnInit {
 
-  constructor(public gameService: WerewolfGameService, public notificationService: NotificationService) {
+  @Input() public werewolfVoteIdentifier: WerewolfVoteIdentifier;
+
+  @ViewChild(ComponentHost, {static: true}) componentHost!: ComponentHost;
+
+  public loading: boolean = true;
+  public errorMessage: string = "";
+
+  constructor() {
     super();
   }
 
   ngOnInit(): void {
-    super.ngOnInit()
+    super.ngOnInit();
+    //this.loadComponent(this.vote.voteIdentifier)
   }
 
-  public sortSelection(t: WerewolfPlayer[] | undefined): WerewolfPlayer[] {
-    return PlayerUtil.sort(t);
-  }
-
-  protected sendVoteData(voteCollection: WerewolfVoteCollection): void {
-    this.gameService.vote(this.gameIdentifier, this.vote.id, voteCollection).subscribe({
-      error: error => this.notificationService.showError(error.error)
-    });
-  }
+  // private loadComponent(voteIdentifier: WerewolfVoteIdentifier) {
+  //   let voteComponentMap = new Map<WerewolfVoteIdentifier, any>([
+  //     [WerewolfVoteIdentifier.PLAYER_VOTE, WerewolfPlayerWerewolfVoteComponent],
+  //   ]);
+  //
+  //   let componentToLoad = voteComponentMap.get(voteIdentifier);
+  //   this.loadComponentIntoHost(componentToLoad, this.componentHost);
+  //   this.loading = false;
+  // }
 
   getTranslationKey(e: Object): string {
-    return "werewolf.vote." + e.valueOf().toString().toLowerCase().replace("_", ".");
+    console.log("Pseudo-Abstract Method called")
+    return "";
   }
 
-  subjectToStringRepresentation(s: WerewolfPlayer): string {
-    return Player.toNameRepresentation(s.user, this.players)
+  includedInSelection(s: any): boolean {
+    console.log("Pseudo-Abstract Method called")
+    return false;
   }
 
-  includedInSelection(s: WerewolfPlayer): boolean {
-    return _.findIndex(this.selectedOptions, (a) => {
-      return _.isEqual(a, s)
-    }) > -1;
-    // let array = this.voteMap.get(this.currentPlayer.id)!.selection
-    // if (array == undefined)
-    //   return false;
-    // return array.some(entry => entry.id == s.id);
+  protected sendVoteData(voteCollection: any): void {
+    console.log("Pseudo-Abstract Method called")
+  }
+
+  sortSelection(t: any[] | undefined): any[] {
+    console.log("Pseudo-Abstract Method called")
+    return [];
+  }
+
+  subjectToStringRepresentation(s: any): string {
+    console.log("Pseudo-Abstract Method called")
+    return "";
   }
 
 }
