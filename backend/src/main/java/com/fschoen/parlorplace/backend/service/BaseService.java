@@ -3,7 +3,7 @@ package com.fschoen.parlorplace.backend.service;
 import com.fschoen.parlorplace.backend.entity.Role;
 import com.fschoen.parlorplace.backend.entity.User;
 import com.fschoen.parlorplace.backend.enumeration.UserRole;
-import com.fschoen.parlorplace.backend.exception.AuthorizationException;
+import com.fschoen.parlorplace.backend.exception.AuthenticationException;
 import com.fschoen.parlorplace.backend.repository.UserRepository;
 import com.fschoen.parlorplace.backend.security.UserDetailsImplementation;
 import com.fschoen.parlorplace.backend.utility.messaging.MessageIdentifier;
@@ -24,7 +24,7 @@ public abstract class BaseService {
         UserDetailsImplementation userDetails = (UserDetailsImplementation) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Optional<User> potentialUser = userRepository.findOneById(userDetails.getId());
         if (potentialUser.isEmpty())
-            throw new AuthorizationException(Messages.exception(MessageIdentifier.AUTHORIZATION_PRINCIPAL_EMPTY));
+            throw new AuthenticationException(Messages.exception(MessageIdentifier.AUTHORIZATION_PRINCIPAL_EMPTY));
         return potentialUser.get();
     }
 

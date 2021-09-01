@@ -68,10 +68,7 @@ public class GeneralGameServiceImplementation extends BaseService implements Gen
 
         Optional<Game<?, ?, ?, ?>> game = this.gameRepository.findById(id);
 
-        if (game.isEmpty())
-            throw new GameException(Messages.exception(MessageIdentifier.GAME_EXISTS_NOT));
-
-        return game.orElseThrow();
+        return game.orElseThrow(() -> new GameException(Messages.exception(MessageIdentifier.GAME_EXISTS_NOT)));
     }
 
 }

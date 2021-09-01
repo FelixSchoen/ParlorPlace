@@ -216,7 +216,6 @@ export class ProfileComponent implements OnInit {
 
   signOut() {
     this.tokenService.signout();
-    this.notificationService.showSuccess("Signed out");
     this.router.navigate([""]).then();
   }
 

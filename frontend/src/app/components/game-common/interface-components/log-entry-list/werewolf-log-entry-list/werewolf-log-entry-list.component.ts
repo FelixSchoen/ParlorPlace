@@ -34,7 +34,7 @@ export class WerewolfLogEntryListComponent extends LogEntryListComponent<Werewol
         filteredArray.push(entry)
     }
 
-    return filteredArray;
+    return filteredArray.reverse();
   }
 
 

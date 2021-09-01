@@ -99,6 +99,9 @@ public class WerewolfGameService extends AbstractGameService<
 
     @Override
     protected WerewolfGame onGameStart(WerewolfGame game) {
+        if (game.getPlayers().size() < 3)
+            throw new GameException(Messages.exception(MessageIdentifier.GAME_PLAYERS_AMOUNT_UNDERFLOW));
+
         int expectedRoles = game.getPlayers().size();
         int actualRoles = game.getRuleSet().getGameRoleTypes().size();
 

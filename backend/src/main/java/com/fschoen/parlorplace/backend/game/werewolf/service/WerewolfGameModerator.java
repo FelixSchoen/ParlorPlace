@@ -7,6 +7,7 @@ import com.fschoen.parlorplace.backend.enumeration.PlayerState;
 import com.fschoen.parlorplace.backend.enumeration.VoteDrawStrategy;
 import com.fschoen.parlorplace.backend.enumeration.VoteType;
 import com.fschoen.parlorplace.backend.exception.GameEndException;
+import com.fschoen.parlorplace.backend.exception.GameException;
 import com.fschoen.parlorplace.backend.game.werewolf.entity.WerewolfGame;
 import com.fschoen.parlorplace.backend.game.werewolf.entity.WerewolfGameRole;
 import com.fschoen.parlorplace.backend.game.werewolf.entity.WerewolfLogEntry;
@@ -30,6 +31,8 @@ import com.fschoen.parlorplace.backend.game.werewolf.utility.WerewolfVoiceLineCl
 import com.fschoen.parlorplace.backend.repository.UserRepository;
 import com.fschoen.parlorplace.backend.service.CommunicationService;
 import com.fschoen.parlorplace.backend.service.game.AbstractGameModerator;
+import com.fschoen.parlorplace.backend.utility.messaging.MessageIdentifier;
+import com.fschoen.parlorplace.backend.utility.messaging.Messages;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -203,7 +206,8 @@ public class WerewolfGameModerator extends AbstractGameModerator<
         cupidWerewolfGameRole.setHasLinked(true);
         save(cupid);
 
-        WerewolfFaction faction = getLastRole(cupidTargets.stream().findAny().orElseThrow()).getWerewolfFaction();
+        WerewolfFaction faction = getLastRole(cupidTargets.stream().findAny().orElseThrow(
+                () -> new GameException(Messages.exception(MessageIdentifier.ROLE_EXISTS_NOT)))).getWerewolfFaction();
         if (!cupidTargets.stream().allMatch(target -> getLastRole(target).getWerewolfFaction() == faction)) {
             // Lovers belong to different factions
 
@@ -281,7 +285,9 @@ public class WerewolfGameModerator extends AbstractGameModerator<
 
         // --- Logic Start ---
 
-        WerewolfPlayer bodyguardProtectTarget = bodyguardProtectVote.getOutcome().stream().findAny().orElseThrow();
+        WerewolfPlayer bodyguardProtectTarget = bodyguardProtectVote.getOutcome().stream().findAny().orElseThrow(
+                () -> new GameException(Messages.exception(MessageIdentifier.VOTE_OUTCOME_EXISTS_NOT))
+        );
         bodyguardWerewolfGameRole.setLastProtected(bodyguardProtectTarget);
         WerewolfGame game = save(bodyguard);
 
@@ -361,7 +367,9 @@ public class WerewolfGameModerator extends AbstractGameModerator<
             WerewolfVote witchHealVote = witchHealVoteFuture.get();
 
             if (witchHealVote.getOutcome().size() > 0) {
-                WerewolfPlayer witchHealTarget = witchHealVote.getOutcome().stream().findAny().orElseThrow();
+                WerewolfPlayer witchHealTarget = witchHealVote.getOutcome().stream().findAny().orElseThrow(
+                        () -> new GameException(Messages.exception(MessageIdentifier.VOTE_OUTCOME_EXISTS_NOT))
+                );
                 witchWerewolfGameRole.setHasHealed(true);
                 WerewolfGame game = save(witch);
 
@@ -392,7 +400,9 @@ public class WerewolfGameModerator extends AbstractGameModerator<
             WerewolfVote witchKillVote = witchKillVoteFuture.get();
 
             if (witchKillVote.getOutcome().size() > 0) {
-                WerewolfPlayer witchKillTarget = witchKillVote.getOutcome().stream().findAny().orElseThrow();
+                WerewolfPlayer witchKillTarget = witchKillVote.getOutcome().stream().findAny().orElseThrow(
+                        () -> new GameException(Messages.exception(MessageIdentifier.VOTE_OUTCOME_EXISTS_NOT))
+                );
                 witchWerewolfGameRole.setHasKilled(true);
                 WerewolfGame game = save(witch);
 
@@ -440,7 +450,9 @@ public class WerewolfGameModerator extends AbstractGameModerator<
         );
         WerewolfVote seerVote = seerVoteFuture.get();
 
-        WerewolfPlayer seerTarget = seerVote.getOutcome().stream().findFirst().orElseThrow();
+        WerewolfPlayer seerTarget = seerVote.getOutcome().stream().findFirst().orElseThrow(
+                () -> new GameException(Messages.exception(MessageIdentifier.VOTE_OUTCOME_EXISTS_NOT))
+        );
 
         // --- Logic Start ---
 
@@ -552,7 +564,9 @@ public class WerewolfGameModerator extends AbstractGameModerator<
 
             // Remove lovers from possible options
             for (Map.Entry<Long, WerewolfVoteCollection> entry : voteCollectionMap.entrySet()) {
-                WerewolfPlayer voter = this.playerRepository.findOneById(entry.getKey()).orElseThrow();
+                WerewolfPlayer voter = this.playerRepository.findOneById(entry.getKey()).orElseThrow(
+                        () -> new GameException(Messages.exception(MessageIdentifier.PLAYER_EXISTS_NOT))
+                );
                 Set<WerewolfPlayer> voterLovers = getLoved(voter);
                 entry.getValue().getSubjects().removeAll(voterLovers);
             }
@@ -649,7 +663,9 @@ public class WerewolfGameModerator extends AbstractGameModerator<
 
     private void handlePlayerDiedEvent(WerewolfPlayer target) {
         WerewolfGame game = getGame();
-        WerewolfPlayer targetInDatabase = game.getPlayers().stream().filter(werewolfPlayer -> werewolfPlayer.getId().equals(target.getId())).findFirst().orElseThrow();
+        WerewolfPlayer targetInDatabase = game.getPlayers().stream().filter(werewolfPlayer -> werewolfPlayer.getId().equals(target.getId())).findFirst().orElseThrow(
+                () -> new GameException(Messages.exception(MessageIdentifier.PLAYER_EXISTS_NOT))
+        );
 
         if (targetInDatabase.getPlayerState() == PlayerState.ALIVE) {
             targetInDatabase.setPlayerState(PlayerState.DECEASED);
