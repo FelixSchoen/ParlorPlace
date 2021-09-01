@@ -299,7 +299,7 @@ public abstract class AbstractVoteService<
     private class VoteConcludeTask implements Runnable {
 
         private final Long voteId;
-        private final Long sleepDurationSeconds;
+        private final Long sleepDurationMillis;
         private final Boolean forceClose;
 
         private final GameIdentifier gameIdentifier;
@@ -314,7 +314,7 @@ public abstract class AbstractVoteService<
             );
             if (initialVote.getVoteState().equals(VoteState.CONCLUDED)) return;
 
-            Thread.sleep(sleepDurationSeconds);
+            Thread.sleep(sleepDurationMillis);
 
             log.info("Trying to conclude Vote {}", voteId);
 
