@@ -39,7 +39,7 @@ export class LoginComponent {
           this.authService.login(userSigninRequest).subscribe({
               next: () => this.router.navigate(["/profile"]).then(),
               error: (error) => {
-                this.notificationService.showError(error.error)
+                this.notificationService.showError(error.error.message)
               }
             }
           )

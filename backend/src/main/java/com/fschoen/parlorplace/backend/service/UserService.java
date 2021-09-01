@@ -3,7 +3,7 @@ package com.fschoen.parlorplace.backend.service;
 import com.fschoen.parlorplace.backend.controller.dto.authentication.TokenRefreshResponseDTO;
 import com.fschoen.parlorplace.backend.controller.dto.user.UserLoginResponseDTO;
 import com.fschoen.parlorplace.backend.entity.User;
-import com.fschoen.parlorplace.backend.exception.AuthorizationException;
+import com.fschoen.parlorplace.backend.exception.AuthenticationException;
 import com.fschoen.parlorplace.backend.exception.DataConflictException;
 
 import java.util.Set;
@@ -35,10 +35,10 @@ public interface UserService {
      * @param id   Id of the user to be updated
      * @param user The user object containing the id of the user to be updated and the update information
      * @return The updated user
-     * @throws AuthorizationException If the principal does not have the necessary authority to edit the specified user
+     * @throws AuthenticationException If the principal does not have the necessary authority to edit the specified user
      * @throws DataConflictException  If the given Id and the one of the {@param user} do not match or no user with the given id was found
      */
-    User update(Long id, User user) throws AuthorizationException, DataConflictException;
+    User update(Long id, User user) throws AuthenticationException, DataConflictException;
 
     /**
      * Obtains the currently logged-in user based on the authentication.
