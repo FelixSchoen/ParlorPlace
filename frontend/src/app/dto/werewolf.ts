@@ -196,6 +196,20 @@ export class WitchWerewolfGameRole extends WerewolfGameRole {
   }
 }
 
+export class HunterWerewolfGameRole extends WerewolfGameRole {
+  constructor(public id: number,
+              public werewolfRoleType: WerewolfRoleType,
+              public werewolfFaction: WerewolfFaction) {
+    super(id, werewolfRoleType, werewolfFaction);
+  }
+
+  public toJSON(): HunterWerewolfGameRole {
+    return Object.assign({}, this, {
+      werewolfRoleType: "HUNTER"
+    });
+  }
+}
+
 export class CupidWerewolfGameRole extends WerewolfGameRole {
   constructor(public id: number,
               public werewolfRoleType: WerewolfRoleType,

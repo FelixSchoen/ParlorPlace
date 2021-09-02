@@ -12,6 +12,7 @@ export enum WerewolfLogType {
   SEER_FAILURE = "SEER_FAILURE",
   WITCH_HEAL = "WITCH_HEAL",
   WITCH_KILL = "WITCH_KILL",
+  HUNTER_SHOOT = "HUNTER_SHOOT",
   CUPID_LINK = "CUPID_LINK",
   LOVERS_LOVE = "LOVERS_LOVE",
   BODYGUARD_PROTECT = "BODYGUARD_PROTECT",
@@ -55,6 +56,9 @@ export class WerewolfLogTypeUtil {
       case WerewolfLogType.WITCH_HEAL:
       case WerewolfLogType.WITCH_KILL:
         iconString = "witch";
+        break;
+      case WerewolfLogType.HUNTER_SHOOT:
+        iconString = "hunter";
         break;
       case WerewolfLogType.CUPID_LINK:
       case WerewolfLogType.LOVERS_LOVE:

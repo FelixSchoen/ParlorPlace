@@ -1,6 +1,6 @@
 package com.fschoen.parlorplace.backend.unit.mapper;
 
-import com.fschoen.parlorplace.backend.game.werewolf.dto.role.WerewolfGameRoleDTO;
+import com.fschoen.parlorplace.backend.game.werewolf.dto.gamerole.WerewolfGameRoleDTO;
 import com.fschoen.parlorplace.backend.game.werewolf.entity.WerewolfGameRole;
 import com.fschoen.parlorplace.backend.game.werewolf.entity.gamerole.VillagerWerewolfGameRole;
 import com.fschoen.parlorplace.backend.game.werewolf.enumeration.WerewolfRoleType;

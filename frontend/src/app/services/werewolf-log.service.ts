@@ -19,6 +19,7 @@ export class WerewolfLogService extends AbstractLogService<WerewolfLogEntry, Wer
     let textValue = l.logType.valueOf().toLowerCase();
 
     switch (l.logType) {
+      // No additional parameters
       case WerewolfLogType.START:
       case WerewolfLogType.END:
       case WerewolfLogType.SLEEP:
@@ -26,6 +27,7 @@ export class WerewolfLogService extends AbstractLogService<WerewolfLogEntry, Wer
       case WerewolfLogType.BEAR_TAMER_GROWL:
       case WerewolfLogType.BEAR_TAMER_SILENT:
         return this.translateService.get("werewolf.log." + textValue);
+        // Targets[0]
       case WerewolfLogType.DEATH:
       case WerewolfLogType.WEREWOLVES_VOTE:
       case WerewolfLogType.SEER_SUCCESS:
@@ -36,10 +38,17 @@ export class WerewolfLogService extends AbstractLogService<WerewolfLogEntry, Wer
       case WerewolfLogType.LOVERS_LOVE:
       case WerewolfLogType.BODYGUARD_PROTECT:
         return this.translateService.get("werewolf.log." + textValue, {player: Player.toNameRepresentation(l.targets[0].user, players)});
+        // Targets[0] + Targets[1]
       case WerewolfLogType.CUPID_LINK:
         return this.translateService.get("werewolf.log." + textValue, {
           player1: Player.toNameRepresentation(l.targets[0].user, players),
           player2: Player.toNameRepresentation(l.targets[1].user, players)
+        });
+        // Sources[0] + Targets[0]
+      case WerewolfLogType.HUNTER_SHOOT:
+        return this.translateService.get("werewolf.log." + textValue, {
+          player1: Player.toNameRepresentation(l.sources[0].user, players),
+          player2: Player.toNameRepresentation(l.targets[0].user, players)
         });
     }
 

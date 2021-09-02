@@ -15,11 +15,15 @@ export abstract class Player {
                         public placement: number) {
   }
 
+  public static nicknameUnique(user: User, playersInGame: Set<Player>): boolean {
+    return !([...playersInGame].some(x => (x.user.nickname == user.nickname && x.user.username != user.username)))
+  }
+
   public static toNameRepresentation(user: User, playersInGame: Set<Player>) {
-    if ([...playersInGame].some(x => (x.user.nickname == user.nickname && x.user.username != user.username)))
-      return (user.nickname + " ("+user.username+")")
-    else
+    if (this.nicknameUnique(user, playersInGame))
       return user.nickname
+    else
+      return (user.nickname + " (" + user.username + ")")
   }
 
 }

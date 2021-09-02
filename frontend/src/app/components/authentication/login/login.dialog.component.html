@@ -2,33 +2,37 @@
 
 <mat-dialog-content class="mat-typography">
 
-  <mat-form-field class="w-100">
-    <mat-label>{{"general.attribute.username" | translate}}</mat-label>
-    <input matInput [(ngModel)]="data.username" [formControl]="usernameControl">
-    <mat-error *ngIf="usernameControl.hasError('required')">{{"general.validation.required" | translate:{"name": ("general.attribute.username" | translate)} }}</mat-error>
-    <mat-error *ngIf="usernameControl.hasError('minlength')">{{"general.validation.minLength" | translate:{
-      "name": ("general.attribute.username" | translate),
-      "value": 3
-    } }}</mat-error>
-    <mat-error *ngIf="usernameControl.hasError('maxlength')">{{"general.validation.maxLength" | translate:{
-      "name": ("general.attribute.username" | translate),
-      "value": 15
-    } }}</mat-error>
-  </mat-form-field>
+  <form>
 
-  <mat-form-field class="w-100">
-    <mat-label>{{"general.attribute.password" | translate}}</mat-label>
-    <input matInput type="password" [(ngModel)]="data.password" [formControl]="passwordControl">
-    <mat-error *ngIf="passwordControl.hasError('required')">{{"general.validation.required" | translate:{"name": ("general.attribute.password" | translate)} }}</mat-error>
-    <mat-error *ngIf="passwordControl.hasError('minlength')">{{"general.validation.minLength" | translate:{
-      "name": ("general.attribute.password" | translate),
-      "value": 8
-    } }}</mat-error>
-    <mat-error *ngIf="passwordControl.hasError('maxlength')">{{"general.action.validation.maxLength" | translate:{
-      "name": ("general.attribute.password" | translate),
-      "value": 255
-    } }}</mat-error>
-  </mat-form-field>
+    <mat-form-field class="w-100">
+      <mat-label>{{"general.attribute.username" | translate}}</mat-label>
+      <input matInput autocomplete="username" [(ngModel)]="data.username" [formControl]="usernameControl">
+      <mat-error *ngIf="usernameControl.hasError('required')">{{"general.validation.required" | translate:{"name": ("general.attribute.username" | translate)} }}</mat-error>
+      <mat-error *ngIf="usernameControl.hasError('minlength')">{{"general.validation.minLength" | translate:{
+        "name": ("general.attribute.username" | translate),
+        "value": 3
+      } }}</mat-error>
+      <mat-error *ngIf="usernameControl.hasError('maxlength')">{{"general.validation.maxLength" | translate:{
+        "name": ("general.attribute.username" | translate),
+        "value": 15
+      } }}</mat-error>
+    </mat-form-field>
+
+    <mat-form-field class="w-100">
+      <mat-label>{{"general.attribute.password" | translate}}</mat-label>
+      <input matInput type="password" autocomplete="on" [(ngModel)]="data.password" [formControl]="passwordControl">
+      <mat-error *ngIf="passwordControl.hasError('required')">{{"general.validation.required" | translate:{"name": ("general.attribute.password" | translate)} }}</mat-error>
+      <mat-error *ngIf="passwordControl.hasError('minlength')">{{"general.validation.minLength" | translate:{
+        "name": ("general.attribute.password" | translate),
+        "value": 8
+      } }}</mat-error>
+      <mat-error *ngIf="passwordControl.hasError('maxlength')">{{"general.action.validation.maxLength" | translate:{
+        "name": ("general.attribute.password" | translate),
+        "value": 255
+      } }}</mat-error>
+    </mat-form-field>
+
+  </form>
 
 </mat-dialog-content>
 
