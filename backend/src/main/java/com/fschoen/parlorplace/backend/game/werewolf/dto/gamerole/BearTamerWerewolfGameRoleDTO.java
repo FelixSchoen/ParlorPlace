@@ -1,4 +1,4 @@
-package com.fschoen.parlorplace.backend.game.werewolf.dto.role;
+package com.fschoen.parlorplace.backend.game.werewolf.dto.gamerole;
 
 import com.fschoen.parlorplace.backend.game.werewolf.enumeration.WerewolfFaction;
 import com.fschoen.parlorplace.backend.game.werewolf.enumeration.WerewolfRoleType;
@@ -18,14 +18,14 @@ import javax.validation.constraints.NotNull;
 @ToString(callSuper = true)
 @SuperBuilder(toBuilder = true)
 @Data
-public class WerewolfWerewolfGameRoleDTO extends WerewolfGameRoleDTO {
+public class BearTamerWerewolfGameRoleDTO extends WerewolfGameRoleDTO {
 
     @Builder.Default
     @NotNull
-    private WerewolfRoleType werewolfRoleType = WerewolfRoleType.WEREWOLF;
+    private WerewolfRoleType werewolfRoleType = WerewolfRoleType.BEAR_TAMER;
 
     @Builder.Default
     @NotNull
-    private WerewolfFaction werewolfFaction = WerewolfFaction.WEREWOLVES;
+    private WerewolfFaction werewolfFaction = WerewolfFaction.VILLAGERS;
 
 }

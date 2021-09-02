@@ -7,7 +7,7 @@
       <h3 matLine>
         {{player.user.nickname}}
       </h3>
-      <p matLine>{{player.user.username}}</p>
+      <p *ngIf="!playerUtil.nicknameUnique(player.user, this.players)" matLine>{{player.user.username}}</p>
 
     </mat-list-item>
   </mat-list>
