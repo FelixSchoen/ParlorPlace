@@ -1,7 +1,7 @@
 import {Component, Input} from '@angular/core';
 import {WerewolfGame, WerewolfPlayer} from "../../../../dto/werewolf";
 import {PlayerState} from "../../../../enums/player-state";
-import {PlayerUtil} from "../../../../dto/player";
+import {Player, PlayerUtil} from "../../../../dto/player";
 import {GameState} from "../../../../enums/game-state";
 import {WerewolfRoleTypeUtil} from "../../../../enums/games/werewolf-role-type";
 
@@ -18,6 +18,7 @@ export class WerewolfPlayerListComponent {
   public gameState = GameState;
   public playerState = PlayerState;
 
+  public playerUtil = Player;
   public werewolfRoleTypeUtil = WerewolfRoleTypeUtil;
 
   constructor() {

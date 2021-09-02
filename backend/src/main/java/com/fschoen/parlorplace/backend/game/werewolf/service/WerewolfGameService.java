@@ -9,6 +9,7 @@ import com.fschoen.parlorplace.backend.game.werewolf.entity.WerewolfRuleSet;
 import com.fschoen.parlorplace.backend.game.werewolf.entity.gamerole.BearTamerWerewolfGameRole;
 import com.fschoen.parlorplace.backend.game.werewolf.entity.gamerole.BodyguardWerewolfGameRole;
 import com.fschoen.parlorplace.backend.game.werewolf.entity.gamerole.CupidWerewolfGameRole;
+import com.fschoen.parlorplace.backend.game.werewolf.entity.gamerole.HunterWerewolfGameRole;
 import com.fschoen.parlorplace.backend.game.werewolf.entity.gamerole.LycanthropeWerewolfGameRole;
 import com.fschoen.parlorplace.backend.game.werewolf.entity.gamerole.SeerWerewolfGameRole;
 import com.fschoen.parlorplace.backend.game.werewolf.entity.gamerole.VillagerWerewolfGameRole;
@@ -53,6 +54,7 @@ public class WerewolfGameService extends AbstractGameService<
         put(WerewolfRoleType.WEREWOLF, WerewolfWerewolfGameRole.class);
         put(WerewolfRoleType.SEER, SeerWerewolfGameRole.class);
         put(WerewolfRoleType.WITCH, WitchWerewolfGameRole.class);
+        put(WerewolfRoleType.HUNTER, HunterWerewolfGameRole.class);
         put(WerewolfRoleType.CUPID, CupidWerewolfGameRole.class);
         put(WerewolfRoleType.BODYGUARD, BodyguardWerewolfGameRole.class);
         put(WerewolfRoleType.LYCANTHROPE, LycanthropeWerewolfGameRole.class);

@@ -15,6 +15,8 @@ export class ParticipantListComponent<P extends Player> implements OnInit {
 
   @Output() playersChanged = new EventEmitter<Set<P>>();
 
+  public playerUtil = Player;
+
   constructor() {
   }
 
