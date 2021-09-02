@@ -5,6 +5,7 @@ public enum WerewolfRoleType {
     WEREWOLF,
     SEER,
     WITCH,
+    HUNTER,
     CUPID,
     BODYGUARD,
     LYCANTHROPE,

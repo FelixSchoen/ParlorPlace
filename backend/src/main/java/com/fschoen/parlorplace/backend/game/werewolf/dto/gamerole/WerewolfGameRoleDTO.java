@@ -1,4 +1,4 @@
-package com.fschoen.parlorplace.backend.game.werewolf.dto.role;
+package com.fschoen.parlorplace.backend.game.werewolf.dto.gamerole;
 
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
@@ -22,6 +22,7 @@ import lombok.experimental.SuperBuilder;
         @JsonSubTypes.Type(value = WerewolfWerewolfGameRoleDTO.class, name = "WEREWOLF"),
         @JsonSubTypes.Type(value = SeerWerewolfGameRoleDTO.class, name = "SEER"),
         @JsonSubTypes.Type(value = WitchWerewolfGameRoleDTO.class, name = "WITCH"),
+        @JsonSubTypes.Type(value = HunterWerewolfGameRoleDTO.class, name = "HUNTER"),
         @JsonSubTypes.Type(value = CupidWerewolfGameRoleDTO.class, name = "CUPID"),
         @JsonSubTypes.Type(value = BodyguardWerewolfGameRoleDTO.class, name = "BODYGUARD"),
         @JsonSubTypes.Type(value = LycanthropeWerewolfGameRoleDTO.class, name = "LYCANTHROPE"),

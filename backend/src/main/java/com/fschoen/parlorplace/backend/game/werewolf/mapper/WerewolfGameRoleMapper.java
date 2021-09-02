@@ -2,25 +2,26 @@ package com.fschoen.parlorplace.backend.game.werewolf.mapper;
 
 import com.fschoen.parlorplace.backend.controller.mapper.GameRoleMapper;
 import com.fschoen.parlorplace.backend.exception.NotImplementedException;
-import com.fschoen.parlorplace.backend.game.werewolf.dto.role.BearTamerWerewolfGameRoleDTO;
-import com.fschoen.parlorplace.backend.game.werewolf.dto.role.BodyguardWerewolfGameRoleDTO;
-import com.fschoen.parlorplace.backend.game.werewolf.dto.role.CupidWerewolfGameRoleDTO;
-import com.fschoen.parlorplace.backend.game.werewolf.dto.role.LycanthropeWerewolfGameRoleDTO;
-import com.fschoen.parlorplace.backend.game.werewolf.dto.role.SeerWerewolfGameRoleDTO;
-import com.fschoen.parlorplace.backend.game.werewolf.dto.role.VillagerWerewolfGameRoleDTO;
-import com.fschoen.parlorplace.backend.game.werewolf.dto.role.WerewolfGameRoleDTO;
-import com.fschoen.parlorplace.backend.game.werewolf.dto.role.WerewolfWerewolfGameRoleDTO;
-import com.fschoen.parlorplace.backend.game.werewolf.dto.role.WitchWerewolfGameRoleDTO;
+import com.fschoen.parlorplace.backend.game.werewolf.dto.gamerole.BearTamerWerewolfGameRoleDTO;
+import com.fschoen.parlorplace.backend.game.werewolf.dto.gamerole.BodyguardWerewolfGameRoleDTO;
+import com.fschoen.parlorplace.backend.game.werewolf.dto.gamerole.CupidWerewolfGameRoleDTO;
+import com.fschoen.parlorplace.backend.game.werewolf.dto.gamerole.HunterWerewolfGameRoleDTO;
+import com.fschoen.parlorplace.backend.game.werewolf.dto.gamerole.LycanthropeWerewolfGameRoleDTO;
+import com.fschoen.parlorplace.backend.game.werewolf.dto.gamerole.SeerWerewolfGameRoleDTO;
+import com.fschoen.parlorplace.backend.game.werewolf.dto.gamerole.VillagerWerewolfGameRoleDTO;
+import com.fschoen.parlorplace.backend.game.werewolf.dto.gamerole.WerewolfGameRoleDTO;
+import com.fschoen.parlorplace.backend.game.werewolf.dto.gamerole.WerewolfWerewolfGameRoleDTO;
+import com.fschoen.parlorplace.backend.game.werewolf.dto.gamerole.WitchWerewolfGameRoleDTO;
 import com.fschoen.parlorplace.backend.game.werewolf.entity.WerewolfGameRole;
 import com.fschoen.parlorplace.backend.game.werewolf.entity.gamerole.BearTamerWerewolfGameRole;
 import com.fschoen.parlorplace.backend.game.werewolf.entity.gamerole.BodyguardWerewolfGameRole;
 import com.fschoen.parlorplace.backend.game.werewolf.entity.gamerole.CupidWerewolfGameRole;
+import com.fschoen.parlorplace.backend.game.werewolf.entity.gamerole.HunterWerewolfGameRole;
 import com.fschoen.parlorplace.backend.game.werewolf.entity.gamerole.LycanthropeWerewolfGameRole;
 import com.fschoen.parlorplace.backend.game.werewolf.entity.gamerole.SeerWerewolfGameRole;
 import com.fschoen.parlorplace.backend.game.werewolf.entity.gamerole.VillagerWerewolfGameRole;
 import com.fschoen.parlorplace.backend.game.werewolf.entity.gamerole.WerewolfWerewolfGameRole;
 import com.fschoen.parlorplace.backend.game.werewolf.entity.gamerole.WitchWerewolfGameRole;
-import org.mapstruct.Context;
 import org.mapstruct.Mapper;
 
 @Mapper(componentModel = "spring")
@@ -33,6 +34,8 @@ public interface WerewolfGameRoleMapper extends GameRoleMapper<WerewolfGameRole,
     SeerWerewolfGameRoleDTO toDTO(SeerWerewolfGameRole gameRole);
 
     WitchWerewolfGameRoleDTO toDTO(WitchWerewolfGameRole gameRole);
+
+    HunterWerewolfGameRoleDTO toDTO(HunterWerewolfGameRole gameRole);
 
     CupidWerewolfGameRoleDTO toDTO(CupidWerewolfGameRole gameRole);
 
@@ -55,6 +58,9 @@ public interface WerewolfGameRoleMapper extends GameRoleMapper<WerewolfGameRole,
             }
             case WITCH -> {
                 return toDTO((WitchWerewolfGameRole) gameRole);
+            }
+            case HUNTER -> {
+                return toDTO((HunterWerewolfGameRole) gameRole);
             }
             case CUPID -> {
                 return toDTO((CupidWerewolfGameRole) gameRole);
@@ -80,6 +86,8 @@ public interface WerewolfGameRoleMapper extends GameRoleMapper<WerewolfGameRole,
 
     WitchWerewolfGameRole fromDTO(WitchWerewolfGameRoleDTO gameRole);
 
+    HunterWerewolfGameRole fromDTO(HunterWerewolfGameRoleDTO gameRole);
+
     CupidWerewolfGameRole fromDTO(CupidWerewolfGameRoleDTO gameRole);
 
     BodyguardWerewolfGameRole fromDTO(BodyguardWerewolfGameRoleDTO gameRole);
@@ -101,6 +109,9 @@ public interface WerewolfGameRoleMapper extends GameRoleMapper<WerewolfGameRole,
             }
             case WITCH -> {
                 return fromDTO((WitchWerewolfGameRoleDTO) gameRoleDTO);
+            }
+            case HUNTER -> {
+                return fromDTO((HunterWerewolfGameRoleDTO) gameRoleDTO);
             }
             case CUPID -> {
                 return fromDTO((CupidWerewolfGameRoleDTO) gameRoleDTO);

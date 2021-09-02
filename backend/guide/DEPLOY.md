@@ -3,6 +3,13 @@
 The following guide documents the process of deploying *ParlorPlace* to a local server.
 It is written with *CentOS 8* in mind, commands may change depending on the distribution.
 
+## Deployment
+
+For the Angular frontend simply run `ng build`.
+For the Spring backend run `mvn install`.
+
+Copy the generated files onto the CentOS server.
+
 ## Setup
 
 ### Java

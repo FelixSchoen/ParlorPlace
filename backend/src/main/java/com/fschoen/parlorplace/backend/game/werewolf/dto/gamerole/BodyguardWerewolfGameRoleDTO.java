@@ -1,6 +1,5 @@
-package com.fschoen.parlorplace.backend.game.werewolf.dto.role;
+package com.fschoen.parlorplace.backend.game.werewolf.dto.gamerole;
 
-import com.fschoen.parlorplace.backend.game.werewolf.dto.game.WerewolfPlayerDTO;
 import com.fschoen.parlorplace.backend.game.werewolf.enumeration.WerewolfFaction;
 import com.fschoen.parlorplace.backend.game.werewolf.enumeration.WerewolfRoleType;
 import lombok.AllArgsConstructor;

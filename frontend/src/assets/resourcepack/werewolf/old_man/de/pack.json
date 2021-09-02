@@ -385,6 +385,21 @@
           }
         ]
       },
+      "hunter": {
+        "action": [
+          {
+            "path": [
+              "action_01_01",
+              "action_01_02"
+            ],
+            "order": [
+              "file_01",
+              "codename_01",
+              "file_02"
+            ]
+          }
+        ]
+      },
       "cupid": {
         "wake": [
           {

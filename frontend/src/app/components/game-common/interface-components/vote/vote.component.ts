@@ -63,7 +63,10 @@ export abstract class VoteComponent<G extends Game, P extends Player, V extends 
 
     if (this.vote.voteState == VoteState.ONGOING) {
       this.timeRemaining = (this.vote.endTime * 1000 - new Date().getTime()) / 1000
-      this.countDown = timer(0, 1000).subscribe(() => this.timeRemaining = Math.max(0, this.timeRemaining - 1));
+      this.countDown = timer(0, 1000).subscribe(() => {
+        this.timeRemaining = Math.max(0, this.timeRemaining - 1);
+        this.ref.markForCheck();
+      });
     }
 
     this.isSelected = isSelected;
