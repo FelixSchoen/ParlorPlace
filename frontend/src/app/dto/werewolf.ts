@@ -36,6 +36,7 @@ export class WerewolfGame extends Game {
 }
 
 export class WerewolfPlayer extends Player {
+
   constructor(public id: number,
               public user: User,
               public codeName: CodeName,
@@ -45,6 +46,18 @@ export class WerewolfPlayer extends Player {
               public position: number,
               public placement: number) {
     super(id, user, codeName, lobbyRole, playerState, gameRoles, position, placement);
+  }
+
+  public static getCurrentGameRole(werewolfPlayer: WerewolfPlayer): WerewolfGameRole | undefined {
+    if (werewolfPlayer != undefined && werewolfPlayer.gameRoles != undefined)
+      return werewolfPlayer.gameRoles[werewolfPlayer.gameRoles.length - 1]
+    else
+      return undefined
+  }
+
+  public static hasGameRoleType(werewolfPlayer: WerewolfPlayer, werewolfRoleType: WerewolfRoleType) {
+    let currentGameRole = this.getCurrentGameRole(werewolfPlayer)
+    return currentGameRole != undefined && currentGameRole.werewolfRoleType == werewolfRoleType
   }
 
 }
@@ -148,6 +161,20 @@ export class VillagerWerewolfGameRole extends WerewolfGameRole {
   public toJSON(): VillagerWerewolfGameRole {
     return Object.assign({}, this, {
       werewolfRoleType: "VILLAGER"
+    });
+  }
+}
+
+export class PureVillagerWerewolfGameRole extends WerewolfGameRole {
+  constructor(public id: number,
+              public werewolfRoleType: WerewolfRoleType,
+              public werewolfFaction: WerewolfFaction) {
+    super(id, werewolfRoleType, werewolfFaction);
+  }
+
+  public toJSON(): PureVillagerWerewolfGameRole {
+    return Object.assign({}, this, {
+      werewolfRoleType: "PURE_VILLAGER"
     });
   }
 }
