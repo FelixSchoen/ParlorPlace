@@ -28,4 +28,5 @@ public class SetupApplication implements CommandLineRunner {
     public void run(String... args) {
         databasePopulator.generate();
     }
+
 }

@@ -71,6 +71,10 @@ export class AppComponent implements OnInit {
         this.domSanitizer.bypassSecurityTrustResourceUrl(duotone_folder + "utensil-fork.svg")
       );
       this.matIconRegistry.addSvgIcon(
+        "duotone-pureVillager",
+        this.domSanitizer.bypassSecurityTrustResourceUrl(duotone_folder + "utensil-fork.svg")
+      );
+      this.matIconRegistry.addSvgIcon(
         "duotone-seer",
         this.domSanitizer.bypassSecurityTrustResourceUrl(duotone_folder + "eye.svg")
       );

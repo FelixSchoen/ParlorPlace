@@ -8,6 +8,7 @@
       </pattern>
     </extension>
     <option name="SPRING_BOOT_MAIN_CLASS" value="com.fschoen.parlorplace.backend.ParlorPlaceApplication" />
+    <option name="PROGRAM_PARAMETERS" value="--default.users=data/defaultUsers.json" />
     <option name="ALTERNATIVE_JRE_PATH" />
     <option name="SHORTEN_COMMAND_LINE" value="NONE" />
     <method v="2">

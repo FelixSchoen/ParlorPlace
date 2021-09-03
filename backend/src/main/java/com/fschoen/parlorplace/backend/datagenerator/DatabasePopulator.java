@@ -148,7 +148,7 @@ public class DatabasePopulator {
         userCollection.setUser3(userRepository.save(user3));
         passwordCollection.put(user3, "password");
 
-        //user3
+        //user4
         Set<Role> rolesUser4 = new HashSet<>() {{
             add(Role.builder().role(UserRole.ROLE_USER).build());
         }};
@@ -164,8 +164,104 @@ public class DatabasePopulator {
         userCollection.setUser4(userRepository.save(user4));
         passwordCollection.put(user4, "password");
 
+        //user5
+        Set<Role> rolesUser5 = new HashSet<>() {{
+            add(Role.builder().role(UserRole.ROLE_USER).build());
+        }};
+        User user5 = User.builder()
+                .username("User5")
+                .nickname("User5")
+                .password("$2a$10$G7E1tKKajd3S8/ORM17isOTCH0To0VkAnTjY7R4gkcgNpyLG/.tJC")
+                .email("user5@mail.com")
+                .roles(rolesUser5)
+                .build();
+        user5.getRoles().forEach(role -> role.setUser(user5));
+
+        userCollection.setUser5(userRepository.save(user5));
+        passwordCollection.put(user5, "password");
+
+        //user6
+        Set<Role> rolesUser6 = new HashSet<>() {{
+            add(Role.builder().role(UserRole.ROLE_USER).build());
+        }};
+        User user6 = User.builder()
+                .username("User6")
+                .nickname("User6")
+                .password("$2a$10$G7E1tKKajd3S8/ORM17isOTCH0To0VkAnTjY7R4gkcgNpyLG/.tJC")
+                .email("user6@mail.com")
+                .roles(rolesUser6)
+                .build();
+        user6.getRoles().forEach(role -> role.setUser(user6));
+
+        userCollection.setUser6(userRepository.save(user6));
+        passwordCollection.put(user6, "password");
+
+        //user7
+        Set<Role> rolesUser7 = new HashSet<>() {{
+            add(Role.builder().role(UserRole.ROLE_USER).build());
+        }};
+        User user7 = User.builder()
+                .username("User7")
+                .nickname("User7")
+                .password("$2a$10$G7E1tKKajd3S8/ORM17isOTCH0To0VkAnTjY7R4gkcgNpyLG/.tJC")
+                .email("user7@mail.com")
+                .roles(rolesUser7)
+                .build();
+        user7.getRoles().forEach(role -> role.setUser(user7));
+
+        userCollection.setUser7(userRepository.save(user7));
+        passwordCollection.put(user7, "password");
+
+        //user8
+        Set<Role> rolesUser8 = new HashSet<>() {{
+            add(Role.builder().role(UserRole.ROLE_USER).build());
+        }};
+        User user8 = User.builder()
+                .username("User8")
+                .nickname("User8")
+                .password("$2a$10$G7E1tKKajd3S8/ORM17isOTCH0To0VkAnTjY7R4gkcgNpyLG/.tJC")
+                .email("user8@mail.com")
+                .roles(rolesUser8)
+                .build();
+        user8.getRoles().forEach(role -> role.setUser(user8));
+
+        userCollection.setUser8(userRepository.save(user8));
+        passwordCollection.put(user8, "password");
+
+        //user9
+        Set<Role> rolesUser9 = new HashSet<>() {{
+            add(Role.builder().role(UserRole.ROLE_USER).build());
+        }};
+        User user9 = User.builder()
+                .username("User9")
+                .nickname("User9")
+                .password("$2a$10$G7E1tKKajd3S8/ORM17isOTCH0To0VkAnTjY7R4gkcgNpyLG/.tJC")
+                .email("user9@mail.com")
+                .roles(rolesUser9)
+                .build();
+        user9.getRoles().forEach(role -> role.setUser(user9));
+
+        userCollection.setUser9(userRepository.save(user9));
+        passwordCollection.put(user9, "password");
+
+        //user10
+        Set<Role> rolesUser10 = new HashSet<>() {{
+            add(Role.builder().role(UserRole.ROLE_USER).build());
+        }};
+        User user10 = User.builder()
+                .username("User10")
+                .nickname("User10")
+                .password("$2a$10$G7E1tKKajd3S8/ORM17isOTCH0To0VkAnTjY7R4gkcgNpyLG/.tJC")
+                .email("user10@mail.com")
+                .roles(rolesUser10)
+                .build();
+        user10.getRoles().forEach(role -> role.setUser(user10));
+
+        userCollection.setUser10(userRepository.save(user10));
+        passwordCollection.put(user10, "password");
+
         //non existant user1
-        Set<Role> rolesneUser1 = new HashSet<>() {{
+        Set<Role> rolesNeUser1 = new HashSet<>() {{
             add(Role.builder().role(UserRole.ROLE_USER).build());
         }};
         User neUser1 = User.builder()
@@ -173,7 +269,7 @@ public class DatabasePopulator {
                 .nickname("nonExistentNickname")
                 .password("$2a$10$G7E1tKKajd3S8/ORM17isOTCH0To0VkAnTjY7R4gkcgNpyLG/.tJC")
                 .email("neUser1@mail.com")
-                .roles(rolesneUser1)
+                .roles(rolesNeUser1)
                 .build();
         neUser1.getRoles().forEach(role -> role.setUser(neUser1));
 
@@ -195,11 +291,16 @@ public class DatabasePopulator {
                 .ruleSet(WerewolfRuleSet.builder()
                         .resourcePack("DEFAULT")
                         .gameRoleTypes(new ArrayList<>() {{
+                            add(WerewolfRoleType.VILLAGER);
+                            add(WerewolfRoleType.PURE_VILLAGER);
                             add(WerewolfRoleType.WEREWOLF);
                             add(WerewolfRoleType.SEER);
                             add(WerewolfRoleType.WITCH);
+                            add(WerewolfRoleType.HUNTER);
                             add(WerewolfRoleType.CUPID);
                             add(WerewolfRoleType.BODYGUARD);
+                            add(WerewolfRoleType.LYCANTHROPE);
+                            add(WerewolfRoleType.BEAR_TAMER);
                         }}).build())
                 .round(0)
                 .votes(new ArrayList<>())
@@ -259,6 +360,61 @@ public class DatabasePopulator {
                         .playerState(PlayerState.ALIVE)
                         .gameRoles(new ArrayList<>())
                         .position(4)
+                        .disconnected(false)
+                        .build()
+        );
+        werewolfLobbyGame1.getPlayers().add(
+                WerewolfPlayer.builder()
+                        .user(generatedData.getUserCollection().getUser5())
+                        .game(werewolfLobbyGame1)
+                        .lobbyRole(LobbyRole.ROLE_USER)
+                        .playerState(PlayerState.ALIVE)
+                        .gameRoles(new ArrayList<>())
+                        .position(5)
+                        .disconnected(false)
+                        .build()
+        );
+        werewolfLobbyGame1.getPlayers().add(
+                WerewolfPlayer.builder()
+                        .user(generatedData.getUserCollection().getUser6())
+                        .game(werewolfLobbyGame1)
+                        .lobbyRole(LobbyRole.ROLE_USER)
+                        .playerState(PlayerState.ALIVE)
+                        .gameRoles(new ArrayList<>())
+                        .position(6)
+                        .disconnected(false)
+                        .build()
+        );
+        werewolfLobbyGame1.getPlayers().add(
+                WerewolfPlayer.builder()
+                        .user(generatedData.getUserCollection().getUser7())
+                        .game(werewolfLobbyGame1)
+                        .lobbyRole(LobbyRole.ROLE_USER)
+                        .playerState(PlayerState.ALIVE)
+                        .gameRoles(new ArrayList<>())
+                        .position(7)
+                        .disconnected(false)
+                        .build()
+        );
+        werewolfLobbyGame1.getPlayers().add(
+                WerewolfPlayer.builder()
+                        .user(generatedData.getUserCollection().getUser8())
+                        .game(werewolfLobbyGame1)
+                        .lobbyRole(LobbyRole.ROLE_USER)
+                        .playerState(PlayerState.ALIVE)
+                        .gameRoles(new ArrayList<>())
+                        .position(8)
+                        .disconnected(false)
+                        .build()
+        );
+        werewolfLobbyGame1.getPlayers().add(
+                WerewolfPlayer.builder()
+                        .user(generatedData.getUserCollection().getUser9())
+                        .game(werewolfLobbyGame1)
+                        .lobbyRole(LobbyRole.ROLE_USER)
+                        .playerState(PlayerState.ALIVE)
+                        .gameRoles(new ArrayList<>())
+                        .position(9)
                         .disconnected(false)
                         .build()
         );
