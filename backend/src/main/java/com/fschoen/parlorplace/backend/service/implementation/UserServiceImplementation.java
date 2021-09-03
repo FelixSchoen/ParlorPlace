@@ -70,7 +70,7 @@ public class UserServiceImplementation extends BaseService implements UserServic
             add(Role.builder().role(UserRole.ROLE_USER).build());
         }};
 
-        User persistUser = user.toBuilder().nickname(user.getNickname()).password(hashedPassword).roles(roles).build();
+        User persistUser = user.toBuilder().password(hashedPassword).roles(roles).build();
         persistUser.getRoles().forEach(role -> role.setUser(persistUser));
 
         return userRepository.save(persistUser);
