@@ -34,6 +34,9 @@ public class WerewolfGameRoleObfuscationService extends GameRoleObfuscationServi
         }
 
         switch (werewolfGameRoleDTO.getWerewolfRoleType()) {
+            case PURE_VILLAGER -> {
+                return;
+            }
             case WITCH -> {
                 WitchWerewolfGameRoleDTO witchWerewolfGameRoleDTO = (WitchWerewolfGameRoleDTO) werewolfGameRoleDTO;
                 witchWerewolfGameRoleDTO.setHasHealed(null);

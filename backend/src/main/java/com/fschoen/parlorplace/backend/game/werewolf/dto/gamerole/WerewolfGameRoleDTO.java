@@ -19,6 +19,7 @@ import lombok.experimental.SuperBuilder;
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "werewolfRoleType")
 @JsonSubTypes({
         @JsonSubTypes.Type(value = VillagerWerewolfGameRoleDTO.class, name = "VILLAGER"),
+        @JsonSubTypes.Type(value = PureVillagerWerewolfGameRoleDTO.class, name = "PURE_VILLAGER"),
         @JsonSubTypes.Type(value = WerewolfWerewolfGameRoleDTO.class, name = "WEREWOLF"),
         @JsonSubTypes.Type(value = SeerWerewolfGameRoleDTO.class, name = "SEER"),
         @JsonSubTypes.Type(value = WitchWerewolfGameRoleDTO.class, name = "WITCH"),

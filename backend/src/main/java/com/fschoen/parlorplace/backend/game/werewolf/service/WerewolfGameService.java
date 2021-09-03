@@ -11,6 +11,7 @@ import com.fschoen.parlorplace.backend.game.werewolf.entity.gamerole.BodyguardWe
 import com.fschoen.parlorplace.backend.game.werewolf.entity.gamerole.CupidWerewolfGameRole;
 import com.fschoen.parlorplace.backend.game.werewolf.entity.gamerole.HunterWerewolfGameRole;
 import com.fschoen.parlorplace.backend.game.werewolf.entity.gamerole.LycanthropeWerewolfGameRole;
+import com.fschoen.parlorplace.backend.game.werewolf.entity.gamerole.PureVillagerWerewolfGameRole;
 import com.fschoen.parlorplace.backend.game.werewolf.entity.gamerole.SeerWerewolfGameRole;
 import com.fschoen.parlorplace.backend.game.werewolf.entity.gamerole.VillagerWerewolfGameRole;
 import com.fschoen.parlorplace.backend.game.werewolf.entity.gamerole.WerewolfWerewolfGameRole;
@@ -51,6 +52,7 @@ public class WerewolfGameService extends AbstractGameService<
 
     private static final Map<WerewolfRoleType, Class<? extends WerewolfGameRole>> werewolfGameRoleClasses = new HashMap<>() {{
         put(WerewolfRoleType.VILLAGER, VillagerWerewolfGameRole.class);
+        put(WerewolfRoleType.PURE_VILLAGER, PureVillagerWerewolfGameRole.class);
         put(WerewolfRoleType.WEREWOLF, WerewolfWerewolfGameRole.class);
         put(WerewolfRoleType.SEER, SeerWerewolfGameRole.class);
         put(WerewolfRoleType.WITCH, WitchWerewolfGameRole.class);

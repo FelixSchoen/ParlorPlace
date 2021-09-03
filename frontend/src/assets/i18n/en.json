@@ -90,6 +90,10 @@
         "name": "Villager",
         "description": "Find the Werewolves and kill them, before they kill you."
       },
+      "pureVillager": {
+        "name": "Pure Villager",
+        "description": "You are a normal villager, and everyone knows that you are."
+      },
       "werewolf": {
         "name": "Werewolf",
         "description": "You wake up each night together with the other Werewolves and choose 1 victim, which you kill."
