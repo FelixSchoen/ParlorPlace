@@ -7,6 +7,7 @@ import com.fschoen.parlorplace.backend.game.werewolf.dto.gamerole.BodyguardWerew
 import com.fschoen.parlorplace.backend.game.werewolf.dto.gamerole.CupidWerewolfGameRoleDTO;
 import com.fschoen.parlorplace.backend.game.werewolf.dto.gamerole.HunterWerewolfGameRoleDTO;
 import com.fschoen.parlorplace.backend.game.werewolf.dto.gamerole.LycanthropeWerewolfGameRoleDTO;
+import com.fschoen.parlorplace.backend.game.werewolf.dto.gamerole.PureVillagerWerewolfGameRoleDTO;
 import com.fschoen.parlorplace.backend.game.werewolf.dto.gamerole.SeerWerewolfGameRoleDTO;
 import com.fschoen.parlorplace.backend.game.werewolf.dto.gamerole.VillagerWerewolfGameRoleDTO;
 import com.fschoen.parlorplace.backend.game.werewolf.dto.gamerole.WerewolfGameRoleDTO;
@@ -18,6 +19,7 @@ import com.fschoen.parlorplace.backend.game.werewolf.entity.gamerole.BodyguardWe
 import com.fschoen.parlorplace.backend.game.werewolf.entity.gamerole.CupidWerewolfGameRole;
 import com.fschoen.parlorplace.backend.game.werewolf.entity.gamerole.HunterWerewolfGameRole;
 import com.fschoen.parlorplace.backend.game.werewolf.entity.gamerole.LycanthropeWerewolfGameRole;
+import com.fschoen.parlorplace.backend.game.werewolf.entity.gamerole.PureVillagerWerewolfGameRole;
 import com.fschoen.parlorplace.backend.game.werewolf.entity.gamerole.SeerWerewolfGameRole;
 import com.fschoen.parlorplace.backend.game.werewolf.entity.gamerole.VillagerWerewolfGameRole;
 import com.fschoen.parlorplace.backend.game.werewolf.entity.gamerole.WerewolfWerewolfGameRole;
@@ -28,6 +30,8 @@ import org.mapstruct.Mapper;
 public interface WerewolfGameRoleMapper extends GameRoleMapper<WerewolfGameRole, WerewolfGameRoleDTO> {
 
     VillagerWerewolfGameRoleDTO toDTO(VillagerWerewolfGameRole gameRole);
+
+    PureVillagerWerewolfGameRoleDTO toDTO(PureVillagerWerewolfGameRole gameRole);
 
     WerewolfWerewolfGameRoleDTO toDTO(WerewolfWerewolfGameRole gameRole);
 
@@ -49,6 +53,9 @@ public interface WerewolfGameRoleMapper extends GameRoleMapper<WerewolfGameRole,
         switch (gameRole.getWerewolfRoleType()) {
             case VILLAGER -> {
                 return toDTO((VillagerWerewolfGameRole) gameRole);
+            }
+            case PURE_VILLAGER -> {
+                return toDTO((PureVillagerWerewolfGameRole) gameRole);
             }
             case WEREWOLF -> {
                 return toDTO((WerewolfWerewolfGameRole) gameRole);
@@ -80,6 +87,8 @@ public interface WerewolfGameRoleMapper extends GameRoleMapper<WerewolfGameRole,
 
     VillagerWerewolfGameRole fromDTO(VillagerWerewolfGameRoleDTO gameRoleDTO);
 
+    PureVillagerWerewolfGameRole fromDTO(PureVillagerWerewolfGameRoleDTO gameRoleDTO);
+
     WerewolfWerewolfGameRole fromDTO(WerewolfWerewolfGameRoleDTO gameRole);
 
     SeerWerewolfGameRole fromDTO(SeerWerewolfGameRoleDTO gameRole);
@@ -100,6 +109,9 @@ public interface WerewolfGameRoleMapper extends GameRoleMapper<WerewolfGameRole,
         switch (gameRoleDTO.getWerewolfRoleType()) {
             case VILLAGER -> {
                 return fromDTO((VillagerWerewolfGameRoleDTO) gameRoleDTO);
+            }
+            case PURE_VILLAGER -> {
+                return fromDTO((PureVillagerWerewolfGameRoleDTO) gameRoleDTO);
             }
             case WEREWOLF -> {
                 return fromDTO((WerewolfWerewolfGameRoleDTO) gameRoleDTO);

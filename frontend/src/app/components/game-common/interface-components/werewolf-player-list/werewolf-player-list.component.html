@@ -1,16 +1,36 @@
 <mat-list>
-  <mat-list-item *ngFor="let player of sortPlayers(this.players)">
+  <mat-list-item *ngFor="let player of this.alivePlayers; last as last">
 
-    <mat-icon *ngIf="player.playerState == playerState.ALIVE && game.gameState != gameState.CONCLUDED" mat-list-icon
-              svgIcon="duotone-unknown"></mat-icon>
     <mat-icon
-      *ngIf="player.gameRoles.length > 0 && (player.playerState == playerState.DECEASED || game.gameState == gameState.CONCLUDED)"
+      *ngIf="player.playerState == playerState.ALIVE && game.gameState != gameState.CONCLUDED && !werewolfPlayer.hasGameRoleType(player, werewolfRoleType.PURE_VILLAGER)"
+      mat-list-icon
+      svgIcon="duotone-unknown"></mat-icon>
+    <mat-icon
+      *ngIf="player.gameRoles.length > 0 && (player.playerState == playerState.DECEASED || game.gameState == gameState.CONCLUDED || werewolfPlayer.hasGameRoleType(player, werewolfRoleType.PURE_VILLAGER))"
       mat-list-icon
       svgIcon="{{this.werewolfRoleTypeUtil.toIconRepresentation(player.gameRoles[player.gameRoles.length-1].werewolfRoleType)}}"></mat-icon>
     <h3 matLine>
       {{player.user.nickname}}
     </h3>
-    <p *ngIf="!playerUtil.nicknameUnique(player.user, this.players)" matLine>{{player.user.username}}</p>
+    <p *ngIf="!werewolfPlayer.nicknameUnique(player.user, this.players)" matLine>{{player.user.username}}</p>
+
+    <mat-icon *ngIf="player.placement != undefined && player.placement == 1"
+              svgIcon="duotone-victory"></mat-icon>
+
+    <mat-divider *ngIf="last && this.deceasedPlayers.length > 0"></mat-divider>
+
+  </mat-list-item>
+
+  <mat-list-item *ngFor="let player of this.deceasedPlayers">
+
+    <mat-icon
+      *ngIf="player.gameRoles.length > 0"
+      mat-list-icon
+      svgIcon="{{this.werewolfRoleTypeUtil.toIconRepresentation(player.gameRoles[player.gameRoles.length-1].werewolfRoleType)}}"></mat-icon>
+    <h3 matLine>
+      {{player.user.nickname}}
+    </h3>
+    <p *ngIf="!werewolfPlayer.nicknameUnique(player.user, this.players)" matLine>{{player.user.username}}</p>
 
     <mat-icon *ngIf="player.placement != undefined && player.placement == 1"
               svgIcon="duotone-victory"></mat-icon>
