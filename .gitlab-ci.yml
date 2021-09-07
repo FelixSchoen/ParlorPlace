@@ -9,9 +9,12 @@ backend-build-job:
 
 frontend-build-job:
   stage: build
-  image: trion/ng-cli:12.2.4
+  image: trion/ng-cli:latest
   script:
     - cd ./frontend
+    - npm install
+    - ng update
+    - npm update
     - ng build
 
 backend-test-job:
