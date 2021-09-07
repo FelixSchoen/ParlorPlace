@@ -16,6 +16,7 @@ import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import java.util.List;
 
 @NoArgsConstructor
@@ -33,8 +34,7 @@ public class WerewolfRuleSet extends RuleSet {
 
     @Column(nullable = false)
     @Enumerated
-    @ElementCollection(targetClass = WerewolfRoleType.class)
-    @LazyCollection(LazyCollectionOption.FALSE)
+    @ElementCollection(targetClass = WerewolfRoleType.class, fetch = FetchType.EAGER)
     private List<WerewolfRoleType> gameRoleTypes;
 
 }
