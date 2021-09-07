@@ -59,7 +59,6 @@ public abstract class Player<GR extends GameRole> {
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
     @NotNull
-    //TODO I don't need this, but I can't get @OneToMany to work without this - always throws exceptions "Batch Update Returned Unexpected Row Count"
     protected Game<?, ?, ?, ?> game;
 
     @Column(nullable = false)

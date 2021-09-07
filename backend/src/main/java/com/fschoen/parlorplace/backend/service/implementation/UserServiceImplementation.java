@@ -16,6 +16,7 @@ import com.fschoen.parlorplace.backend.service.RefreshTokenService;
 import com.fschoen.parlorplace.backend.service.UserService;
 import com.fschoen.parlorplace.backend.utility.messaging.MessageIdentifier;
 import com.fschoen.parlorplace.backend.utility.messaging.Messages;
+import com.fschoen.parlorplace.backend.utility.other.SetBuilder;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -66,9 +67,7 @@ public class UserServiceImplementation extends BaseService implements UserServic
             throw new DataConflictException(Messages.exception(MessageIdentifier.USER_EMAIL_EXISTS));
 
         String hashedPassword = passwordEncoder.encode(user.getPassword());
-        Set<Role> roles = new HashSet<>() {{
-            add(Role.builder().role(UserRole.ROLE_USER).build());
-        }};
+        Set<Role> roles = new SetBuilder<Role>().add(Role.builder().role(UserRole.ROLE_USER).build()).build();
 
         User persistUser = user.toBuilder().password(hashedPassword).roles(roles).build();
         persistUser.getRoles().forEach(role -> role.setUser(persistUser));

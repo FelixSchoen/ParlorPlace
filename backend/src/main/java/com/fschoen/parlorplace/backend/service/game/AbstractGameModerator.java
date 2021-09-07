@@ -14,10 +14,10 @@ import com.fschoen.parlorplace.backend.repository.PlayerRepository;
 import com.fschoen.parlorplace.backend.repository.UserRepository;
 import com.fschoen.parlorplace.backend.service.CommunicationService;
 import com.fschoen.parlorplace.backend.utility.communication.VoiceLineClientNotification;
+import com.fschoen.parlorplace.backend.utility.other.SetBuilder;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -108,10 +108,9 @@ public abstract class AbstractGameModerator<
         P finalLeftNeighbour = leftNeighbour;
         P finalRightNeighbour = rightNeighbour;
 
-        return new HashSet<>() {{
-            add(finalLeftNeighbour);
-            add(finalRightNeighbour);
-        }};
+        return new SetBuilder<P>()
+                .add(finalLeftNeighbour)
+                .add(finalRightNeighbour).build();
     }
 
     protected void pause(int pauseTime) {

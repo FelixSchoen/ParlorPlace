@@ -7,8 +7,9 @@
         <option name="ENABLED" value="true" />
       </pattern>
     </extension>
-    <option name="SPRING_BOOT_MAIN_CLASS" value="com.fschoen.parlorplace.backend.SetupApplication" />
+    <option name="SPRING_BOOT_MAIN_CLASS" value="com.fschoen.parlorplace.backend.ParlorPlaceApplication" />
     <option name="ACTIVE_PROFILES" value="setup" />
+    <option name="PROGRAM_PARAMETERS" value="--test.data" />
     <option name="ALTERNATIVE_JRE_PATH" />
     <option name="SHORTEN_COMMAND_LINE" value="NONE" />
     <method v="2">

@@ -19,6 +19,7 @@ import com.fschoen.parlorplace.backend.repository.VoteRepository;
 import com.fschoen.parlorplace.backend.service.CommunicationService;
 import com.fschoen.parlorplace.backend.utility.messaging.MessageIdentifier;
 import com.fschoen.parlorplace.backend.utility.messaging.Messages;
+import com.fschoen.parlorplace.backend.utility.other.SetBuilder;
 import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -54,7 +55,6 @@ public abstract class AbstractVoteService<
         VRepo extends VoteRepository<V>
         > extends BaseGameService<G, P, GRepo> {
 
-    // TODO Not stateless, but not persistent either - I believe that this still should be ok, on a server crash we can delete open votes and restart the moderator
     protected final ConcurrentMap<Long, CompletableFuture<V>> futureMap;
 
     protected final PRepo playerRepository;
@@ -86,11 +86,10 @@ public abstract class AbstractVoteService<
             vote.setVoteState(VoteState.ONGOING);
             vote.setVoteType(voteType);
             vote.setVoteDrawStrategy(voteDrawStrategy);
-            vote.setVoters(new HashSet<>() {{
-                addAll(voteCollectionMap.keySet().stream().map(id -> playerRepository.findOneById(id).orElseThrow(
-                        () -> new VoteException(Messages.exception(MessageIdentifier.PLAYER_EXISTS_NOT))
-                )).collect(Collectors.toList()));
-            }});
+            vote.setVoters(new SetBuilder<P>()
+                    .addAll(voteCollectionMap.keySet().stream().map(id -> playerRepository.findOneById(id).orElseThrow(
+                            () -> new VoteException(Messages.exception(MessageIdentifier.PLAYER_EXISTS_NOT))
+                    )).collect(Collectors.toList())).build());
             vote.setVoteCollectionMap(voteCollectionMap);
             vote.setOutcome(new HashSet<>());
             vote.setOutcomeAmount(outcomeAmount);
@@ -255,9 +254,7 @@ public abstract class AbstractVoteService<
                 voteCollection = this.getVoteCollectionClass().getDeclaredConstructor().newInstance();
                 voteCollection.setAmountVotes(amountVotes);
                 voteCollection.setAllowAbstain(allowAbstain);
-                voteCollection.setSubjects(new HashSet<>() {{
-                    addAll(subjects);
-                }});
+                voteCollection.setSubjects(new SetBuilder<T>().addAll(subjects).build());
                 voteCollection.setSelection(new HashSet<>());
                 map.put(voter.getId(), voteCollection);
             } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
