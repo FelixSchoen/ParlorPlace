@@ -16,6 +16,7 @@ import com.fschoen.parlorplace.backend.game.werewolf.entity.gamerole.SeerWerewol
 import com.fschoen.parlorplace.backend.game.werewolf.entity.gamerole.VillagerWerewolfGameRole;
 import com.fschoen.parlorplace.backend.game.werewolf.entity.gamerole.WerewolfWerewolfGameRole;
 import com.fschoen.parlorplace.backend.game.werewolf.entity.gamerole.WitchWerewolfGameRole;
+import com.fschoen.parlorplace.backend.game.werewolf.enumeration.WerewolfFaction;
 import com.fschoen.parlorplace.backend.game.werewolf.enumeration.WerewolfGamePhase;
 import com.fschoen.parlorplace.backend.game.werewolf.enumeration.WerewolfRoleType;
 import com.fschoen.parlorplace.backend.game.werewolf.repository.WerewolfGameRepository;
@@ -127,6 +128,22 @@ public class WerewolfGameService extends AbstractGameService<
         } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
             throw new DataConflictException(Messages.exception(MessageIdentifier.ROLE_TYPE_MISMATCH));
         }
+
+        boolean atLeastTwoFactions = false;
+        WerewolfFaction factionToCompareAgainst = game.getPlayers().stream().findAny().orElseThrow(() -> new GameException(Messages.exception(MessageIdentifier.PLAYER_EXISTS_NOT)))
+                .getGameRoles().get(0).getWerewolfFaction();
+
+        for (WerewolfPlayer p : game.getPlayers()) {
+            WerewolfFaction playerFaction = p.getGameRoles().get(0).getWerewolfFaction();
+
+            if (playerFaction != factionToCompareAgainst) {
+                atLeastTwoFactions = true;
+                break;
+            }
+        }
+
+        if (!atLeastTwoFactions)
+            throw new GameException(Messages.exception(MessageIdentifier.GAME_ROLES_TYPE_INVALID));
 
         return game;
     }
