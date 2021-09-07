@@ -79,7 +79,7 @@ public class UserController {
     }
 
     @PutMapping("/update/{id}")
-    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
+    @PreAuthorize("(hasRole('USER') and principalHasId(#userUpdateRequestDTO.id)) or hasRole('ADMIN')")
     public ResponseEntity<UserDTO> updateUser(@PathVariable("id") Long id, @RequestBody UserUpdateRequestDTO userUpdateRequestDTO) {
         validator.validate(userUpdateRequestDTO).throwIfInvalid();
 
