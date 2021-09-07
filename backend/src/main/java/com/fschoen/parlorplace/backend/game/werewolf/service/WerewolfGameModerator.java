@@ -174,7 +174,7 @@ public class WerewolfGameModerator extends AbstractGameModerator<
     private void processAllCupids() throws ExecutionException, InterruptedException {
         Set<WerewolfPlayer> cupids = getAlivePlayersOfLastRoleType(WerewolfRoleType.CUPID);
         for (WerewolfPlayer cupid : cupids)
-            if (!((CupidWerewolfGameRole) getLastRole(cupid)).getHasLinked())
+            if (!((CupidWerewolfGameRole) getLastRole(cupid)).hasLinked())
                 processCupid(cupid);
     }
 
@@ -205,7 +205,7 @@ public class WerewolfGameModerator extends AbstractGameModerator<
 
         Set<WerewolfPlayer> cupidTargets = cupidVote.getOutcome();
         CupidWerewolfGameRole cupidWerewolfGameRole = (CupidWerewolfGameRole) getLastRole(cupid);
-        cupidWerewolfGameRole.setHasLinked(true);
+        cupidWerewolfGameRole.hasLinked(true);
         save(cupid);
 
         WerewolfFaction faction = getLastRole(cupidTargets.stream().findAny().orElseThrow(
@@ -322,7 +322,7 @@ public class WerewolfGameModerator extends AbstractGameModerator<
     private void processAllWitches() throws ExecutionException, InterruptedException {
         Set<WerewolfPlayer> witches = getAlivePlayersOfLastRoleType(WerewolfRoleType.WITCH);
         for (WerewolfPlayer witch : witches)
-            if (!((WitchWerewolfGameRole) getLastRole(witch)).getHasHealed() || !((WitchWerewolfGameRole) getLastRole(witch)).getHasKilled())
+            if (!((WitchWerewolfGameRole) getLastRole(witch)).hasHealed() || !((WitchWerewolfGameRole) getLastRole(witch)).hasKilled())
                 processWitch(witch);
     }
 
@@ -337,7 +337,7 @@ public class WerewolfGameModerator extends AbstractGameModerator<
 
         WitchWerewolfGameRole witchWerewolfGameRole = (WitchWerewolfGameRole) getLastRole(witch);
 
-        if (!witchWerewolfGameRole.getHasHealed()) {
+        if (!witchWerewolfGameRole.hasHealed()) {
             Set<WerewolfPlayer> validHealTargets = new HashSet<>();
             getVotesInRoundOfVoteDescriptor(getCurrentRound(), WerewolfVoteDescriptor.WEREWOLVES_KILL).forEach(vote -> validHealTargets.addAll(vote.getOutcome()));
 
@@ -361,7 +361,7 @@ public class WerewolfGameModerator extends AbstractGameModerator<
                 WerewolfPlayer witchHealTarget = witchHealVote.getOutcome().stream().findAny().orElseThrow(
                         () -> new GameException(Messages.exception(MessageIdentifier.VOTE_OUTCOME_EXISTS_NOT))
                 );
-                witchWerewolfGameRole.setHasHealed(true);
+                witchWerewolfGameRole.hasHealed(true);
                 WerewolfGame game = save(witch);
 
                 game.getLog().add(getLogEntryTemplate(witchSet).logType(WerewolfLogType.WITCH_HEAL).targets(new SetBuilder<WerewolfPlayer>().add(witchHealTarget).build()).build());
@@ -369,7 +369,7 @@ public class WerewolfGameModerator extends AbstractGameModerator<
             }
         }
 
-        if (!witchWerewolfGameRole.getHasKilled()) {
+        if (!witchWerewolfGameRole.hasKilled()) {
             Set<WerewolfPlayer> validKillTargets = getAlivePlayers();
 
             CompletableFuture<WerewolfPlayerWerewolfVote> witchKillVoteFuture = this.playerVoteService.requestVote(
@@ -392,7 +392,7 @@ public class WerewolfGameModerator extends AbstractGameModerator<
                 WerewolfPlayer witchKillTarget = witchKillVote.getOutcome().stream().findAny().orElseThrow(
                         () -> new GameException(Messages.exception(MessageIdentifier.VOTE_OUTCOME_EXISTS_NOT))
                 );
-                witchWerewolfGameRole.setHasKilled(true);
+                witchWerewolfGameRole.hasKilled(true);
                 WerewolfGame game = save(witch);
 
                 game.getLog().add(getLogEntryTemplate(witchSet).logType(WerewolfLogType.WITCH_KILL)
@@ -700,7 +700,7 @@ public class WerewolfGameModerator extends AbstractGameModerator<
 
         // Witch
         getAlivePlayersOfLastRoleType(WerewolfRoleType.WITCH).stream()
-                .filter(witch -> !((WitchWerewolfGameRole) getLastRole(witch)).getHasKilled() && !((WitchWerewolfGameRole) getLastRole(witch)).getHasHealed())
+                .filter(witch -> !((WitchWerewolfGameRole) getLastRole(witch)).hasKilled() && !((WitchWerewolfGameRole) getLastRole(witch)).hasHealed())
                 .forEach(witch -> maxAliveVillagersNeededForWin.getAndIncrement());
 
         return maxAliveVillagersNeededForWin.get() <= getAlivePlayersOfFaction(WerewolfFaction.WEREWOLVES).size();
