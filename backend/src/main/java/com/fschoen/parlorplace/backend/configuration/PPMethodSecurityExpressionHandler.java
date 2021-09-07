@@ -3,7 +3,6 @@ package com.fschoen.parlorplace.backend.configuration;
 import com.fschoen.parlorplace.backend.service.implementation.UserServiceImplementation;
 import org.aopalliance.intercept.MethodInvocation;
 import org.springframework.context.ApplicationContext;
-import org.springframework.expression.EvaluationContext;
 import org.springframework.security.access.expression.method.DefaultMethodSecurityExpressionHandler;
 import org.springframework.security.access.expression.method.MethodSecurityExpressionOperations;
 import org.springframework.security.authentication.AuthenticationTrustResolver;

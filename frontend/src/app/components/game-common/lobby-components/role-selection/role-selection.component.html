@@ -6,7 +6,8 @@
       *ngFor="let role of this.roles | distinct"
       [selectable]="false"
       [removable]="true"
-      (removed)="removeRole(role)">
+      (removed)="removeRole(role)"
+      (click)="incrementRole(role)">
       {{this.countRole(role)}}x {{this.displayRole(role) | async}}
       <mat-icon matChipRemove>cancel</mat-icon>
     </mat-chip>
@@ -14,6 +15,7 @@
 
   <input matInput
          #roleInput
+         #trigger="matAutocompleteTrigger"
          [formControl]="roleControl"
          [matAutocomplete]="roleAutocomplete"
          [matChipInputFor]="roleChipList">

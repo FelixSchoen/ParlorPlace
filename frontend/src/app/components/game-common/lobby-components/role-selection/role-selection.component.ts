@@ -1,6 +1,6 @@
 import {Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
 import {Player} from "../../../../dto/player";
-import {MatAutocompleteSelectedEvent} from "@angular/material/autocomplete";
+import {MatAutocompleteSelectedEvent, MatAutocompleteTrigger} from "@angular/material/autocomplete";
 import {FormControl} from "@angular/forms";
 import {removeFromArray} from "../../../../utility/utility";
 import {Observable, of} from "rxjs";
@@ -25,6 +25,7 @@ export class RoleSelectionComponent<R, P extends Player> implements OnInit {
   @Output() roleChanged = new EventEmitter<R[]>();
 
   @ViewChild('roleInput') roleInput: ElementRef<HTMLInputElement>;
+  @ViewChild('trigger', { read: MatAutocompleteTrigger }) trigger: MatAutocompleteTrigger;
 
   public roleControl = new FormControl();
   public filteredOptions: Observable<R[]>;
@@ -61,6 +62,11 @@ export class RoleSelectionComponent<R, P extends Player> implements OnInit {
     this.roleInput.nativeElement.value = "";
     this.roleControl.setValue("");
     this.roleChanged.emit(this.roles);
+
+    let that = this;
+    requestAnimationFrame(function () {
+      that.trigger.openPanel();
+    })
   }
 
   displayRole(
@@ -87,6 +93,12 @@ export class RoleSelectionComponent<R, P extends Player> implements OnInit {
     }
 
     return count;
+  }
+
+  incrementRole(
+    role: R
+  ) {
+    this.roles.push(role);
   }
 
 }

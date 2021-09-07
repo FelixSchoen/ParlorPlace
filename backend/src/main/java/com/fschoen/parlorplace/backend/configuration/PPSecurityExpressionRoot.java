@@ -1,9 +1,7 @@
 package com.fschoen.parlorplace.backend.configuration;
 
-import com.fschoen.parlorplace.backend.entity.User;
 import com.fschoen.parlorplace.backend.service.UserService;
 import lombok.Setter;
-import org.springframework.context.annotation.Bean;
 import org.springframework.security.access.expression.SecurityExpressionRoot;
 import org.springframework.security.access.expression.method.MethodSecurityExpressionOperations;
 import org.springframework.security.core.Authentication;
