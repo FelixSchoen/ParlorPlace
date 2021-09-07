@@ -12,6 +12,7 @@ import com.fschoen.parlorplace.backend.enumeration.VoteDrawStrategy;
 import com.fschoen.parlorplace.backend.enumeration.VoteState;
 import com.fschoen.parlorplace.backend.enumeration.VoteType;
 import com.fschoen.parlorplace.backend.game.werewolf.entity.WerewolfGame;
+import com.fschoen.parlorplace.backend.game.werewolf.entity.WerewolfGameRole;
 import com.fschoen.parlorplace.backend.game.werewolf.entity.WerewolfLogEntry;
 import com.fschoen.parlorplace.backend.game.werewolf.entity.WerewolfPlayer;
 import com.fschoen.parlorplace.backend.game.werewolf.entity.WerewolfPlayerVoteCollection;
@@ -26,6 +27,8 @@ import com.fschoen.parlorplace.backend.game.werewolf.enumeration.WerewolfVoteDes
 import com.fschoen.parlorplace.backend.repository.GameRepository;
 import com.fschoen.parlorplace.backend.repository.PlayerRepository;
 import com.fschoen.parlorplace.backend.repository.UserRepository;
+import com.fschoen.parlorplace.backend.utility.other.ListBuilder;
+import com.fschoen.parlorplace.backend.utility.other.SetBuilder;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
@@ -84,10 +87,10 @@ public class DatabasePopulator {
         GeneratedData.UserCollection userCollection = new GeneratedData.UserCollection();
 
         //admin1
-        Set<Role> rolesAdmin1 = new HashSet<>() {{
-            add(Role.builder().role(UserRole.ROLE_USER).build());
-            add(Role.builder().role(UserRole.ROLE_ADMIN).build());
-        }};
+        Set<Role> rolesAdmin1 = new SetBuilder<Role>()
+                .add(Role.builder().role(UserRole.ROLE_USER).build())
+                .add(Role.builder().role(UserRole.ROLE_ADMIN).build()).build();
+
         User admin1 = User.builder()
                 .username("Admin1")
                 .nickname("Admin1")
@@ -101,9 +104,8 @@ public class DatabasePopulator {
         passwordCollection.put(admin1, "password");
 
         //user1
-        Set<Role> rolesUser1 = new HashSet<>() {{
-            add(Role.builder().role(UserRole.ROLE_USER).build());
-        }};
+        Set<Role> rolesUser1 = new SetBuilder<Role>().add(Role.builder().role(UserRole.ROLE_USER).build()).build();
+
         User user1 = User.builder()
                 .username("User1")
                 .nickname("User1")
@@ -117,9 +119,8 @@ public class DatabasePopulator {
         passwordCollection.put(user1, "password");
 
         //user2
-        Set<Role> rolesUser2 = new HashSet<>() {{
-            add(Role.builder().role(UserRole.ROLE_USER).build());
-        }};
+        Set<Role> rolesUser2 = new SetBuilder<Role>().add(Role.builder().role(UserRole.ROLE_USER).build()).build();
+
         User user2 = User.builder()
                 .username("User2")
                 .nickname("User2")
@@ -133,9 +134,8 @@ public class DatabasePopulator {
         passwordCollection.put(user2, "password");
 
         //user3
-        Set<Role> rolesUser3 = new HashSet<>() {{
-            add(Role.builder().role(UserRole.ROLE_USER).build());
-        }};
+        Set<Role> rolesUser3 = new SetBuilder<Role>().add(Role.builder().role(UserRole.ROLE_USER).build()).build();
+
         User user3 = User.builder()
                 .username("User3")
                 .nickname("User3")
@@ -149,9 +149,8 @@ public class DatabasePopulator {
         passwordCollection.put(user3, "password");
 
         //user4
-        Set<Role> rolesUser4 = new HashSet<>() {{
-            add(Role.builder().role(UserRole.ROLE_USER).build());
-        }};
+        Set<Role> rolesUser4 = new SetBuilder<Role>().add(Role.builder().role(UserRole.ROLE_USER).build()).build();
+
         User user4 = User.builder()
                 .username("User4")
                 .nickname("User4")
@@ -165,9 +164,8 @@ public class DatabasePopulator {
         passwordCollection.put(user4, "password");
 
         //user5
-        Set<Role> rolesUser5 = new HashSet<>() {{
-            add(Role.builder().role(UserRole.ROLE_USER).build());
-        }};
+        Set<Role> rolesUser5 = new SetBuilder<Role>().add(Role.builder().role(UserRole.ROLE_USER).build()).build();
+
         User user5 = User.builder()
                 .username("User5")
                 .nickname("User5")
@@ -181,9 +179,8 @@ public class DatabasePopulator {
         passwordCollection.put(user5, "password");
 
         //user6
-        Set<Role> rolesUser6 = new HashSet<>() {{
-            add(Role.builder().role(UserRole.ROLE_USER).build());
-        }};
+        Set<Role> rolesUser6 = new SetBuilder<Role>().add(Role.builder().role(UserRole.ROLE_USER).build()).build();
+
         User user6 = User.builder()
                 .username("User6")
                 .nickname("User6")
@@ -197,9 +194,8 @@ public class DatabasePopulator {
         passwordCollection.put(user6, "password");
 
         //user7
-        Set<Role> rolesUser7 = new HashSet<>() {{
-            add(Role.builder().role(UserRole.ROLE_USER).build());
-        }};
+        Set<Role> rolesUser7 = new SetBuilder<Role>().add(Role.builder().role(UserRole.ROLE_USER).build()).build();
+
         User user7 = User.builder()
                 .username("User7")
                 .nickname("User7")
@@ -213,9 +209,8 @@ public class DatabasePopulator {
         passwordCollection.put(user7, "password");
 
         //user8
-        Set<Role> rolesUser8 = new HashSet<>() {{
-            add(Role.builder().role(UserRole.ROLE_USER).build());
-        }};
+        Set<Role> rolesUser8 = new SetBuilder<Role>().add(Role.builder().role(UserRole.ROLE_USER).build()).build();
+
         User user8 = User.builder()
                 .username("User8")
                 .nickname("User8")
@@ -229,9 +224,8 @@ public class DatabasePopulator {
         passwordCollection.put(user8, "password");
 
         //user9
-        Set<Role> rolesUser9 = new HashSet<>() {{
-            add(Role.builder().role(UserRole.ROLE_USER).build());
-        }};
+        Set<Role> rolesUser9 = new SetBuilder<Role>().add(Role.builder().role(UserRole.ROLE_USER).build()).build();
+
         User user9 = User.builder()
                 .username("User9")
                 .nickname("User9")
@@ -245,9 +239,8 @@ public class DatabasePopulator {
         passwordCollection.put(user9, "password");
 
         //user10
-        Set<Role> rolesUser10 = new HashSet<>() {{
-            add(Role.builder().role(UserRole.ROLE_USER).build());
-        }};
+        Set<Role> rolesUser10 = new SetBuilder<Role>().add(Role.builder().role(UserRole.ROLE_USER).build()).build();
+
         User user10 = User.builder()
                 .username("User10")
                 .nickname("User10")
@@ -261,9 +254,8 @@ public class DatabasePopulator {
         passwordCollection.put(user10, "password");
 
         //non existant user1
-        Set<Role> rolesNeUser1 = new HashSet<>() {{
-            add(Role.builder().role(UserRole.ROLE_USER).build());
-        }};
+        Set<Role> rolesNeUser1 = new SetBuilder<Role>().add(Role.builder().role(UserRole.ROLE_USER).build()).build();
+
         User neUser1 = User.builder()
                 .username("nonExistentUsername")
                 .nickname("nonExistentNickname")
@@ -290,18 +282,18 @@ public class DatabasePopulator {
                 .players(new HashSet<>())
                 .ruleSet(WerewolfRuleSet.builder()
                         .resourcePack("DEFAULT")
-                        .gameRoleTypes(new ArrayList<>() {{
-                            add(WerewolfRoleType.VILLAGER);
-                            add(WerewolfRoleType.PURE_VILLAGER);
-                            add(WerewolfRoleType.WEREWOLF);
-                            add(WerewolfRoleType.SEER);
-                            add(WerewolfRoleType.WITCH);
-                            add(WerewolfRoleType.HUNTER);
-                            add(WerewolfRoleType.CUPID);
-                            add(WerewolfRoleType.BODYGUARD);
-                            add(WerewolfRoleType.LYCANTHROPE);
-                            add(WerewolfRoleType.BEAR_TAMER);
-                        }}).build())
+                        .gameRoleTypes(new ListBuilder<WerewolfRoleType>()
+                                .add(WerewolfRoleType.VILLAGER)
+                                .add(WerewolfRoleType.PURE_VILLAGER)
+                                .add(WerewolfRoleType.WEREWOLF)
+                                .add(WerewolfRoleType.SEER)
+                                .add(WerewolfRoleType.WITCH)
+                                .add(WerewolfRoleType.HUNTER)
+                                .add(WerewolfRoleType.CUPID)
+                                .add(WerewolfRoleType.BODYGUARD)
+                                .add(WerewolfRoleType.LYCANTHROPE)
+                                .add(WerewolfRoleType.BEAR_TAMER).build()
+                        ).build())
                 .round(0)
                 .votes(new ArrayList<>())
                 .log(new ArrayList<>())
@@ -429,11 +421,10 @@ public class DatabasePopulator {
                 .players(new HashSet<>())
                 .ruleSet(WerewolfRuleSet.builder()
                         .resourcePack("DEFAULT")
-                        .gameRoleTypes(new ArrayList<>() {{
-                            add(WerewolfRoleType.WEREWOLF);
-                            add(WerewolfRoleType.VILLAGER);
-                            add(WerewolfRoleType.VILLAGER);
-                        }}).build())
+                        .gameRoleTypes(new ListBuilder<WerewolfRoleType>()
+                                .add(WerewolfRoleType.VILLAGER)
+                                .add(WerewolfRoleType.VILLAGER)
+                                .add(WerewolfRoleType.WEREWOLF).build()).build())
                 .round(0)
                 .votes(new ArrayList<>())
                 .log(new ArrayList<>())
@@ -446,9 +437,7 @@ public class DatabasePopulator {
                         .game(werewolfOngoingGame1)
                         .lobbyRole(LobbyRole.ROLE_ADMIN)
                         .playerState(PlayerState.ALIVE)
-                        .gameRoles(new ArrayList<>() {{
-                            add(new WerewolfWerewolfGameRole());
-                        }})
+                        .gameRoles(new ListBuilder<WerewolfGameRole>().add(new WerewolfWerewolfGameRole()).build())
                         .position(0)
                         .disconnected(false)
                         .build()
@@ -459,9 +448,7 @@ public class DatabasePopulator {
                         .game(werewolfOngoingGame1)
                         .lobbyRole(LobbyRole.ROLE_USER)
                         .playerState(PlayerState.ALIVE)
-                        .gameRoles(new ArrayList<>() {{
-                            add(new VillagerWerewolfGameRole());
-                        }})
+                        .gameRoles(new ListBuilder<WerewolfGameRole>().add(new VillagerWerewolfGameRole()).build())
                         .position(1)
                         .disconnected(false)
                         .build()
@@ -472,9 +459,7 @@ public class DatabasePopulator {
                         .game(werewolfOngoingGame1)
                         .lobbyRole(LobbyRole.ROLE_USER)
                         .playerState(PlayerState.ALIVE)
-                        .gameRoles(new ArrayList<>() {{
-                            add(new VillagerWerewolfGameRole());
-                        }})
+                        .gameRoles(new ListBuilder<WerewolfGameRole>().add(new VillagerWerewolfGameRole()).build())
                         .position(2)
                         .disconnected(false)
                         .build()
@@ -508,13 +493,11 @@ public class DatabasePopulator {
 
         for (WerewolfPlayer p : werewolfOngoingGame1.getPlayers()) {
             werewolfOngoingGame1.getVotes().get(0).getVoters().add(p);
-            ((WerewolfPlayerWerewolfVote)werewolfOngoingGame1.getVotes().get(0)).getVoteCollectionMap().put(p.getId(),
+            ((WerewolfPlayerWerewolfVote) werewolfOngoingGame1.getVotes().get(0)).getVoteCollectionMap().put(p.getId(),
                     WerewolfPlayerVoteCollection.builder()
                             .amountVotes(1)
                             .allowAbstain(false)
-                            .subjects(new HashSet<>() {{
-                                add(p);
-                            }})
+                            .subjects(new SetBuilder<WerewolfPlayer>().add(p).build())
                             .selection(new HashSet<>())
                             .build());
         }

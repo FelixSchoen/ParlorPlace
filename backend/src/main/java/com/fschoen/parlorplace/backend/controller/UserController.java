@@ -49,7 +49,6 @@ public class UserController {
         this.userMapper = userMapper;
     }
 
-
     @PostMapping("/register")
     public ResponseEntity<UserDTO> registerUser(@RequestBody UserRegisterRequestDTO userRegisterRequestDTO) {
         validator.validate(userRegisterRequestDTO).throwIfInvalid();

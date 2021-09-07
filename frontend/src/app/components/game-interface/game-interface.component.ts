@@ -83,7 +83,7 @@ export abstract class GameInterfaceComponent<G extends Game, P extends Player, V
         });
       }
     } else if (notification.notificationType == NotificationType.PLAYER_NOTIFICATION) {
-      navigator.vibrate([100, 30, 100, 30, 100])
+      navigator.vibrate([150, 30, 150, 30, 150, 30, 150, 30, 150])
     }
   }
 

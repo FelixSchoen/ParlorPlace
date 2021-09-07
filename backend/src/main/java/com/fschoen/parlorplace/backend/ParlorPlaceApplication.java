@@ -2,10 +2,12 @@ package com.fschoen.parlorplace.backend;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fschoen.parlorplace.backend.controller.dto.user.UserRegisterRequestDTO;
+import com.fschoen.parlorplace.backend.datagenerator.DatabasePopulator;
 import com.fschoen.parlorplace.backend.entity.Role;
 import com.fschoen.parlorplace.backend.entity.User;
 import com.fschoen.parlorplace.backend.enumeration.UserRole;
 import com.fschoen.parlorplace.backend.repository.UserRepository;
+import com.fschoen.parlorplace.backend.utility.other.SetBuilder;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
@@ -16,7 +18,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -26,11 +27,13 @@ public class ParlorPlaceApplication implements ApplicationRunner {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final DatabasePopulator databasePopulator;
 
     @Autowired
-    public ParlorPlaceApplication(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+    public ParlorPlaceApplication(UserRepository userRepository, PasswordEncoder passwordEncoder, @Autowired(required = false) DatabasePopulator databasePopulator) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
+        this.databasePopulator = databasePopulator;
     }
 
     public static void main(String[] args) {
@@ -39,6 +42,10 @@ public class ParlorPlaceApplication implements ApplicationRunner {
 
     @Override
     public void run(ApplicationArguments args) throws IOException {
+        if (args.getOptionNames().contains("test.data")) {
+            databasePopulator.generate();
+        }
+
         List<String> defaultUsersFiles = args.getOptionValues("default.users");
         if (defaultUsersFiles != null) {
             for (String defaultUsersFile : defaultUsersFiles) {
@@ -51,10 +58,9 @@ public class ParlorPlaceApplication implements ApplicationRunner {
                     User user = new User();
 
                     String hashedPassword = passwordEncoder.encode(userRegisterRequestDTO.getPassword());
-                    Set<Role> roles = new HashSet<>() {{
-                        add(Role.builder().role(UserRole.ROLE_USER).build());
-                        add(Role.builder().role(UserRole.ROLE_ADMIN).build());
-                    }};
+                    Set<Role> roles = new SetBuilder<Role>()
+                            .add(Role.builder().role(UserRole.ROLE_USER).build())
+                            .add(Role.builder().role(UserRole.ROLE_ADMIN).build()).build();
 
                     User persistUser = user.toBuilder()
                             .username(userRegisterRequestDTO.getUsername())

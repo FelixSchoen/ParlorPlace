@@ -34,6 +34,7 @@ import com.fschoen.parlorplace.backend.service.CommunicationService;
 import com.fschoen.parlorplace.backend.service.game.AbstractGameModerator;
 import com.fschoen.parlorplace.backend.utility.messaging.MessageIdentifier;
 import com.fschoen.parlorplace.backend.utility.messaging.Messages;
+import com.fschoen.parlorplace.backend.utility.other.SetBuilder;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -178,9 +179,7 @@ public class WerewolfGameModerator extends AbstractGameModerator<
     }
 
     private void processCupid(WerewolfPlayer cupid) throws ExecutionException, InterruptedException {
-        Set<WerewolfPlayer> cupidSet = new HashSet<>() {{
-            add(cupid);
-        }};
+        Set<WerewolfPlayer> cupidSet = new SetBuilder<WerewolfPlayer>().add(cupid).build();
 
         processNightPreVote(cupidSet, WerewolfVoiceLineType.CUPID_WAKE, cupid);
 
@@ -236,16 +235,10 @@ public class WerewolfGameModerator extends AbstractGameModerator<
         WerewolfPlayer[] cupidTargetsArray = cupidTargets.toArray(WerewolfPlayer[]::new);
 
         game = this.getGame();
-        game.getLog().add(getLogEntryTemplate(new HashSet<>() {{
-            add(cupidTargetsArray[0]);
-        }}).logType(WerewolfLogType.LOVERS_LOVE).targets(new HashSet<>() {{
-            add(cupidTargetsArray[1]);
-        }}).build());
-        game.getLog().add(getLogEntryTemplate(new HashSet<>() {{
-            add(cupidTargetsArray[1]);
-        }}).logType(WerewolfLogType.LOVERS_LOVE).targets(new HashSet<>() {{
-            add(cupidTargetsArray[0]);
-        }}).build());
+        game.getLog().add(getLogEntryTemplate(new SetBuilder<WerewolfPlayer>().add(cupidTargetsArray[0]).build())
+                .logType(WerewolfLogType.LOVERS_LOVE).targets(new SetBuilder<WerewolfPlayer>().add(cupidTargetsArray[1]).build()).build());
+        game.getLog().add(getLogEntryTemplate(new SetBuilder<WerewolfPlayer>().add(cupidTargetsArray[1]).build())
+                .logType(WerewolfLogType.LOVERS_LOVE).targets(new SetBuilder<WerewolfPlayer>().add(cupidTargetsArray[0]).build()).build());
         saveAndSend(game, cupidTargets);
 
         pause(WAIT_TIME_NEW_INFORMATION);
@@ -260,9 +253,7 @@ public class WerewolfGameModerator extends AbstractGameModerator<
     }
 
     private void processBodyguard(WerewolfPlayer bodyguard) throws ExecutionException, InterruptedException {
-        Set<WerewolfPlayer> bodyguardSet = new HashSet<>() {{
-            add(bodyguard);
-        }};
+        Set<WerewolfPlayer> bodyguardSet = new SetBuilder<WerewolfPlayer>().add(bodyguard).build();
 
         processNightPreVote(bodyguardSet, WerewolfVoiceLineType.BODYGUARD_WAKE, bodyguard);
 
@@ -294,9 +285,8 @@ public class WerewolfGameModerator extends AbstractGameModerator<
         bodyguardWerewolfGameRole.setLastProtected(bodyguardProtectTarget);
         WerewolfGame game = save(bodyguard);
 
-        game.getLog().add(getLogEntryTemplate(bodyguardSet).logType(WerewolfLogType.BODYGUARD_PROTECT).targets(new HashSet<>() {{
-            add(bodyguardProtectTarget);
-        }}).build());
+        game.getLog().add(getLogEntryTemplate(bodyguardSet).logType(WerewolfLogType.BODYGUARD_PROTECT)
+                .targets(new SetBuilder<WerewolfPlayer>().add(bodyguardProtectTarget).build()).build());
         saveAndSend(game, bodyguardSet);
 
         // --- Logic End ---
@@ -337,9 +327,7 @@ public class WerewolfGameModerator extends AbstractGameModerator<
     }
 
     private void processWitch(WerewolfPlayer witch) throws ExecutionException, InterruptedException {
-        Set<WerewolfPlayer> witchSet = new HashSet<>() {{
-            add(witch);
-        }};
+        Set<WerewolfPlayer> witchSet = new SetBuilder<WerewolfPlayer>().add(witch).build();
 
         processNightPreVote(witchSet, WerewolfVoiceLineType.WITCH_WAKE, witch);
 
@@ -376,9 +364,7 @@ public class WerewolfGameModerator extends AbstractGameModerator<
                 witchWerewolfGameRole.setHasHealed(true);
                 WerewolfGame game = save(witch);
 
-                game.getLog().add(getLogEntryTemplate(witchSet).logType(WerewolfLogType.WITCH_HEAL).targets(new HashSet<>() {{
-                    add(witchHealTarget);
-                }}).build());
+                game.getLog().add(getLogEntryTemplate(witchSet).logType(WerewolfLogType.WITCH_HEAL).targets(new SetBuilder<WerewolfPlayer>().add(witchHealTarget).build()).build());
                 saveAndSend(game, witchSet);
             }
         }
@@ -409,9 +395,8 @@ public class WerewolfGameModerator extends AbstractGameModerator<
                 witchWerewolfGameRole.setHasKilled(true);
                 WerewolfGame game = save(witch);
 
-                game.getLog().add(getLogEntryTemplate(witchSet).logType(WerewolfLogType.WITCH_KILL).targets(new HashSet<>() {{
-                    add(witchKillTarget);
-                }}).build());
+                game.getLog().add(getLogEntryTemplate(witchSet).logType(WerewolfLogType.WITCH_KILL)
+                        .targets(new SetBuilder<WerewolfPlayer>().add(witchKillTarget).build()).build());
                 saveAndSend(game, witchSet);
             }
         }
@@ -428,9 +413,7 @@ public class WerewolfGameModerator extends AbstractGameModerator<
     }
 
     private void processSeer(WerewolfPlayer seer) throws ExecutionException, InterruptedException {
-        Set<WerewolfPlayer> seerSet = new HashSet<>() {{
-            add(seer);
-        }};
+        Set<WerewolfPlayer> seerSet = new SetBuilder<WerewolfPlayer>().add(seer).build();
 
         processNightPreVote(seerSet, WerewolfVoiceLineType.SEER_WAKE, seer);
 
@@ -462,14 +445,11 @@ public class WerewolfGameModerator extends AbstractGameModerator<
         WerewolfGame game = this.getGame();
 
         if (hasLastRoleType(seerTarget, WerewolfRoleType.WEREWOLF) || hasLastRoleType(seerTarget, WerewolfRoleType.LYCANTHROPE)) {
-            game.getLog().add(getLogEntryTemplate(seerSet).logType(WerewolfLogType.SEER_SUCCESS).targets(new HashSet<>() {{
-                add(seerTarget);
-            }}).build());
+            game.getLog().add(getLogEntryTemplate(seerSet).logType(WerewolfLogType.SEER_SUCCESS)
+                    .targets(new SetBuilder<WerewolfPlayer>().add(seerTarget).build()).build());
 
         } else {
-            game.getLog().add(getLogEntryTemplate(seerSet).logType(WerewolfLogType.SEER_FAILURE).targets(new HashSet<>() {{
-                add(seerTarget);
-            }}).build());
+            game.getLog().add(getLogEntryTemplate(seerSet).logType(WerewolfLogType.SEER_FAILURE).targets(new SetBuilder<WerewolfPlayer>().add(seerTarget).build()).build());
         }
 
         saveAndSend(game, seerSet);
@@ -528,9 +508,7 @@ public class WerewolfGameModerator extends AbstractGameModerator<
     }
 
     private void processBearTamer(WerewolfPlayer bearTamer) {
-        Set<WerewolfPlayer> bearTamerSet = new HashSet<>() {{
-            add(bearTamer);
-        }};
+        Set<WerewolfPlayer> bearTamerSet = new SetBuilder<WerewolfPlayer>().add(bearTamer).build();
 
         // --- Logic Start ---
 
@@ -601,9 +579,7 @@ public class WerewolfGameModerator extends AbstractGameModerator<
     // ---------------------
 
     private void processHunter(WerewolfPlayer hunter) throws ExecutionException, InterruptedException {
-        Set<WerewolfPlayer> hunterSet = new HashSet<>() {{
-            add(hunter);
-        }};
+        Set<WerewolfPlayer> hunterSet = new SetBuilder<WerewolfPlayer>().add(hunter).build();
 
         broadcastVoiceLineNotification(getVoiceLineNotification(WerewolfVoiceLineType.HUNTER_ACTION, hunterSet.stream().map(Player::getCodeName).toArray(CodeName[]::new)));
 
@@ -631,12 +607,8 @@ public class WerewolfGameModerator extends AbstractGameModerator<
 
         WerewolfGame game = this.getGame();
         game.getLog().add(getLogEntryTemplate(getAllPlayersOfGame()).logType(WerewolfLogType.HUNTER_SHOOT)
-                .sources(new HashSet<>() {{
-                    add(hunter);
-                }})
-                .targets(new HashSet<>() {{
-                    add(hunterTarget);
-                }}).build());
+                .sources(new SetBuilder<WerewolfPlayer>().add(hunter).build())
+                .targets(new SetBuilder<WerewolfPlayer>().add(hunterTarget).build()).build());
 
         saveAndBroadcast(game);
         pause(WAIT_TIME_BETWEEN_CONSECUTIVE_EVENTS);
@@ -765,9 +737,7 @@ public class WerewolfGameModerator extends AbstractGameModerator<
     }
 
     private WerewolfLogEntry getPlayerDiedLogEntry(WerewolfPlayer werewolfPlayer) {
-        return getLogEntryTemplate(getAllPlayersOfGame()).logType(WerewolfLogType.DEATH).targets(new HashSet<>() {{
-            add(werewolfPlayer);
-        }}).build();
+        return getLogEntryTemplate(getAllPlayersOfGame()).logType(WerewolfLogType.DEATH).targets(new SetBuilder<WerewolfPlayer>().add(werewolfPlayer).build()).build();
     }
 
     private WerewolfVoiceLineClientNotification getVoiceLineNotification(WerewolfVoiceLineType voiceLineType, CodeName... codeNames) {

@@ -25,6 +25,7 @@ import com.fschoen.parlorplace.backend.service.game.AbstractGameService;
 import com.fschoen.parlorplace.backend.service.game.GameIdentifierService;
 import com.fschoen.parlorplace.backend.utility.messaging.MessageIdentifier;
 import com.fschoen.parlorplace.backend.utility.messaging.Messages;
+import com.fschoen.parlorplace.backend.utility.other.MapBuilder;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -34,7 +35,6 @@ import org.springframework.stereotype.Service;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -50,18 +50,17 @@ public class WerewolfGameService extends AbstractGameService<
         WerewolfGameModerator
         > {
 
-    private static final Map<WerewolfRoleType, Class<? extends WerewolfGameRole>> werewolfGameRoleClasses = new HashMap<>() {{
-        put(WerewolfRoleType.VILLAGER, VillagerWerewolfGameRole.class);
-        put(WerewolfRoleType.PURE_VILLAGER, PureVillagerWerewolfGameRole.class);
-        put(WerewolfRoleType.WEREWOLF, WerewolfWerewolfGameRole.class);
-        put(WerewolfRoleType.SEER, SeerWerewolfGameRole.class);
-        put(WerewolfRoleType.WITCH, WitchWerewolfGameRole.class);
-        put(WerewolfRoleType.HUNTER, HunterWerewolfGameRole.class);
-        put(WerewolfRoleType.CUPID, CupidWerewolfGameRole.class);
-        put(WerewolfRoleType.BODYGUARD, BodyguardWerewolfGameRole.class);
-        put(WerewolfRoleType.LYCANTHROPE, LycanthropeWerewolfGameRole.class);
-        put(WerewolfRoleType.BEAR_TAMER, BearTamerWerewolfGameRole.class);
-    }};
+    private static final Map<WerewolfRoleType, Class<? extends WerewolfGameRole>> werewolfGameRoleClasses = new MapBuilder<WerewolfRoleType, Class<? extends WerewolfGameRole>>()
+            .put(WerewolfRoleType.VILLAGER, VillagerWerewolfGameRole.class)
+            .put(WerewolfRoleType.PURE_VILLAGER, PureVillagerWerewolfGameRole.class)
+            .put(WerewolfRoleType.WEREWOLF, WerewolfWerewolfGameRole.class)
+            .put(WerewolfRoleType.SEER, SeerWerewolfGameRole.class)
+            .put(WerewolfRoleType.WITCH, WitchWerewolfGameRole.class)
+            .put(WerewolfRoleType.HUNTER, HunterWerewolfGameRole.class)
+            .put(WerewolfRoleType.CUPID, CupidWerewolfGameRole.class)
+            .put(WerewolfRoleType.BODYGUARD, BodyguardWerewolfGameRole.class)
+            .put(WerewolfRoleType.LYCANTHROPE, LycanthropeWerewolfGameRole.class)
+            .put(WerewolfRoleType.BEAR_TAMER, BearTamerWerewolfGameRole.class).build();
 
     @Autowired
     public WerewolfGameService(
