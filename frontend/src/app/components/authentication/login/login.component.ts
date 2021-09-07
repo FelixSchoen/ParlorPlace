@@ -25,7 +25,8 @@ export class LoginComponent {
         submitted: false,
         username: this.username,
         password: this.password
-      }
+      },
+      disableClose: true
     });
 
     dialogRef.afterClosed().subscribe({
