@@ -108,6 +108,9 @@ public class WerewolfGameModerator extends AbstractGameModerator<
         pause(WAIT_TIME_INITIAL_ROLES);
 
         try {
+            // Check if selection of roles makes game end instantly
+            checkGameEnded();
+
             while (true) {
                 processTransitionNight();
                 processNight();
