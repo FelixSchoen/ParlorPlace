@@ -100,6 +100,7 @@ In order to restart the Apache service (after making some changes to the system)
 We now want to setup Virtual Hosts, which allow us to host multiple sites (or in our case, both the backend and frontend of *ParlorPlace*) on the same server.
 we start by creating a directory for whichever service we are trying to create, using `sudo mkdir -p /var/www/parlorplace.fschoen.com/html`.
 It is important to assign the right ownership of the folder, using `sudo chown -R $USER:apache /var/www/` and `sudo chmod -R 755 /var/www`.
+Furthermore, for the newest installation an application of `sudo chcon -R -h -t httpd_sys_content_t /var/www` was needed.
 At this point in time it can be advantageous to create a sample `index.html` file, in order to check if the service is running correctly.
 
 We move onto creating two new directories, which will later be used to link the Apache config files into the executed configuration.
@@ -189,6 +190,14 @@ The installation of the certificate will be covered in the Apache session, the f
 ```
 sudo certbot certonly -d *.fschoen.com
 ```
+
+For usage of automatic renewals use, and select both domains.
+
+```
+sudo certbot --apache
+```
+
+After that, use `certbot renew` to renew the certificates.
 
 Select `1: Apache Web Server plugin (apache)`, and then `2: Renew & replace the certificate`.
 
@@ -292,3 +301,4 @@ The backend file has a redirection to the frontend for any request not containin
 - [Secure Apache](https://www.digitalocean.com/community/tutorials/how-to-secure-apache-with-let-s-encrypt-on-centos-8)
 - [Apache WebSocket Configuration](https://stackoverflow.com/questions/27526281/websockets-and-apache-proxy-how-to-configure-mod-proxy-wstunnel)
 - [Let's Encrypt Wildcard](https://www.digitalocean.com/community/tutorials/how-to-create-let-s-encrypt-wildcard-certificates-with-certbot)
+- [File Permissions Denied stackoverflow](https://serverfault.com/questions/381760/fedora-16-permission-denied-file-permissions-deny-server-access)

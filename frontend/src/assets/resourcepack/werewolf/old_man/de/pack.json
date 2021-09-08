@@ -270,12 +270,33 @@
           "path": [
             "start_01"
           ]
+        },
+        {
+          "path": [
+            "start_02"
+          ]
+        },
+        {
+          "path": [
+            "start_03"
+          ]
         }
       ],
       "end": [
         {
           "path": [
             "end_01"
+          ]
+        },
+
+        {
+          "path": [
+            "end_02"
+          ]
+        },
+        {
+          "path": [
+            "end_03"
           ]
         }
       ],
@@ -290,13 +311,51 @@
             "codename_01",
             "file_02"
           ]
+        },
+        {
+          "path": [
+            "death_02"
+          ],
+          "order": [
+            "file_01",
+            "codename_01"
+          ]
+        },
+        {
+          "path": [
+            "death_03_01",
+            "death_03_02"
+          ],
+          "order": [
+            "file_01",
+            "codename_01",
+            "file_02"
+          ]
         }
       ],
       "player_wake": [
         {
           "path": [
-            "player_wake_01_01",
-            "player_wake_01_02"
+            "player_wake_01"
+          ],
+          "order": [
+            "codename_01",
+            "file_01"
+          ]
+        },
+        {
+          "path": [
+            "player_wake_01"
+          ],
+          "order": [
+            "file_01",
+            "codename_01"
+          ]
+        },
+        {
+          "path": [
+            "player_wake_03_01",
+            "player_wake_03_02"
           ],
           "order": [
             "file_01",
@@ -308,11 +367,33 @@
       "player_sleep": [
         {
           "path": [
-            "player_sleep_01"
+            "player_sleep_01_01",
+            "player_sleep_01_02"
+          ],
+          "order": [
+            "file_01",
+            "codename_01",
+            "file_02"
+          ]
+        },
+        {
+          "path": [
+            "player_sleep_02"
           ],
           "order": [
             "codename_01",
             "file_01"
+          ]
+        },
+        {
+          "path": [
+            "player_sleep_03_01",
+            "player_sleep_03_02"
+          ],
+          "order": [
+            "file_01",
+            "codename_01",
+            "file_02"
           ]
         }
       ],
@@ -321,6 +402,16 @@
           "path": [
             "village_wake_01"
           ]
+        },
+        {
+          "path": [
+            "village_wake_02"
+          ]
+        },
+        {
+          "path": [
+            "village_wake_03"
+          ]
         }
       ],
       "village_sleep": [
@@ -328,12 +419,32 @@
           "path": [
             "village_sleep_01"
           ]
+        },
+        {
+          "path": [
+            "village_sleep_02"
+          ]
+        },
+        {
+          "path": [
+            "village_sleep_03"
+          ]
         }
       ],
       "village_vote": [
         {
           "path": [
             "village_vote_01"
+          ]
+        },
+        {
+          "path": [
+            "village_vote_02"
+          ]
+        },
+        {
+          "path": [
+            "village_vote_03"
           ]
         }
       ]
@@ -345,12 +456,32 @@
             "path": [
               "wake_01"
             ]
+          },
+          {
+            "path": [
+              "wake_02"
+            ]
+          },
+          {
+            "path": [
+              "wake_03"
+            ]
           }
         ],
         "sleep": [
           {
             "path": [
               "sleep_01"
+            ]
+          },
+          {
+            "path": [
+              "sleep_02"
+            ]
+          },
+          {
+            "path": [
+              "sleep_03"
             ]
           }
         ]
@@ -361,6 +492,28 @@
             "path": [
               "wake_01_01",
               "wake_01_02"
+            ],
+            "order": [
+              "file_01",
+              "codename_01",
+              "file_02"
+            ]
+          },
+          {
+            "path": [
+              "wake_02_01",
+              "wake_02_02"
+            ],
+            "order": [
+              "file_01",
+              "codename_01",
+              "file_02"
+            ]
+          },
+          {
+            "path": [
+              "wake_03_01",
+              "wake_03_02"
             ],
             "order": [
               "file_01",
@@ -382,6 +535,28 @@
               "codename_01",
               "file_02"
             ]
+          },
+          {
+            "path": [
+              "wake_02_01",
+              "wake_02_02"
+            ],
+            "order": [
+              "file_01",
+              "codename_01",
+              "file_02"
+            ]
+          },
+          {
+            "path": [
+              "wake_03_01",
+              "wake_03_02"
+            ],
+            "order": [
+              "file_01",
+              "codename_01",
+              "file_02"
+            ]
           }
         ]
       },
@@ -391,6 +566,28 @@
             "path": [
               "action_01_01",
               "action_01_02"
+            ],
+            "order": [
+              "file_01",
+              "codename_01",
+              "file_02"
+            ]
+          },
+          {
+            "path": [
+              "action_02_01",
+              "action_02_02"
+            ],
+            "order": [
+              "file_01",
+              "codename_01",
+              "file_02"
+            ]
+          },
+          {
+            "path": [
+              "action_03_01",
+              "action_03_02"
             ],
             "order": [
               "file_01",
@@ -412,6 +609,28 @@
               "codename_01",
               "file_02"
             ]
+          },
+          {
+            "path": [
+              "wake_02_01",
+              "wake_02_02"
+            ],
+            "order": [
+              "file_01",
+              "codename_01",
+              "file_02"
+            ]
+          },
+          {
+            "path": [
+              "wake_03_01",
+              "wake_03_02"
+            ],
+            "order": [
+              "file_01",
+              "codename_01",
+              "file_02"
+            ]
           }
         ]
       },
@@ -421,12 +640,32 @@
             "path": [
               "wake_01"
             ]
+          },
+          {
+            "path": [
+              "wake_02"
+            ]
+          },
+          {
+            "path": [
+              "wake_03"
+            ]
           }
         ],
         "sleep": [
           {
             "path": [
               "sleep_01"
+            ]
+          },
+          {
+            "path": [
+              "sleep_02"
+            ]
+          },
+          {
+            "path": [
+              "sleep_03"
             ]
           }
         ]
@@ -443,7 +682,30 @@
               "codename_01",
               "file_02"
             ]
+          },
+          {
+            "path": [
+              "wake_02_01",
+              "wake_02_02"
+            ],
+            "order": [
+              "file_01",
+              "codename_01",
+              "file_02"
+            ]
+          },
+          {
+            "path": [
+              "wake_03_01",
+              "wake_03_02"
+            ],
+            "order": [
+              "file_01",
+              "codename_01",
+              "file_02"
+            ]
           }
+
         ]
       },
       "bearTamer": {
@@ -452,12 +714,32 @@
             "path": [
               "growl_01"
             ]
+          },
+          {
+            "path": [
+              "growl_02"
+            ]
+          },
+          {
+            "path": [
+              "growl_03"
+            ]
           }
         ],
         "silent": [
           {
             "path": [
               "silent_01"
+            ]
+          },
+          {
+            "path": [
+              "silent_02"
+            ]
+          },
+          {
+            "path": [
+              "silent_03"
             ]
           }
         ]
