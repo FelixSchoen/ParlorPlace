@@ -16,7 +16,6 @@ public class SecurityWebSocketConfig extends AbstractSecurityWebSocketMessageBro
 
     @Override
     protected boolean sameOriginDisabled() {
-        // TODO Allow only on endpoint - I don't know how to, I tried (see WebSocketConfig#registerStompEndpoints(StompEndpointRegistry registry)) to allow only for my endpoint, but it seems that this does not work with authentication
         return true;
     }
 

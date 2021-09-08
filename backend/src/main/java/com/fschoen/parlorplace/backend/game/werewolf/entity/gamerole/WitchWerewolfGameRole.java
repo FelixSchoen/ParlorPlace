@@ -9,6 +9,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import lombok.experimental.Accessors;
 import lombok.experimental.SuperBuilder;
 
 import javax.persistence.Column;
@@ -36,12 +37,14 @@ public class WitchWerewolfGameRole extends WerewolfGameRole {
 
     @Column(nullable = false)
     @Builder.Default
+    @Accessors(fluent = true)
     @NotNull
-    private Boolean hasHealed = false;
+    private boolean hasHealed = false;
 
     @Column(nullable = false)
     @Builder.Default
+    @Accessors(fluent = true)
     @NotNull
-    private Boolean hasKilled = false;
+    private boolean hasKilled = false;
 
 }

@@ -10,7 +10,7 @@
     </parent>
     <groupId>com.fschoen</groupId>
     <artifactId>backend</artifactId>
-    <version>v1.0-alpha2</version>
+    <version>v1.0</version>
     <name>backend</name>
     <description>Backend for ParlorPlace</description>
     <properties>
@@ -23,6 +23,7 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>

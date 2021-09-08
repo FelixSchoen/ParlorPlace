@@ -29,7 +29,8 @@ export class RegisterComponent {
         username: this.username,
         password: this.password,
         email: this.email
-      }
+      },
+      disableClose: true
     });
 
     dialogRef.afterClosed().subscribe(
