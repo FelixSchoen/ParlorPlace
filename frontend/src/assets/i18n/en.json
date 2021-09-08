@@ -82,6 +82,9 @@
     },
     "gameJoin": {
       "join": "Join Game"
+    },
+    "version": {
+      "version": "Version"
     }
   },
   "werewolf": {

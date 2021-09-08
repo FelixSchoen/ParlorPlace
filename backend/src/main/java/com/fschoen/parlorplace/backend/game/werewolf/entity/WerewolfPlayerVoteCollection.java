@@ -7,10 +7,9 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import lombok.experimental.SuperBuilder;
-import org.hibernate.annotations.LazyCollection;
-import org.hibernate.annotations.LazyCollectionOption;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
@@ -27,21 +26,19 @@ import java.util.Set;
 @Entity
 public class WerewolfPlayerVoteCollection extends VoteCollection<WerewolfPlayer> {
 
-    @ManyToMany(targetEntity = Player.class)
+    @ManyToMany(targetEntity = Player.class, fetch = FetchType.EAGER)
     @JoinTable(
             joinColumns = @JoinColumn(name = "votecollection_id"),
             inverseJoinColumns = @JoinColumn(name = "player_id")
     )
-    @LazyCollection(LazyCollectionOption.FALSE)
     @NotNull
     private Set<WerewolfPlayer> subjects;
 
-    @ManyToMany(targetEntity = Player.class)
+    @ManyToMany(targetEntity = Player.class, fetch = FetchType.EAGER)
     @JoinTable(
             joinColumns = @JoinColumn(name = "votecollection_id"),
             inverseJoinColumns = @JoinColumn(name = "player_id")
     )
-    @LazyCollection(LazyCollectionOption.FALSE)
     @NotNull
     private Set<WerewolfPlayer> selection;
 
