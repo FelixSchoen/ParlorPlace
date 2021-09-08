@@ -1,11 +1,34 @@
 # Changelog
 
-- [v0.1 (2021-07-11)](#v0.1)
-- [v0.2 (2021-07-22)](#v0.2)
-- [v0.3 (2021-08-05)](#v0.3)
-- [v0.4 (2021-08-16)](#v0.4)
-- [v1.0-alpha1 (2021-08-25)](#v1.0-alpha1)
+- [v1.0 (2021-09-08)](#v1.0)
 - [v1.0-alpha2 (2021-08-27)](#v1.0-alpha2)
+- [v1.0-alpha1 (2021-08-25)](#v1.0-alpha1)
+- [v0.4 (2021-08-16)](#v0.4)
+- [v0.3 (2021-08-05)](#v0.3)
+- [v0.2 (2021-07-22)](#v0.2)
+- [v0.1 (2021-07-11)](#v0.1)
+
+---
+
+## v1.0 (27-09-08)
+<a name="v1.0"></a>
+
+## Added
+
+- **Implemented hunter**
+  - Has to kill another player upon their death
+- **Implemented pure villager**
+  - Is a normal villager with the addition that everyone knows that they are
+- Deployed [ParlorPlace](https://parlorplace.fschoen.com)
+- Missing and additional voicelines
+
+## Fixed
+
+- Error message on wrong login credentials
+
+## Changed
+
+- Updated document structure
 
 ---
 

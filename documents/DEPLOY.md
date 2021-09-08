@@ -1,16 +1,26 @@
 # Deploy ParlorPlace
 
-The following guide documents the process of deploying *ParlorPlace* to a local server.
-It is written with *CentOS 8* in mind, commands may change depending on the distribution.
+This following guide document provides information on how to deploy *ParlorPlace*.
+The first section will cover using the provided docker containers, in order to get the backend up and running in a quick fashion (for testing or evaluation).
 
-## Deployment
+The further sections cover the process of permanently deploying it to a *CentOS 8* server.
 
-For the Angular frontend simply run `ng build`.
-For the Spring backend run `mvn install`.
+## Docker
 
+This simple approach allows for getting *ParlorPlace* up and running quicky.
+In order to serve the Angular frontend, simply run `ng serve`.
+Creating a specialized Docker image for serving the frontend was omitted due to the simplicity of serving it, but can be created at a later point in time if demand for it exists.
+
+For the backend we refer to the [Docker Repository](https://hub.docker.com/repository/docker/fschoen/parlorplace), on which you will find images for deploying the backend.
+Pull a Docker image and run it using e.g. the command `docker pull fschoen/parlorplace:v1.0-production` (alternatively use `parlorplace:v1.0-setup`).
+The production version does not create any user accounts, while the setup version creates predefined user accounts, which can be used to test the application.
+
+## CentOS Server
+
+This section will cover permanently deploying the application to a server running *CentOS 8*.
+
+Start by running `ng build` to build the frontend, and `mvn install` to build the backend.
 Copy the generated files onto the CentOS server.
-
-## Setup
 
 ### Java
 
@@ -90,6 +100,7 @@ In order to restart the Apache service (after making some changes to the system)
 We now want to setup Virtual Hosts, which allow us to host multiple sites (or in our case, both the backend and frontend of *ParlorPlace*) on the same server.
 we start by creating a directory for whichever service we are trying to create, using `sudo mkdir -p /var/www/parlorplace.fschoen.com/html`.
 It is important to assign the right ownership of the folder, using `sudo chown -R $USER:apache /var/www/` and `sudo chmod -R 755 /var/www`.
+Furthermore, for the newest installation an application of `sudo chcon -R -h -t httpd_sys_content_t /var/www` was needed.
 At this point in time it can be advantageous to create a sample `index.html` file, in order to check if the service is running correctly.
 
 We move onto creating two new directories, which will later be used to link the Apache config files into the executed configuration.
@@ -179,6 +190,14 @@ The installation of the certificate will be covered in the Apache session, the f
 ```
 sudo certbot certonly -d *.fschoen.com
 ```
+
+For usage of automatic renewals use, and select both domains.
+
+```
+sudo certbot --apache
+```
+
+After that, use `certbot renew` to renew the certificates.
 
 Select `1: Apache Web Server plugin (apache)`, and then `2: Renew & replace the certificate`.
 
@@ -282,3 +301,4 @@ The backend file has a redirection to the frontend for any request not containin
 - [Secure Apache](https://www.digitalocean.com/community/tutorials/how-to-secure-apache-with-let-s-encrypt-on-centos-8)
 - [Apache WebSocket Configuration](https://stackoverflow.com/questions/27526281/websockets-and-apache-proxy-how-to-configure-mod-proxy-wstunnel)
 - [Let's Encrypt Wildcard](https://www.digitalocean.com/community/tutorials/how-to-create-let-s-encrypt-wildcard-certificates-with-certbot)
+- [File Permissions Denied stackoverflow](https://serverfault.com/questions/381760/fedora-16-permission-denied-file-permissions-deny-server-access)
