@@ -3,7 +3,7 @@ import {CommonModule} from '@angular/common';
 
 import {GameRoutingModule} from './game-routing.module';
 import {GameComponent} from './game.component';
-import {GameDirective} from './game.directive';
+import {ComponentHost} from './component-host.directive';
 import {ReactiveFormsModule} from "@angular/forms";
 import {MatChipsModule} from "@angular/material/chips";
 import {MatCardModule} from "@angular/material/card";
@@ -21,10 +21,10 @@ import {RoleSelectionComponent} from "../../components/game-common/lobby-compone
 import {ParticipantListComponent} from "../../components/game-common/lobby-components/participant-list/participant-list.component";
 import {GeneralModule} from "../general/general.module";
 import {WerewolfInterfaceComponent} from '../../components/game-interface/werewolf-interface/werewolf-interface.component';
-import {WerewolfPlayerListComponent} from '../../components/game-common/game-components/werewolf-player-list/werewolf-player-list.component';
+import {WerewolfPlayerListComponent} from '../../components/game-common/interface-components/werewolf-player-list/werewolf-player-list.component';
 import {MatBadgeModule} from "@angular/material/badge";
-import {WerewolfLogEntryListComponent} from '../../components/game-common/game-components/log-entry-list/werewolf-log-entry-list/werewolf-log-entry-list.component';
-import {WerewolfVoteComponent} from '../../components/game-common/game-components/vote/werewolf-vote/werewolf-vote.component';
+import {WerewolfLogEntryListComponent} from '../../components/game-common/interface-components/log-entry-list/werewolf-log-entry-list/werewolf-log-entry-list.component';
+import {WerewolfPlayerWerewolfVoteComponent} from '../../components/game-common/interface-components/vote/werewolf-player-werewolf-vote/werewolf-player-werewolf-vote.component';
 import {MatTableModule} from "@angular/material/table";
 import {ResourcepackSelectionComponent} from '../../components/game-common/lobby-components/resourcepack-selection/resourcepack-selection.component';
 import {MatSelectModule} from "@angular/material/select";
@@ -32,7 +32,7 @@ import {MatSelectModule} from "@angular/material/select";
 
 @NgModule({
   declarations: [
-    GameDirective,
+    ComponentHost,
     GameComponent,
     WerewolfLobbyComponent,
     RoleSelectionComponent,
@@ -40,11 +40,11 @@ import {MatSelectModule} from "@angular/material/select";
     WerewolfInterfaceComponent,
     WerewolfPlayerListComponent,
     WerewolfLogEntryListComponent,
-    WerewolfVoteComponent,
+    WerewolfPlayerWerewolfVoteComponent,
     ResourcepackSelectionComponent,
   ],
   exports: [
-    GameDirective,
+    ComponentHost,
     WerewolfPlayerListComponent
   ],
   imports: [

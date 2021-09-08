@@ -1,13 +1,23 @@
-image: maven:3.8.1-openjdk-17
-
 stages:
   - build
   - test
 
-build-job:
+backend-build-job:
   stage: build
+  image: maven:3.8.2-openjdk-16
   script: "mvn clean -f ./backend/pom.xml"
 
-test-job:
+frontend-build-job:
+  stage: build
+  image: trion/ng-cli:latest
+  script:
+    - cd ./frontend
+    - npm install
+    - ng update
+    - npm update
+    - ng build
+
+backend-test-job:
   stage: test
+  image: maven:3.8.2-openjdk-16
   script: "mvn install -B -f ./backend/pom.xml"

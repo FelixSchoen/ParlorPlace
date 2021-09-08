@@ -9,8 +9,6 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import lombok.experimental.SuperBuilder;
-import org.hibernate.annotations.LazyCollection;
-import org.hibernate.annotations.LazyCollectionOption;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -46,7 +44,8 @@ public abstract class Vote<
         P extends Player<?>,
         T,
         C extends VoteCollection<T>,
-        D extends Enum<D>> {
+        D extends Enum<D>,
+        E extends Enum<E>> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "seq_vote_id")
@@ -75,18 +74,17 @@ public abstract class Vote<
     @NotNull
     protected VoteDrawStrategy voteDrawStrategy;
 
-    @ManyToMany(targetEntity = Player.class)
+    @ManyToMany(targetEntity = Player.class, fetch = FetchType.EAGER)
     @JoinTable(
             joinColumns = @JoinColumn(name = "vote_id"),
             inverseJoinColumns = @JoinColumn(name = "player_id")
     )
-    @LazyCollection(LazyCollectionOption.FALSE)
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
     @NotNull
     protected Set<P> voters;
 
-    @OneToMany(targetEntity = VoteCollection.class, cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    @OneToMany(targetEntity = VoteCollection.class, fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinTable(
             joinColumns = @JoinColumn(name = "vote_id"),
             inverseJoinColumns = @JoinColumn(name = "collection_id")
@@ -111,8 +109,13 @@ public abstract class Vote<
     public abstract void setOutcome(Set<T> tSet);
 
     // TODO Not ideal, I would have preferred to have this as a field, but since enums cannot inherit I cannot specify a supertype using targetEntity=
-    public abstract D getVoteDescriptor();
 
-    public abstract void setVoteDescriptor(D d);
+    public abstract D getVoteIdentifier();
+
+    public abstract void setVoteIdentifier(D d);
+
+    public abstract E getVoteDescriptor();
+
+    public abstract void setVoteDescriptor(E e);
 
 }

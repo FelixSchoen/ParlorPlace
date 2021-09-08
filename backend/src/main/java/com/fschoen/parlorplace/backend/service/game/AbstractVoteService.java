@@ -19,6 +19,7 @@ import com.fschoen.parlorplace.backend.repository.VoteRepository;
 import com.fschoen.parlorplace.backend.service.CommunicationService;
 import com.fschoen.parlorplace.backend.utility.messaging.MessageIdentifier;
 import com.fschoen.parlorplace.backend.utility.messaging.Messages;
+import com.fschoen.parlorplace.backend.utility.other.SetBuilder;
 import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -43,8 +44,8 @@ import java.util.stream.Collectors;
 
 @Slf4j
 public abstract class AbstractVoteService<
-        V extends Vote<P, T, C, D>,
-        G extends Game<P, ?, V, ?>,
+        V extends Vote<P, T, C, ?, D>,
+        G extends Game<P, ?, ? super V, ?>,
         P extends Player<?>,
         T,
         C extends VoteCollection<T>,
@@ -54,7 +55,6 @@ public abstract class AbstractVoteService<
         VRepo extends VoteRepository<V>
         > extends BaseGameService<G, P, GRepo> {
 
-    // TODO Not stateless, but not persistent either - I believe that this still should be ok, on a server crash we can delete open votes and restart the moderator
     protected final ConcurrentMap<Long, CompletableFuture<V>> futureMap;
 
     protected final PRepo playerRepository;
@@ -86,9 +86,10 @@ public abstract class AbstractVoteService<
             vote.setVoteState(VoteState.ONGOING);
             vote.setVoteType(voteType);
             vote.setVoteDrawStrategy(voteDrawStrategy);
-            vote.setVoters(new HashSet<>() {{
-                addAll(voteCollectionMap.keySet().stream().map(id -> playerRepository.findOneById(id).orElseThrow()).collect(Collectors.toList()));
-            }});
+            vote.setVoters(new SetBuilder<P>()
+                    .addAll(voteCollectionMap.keySet().stream().map(id -> playerRepository.findOneById(id).orElseThrow(
+                            () -> new VoteException(Messages.exception(MessageIdentifier.PLAYER_EXISTS_NOT))
+                    )).collect(Collectors.toList())).build());
             vote.setVoteCollectionMap(voteCollectionMap);
             vote.setOutcome(new HashSet<>());
             vote.setOutcomeAmount(outcomeAmount);
@@ -123,7 +124,7 @@ public abstract class AbstractVoteService<
         validateVoteStatusOngoing(voteId);
 
         G game = this.getActiveGame(gameIdentifier);
-        V vote = this.voteRepository.findOneById(voteId).orElseThrow();
+        V vote = this.voteRepository.findOneById(voteId).orElseThrow(() -> new VoteException(Messages.exception(MessageIdentifier.VOTE_EXISTS_NOT)));
         P player = game.getPlayers().stream().filter(p -> p.getUser().equals(principal)).findFirst().orElseThrow(() -> new DataConflictException(Messages.exception(MessageIdentifier.PLAYER_EXISTS_NOT)));
 
         validatePlayerIsVoter(voteId, player);
@@ -143,7 +144,9 @@ public abstract class AbstractVoteService<
         voteCollection.setAbstain(voteCollectionProposal.getAbstain());
         voteCollection.getSelection().removeAll(voteCollection.getSelection());
         for (T element : voteCollectionProposal.getSelection()) {
-            voteCollection.getSelection().add(voteCollection.getSubjects().stream().filter(subject -> subject.equals(element)).findAny().orElseThrow());
+            voteCollection.getSelection().add(voteCollection.getSubjects().stream().filter(subject -> subject.equals(element)).findAny().orElseThrow(
+                    () -> new VoteException(Messages.exception(MessageIdentifier.VOTE_SUBJECT_EXISTS_NOT))
+            ));
         }
 
         vote = this.voteRepository.save(vote);
@@ -236,7 +239,9 @@ public abstract class AbstractVoteService<
                 game.getGameIdentifier(),
                 vote.getVoteCollectionMap().keySet().stream()
                         .map(playerId -> game.getPlayers().stream()
-                                .filter(player -> player.getId().equals(playerId)).findFirst().orElseThrow())
+                                .filter(player -> player.getId().equals(playerId)).findFirst().orElseThrow(
+                                        () -> new VoteException(Messages.exception(MessageIdentifier.PLAYER_EXISTS_NOT))
+                                ))
                         .collect(Collectors.toSet()));
     }
 
@@ -249,9 +254,7 @@ public abstract class AbstractVoteService<
                 voteCollection = this.getVoteCollectionClass().getDeclaredConstructor().newInstance();
                 voteCollection.setAmountVotes(amountVotes);
                 voteCollection.setAllowAbstain(allowAbstain);
-                voteCollection.setSubjects(new HashSet<>() {{
-                    addAll(subjects);
-                }});
+                voteCollection.setSubjects(new SetBuilder<T>().addAll(subjects).build());
                 voteCollection.setSelection(new HashSet<>());
                 map.put(voter.getId(), voteCollection);
             } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
@@ -269,12 +272,16 @@ public abstract class AbstractVoteService<
     }
 
     protected void validatePlayerIsVoter(long voteId, P player) {
-        if (this.voteRepository.findOneById(voteId).orElseThrow().getVoteCollectionMap().keySet().stream().noneMatch(key -> key.equals(player.getId())))
+        if (this.voteRepository.findOneById(voteId).orElseThrow(
+                () -> new VoteException(Messages.exception(MessageIdentifier.VOTE_EXISTS_NOT))
+        ).getVoteCollectionMap().keySet().stream().noneMatch(key -> key.equals(player.getId())))
             throw new VoteException(Messages.exception(MessageIdentifier.VOTE_EXISTS_NOT));
     }
 
     protected void validateVoteStatusOngoing(long voteId) {
-        if (!this.voteRepository.findOneById(voteId).orElseThrow().getVoteState().equals(VoteState.ONGOING))
+        if (!this.voteRepository.findOneById(voteId).orElseThrow(
+                () -> new VoteException(Messages.exception(MessageIdentifier.VOTE_EXISTS_NOT))
+        ).getVoteState().equals(VoteState.ONGOING))
             throw new VoteException(Messages.exception(MessageIdentifier.VOTE_STATUS_CONCLUDED));
     }
 
@@ -289,7 +296,7 @@ public abstract class AbstractVoteService<
     private class VoteConcludeTask implements Runnable {
 
         private final Long voteId;
-        private final Long sleepDurationSeconds;
+        private final Long sleepDurationMillis;
         private final Boolean forceClose;
 
         private final GameIdentifier gameIdentifier;
@@ -299,15 +306,19 @@ public abstract class AbstractVoteService<
         public void run() {
             log.info("Started VoteConcludeTask for Vote {}", voteId);
 
-            V initialVote = voteRepository.findOneById(voteId).orElseThrow();
+            V initialVote = voteRepository.findOneById(voteId).orElseThrow(
+                    () -> new VoteException(Messages.exception(MessageIdentifier.VOTE_EXISTS_NOT))
+            );
             if (initialVote.getVoteState().equals(VoteState.CONCLUDED)) return;
 
-            Thread.sleep(sleepDurationSeconds);
+            Thread.sleep(sleepDurationMillis);
 
             log.info("Trying to conclude Vote {}", voteId);
 
             // If already concluded do not complete future again
-            V currentVote = voteRepository.findOneById(voteId).orElseThrow();
+            V currentVote = voteRepository.findOneById(voteId).orElseThrow(
+                    () -> new VoteException(Messages.exception(MessageIdentifier.VOTE_EXISTS_NOT))
+            );
             if (currentVote.getVoteState().equals(VoteState.CONCLUDED)) return;
 
             // If changes during grace period, disregard conclusion task

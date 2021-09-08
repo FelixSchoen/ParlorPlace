@@ -6,7 +6,7 @@ import com.fschoen.parlorplace.backend.entity.RefreshToken;
 import com.fschoen.parlorplace.backend.entity.Role;
 import com.fschoen.parlorplace.backend.entity.User;
 import com.fschoen.parlorplace.backend.enumeration.UserRole;
-import com.fschoen.parlorplace.backend.exception.AuthorizationException;
+import com.fschoen.parlorplace.backend.exception.AuthenticationException;
 import com.fschoen.parlorplace.backend.exception.DataConflictException;
 import com.fschoen.parlorplace.backend.repository.UserRepository;
 import com.fschoen.parlorplace.backend.security.JwtUtils;
@@ -16,6 +16,7 @@ import com.fschoen.parlorplace.backend.service.RefreshTokenService;
 import com.fschoen.parlorplace.backend.service.UserService;
 import com.fschoen.parlorplace.backend.utility.messaging.MessageIdentifier;
 import com.fschoen.parlorplace.backend.utility.messaging.Messages;
+import com.fschoen.parlorplace.backend.utility.other.SetBuilder;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -66,11 +67,9 @@ public class UserServiceImplementation extends BaseService implements UserServic
             throw new DataConflictException(Messages.exception(MessageIdentifier.USER_EMAIL_EXISTS));
 
         String hashedPassword = passwordEncoder.encode(user.getPassword());
-        Set<Role> roles = new HashSet<>() {{
-            add(Role.builder().role(UserRole.ROLE_USER).build());
-        }};
+        Set<Role> roles = new SetBuilder<Role>().add(Role.builder().role(UserRole.ROLE_USER).build()).build();
 
-        User persistUser = user.toBuilder().nickname(user.getNickname()).password(hashedPassword).roles(roles).build();
+        User persistUser = user.toBuilder().password(hashedPassword).roles(roles).build();
         persistUser.getRoles().forEach(role -> role.setUser(persistUser));
 
         return userRepository.save(persistUser);
@@ -92,7 +91,7 @@ public class UserServiceImplementation extends BaseService implements UserServic
     }
 
     @Override
-    public TokenRefreshResponseDTO refresh(String refreshToken) throws AuthorizationException {
+    public TokenRefreshResponseDTO refresh(String refreshToken) throws AuthenticationException {
         log.info("Refreshing Token");
 
         return refreshTokenService.findByRefreshToken(refreshToken)
@@ -103,11 +102,11 @@ public class UserServiceImplementation extends BaseService implements UserServic
                     RefreshToken newRefreshToken = refreshTokenService.createRefreshToken(user.getId());
                     return TokenRefreshResponseDTO.builder().accessToken(accessToken).refreshToken(newRefreshToken.getRefreshToken()).build();
                 })
-                .orElseThrow(() -> new AuthorizationException(Messages.exception(MessageIdentifier.AUTHORIZATION_TOKEN_REFRESH_EXISTS_NOT)));
+                .orElseThrow(() -> new AuthenticationException(Messages.exception(MessageIdentifier.AUTHORIZATION_TOKEN_REFRESH_EXISTS_NOT)));
     }
 
     @Override
-    public User update(Long id, User user) throws AuthorizationException, DataConflictException {
+    public User update(Long id, User user) throws AuthenticationException, DataConflictException {
         log.info("Updating User: {}", user.getUsername());
 
         User principal = getPrincipal();
@@ -115,7 +114,7 @@ public class UserServiceImplementation extends BaseService implements UserServic
         if ((!principal.getId().equals(id) && notAuthority(principal, UserRole.ROLE_ADMIN))
                 || (user.getRoles() != null && !user.getRoles().equals(principal.getRoles()) && notAuthority(principal, UserRole.ROLE_ADMIN))
                 || (user.getUsername() != null && !user.getUsername().equals("") && !user.getUsername().equals(principal.getUsername()) && notAuthority(principal, UserRole.ROLE_ADMIN)))
-            throw new AuthorizationException(Messages.exception(MessageIdentifier.AUTHORIZATION_UNAUTHORIZED));
+            throw new AuthenticationException(Messages.exception(MessageIdentifier.AUTHORIZATION_UNAUTHORIZED));
 
         if (user.getId() != null && !user.getId().equals(id))
             throw new DataConflictException(Messages.exception(MessageIdentifier.DATA_MISMATCHED_ID));

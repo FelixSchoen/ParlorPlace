@@ -82,6 +82,9 @@
     },
     "gameJoin": {
       "join": "Join Game"
+    },
+    "version": {
+      "version": "Version"
     }
   },
   "werewolf": {
@@ -89,6 +92,10 @@
       "villager": {
         "name": "Villager",
         "description": "Find the Werewolves and kill them, before they kill you."
+      },
+      "pureVillager": {
+        "name": "Pure Villager",
+        "description": "You are a normal villager, and everyone knows that you are."
       },
       "werewolf": {
         "name": "Werewolf",
@@ -101,6 +108,10 @@
       "witch": {
         "name": "Witch",
         "description": "You heal or kill 1 player during the night. You can do both of these actions only once per game."
+      },
+      "hunter": {
+        "name": "Hunter",
+        "description": "When you are killed, you immediately kill 1 other player."
       },
       "cupid": {
         "name": "Cupid",
@@ -147,6 +158,9 @@
         "heal": "Who do you want to heal?",
         "kill": "Who do you want to poison?"
       },
+      "hunter": {
+        "shoot": "Who do you want to shoot?"
+      },
       "cupid": {
         "link": "Who do you want to fall in love?"
       },
@@ -160,12 +174,13 @@
       "sleep": "You fall asleep",
       "wake": "You wake up",
       "death": "{player} has died",
+      "villagers_vote": "The villagers lynch {player}",
       "werewolves_vote": "The werewolves savage {player}",
       "seer_success": "{player} is a Werewolf",
       "seer_failure": "{player} is not a Werewolf",
       "witch_heal": "You heal {player}",
       "witch_kill": "You poison {player}",
-      "villagers_vote": "The villagers lynch {player}",
+      "hunter_shoot": "{player1} shoots {player2}",
       "cupid_link": "You make {player1} and {player2} fall in love",
       "lovers_love": "You fall in love with {player}",
       "bodyguard_protect": "You protect {player}",

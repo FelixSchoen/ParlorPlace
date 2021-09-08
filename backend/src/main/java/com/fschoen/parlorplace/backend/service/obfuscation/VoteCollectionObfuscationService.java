@@ -7,7 +7,7 @@ import com.fschoen.parlorplace.backend.entity.User;
 import com.fschoen.parlorplace.backend.repository.UserRepository;
 
 public abstract class VoteCollectionObfuscationService<
-        C extends VoteCollectionDTO<P, T>,
+        C extends VoteCollectionDTO<T>,
         T,
         G extends GameDTO<?, ?, ?, ?>,
         P extends PlayerDTO<?>,

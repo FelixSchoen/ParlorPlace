@@ -12,6 +12,7 @@ public enum WerewolfLogType {
     SEER_FAILURE,
     WITCH_HEAL,
     WITCH_KILL,
+    HUNTER_SHOOT,
     CUPID_LINK,
     LOVERS_LOVE,
     BODYGUARD_PROTECT,

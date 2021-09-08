@@ -3,7 +3,7 @@ package com.fschoen.parlorplace.backend.controller;
 import com.fschoen.parlorplace.backend.controller.mapper.UserMapper;
 import com.fschoen.parlorplace.backend.game.werewolf.dto.game.WerewolfGameDTO;
 import com.fschoen.parlorplace.backend.game.werewolf.dto.game.WerewolfPlayerDTO;
-import com.fschoen.parlorplace.backend.game.werewolf.dto.game.WerewolfVoteCollectionDTO;
+import com.fschoen.parlorplace.backend.game.werewolf.dto.game.WerewolfPlayerVoteCollectionDTO;
 import com.fschoen.parlorplace.backend.game.werewolf.dto.lobby.WerewolfLobbyChangeRequestDTO;
 import com.fschoen.parlorplace.backend.game.werewolf.dto.lobby.WerewolfRuleSetDTO;
 import com.fschoen.parlorplace.backend.game.werewolf.entity.WerewolfGame;
@@ -12,11 +12,11 @@ import com.fschoen.parlorplace.backend.game.werewolf.entity.WerewolfPlayer;
 import com.fschoen.parlorplace.backend.game.werewolf.entity.WerewolfRuleSet;
 import com.fschoen.parlorplace.backend.game.werewolf.mapper.WerewolfGameMapper;
 import com.fschoen.parlorplace.backend.game.werewolf.mapper.WerewolfPlayerMapper;
+import com.fschoen.parlorplace.backend.game.werewolf.mapper.WerewolfPlayerVoteCollectionMapper;
 import com.fschoen.parlorplace.backend.game.werewolf.mapper.WerewolfRuleSetMapper;
-import com.fschoen.parlorplace.backend.game.werewolf.mapper.WerewolfVoteCollectionMapper;
 import com.fschoen.parlorplace.backend.game.werewolf.repository.WerewolfGameRepository;
 import com.fschoen.parlorplace.backend.game.werewolf.service.WerewolfGameModerator;
-import com.fschoen.parlorplace.backend.game.werewolf.service.WerewolfVoteService;
+import com.fschoen.parlorplace.backend.game.werewolf.service.WerewolfPlayerWerewolfVoteService;
 import com.fschoen.parlorplace.backend.service.game.AbstractGameService;
 import com.fschoen.parlorplace.backend.service.obfuscation.ObfuscationService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,20 +38,20 @@ public class WerewolfGameController extends AbstractGameController<
         WerewolfRuleSetDTO,
         WerewolfLobbyChangeRequestDTO> {
 
-    private final WerewolfVoteService voteService;
+    private final WerewolfPlayerWerewolfVoteService voteService;
 
-    private final WerewolfVoteCollectionMapper voteCollectionMapper;
+    private final WerewolfPlayerVoteCollectionMapper voteCollectionMapper;
 
     @Autowired
     public WerewolfGameController(
             AbstractGameService<WerewolfGame, WerewolfPlayer, WerewolfRuleSet, WerewolfGameRole, WerewolfGameRepository, WerewolfGameModerator> gameService,
             ObfuscationService<WerewolfGameDTO> gameObfuscationService,
-            WerewolfVoteService voteService,
+            WerewolfPlayerWerewolfVoteService voteService,
             UserMapper userMapper,
             WerewolfGameMapper gameMapper,
             WerewolfPlayerMapper playerMapper,
             WerewolfRuleSetMapper ruleSetMapper,
-            WerewolfVoteCollectionMapper voteCollectionMapper
+            WerewolfPlayerVoteCollectionMapper voteCollectionMapper
     ) {
         super(gameService, gameObfuscationService, userMapper, gameMapper, playerMapper, ruleSetMapper);
         this.voteService = voteService;
@@ -59,7 +59,7 @@ public class WerewolfGameController extends AbstractGameController<
     }
 
     @PostMapping("/vote/{identifier}/{voteIdentifier}")
-    public ResponseEntity<WerewolfGameDTO> vote(@PathVariable("identifier") String identifier, @PathVariable("voteIdentifier") Long voteIdentifier, @RequestBody WerewolfVoteCollectionDTO voteCollectionDTO) {
+    public ResponseEntity<WerewolfGameDTO> vote(@PathVariable("identifier") String identifier, @PathVariable("voteIdentifier") Long voteIdentifier, @RequestBody WerewolfPlayerVoteCollectionDTO voteCollectionDTO) {
         return this.vote(voteService, voteCollectionMapper, identifier, voteIdentifier, voteCollectionDTO);
     }
 

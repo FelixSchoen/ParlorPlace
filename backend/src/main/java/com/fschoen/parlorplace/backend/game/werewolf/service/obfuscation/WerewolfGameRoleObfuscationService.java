@@ -5,10 +5,9 @@ import com.fschoen.parlorplace.backend.enumeration.GameState;
 import com.fschoen.parlorplace.backend.enumeration.PlayerState;
 import com.fschoen.parlorplace.backend.game.werewolf.dto.game.WerewolfGameDTO;
 import com.fschoen.parlorplace.backend.game.werewolf.dto.game.WerewolfPlayerDTO;
-import com.fschoen.parlorplace.backend.game.werewolf.dto.role.BodyguardWerewolfGameRoleDTO;
-import com.fschoen.parlorplace.backend.game.werewolf.dto.role.CupidWerewolfGameRoleDTO;
-import com.fschoen.parlorplace.backend.game.werewolf.dto.role.WerewolfGameRoleDTO;
-import com.fschoen.parlorplace.backend.game.werewolf.dto.role.WitchWerewolfGameRoleDTO;
+import com.fschoen.parlorplace.backend.game.werewolf.dto.gamerole.CupidWerewolfGameRoleDTO;
+import com.fschoen.parlorplace.backend.game.werewolf.dto.gamerole.WerewolfGameRoleDTO;
+import com.fschoen.parlorplace.backend.game.werewolf.dto.gamerole.WitchWerewolfGameRoleDTO;
 import com.fschoen.parlorplace.backend.repository.UserRepository;
 import com.fschoen.parlorplace.backend.service.obfuscation.GameRoleObfuscationService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +34,9 @@ public class WerewolfGameRoleObfuscationService extends GameRoleObfuscationServi
         }
 
         switch (werewolfGameRoleDTO.getWerewolfRoleType()) {
+            case PURE_VILLAGER -> {
+                return;
+            }
             case WITCH -> {
                 WitchWerewolfGameRoleDTO witchWerewolfGameRoleDTO = (WitchWerewolfGameRoleDTO) werewolfGameRoleDTO;
                 witchWerewolfGameRoleDTO.setHasHealed(null);
@@ -43,10 +45,6 @@ public class WerewolfGameRoleObfuscationService extends GameRoleObfuscationServi
             case CUPID -> {
                 CupidWerewolfGameRoleDTO cupidWerewolfGameRoleDTO = (CupidWerewolfGameRoleDTO) werewolfGameRoleDTO;
                 cupidWerewolfGameRoleDTO.setHasLinked(null);
-            }
-            case BODYGUARD -> {
-                BodyguardWerewolfGameRoleDTO bodyguardWerewolfGameRoleDTO = (BodyguardWerewolfGameRoleDTO) werewolfGameRoleDTO;
-                bodyguardWerewolfGameRoleDTO.setLastProtected(null);
             }
         }
 

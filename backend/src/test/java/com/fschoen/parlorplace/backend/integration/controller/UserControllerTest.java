@@ -133,7 +133,7 @@ public class UserControllerTest extends BaseIntegrationTest {
                 .build();
 
         Response response = payload(userUpdateRequestDTO, getToken(existingUser)).pathParam("id", otherUser.getId()).put(USER_BASE_URI + "update/{id}").then().extract().response();
-        assertThat(response.statusCode()).isEqualTo(HttpStatus.UNAUTHORIZED.value());
+        assertThat(response.statusCode()).isEqualTo(HttpStatus.FORBIDDEN.value());
     }
 
     @Test

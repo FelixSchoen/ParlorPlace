@@ -2,37 +2,25 @@ package com.fschoen.parlorplace.backend.controller.dto.user;
 
 import com.fschoen.parlorplace.backend.enumeration.UserRole;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
+import lombok.experimental.SuperBuilder;
 
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import java.util.Set;
 
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder(toBuilder = true)
+@EqualsAndHashCode(callSuper = true)
+@ToString(callSuper = true)
+@SuperBuilder(toBuilder = true)
 @Data
-public class UserDTO {
+public class UserDTO extends BaseUserInformationDTO {
 
     @NotNull
     private Long id;
-
-    @NotBlank
-    @Size(min = 3, max = 15)
-    private String username;
-
-    @NotBlank
-    @Size(min = 3, max = 15)
-    private String nickname;
-
-    @NotBlank
-    @Size(min = 3, max = 255)
-    @Email
-    private String email;
 
     @NotNull
     private Set<UserRole> userRoles;

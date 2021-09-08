@@ -6,7 +6,7 @@ import com.fschoen.parlorplace.backend.validation.ValidationResult;
 
 public class VoteValidator extends BaseValidator {
 
-    public ValidationResult validate(VoteCollectionDTO<?, ?> voteCollectionDTO) {
+    public ValidationResult validate(VoteCollectionDTO<?> voteCollectionDTO) {
         return new ValidationResult(validateConstraints(voteCollectionDTO, true));
     }
 

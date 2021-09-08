@@ -6,8 +6,8 @@ import com.fschoen.parlorplace.backend.enumeration.GameType;
 import com.fschoen.parlorplace.backend.enumeration.LobbyRole;
 import com.fschoen.parlorplace.backend.game.werewolf.dto.game.WerewolfGameDTO;
 import com.fschoen.parlorplace.backend.game.werewolf.dto.game.WerewolfPlayerDTO;
-import com.fschoen.parlorplace.backend.game.werewolf.dto.game.WerewolfVoteCollectionDTO;
-import com.fschoen.parlorplace.backend.game.werewolf.dto.game.WerewolfVoteDTO;
+import com.fschoen.parlorplace.backend.game.werewolf.dto.game.WerewolfPlayerVoteCollectionDTO;
+import com.fschoen.parlorplace.backend.game.werewolf.dto.game.WerewolfPlayerWerewolfVoteDTO;
 import com.fschoen.parlorplace.backend.game.werewolf.dto.lobby.WerewolfLobbyChangeRequestDTO;
 import com.fschoen.parlorplace.backend.game.werewolf.dto.lobby.WerewolfRuleSetDTO;
 import com.fschoen.parlorplace.backend.game.werewolf.entity.WerewolfGame;
@@ -290,15 +290,15 @@ public class WerewolfGameControllerTest extends BaseIntegrationTest {
         assertThat(responseGetGame.statusCode()).isEqualTo(HttpStatus.OK.value());
         WerewolfGameDTO gameDTOResponse = responseGetGame.getBody().as(WerewolfGameDTO.class);
 
-        WerewolfVoteDTO werewolfVoteDTO = gameDTOResponse.getVotes().get(0);
+        WerewolfPlayerWerewolfVoteDTO werewolfPlayerWerewolfVoteDTO = (WerewolfPlayerWerewolfVoteDTO) gameDTOResponse.getVotes().get(0);
         WerewolfPlayerDTO werewolfPlayerDTO = gameDTOResponse.getPlayers().stream().filter(player -> player.getUser().getId().equals(admin1.getId())).findFirst().orElseThrow();
-        WerewolfVoteCollectionDTO werewolfVoteCollectionDTO = werewolfVoteDTO.getVoteCollectionMap().get(werewolfPlayerDTO);
+        WerewolfPlayerVoteCollectionDTO werewolfPlayerVoteCollectionDTO = werewolfPlayerWerewolfVoteDTO.getVoteCollectionMap().get(werewolfPlayerDTO);
 
-        werewolfVoteCollectionDTO.getSelection().add(werewolfVoteCollectionDTO.getSubjects().stream().findAny().orElseThrow());
+        werewolfPlayerVoteCollectionDTO.getSelection().add(werewolfPlayerVoteCollectionDTO.getSubjects().stream().findAny().orElseThrow());
 
-        Response responseVote = payload(werewolfVoteCollectionDTO, getToken(admin1))
+        Response responseVote = payload(werewolfPlayerVoteCollectionDTO, getToken(admin1))
                 .pathParam("identifier", werewolfGame.getGameIdentifier().getToken())
-                .pathParam("voteIdentifier", werewolfVoteDTO.getId())
+                .pathParam("voteIdentifier", werewolfPlayerWerewolfVoteDTO.getId())
                 .post(WEREWOLF_BASE_URI + "vote/{identifier}/{voteIdentifier}").then().extract().response();
         assertThat(responseVote.statusCode()).isEqualTo(HttpStatus.OK.value());
 

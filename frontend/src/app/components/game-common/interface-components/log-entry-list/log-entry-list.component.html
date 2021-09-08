@@ -1,0 +1,7 @@
+<mat-list class="mat-list-break">
+    <mat-list-item class="mat-list-item-break" *ngFor="let logEntry of cleanedLog; last as last">
+        <mat-icon mat-list-icon svgIcon="{{toIconRepresentation(logEntry)}}"></mat-icon>
+        <h3 matLine class="mat-line-break">{{this.logService.toStringRepresentation(logEntry, this.players) | async}}</h3>
+        <mat-divider [inset]="false" *ngIf="!last"></mat-divider>
+    </mat-list-item>
+</mat-list>

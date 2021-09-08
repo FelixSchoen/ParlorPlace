@@ -7,11 +7,10 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import lombok.experimental.SuperBuilder;
-import org.hibernate.annotations.LazyCollection;
-import org.hibernate.annotations.LazyCollectionOption;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -51,35 +50,32 @@ public abstract class LogEntry<P extends Player<?>> {
     @NotNull
     protected Game<?, ?, ?, ?> game;
 
-    @ManyToMany(targetEntity = Player.class)
+    @ManyToMany(targetEntity = Player.class, fetch = FetchType.EAGER)
     @JoinTable(
             joinColumns = @JoinColumn(name = "logentry_id"),
             inverseJoinColumns = @JoinColumn(name = "player_id")
     )
-    @LazyCollection(LazyCollectionOption.FALSE)
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
     @NotNull
     protected Set<P> recipients;
 
-    @ManyToMany(targetEntity = Player.class)
+    @ManyToMany(targetEntity = Player.class, fetch = FetchType.EAGER)
     @JoinTable(
             joinColumns = @JoinColumn(name = "logentry_id"),
             inverseJoinColumns = @JoinColumn(name = "player_id")
     )
-    @LazyCollection(LazyCollectionOption.FALSE)
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
     @Builder.Default
     @NotNull
     protected Set<P> sources = new HashSet<>();
 
-    @ManyToMany(targetEntity = Player.class)
+    @ManyToMany(targetEntity = Player.class, fetch = FetchType.EAGER)
     @JoinTable(
             joinColumns = @JoinColumn(name = "logentry_id"),
             inverseJoinColumns = @JoinColumn(name = "player_id")
     )
-    @LazyCollection(LazyCollectionOption.FALSE)
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
     @Builder.Default

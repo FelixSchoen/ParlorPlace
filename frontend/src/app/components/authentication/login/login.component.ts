@@ -25,7 +25,8 @@ export class LoginComponent {
         submitted: false,
         username: this.username,
         password: this.password
-      }
+      },
+      disableClose: true
     });
 
     dialogRef.afterClosed().subscribe({
@@ -39,7 +40,7 @@ export class LoginComponent {
           this.authService.login(userSigninRequest).subscribe({
               next: () => this.router.navigate(["/profile"]).then(),
               error: (error) => {
-                this.notificationService.showError(error.error)
+                this.notificationService.showError(error.error.message)
               }
             }
           )

@@ -15,7 +15,7 @@
         <!-- Recent Log Card -->
         <mat-card class="mx-3 log-card" *ngIf="this.game.log.length > 0">
           <mat-card-content>
-            <app-werewolf-log-entry-list [hideSleep]="false" [log]="[this.game.log.reverse()[0]]"
+            <app-werewolf-log-entry-list [hideSleep]="false" [log]="[this.game.log[this.game.log.length-1]]"
                                          [players]="this.game.players"></app-werewolf-log-entry-list>
           </mat-card-content>
         </mat-card>
@@ -39,17 +39,36 @@
     <!-- Vote Tab -->
     <mat-tab>
       <ng-template mat-tab-label>
-        <mat-icon class="material-icons" matBadge="{{sortVotes(game.votes)[0].length}}" matBadgeSize="small"
-                  [matBadgeHidden]="!sortVotes(game.votes)[0].length > 0">gavel
+        <mat-icon class="material-icons" matBadge="{{activeVotes.length}}" matBadgeSize="small"
+                  [matBadgeHidden]="!activeVotes.length > 0">gavel
         </mat-icon>
       </ng-template>
 
       <div class="h-100 pt-3">
 
         <!-- Ongoing Votes -->
-        <div *ngFor="let vote of sortVotes(game.votes)[0]" class="mx-3 mb-3">
-          <app-werewolf-vote [currentPlayer]="currentPlayer" [gameIdentifier]="this.game.gameIdentifier"
-                             [players]="this.game.players" [vote]="vote"></app-werewolf-vote>
+        <div *ngFor="let vote of activeVotes" class="mx-3 mb-3">
+          <div [ngSwitch]="vote.voteIdentifier">
+            <div *ngSwitchCase="werewolfVoteIdentifier.PLAYER_VOTE">
+              <app-werewolf-player-werewolf-vote [currentPlayer]="currentPlayer"
+                                                 [gameIdentifier]="this.game.gameIdentifier"
+                                                 [players]="this.game.players"
+                                                 [vote]="vote"></app-werewolf-player-werewolf-vote>
+            </div>
+          </div>
+        </div>
+
+        <div *ngFor="let vote of concludedVotes" class="mx-3 mb-3">
+          <div *ngIf="voteHideGracePeriod(vote)">
+            <div [ngSwitch]="vote.voteIdentifier">
+              <div *ngSwitchCase="werewolfVoteIdentifier.PLAYER_VOTE">
+                <app-werewolf-player-werewolf-vote [currentPlayer]="currentPlayer"
+                                                   [gameIdentifier]="this.game.gameIdentifier"
+                                                   [players]="this.game.players"
+                                                   [vote]="vote"></app-werewolf-player-werewolf-vote>
+              </div>
+            </div>
+          </div>
         </div>
 
         <div class="pp-center">
@@ -67,9 +86,13 @@
 
         <!-- Concluded Votes -->
         <div *ngIf="!hideVotes" class="mt-3">
-          <div *ngFor="let vote of sortVotes(game.votes)[1]" class="mx-3 mb-3">
-            <app-werewolf-vote [currentPlayer]="currentPlayer" [gameIdentifier]="this.game.gameIdentifier"
-                               [players]="this.game.players" [vote]="vote"></app-werewolf-vote>
+          <div *ngFor="let vote of concludedVotes" class="mx-3 mb-3">
+            <div *ngIf="!voteHideGracePeriod(vote)">
+              <app-werewolf-player-werewolf-vote [currentPlayer]="currentPlayer"
+                                                 [gameIdentifier]="this.game.gameIdentifier"
+                                                 [players]="this.game.players"
+                                                 [vote]="vote"></app-werewolf-player-werewolf-vote>
+            </div>
           </div>
         </div>
 
@@ -80,7 +103,9 @@
     <!-- Log Tab -->
     <mat-tab>
       <ng-template mat-tab-label>
-        <mat-icon class="material-icons">format_list_bulleted</mat-icon>
+        <mat-icon class="material-icons" matBadge="‎" matBadgeSize="small" [matBadgeHidden]="this.viewedLog">
+          format_list_bulleted
+        </mat-icon>
       </ng-template>
 
       <div class="h-100 pt-3">

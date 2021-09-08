@@ -9,13 +9,12 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import lombok.experimental.SuperBuilder;
-import org.hibernate.annotations.LazyCollection;
-import org.hibernate.annotations.LazyCollectionOption;
 
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import java.util.List;
 
 @NoArgsConstructor
@@ -33,8 +32,7 @@ public class WerewolfRuleSet extends RuleSet {
 
     @Column(nullable = false)
     @Enumerated
-    @ElementCollection(targetClass = WerewolfRoleType.class)
-    @LazyCollection(LazyCollectionOption.FALSE)
+    @ElementCollection(targetClass = WerewolfRoleType.class, fetch = FetchType.EAGER)
     private List<WerewolfRoleType> gameRoleTypes;
 
 }

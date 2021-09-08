@@ -71,12 +71,20 @@ export class AppComponent implements OnInit {
         this.domSanitizer.bypassSecurityTrustResourceUrl(duotone_folder + "utensil-fork.svg")
       );
       this.matIconRegistry.addSvgIcon(
+        "duotone-pureVillager",
+        this.domSanitizer.bypassSecurityTrustResourceUrl(duotone_folder + "utensil-fork.svg")
+      );
+      this.matIconRegistry.addSvgIcon(
         "duotone-seer",
         this.domSanitizer.bypassSecurityTrustResourceUrl(duotone_folder + "eye.svg")
       );
       this.matIconRegistry.addSvgIcon(
         "duotone-witch",
         this.domSanitizer.bypassSecurityTrustResourceUrl(duotone_folder + "hat-witch.svg")
+      );
+      this.matIconRegistry.addSvgIcon(
+        "duotone-hunter",
+        this.domSanitizer.bypassSecurityTrustResourceUrl(duotone_folder + "crosshairs.svg")
       );
       this.matIconRegistry.addSvgIcon(
         "duotone-cupid",

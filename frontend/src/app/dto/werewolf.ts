@@ -18,6 +18,7 @@ import {WerewolfLogType} from "../enums/games/werewolf-log-type";
 import {CodeName} from "../enums/code-name";
 import {WerewolfFaction} from "../enums/games/werewolf-faction";
 import {WerewolfResourcePackType} from "../enums/games/werewolf-resource-pack-type";
+import {WerewolfVoteIdentifier} from "../enums/games/werewolf-vote-identifier";
 
 export class WerewolfGame extends Game {
   constructor(public id: number,
@@ -25,7 +26,7 @@ export class WerewolfGame extends Game {
               public players: Set<WerewolfPlayer>,
               public ruleSet: WerewolfRuleSet,
               public round: number,
-              public votes: WerewolfVote[],
+              public votes: WerewolfPlayerWerewolfVote[],
               public log: WerewolfLogEntry[],
               public startedAt: string,
               public endedAt: string | null,
@@ -35,6 +36,7 @@ export class WerewolfGame extends Game {
 }
 
 export class WerewolfPlayer extends Player {
+
   constructor(public id: number,
               public user: User,
               public codeName: CodeName,
@@ -44,6 +46,18 @@ export class WerewolfPlayer extends Player {
               public position: number,
               public placement: number) {
     super(id, user, codeName, lobbyRole, playerState, gameRoles, position, placement);
+  }
+
+  public static getCurrentGameRole(werewolfPlayer: WerewolfPlayer): WerewolfGameRole | undefined {
+    if (werewolfPlayer != undefined && werewolfPlayer.gameRoles != undefined)
+      return werewolfPlayer.gameRoles[werewolfPlayer.gameRoles.length - 1]
+    else
+      return undefined
+  }
+
+  public static hasGameRoleType(werewolfPlayer: WerewolfPlayer, werewolfRoleType: WerewolfRoleType) {
+    let currentGameRole = this.getCurrentGameRole(werewolfPlayer)
+    return currentGameRole != undefined && currentGameRole.werewolfRoleType == werewolfRoleType
   }
 
 }
@@ -56,22 +70,41 @@ export class WerewolfRuleSet extends RuleSet {
   }
 }
 
-export class WerewolfVote extends Vote<WerewolfPlayer, WerewolfVoteCollection> {
+export class WerewolfVote<T, C extends VoteCollection<T>> extends Vote<WerewolfPlayer, T, C> {
 
   constructor(public id: number,
               public voteState: VoteState,
               public voteType: VoteType,
+              public voteIdentifier: WerewolfVoteIdentifier,
               public voteDescriptor: EnumValue,
-              public voteCollectionMap: [number, WerewolfVoteCollection][],
-              public outcome: Set<WerewolfPlayer>,
+              public voters: Set<WerewolfPlayer>,
+              public voteCollectionMap: [number, C][],
+              public outcome: Set<T>,
               public outcomeAmount: number,
               public endTime: number) {
-    super(id, voteState, voteType, voteDescriptor, voteCollectionMap, outcome, outcomeAmount, endTime);
+    super(id, voteState, voteType, voteDescriptor, voters, voteCollectionMap, outcome, outcomeAmount, endTime);
   }
 
 }
 
-export class WerewolfVoteCollection extends VoteCollection<WerewolfPlayer> {
+export class WerewolfPlayerWerewolfVote extends WerewolfVote<WerewolfPlayer, WerewolfPlayerVoteCollection> {
+
+  constructor(public id: number,
+              public voteState: VoteState,
+              public voteType: VoteType,
+              public voteIdentifier: WerewolfVoteIdentifier,
+              public voteDescriptor: EnumValue,
+              public voters: Set<WerewolfPlayer>,
+              public voteCollectionMap: [number, WerewolfPlayerVoteCollection][],
+              public outcome: Set<WerewolfPlayer>,
+              public outcomeAmount: number,
+              public endTime: number) {
+    super(id, voteState, voteType, voteIdentifier, voteDescriptor, voters, voteCollectionMap, outcome, outcomeAmount, endTime);
+  }
+
+}
+
+export class WerewolfPlayerVoteCollection extends VoteCollection<WerewolfPlayer> {
 
   constructor(public amountVotes: number,
               public allowAbstain: boolean,
@@ -132,6 +165,20 @@ export class VillagerWerewolfGameRole extends WerewolfGameRole {
   }
 }
 
+export class PureVillagerWerewolfGameRole extends WerewolfGameRole {
+  constructor(public id: number,
+              public werewolfRoleType: WerewolfRoleType,
+              public werewolfFaction: WerewolfFaction) {
+    super(id, werewolfRoleType, werewolfFaction);
+  }
+
+  public toJSON(): PureVillagerWerewolfGameRole {
+    return Object.assign({}, this, {
+      werewolfRoleType: "PURE_VILLAGER"
+    });
+  }
+}
+
 export class WerewolfWerewolfGameRole extends WerewolfGameRole {
   constructor(public id: number,
               public werewolfRoleType: WerewolfRoleType,
@@ -172,6 +219,20 @@ export class WitchWerewolfGameRole extends WerewolfGameRole {
   public toJSON(): WitchWerewolfGameRole {
     return Object.assign({}, this, {
       werewolfRoleType: "WITCH"
+    });
+  }
+}
+
+export class HunterWerewolfGameRole extends WerewolfGameRole {
+  constructor(public id: number,
+              public werewolfRoleType: WerewolfRoleType,
+              public werewolfFaction: WerewolfFaction) {
+    super(id, werewolfRoleType, werewolfFaction);
+  }
+
+  public toJSON(): HunterWerewolfGameRole {
+    return Object.assign({}, this, {
+      werewolfRoleType: "HUNTER"
     });
   }
 }

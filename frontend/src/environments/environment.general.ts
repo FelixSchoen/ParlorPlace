@@ -1,4 +1,5 @@
 export const environmentGeneral = {
+  parlorPlace: "ParlorPlace",
   USER_API: "user/",
   GAME_API: "game/",
   ENTRY_URI: "entry/",

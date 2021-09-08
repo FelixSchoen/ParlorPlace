@@ -21,7 +21,7 @@ import {AudioService} from "../../services/audio.service";
   templateUrl: './game-interface.component.html',
   styleUrls: ['./game-interface.component.scss']
 })
-export abstract class GameInterfaceComponent<G extends Game, P extends Player, V extends Vote<any, any>, RP extends ResourcePack> extends GameCommonComponent<G, P> {
+export abstract class GameInterfaceComponent<G extends Game, P extends Player, V extends Vote<any, any, any>, RP extends ResourcePack> extends GameCommonComponent<G, P> {
 
   public hideVotes: boolean = true;
   public hideSleep: boolean = true;
@@ -55,8 +55,12 @@ export abstract class GameInterfaceComponent<G extends Game, P extends Player, V
     });
 
     return _.partition(function (vote: V) {
-      return vote.voteState == VoteState.ONGOING || (new Date().getTime() - vote.endTime * 1000) / 1000 <= 5;
+      return vote.voteState == VoteState.ONGOING;
     }, sorted);
+  }
+
+  voteHideGracePeriod(vote: V): boolean {
+    return (new Date().getTime() - vote.endTime * 1000) / 1000 <= 5;
   }
 
   protected abstract getResourcePack(): RP;
@@ -79,7 +83,7 @@ export abstract class GameInterfaceComponent<G extends Game, P extends Player, V
         });
       }
     } else if (notification.notificationType == NotificationType.PLAYER_NOTIFICATION) {
-      navigator.vibrate([100, 30, 100, 30, 100])
+      navigator.vibrate([150, 30, 150, 30, 150, 30, 150, 30, 150])
     }
   }
 

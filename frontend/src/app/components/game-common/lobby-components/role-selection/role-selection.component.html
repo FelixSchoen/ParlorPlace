@@ -6,21 +6,24 @@
       *ngFor="let role of this.roles | distinct"
       [selectable]="false"
       [removable]="true"
-      (removed)="removeRole(role)">
-      {{this.countRole(role)}}x {{(this.translationPrefix + this.internalRepresentation(role) + ".name") | translate}}
+      (removed)="removeRole(role)"
+      (click)="incrementRole(role)">
+      {{this.countRole(role)}}x {{this.displayRole(role) | async}}
       <mat-icon matChipRemove>cancel</mat-icon>
     </mat-chip>
   </mat-chip-list>
 
   <input matInput
          #roleInput
+         #trigger="matAutocompleteTrigger"
          [formControl]="roleControl"
          [matAutocomplete]="roleAutocomplete"
          [matChipInputFor]="roleChipList">
   <mat-autocomplete #roleAutocomplete="matAutocomplete"
+                    autoActiveFirstOption
                     (optionSelected)="selectAutocomplete($event)">
-    <mat-option *ngFor="let role of this.getArray" [value]="role">
-      {{(this.translationPrefix + this.internalRepresentation(role) + ".name") | translate}}
+    <mat-option *ngFor="let role of this.filteredOptions | async" [value]="role">
+      {{this.displayRole(role) | async}}
     </mat-option>
   </mat-autocomplete>
 </mat-form-field>
@@ -32,7 +35,7 @@
       *ngFor="let role of this.roles | distinct"
       [selectable]="false"
       [removable]="false">
-      {{this.countRole(role)}}x {{(this.translationPrefix + this.internalRepresentation(role) + ".name") | translate}}
+      {{this.countRole(role)}}x {{this.displayRole(role) | async}}
     </mat-chip>
   </mat-chip-list>
 </div>

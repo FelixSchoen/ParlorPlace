@@ -2,9 +2,11 @@ import {Injectable} from "@angular/core";
 
 export enum WerewolfRoleType {
   VILLAGER = "VILLAGER",
+  PURE_VILLAGER = "PURE_VILLAGER",
   WEREWOLF = "WEREWOLF",
   SEER = "SEER",
   WITCH = "WITCH",
+  HUNTER = "HUNTER",
   CUPID = "CUPID",
   BODYGUARD = "BODYGUARD",
   LYCANTHROPE = "LYCANTHROPE",
@@ -20,10 +22,13 @@ export class WerewolfRoleTypeUtil {
   }
 
   public static getArray(): WerewolfRoleType[] {
-    return [WerewolfRoleType.VILLAGER,
+    return [
+      WerewolfRoleType.VILLAGER,
+      WerewolfRoleType.PURE_VILLAGER,
       WerewolfRoleType.WEREWOLF,
       WerewolfRoleType.SEER,
       WerewolfRoleType.WITCH,
+      WerewolfRoleType.HUNTER,
       WerewolfRoleType.CUPID,
       WerewolfRoleType.BODYGUARD,
       WerewolfRoleType.LYCANTHROPE,
