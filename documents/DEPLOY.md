@@ -1,16 +1,26 @@
 # Deploy ParlorPlace
 
-The following guide documents the process of deploying *ParlorPlace* to a local server.
-It is written with *CentOS 8* in mind, commands may change depending on the distribution.
+This following guide document provides information on how to deploy *ParlorPlace*.
+The first section will cover using the provided docker containers, in order to get the backend up and running in a quick fashion (for testing or evaluation).
 
-## Deployment
+The further sections cover the process of permanently deploying it to a *CentOS 8* server.
 
-For the Angular frontend simply run `ng build`.
-For the Spring backend run `mvn install`.
+## Docker
 
+This simple approach allows for getting *ParlorPlace* up and running quicky.
+In order to serve the Angular frontend, simply run `ng serve`.
+Creating a specialized Docker image for serving the frontend was omitted due to the simplicity of serving it, but can be created at a later point in time if demand for it exists.
+
+For the backend we refer to the [Docker Repository](https://hub.docker.com/repository/docker/fschoen/parlorplace), on which you will find images for deploying the backend.
+Pull a Docker image and run it using e.g. the command `docker pull fschoen/parlorplace:v1.0-production` (alternatively use `parlorplace:v1.0-setup`).
+The production version does not create any user accounts, while the setup version creates predefined user accounts, which can be used to test the application.
+
+## CentOS Server
+
+This section will cover permanently deploying the application to a server running *CentOS 8*.
+
+Start by running `ng build` to build the frontend, and `mvn install` to build the backend.
 Copy the generated files onto the CentOS server.
-
-## Setup
 
 ### Java
 
