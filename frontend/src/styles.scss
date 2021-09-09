@@ -6,18 +6,12 @@ $frontend-primary: mat.define-palette(mat.$cyan-palette);
 $frontend-accent: mat.define-palette(mat.$pink-palette);
 $frontend-warn: mat.define-palette(mat.$red-palette);
 
-$mat-light-theme-background: (
-  background: map_get(mat.$cyan-palette, 200)
-);
-
 $light-theme: mat.define-light-theme((
   color: (
     primary: $frontend-primary,
     accent: $frontend-accent,
     warn: $frontend-warn,
-    background: $mat-light-theme-background
-  ),
-  background: $mat-light-theme-background
+  )
 ));
 
 $dark-theme: mat.define-dark-theme((
@@ -53,13 +47,19 @@ $dark-theme: mat.define-dark-theme((
 
 @import 'reset';
 
-html, body {
-  height: 100%;
-}
+//html, body {
+//  height: 100%;
+//}
 
-body {
-  margin: 0;
-  font-family: Roboto, "Helvetica Neue", sans-serif;
+//body {
+//  margin: 0;
+//  font-family: Roboto, "Helvetica Neue", sans-serif;
+//}
+
+.pp-root {
+  //display: flex;
+  min-height: 100vh;
+  //flex-direction: column;
 }
 
 .pp-center {
