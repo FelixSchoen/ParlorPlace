@@ -1,4 +1,4 @@
-﻿package com.fschoen.parlorplace.backend.controller.dto.game;
+package com.fschoen.parlorplace.backend.controller.dto.game;
 
 import com.fschoen.parlorplace.backend.controller.dto.user.UserDTO;
 import com.fschoen.parlorplace.backend.enumeration.CodeName;
