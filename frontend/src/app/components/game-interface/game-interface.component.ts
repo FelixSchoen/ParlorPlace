@@ -9,12 +9,12 @@ import {Player} from "../../dto/player";
 import {GameCommonComponent} from "../game-common/game-common.component";
 import {Vote} from "../../dto/vote";
 import {VoteState} from "../../enums/vote-state";
-import * as _ from "lodash/fp";
 import {ResourcePack} from "../../entities/resource-pack";
 import {LoadJsonService} from "../../services/load-json.service";
 import {ClientNotification, VoiceLineClientNotification} from "../../dto/communication";
 import {NotificationType} from "../../enums/notification-type";
 import {AudioService} from "../../services/audio.service";
+import _ from "lodash";
 
 @Component({
   selector: 'app-game-interface',
@@ -54,9 +54,9 @@ export abstract class GameInterfaceComponent<G extends Game, P extends Player, V
         return a.endTime > b.endTime ? 0 : 1;
     });
 
-    return _.partition(function (vote: V) {
+    return _.partition(sorted, function (vote: V) {
       return vote.voteState == VoteState.ONGOING;
-    }, sorted);
+    });
   }
 
   voteHideGracePeriod(vote: V): boolean {

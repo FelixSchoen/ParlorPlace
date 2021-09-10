@@ -2,22 +2,45 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <version>v1.0</version>
+
     <name>parlorplace</name>
+
     <description>Backend for ParlorPlace</description>
+
     <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.fschoen</groupId>
+
+    <artifactId>backend</artifactId>
+
+    <profiles>
+        <profile>
+            <id>dev</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+        </profile>
+        <profile>
+            <id>production</id>
+            <properties>
+                <activatedProperties>production</activatedProperties>
+            </properties>
+        </profile>
+    </profiles>
+
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
         <version>2.5.2</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
-    <groupId>com.fschoen</groupId>
-    <artifactId>backend</artifactId>
+
     <properties>
         <java.version>16</java.version>
         <jjwt.version>0.11.2</jjwt.version>
         <h2.version>1.4.197</h2.version>
     </properties>
+
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -136,6 +159,7 @@
             <version>5.2.2.RELEASE</version>
         </dependency>
     </dependencies>
+
     <build>
         <plugins>
             <plugin>
