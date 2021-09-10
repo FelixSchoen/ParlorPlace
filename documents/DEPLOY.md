@@ -100,7 +100,7 @@ In order to restart the Apache service (after making some changes to the system)
 We now want to setup Virtual Hosts, which allow us to host multiple sites (or in our case, both the backend and frontend of *ParlorPlace*) on the same server.
 we start by creating a directory for whichever service we are trying to create, using `sudo mkdir -p /var/www/parlorplace.fschoen.com/html`.
 It is important to assign the right ownership of the folder, using `sudo chown -R $USER:apache /var/www/` and `sudo chmod -R 755 /var/www`.
-Furthermore, for the newest installation an application of `sudo chcon -R -h -t httpd_sys_content_t /var/www` was needed.
+Furthermore, for the newest installation an application of `sudo chcon -R -h -t httpd_sys_content_t /var/www` was needed, as well as `/usr/sbin/setsebool -P httpd_can_network_connect 1`.
 At this point in time it can be advantageous to create a sample `index.html` file, in order to check if the service is running correctly.
 
 We move onto creating two new directories, which will later be used to link the Apache config files into the executed configuration.

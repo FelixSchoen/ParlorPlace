@@ -1,4 +1,4 @@
-﻿package com.fschoen.parlorplace.backend.controller.mapper;
+package com.fschoen.parlorplace.backend.controller.mapper;
 
 import com.fschoen.parlorplace.backend.controller.dto.game.PlayerDTO;
 import com.fschoen.parlorplace.backend.entity.Player;

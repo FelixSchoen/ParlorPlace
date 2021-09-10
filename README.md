@@ -63,8 +63,6 @@ Translating this file into your local language allows for new display languages!
 ## Guides
 <a name="Guides"></a>
 
-To get a better grasp of the application, and especially a visual representation of the different components, visit the following [Page](https://reset.inso.tuwien.ac.at/repo/praktika/ParlorPlace/-/wikis/Guide) in the wiki, detailing these aspects.
-
 We provide you with a [Guide on how to create new Characters for Werewolf](documents/werewolf/ROLE_CREATION_GUIDE.md), which should serve as a starting point of creating new roles.
 If you want to create a new role, we would ask you to create a pull request, which will then undergo closer examination.
 Thank you for your help!
@@ -79,7 +77,3 @@ Thank you for your help!
 <a name="Changelog"></a>
 
 To see a changelog regarding the different versions of the application, see [Changelog](documents/CHANGELOG.md)
-
-## Reports
-
-To see the (bi-)weekly reports which cover the work done in this timeframe, visit the [Wiki](https://reset.inso.tuwien.ac.at/repo/praktika/ParlorPlace/-/wikis/Reports/Week28)
