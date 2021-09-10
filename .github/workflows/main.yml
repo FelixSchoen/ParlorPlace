@@ -1,0 +1,41 @@
+name: CI
+
+on:
+  push:
+    branches: [ master, develop ]
+  pull_request:
+    branches: [ master, develop ]
+
+  workflow_dispatch:
+
+jobs:
+  backend-build:
+    runs-on: ubuntu-latest
+    container: maven:3.8.2-openjdk-16
+    steps:
+      - uses: actions/checkout@v2
+      - name: Build Backend
+        run: mvn clean -f ./backend/pom.xml
+
+  frontend-build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+      - name: Build Frontend
+        run: |
+          cd ./frontend
+          npm i -g @angular/cli
+          ng update
+          npm update
+          ng build
+
+  backend-test:
+    runs-on: ubuntu-latest
+    container: maven:3.8.2-openjdk-16
+    steps:
+      - uses: actions/checkout@v2
+      - name: Test Backend
+        run: mvn install -B -f ./backend/pom.xml
