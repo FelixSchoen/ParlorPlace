@@ -1,4 +1,4 @@
-name: CI
+name: CI / Windows
 
 on:
   push:
@@ -10,15 +10,15 @@ on:
 
 jobs:
   backend-build:
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
     container: maven:3.8.2-openjdk-16
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v2s
       - name: Build Backend
         run: mvn clean -f ./backend/pom.xml
 
   frontend-build:
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v2
@@ -33,7 +33,7 @@ jobs:
           ng build
 
   backend-test:
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
     container: maven:3.8.2-openjdk-16
     needs: [backend-build]
     steps:
