@@ -6,11 +6,7 @@ import com.fschoen.parlorplace.backend.controller.dto.game.VoteCollectionDTO;
 import com.fschoen.parlorplace.backend.controller.dto.game.VoteDTO;
 import com.fschoen.parlorplace.backend.game.werewolf.enumeration.WerewolfVoteDescriptor;
 import com.fschoen.parlorplace.backend.game.werewolf.enumeration.WerewolfVoteIdentifier;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
 
 import javax.validation.constraints.NotNull;

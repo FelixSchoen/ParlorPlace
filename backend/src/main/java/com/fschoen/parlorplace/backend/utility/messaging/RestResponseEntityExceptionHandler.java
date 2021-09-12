@@ -1,11 +1,6 @@
 package com.fschoen.parlorplace.backend.utility.messaging;
 
-import com.fschoen.parlorplace.backend.exception.AuthenticationException;
-import com.fschoen.parlorplace.backend.exception.DataConflictException;
-import com.fschoen.parlorplace.backend.exception.GameException;
-import com.fschoen.parlorplace.backend.exception.NotImplementedException;
-import com.fschoen.parlorplace.backend.exception.ValidationException;
-import com.fschoen.parlorplace.backend.exception.VoteException;
+import com.fschoen.parlorplace.backend.exception.*;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

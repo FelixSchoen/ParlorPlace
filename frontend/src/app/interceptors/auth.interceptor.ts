@@ -1,15 +1,15 @@
 import {Injectable} from "@angular/core";
 import {
-  HTTP_INTERCEPTORS, HttpErrorResponse,
+  HTTP_INTERCEPTORS,
+  HttpErrorResponse,
   HttpEvent,
   HttpHandler,
   HttpInterceptor,
-  HttpRequest,
-  HttpResponse
+  HttpRequest
 } from "@angular/common/http";
 import {TokenService} from "../authentication/token.service";
 import {Observable, throwError} from "rxjs";
-import {catchError, map} from "rxjs/operators";
+import {catchError} from "rxjs/operators";
 import {Router} from "@angular/router";
 import {NotificationService} from "../services/notification.service";
 

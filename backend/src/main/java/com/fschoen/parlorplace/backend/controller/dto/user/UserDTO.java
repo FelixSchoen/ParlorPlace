@@ -1,11 +1,7 @@
 package com.fschoen.parlorplace.backend.controller.dto.user;
 
 import com.fschoen.parlorplace.backend.enumeration.UserRole;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
 
 import javax.validation.constraints.NotNull;

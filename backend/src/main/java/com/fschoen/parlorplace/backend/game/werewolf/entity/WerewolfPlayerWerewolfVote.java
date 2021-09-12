@@ -2,21 +2,10 @@ package com.fschoen.parlorplace.backend.game.werewolf.entity;
 
 import com.fschoen.parlorplace.backend.entity.Player;
 import com.fschoen.parlorplace.backend.game.werewolf.enumeration.WerewolfVoteIdentifier;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.Set;
 

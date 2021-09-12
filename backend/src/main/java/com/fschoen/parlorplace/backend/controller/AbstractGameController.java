@@ -1,23 +1,10 @@
 package com.fschoen.parlorplace.backend.controller;
 
-import com.fschoen.parlorplace.backend.controller.dto.game.GameDTO;
-import com.fschoen.parlorplace.backend.controller.dto.game.GameStartRequestDTO;
-import com.fschoen.parlorplace.backend.controller.dto.game.PlayerDTO;
-import com.fschoen.parlorplace.backend.controller.dto.game.RuleSetDTO;
-import com.fschoen.parlorplace.backend.controller.dto.game.VoteCollectionDTO;
+import com.fschoen.parlorplace.backend.controller.dto.game.*;
 import com.fschoen.parlorplace.backend.controller.dto.lobby.LobbyChangeRequestDTO;
 import com.fschoen.parlorplace.backend.controller.dto.user.UserDTO;
-import com.fschoen.parlorplace.backend.controller.mapper.GameMapper;
-import com.fschoen.parlorplace.backend.controller.mapper.PlayerMapper;
-import com.fschoen.parlorplace.backend.controller.mapper.RuleSetMapper;
-import com.fschoen.parlorplace.backend.controller.mapper.UserMapper;
-import com.fschoen.parlorplace.backend.controller.mapper.VoteCollectionMapper;
-import com.fschoen.parlorplace.backend.entity.Game;
-import com.fschoen.parlorplace.backend.entity.GameIdentifier;
-import com.fschoen.parlorplace.backend.entity.Player;
-import com.fschoen.parlorplace.backend.entity.RuleSet;
-import com.fschoen.parlorplace.backend.entity.User;
-import com.fschoen.parlorplace.backend.entity.VoteCollection;
+import com.fschoen.parlorplace.backend.controller.mapper.*;
+import com.fschoen.parlorplace.backend.entity.*;
 import com.fschoen.parlorplace.backend.service.game.AbstractGameService;
 import com.fschoen.parlorplace.backend.service.game.AbstractVoteService;
 import com.fschoen.parlorplace.backend.service.obfuscation.ObfuscationService;

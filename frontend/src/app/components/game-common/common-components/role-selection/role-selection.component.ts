@@ -1,11 +1,12 @@
-import {Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
+import {Component, ElementRef, EventEmitter, Inject, Input, OnInit, Output, ViewChild} from '@angular/core';
 import {Player} from "../../../../dto/player";
 import {MatAutocompleteSelectedEvent, MatAutocompleteTrigger} from "@angular/material/autocomplete";
-import {FormControl} from "@angular/forms";
+import {FormBuilder, FormControl} from "@angular/forms";
 import {removeFromArray} from "../../../../utility/utility";
 import {Observable, of} from "rxjs";
 import {TranslateService} from "@ngx-translate/core";
 import {debounceTime, distinctUntilChanged, startWith, switchMap} from "rxjs/operators";
+import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from "@angular/material/dialog";
 
 @Component({
   selector: 'app-role-selection',
@@ -20,6 +21,7 @@ export class RoleSelectionComponent<R, P extends Player> implements OnInit {
   @Input() getArray: R[];
 
   @Input() translationPrefix: string;
+  @Input() iconRepresentation: (r: R) => string;
   @Input() internalRepresentation: (r: R) => string;
 
   @Output() roleChanged = new EventEmitter<R[]>();
@@ -31,7 +33,8 @@ export class RoleSelectionComponent<R, P extends Player> implements OnInit {
   public filteredOptions: Observable<R[]>;
 
   constructor(
-    private translateService: TranslateService
+    private translateService: TranslateService,
+    private dialog: MatDialog
   ) {
   }
 
@@ -100,6 +103,43 @@ export class RoleSelectionComponent<R, P extends Player> implements OnInit {
   ) {
     this.roles.push(role);
     this.roleChanged.emit(this.roles);
+  }
+
+  openRoleInformationDialog(r: R) {
+    this.dialog.open(DialogContentRoleDialog, {
+      data: {
+        role: r,
+        translationPrefix: this.translationPrefix,
+        iconRepresentation: this.iconRepresentation,
+        internalRepresentation: this.internalRepresentation
+      }
+    })
+  }
+
+}
+
+export interface DialogData<R> {
+  role: R,
+  translationPrefix: string,
+  iconRepresentation: (r: R) => string,
+  internalRepresentation: (r: R) => string,
+}
+
+@Component({
+  selector: "dialog-content-role-dialog",
+  templateUrl: "role.dialog.component.html",
+})
+export class DialogContentRoleDialog<R> implements OnInit {
+
+  constructor(public dialogRef: MatDialogRef<DialogContentRoleDialog<R>>,
+              @Inject(MAT_DIALOG_DATA) public data: DialogData<R>, public formBuilder: FormBuilder) {
+  }
+
+  ngOnInit(): void {
+  }
+
+  onCancel(): void {
+    this.dialogRef.close(this.data);
   }
 
 }

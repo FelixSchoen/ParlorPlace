@@ -2,19 +2,10 @@ package com.fschoen.parlorplace.backend.game.werewolf.entity;
 
 import com.fschoen.parlorplace.backend.entity.RuleSet;
 import com.fschoen.parlorplace.backend.game.werewolf.enumeration.WerewolfRoleType;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
 
-import javax.persistence.Column;
-import javax.persistence.ElementCollection;
-import javax.persistence.Entity;
-import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
+import javax.persistence.*;
 import java.util.List;
 
 @NoArgsConstructor

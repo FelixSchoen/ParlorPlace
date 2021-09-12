@@ -4,12 +4,7 @@ import com.fschoen.parlorplace.backend.game.werewolf.entity.WerewolfGameRole;
 import com.fschoen.parlorplace.backend.game.werewolf.entity.WerewolfPlayer;
 import com.fschoen.parlorplace.backend.game.werewolf.enumeration.WerewolfFaction;
 import com.fschoen.parlorplace.backend.game.werewolf.enumeration.WerewolfRoleType;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
 
 import javax.persistence.Column;

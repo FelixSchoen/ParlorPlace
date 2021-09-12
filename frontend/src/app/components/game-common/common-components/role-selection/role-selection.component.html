@@ -34,7 +34,8 @@
     <mat-chip
       *ngFor="let role of this.roles | distinct"
       [selectable]="false"
-      [removable]="false">
+      [removable]="false"
+      (click)="openRoleInformationDialog(role)">
       {{this.countRole(role)}}x {{this.displayRole(role) | async}}
     </mat-chip>
   </mat-chip-list>

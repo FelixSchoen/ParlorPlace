@@ -2,11 +2,7 @@ package com.fschoen.parlorplace.backend.game.werewolf.dto.lobby;
 
 import com.fschoen.parlorplace.backend.controller.dto.lobby.LobbyChangeRequestDTO;
 import com.fschoen.parlorplace.backend.game.werewolf.dto.game.WerewolfPlayerDTO;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
 
 import javax.validation.Valid;
