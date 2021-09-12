@@ -2,7 +2,11 @@ package com.fschoen.parlorplace.backend.integration.controller;
 
 import com.fschoen.parlorplace.backend.controller.dto.authentication.TokenRefreshRequestDTO;
 import com.fschoen.parlorplace.backend.controller.dto.authentication.TokenRefreshResponseDTO;
-import com.fschoen.parlorplace.backend.controller.dto.user.*;
+import com.fschoen.parlorplace.backend.controller.dto.user.UserDTO;
+import com.fschoen.parlorplace.backend.controller.dto.user.UserLoginRequestDTO;
+import com.fschoen.parlorplace.backend.controller.dto.user.UserLoginResponseDTO;
+import com.fschoen.parlorplace.backend.controller.dto.user.UserRegisterRequestDTO;
+import com.fschoen.parlorplace.backend.controller.dto.user.UserUpdateRequestDTO;
 import com.fschoen.parlorplace.backend.entity.User;
 import com.fschoen.parlorplace.backend.enumeration.UserRole;
 import com.fschoen.parlorplace.backend.integration.base.BaseIntegrationTest;
