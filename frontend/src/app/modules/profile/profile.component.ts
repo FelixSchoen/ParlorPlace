@@ -21,6 +21,7 @@ import {environment} from "../../../environments/environment";
 import {WerewolfGameService} from "../../services/werewolf-game.service";
 import {GeneralGameService} from "../../services/general-game.service";
 import {AbstractGameService} from "../../services/abstract-game.service";
+import {AuthService} from "../../authentication/auth.service";
 
 @Component({
   selector: 'app-profile',
