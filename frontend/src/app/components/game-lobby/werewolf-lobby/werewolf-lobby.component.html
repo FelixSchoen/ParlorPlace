@@ -59,6 +59,7 @@
                                 [mayEdit]="isLobbyAdmin"
                                 [getArray]="werewolfRoleTypeArray"
                                 [translationPrefix]="'werewolf.role.'"
+                                [iconRepresentation]="this.werewolfRoleTypeUtil.toIconRepresentation"
                                 [internalRepresentation]="this.werewolfRoleTypeUtil.toInternalRepresentation"
                                 (roleChanged)="changeRoles($event)"></app-role-selection>
 

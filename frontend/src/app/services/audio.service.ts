@@ -51,7 +51,7 @@ export class AudioService {
           })
         },
         error: () => {
-          console.error("Could not load audio file: " + voiceline)
+          console.error()
           this.startable = true;
         }
       })

@@ -1,0 +1,31 @@
+<h2 mat-dialog-title>{{"general.other.roleInformation" | translate}}</h2>
+
+<mat-dialog-content class="mat-typography pp-center">
+
+  <div>
+    <div class="flex-row mt-5 pp-center">
+      <div class="col icon-container" style="max-width: 50% !important;">
+        <mat-icon inline="true"
+                  svgIcon="{{this.data.iconRepresentation(this.data.role)}}"></mat-icon>
+      </div>
+    </div>
+    <div class="flex-row mt-5">
+      <div class="col">
+        <div>
+          <h3>{{("werewolf.role." + this.data.internalRepresentation(this.data.role) + ".name") | translate}}</h3>
+        </div>
+      </div>
+    </div>
+    <div class="flex-row mt-1">
+      <div class="col">
+        <div>
+          {{("werewolf.role." + this.data.internalRepresentation(this.data.role) + ".description") | translate}}</div>
+      </div>
+    </div>
+  </div>
+
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="onCancel()">{{"general.action.close" | translate}}</button>
+</mat-dialog-actions>

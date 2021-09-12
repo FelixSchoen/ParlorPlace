@@ -47,7 +47,7 @@ export class WerewolfRoleTypeUtil {
   }
 
   public static toIconRepresentation(type: WerewolfRoleType): string {
-    return "duotone-" + this.toInternalRepresentation(type);
+    return "duotone-" + WerewolfRoleTypeUtil.toInternalRepresentation(type);
   }
 
 }

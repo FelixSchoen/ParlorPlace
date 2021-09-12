@@ -32,8 +32,8 @@ export abstract class GameLobbyComponent<G extends Game, P extends Player> exten
 
   public startGame(): void {
     this.gameService.startGame(this.gameIdentifier).subscribe({
-      error: error => this.notificationService.showError(error.error)
-    })
+      error: () => {}
+    });
   }
 
   public quitLobby(user: User | null): void {

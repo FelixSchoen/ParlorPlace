@@ -12,7 +12,7 @@ import {WerewolfGameService} from "../../../services/werewolf-game.service";
 import {CommunicationService} from "../../../services/communication.service";
 import {NotificationService} from "../../../services/notification.service";
 import {ActivatedRoute, Router} from "@angular/router";
-import {WerewolfRoleType} from "../../../enums/games/werewolf-role-type";
+import {WerewolfRoleType, WerewolfRoleTypeUtil} from "../../../enums/games/werewolf-role-type";
 import {LogEntryListComponent} from "../../game-common/interface-components/log-entry-list/log-entry-list.component";
 import {WerewolfResourcePack} from "../../../entities/resource-pack";
 import {LoadJsonService} from "../../../services/load-json.service";
@@ -52,6 +52,8 @@ export class WerewolfInterfaceComponent extends GameInterfaceComponent<WerewolfG
     WerewolfLogType.LOVERS_LOVE]
 
   public werewolfVoteIdentifier = WerewolfVoteIdentifier;
+
+  public werewolfRoleTypeArray: WerewolfRoleType[] = WerewolfRoleTypeUtil.getArray();
 
   constructor(
     public userService: UserService,
