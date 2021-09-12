@@ -196,6 +196,17 @@
                     {{("werewolf.role." + this.werewolfRoleTypeUtil.toInternalRepresentation(this.getCurrentRoleTypeCurrentPlayer()) + ".description") | translate}}</div>
                 </div>
               </div>
+              <div class="flex-row mt-5">
+                <div class="col">
+                  <h3>
+                    <app-role-selection [roles]="game.ruleSet.gameRoleTypes"
+                                        [currentPlayer]="currentPlayer"
+                                        [getArray]="werewolfRoleTypeArray"
+                                        [translationPrefix]="'werewolf.role.'"
+                                        [internalRepresentation]="this.werewolfRoleTypeUtil.toInternalRepresentation"></app-role-selection>
+                  </h3>
+                </div>
+              </div>
             </div>
 
           </mat-card-content>

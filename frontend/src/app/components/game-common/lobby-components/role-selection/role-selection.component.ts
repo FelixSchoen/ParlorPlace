@@ -16,7 +16,7 @@ export class RoleSelectionComponent<R, P extends Player> implements OnInit {
 
   @Input() roles: R[];
   @Input() currentPlayer: P;
-  @Input() mayEdit: (player: Player) => boolean;
+  @Input() mayEdit: (player: Player) => boolean = () => false;
   @Input() getArray: R[];
 
   @Input() translationPrefix: string;
@@ -99,6 +99,7 @@ export class RoleSelectionComponent<R, P extends Player> implements OnInit {
     role: R
   ) {
     this.roles.push(role);
+    this.roleChanged.emit(this.roles);
   }
 
 }
