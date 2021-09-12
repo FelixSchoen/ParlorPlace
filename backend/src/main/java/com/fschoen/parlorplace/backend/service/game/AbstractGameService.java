@@ -176,6 +176,12 @@ public abstract class AbstractGameService<
                 ).setLobbyRole(LobbyRole.ROLE_ADMIN);
             }
 
+            for (P existingPlayer : game.getPlayers()) {
+                if (existingPlayer.getPosition() > player.getPosition())
+                    existingPlayer.setPosition(existingPlayer.getPosition() - 1);
+            }
+
+
             saveAndBroadcast(game);
         } else {
             player.setDisconnected(true);
@@ -203,11 +209,11 @@ public abstract class AbstractGameService<
         )
             throw new DataConflictException(Messages.exception(MessageIdentifier.GAME_MODIFY_INVALID));
 
-        players.forEach(requestPlayer -> {
+        for (P requestPlayer : players) {
             P foundPlayer = game.getPlayers().stream().filter(existingPlayer ->
-                    existingPlayer.getUser().equals(requestPlayer.getUser())).findFirst().orElseThrow(() -> invalidRequestException);
+                    existingPlayer.getUser().getId().equals(requestPlayer.getUser().getId())).findFirst().orElseThrow(() -> invalidRequestException);
             foundPlayer.setPosition(requestPlayer.getPosition());
-        });
+        }
 
         return saveAndBroadcast(game);
     }
