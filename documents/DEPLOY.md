@@ -47,28 +47,6 @@ export PATH=$PATH:$JAVA_HOME/bin
 
 After adjusting all these settings, we can check for a successful installation of Java using `java --version`, it should yield information about the Java installation.
 
-<!-- ## Configure System Service
-
-Create file under `usr/lib/systemd/system` named `ppbackend.service` with following content:
-
-```
-[Unit]
-Description=ParlorPlace Backend Server Daemon
-
-[Service]
-ExecStart=/usr/bin/java -jar -Dspring.profiles.active=production
-/root/app/ppbackend.jar
-User=root
-WorkingDirectory=/root
-
-[Install]
-WantedBy=multi-user.target
-```
-
-## Create executable file
-
-Create file with `java -jar -Dspring.profiles.active=production ppbackend.jar`, make it runnable and run it with `./start.sh` -->
-
 ## Apache
 
 The Apache installation is responsible for serving both our frontend and backend.
@@ -294,6 +272,10 @@ Just a brief explanation of the files:
 The frontend file simply contains predefined Angular directives, which were taken from the official website, and serves straight up HTTP/S.
 
 The backend file has a redirection to the frontend for any request not containing either `/api` or `/comm`, and a ProxyPass in order to hand off requests to the locally running backend.
+
+## Useful commands
+
+For generating a jwt secret: `node -e "console.log(require('crypto').randomBytes(256).toString('base64'));"`
 
 ## Useful Links
 

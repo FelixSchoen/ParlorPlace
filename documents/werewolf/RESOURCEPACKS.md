@@ -85,6 +85,7 @@
 - Die Hexe {player} hext ein wenig herum!
 - Was für Unfug die Hexe {player} wohl heute wieder treibt?
 - Die Hexe {player} erwacht, und ich hoffe sie hat das eine oder andere Tränkchen für mich dabei...
+- Die Emma... ähh Hexe {player} wacht auf!
 
 #### Hunter
 
