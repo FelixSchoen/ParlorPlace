@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     container: maven:3.8.2-openjdk-16
     steps:
-      - uses: actions/checkout@v2s
+      - uses: actions/checkout@v2
       - name: Build Backend
         run: mvn clean -f ./backend/pom.xml
 
