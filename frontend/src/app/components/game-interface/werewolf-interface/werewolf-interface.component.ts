@@ -1,4 +1,4 @@
-import {Component, ViewChild} from '@angular/core';
+import {ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewChild} from '@angular/core';
 import {GameInterfaceComponent} from "../game-interface.component";
 import {
   WerewolfGame,
@@ -27,7 +27,8 @@ import {TabTitleService} from "../../../services/tab-title.service";
 @Component({
   selector: 'app-werewolf-interface',
   templateUrl: './werewolf-interface.component.html',
-  styleUrls: ['./werewolf-interface.component.scss']
+  styleUrls: ['./werewolf-interface.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class WerewolfInterfaceComponent extends GameInterfaceComponent<WerewolfGame, WerewolfPlayer, WerewolfPlayerWerewolfVote, WerewolfResourcePack> {
 
@@ -64,9 +65,10 @@ export class WerewolfInterfaceComponent extends GameInterfaceComponent<WerewolfG
     public audioService: AudioService,
     public loadJsonService: LoadJsonService,
     public activatedRoute: ActivatedRoute,
+    public ref: ChangeDetectorRef,
     public router: Router
   ) {
-    super(userService, gameService, communicationService, notificationService, audioService, loadJsonService, activatedRoute, router)
+    super(userService, gameService, communicationService, notificationService, audioService, loadJsonService, activatedRoute, ref, router)
     this.viewedRole = false;
   }
 

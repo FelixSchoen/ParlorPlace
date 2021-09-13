@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import {ChangeDetectionStrategy, ChangeDetectorRef, Component} from '@angular/core';
 import {GameLobbyComponent} from "../game-lobby.component";
 import {ActivatedRoute, Router} from "@angular/router";
 import {NotificationService} from "../../../services/notification.service";
@@ -12,7 +12,8 @@ import {WerewolfResourcePackType, WerewolfResourcePackTypeUtil} from "../../../e
 @Component({
   selector: 'app-werewolf-lobby',
   templateUrl: './werewolf-lobby.component.html',
-  styleUrls: ['./werewolf-lobby.component.scss']
+  styleUrls: ['./werewolf-lobby.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class WerewolfLobbyComponent extends GameLobbyComponent<WerewolfGame, WerewolfPlayer> {
 
@@ -25,15 +26,16 @@ export class WerewolfLobbyComponent extends GameLobbyComponent<WerewolfGame, Wer
     public communicationService: CommunicationService,
     public notificationService: NotificationService,
     public activatedRoute: ActivatedRoute,
+    public ref: ChangeDetectorRef,
     public router: Router
   ) {
-    super(userService, gameService, communicationService, notificationService, activatedRoute, router)
+    super(userService, gameService, communicationService, notificationService, activatedRoute, ref, router)
   }
 
   changeLobby(): void {
     let lobbyChangeRequest = new WerewolfLobbyChangeRequest(this.game.players, this.game.ruleSet);
     this.gameService.changeLobby(this.gameIdentifier, lobbyChangeRequest).subscribe(
-      () => this.refreshGame(),
+      () => this.update(),
       (error => this.notificationService.showError(error.error))
     );
   }
