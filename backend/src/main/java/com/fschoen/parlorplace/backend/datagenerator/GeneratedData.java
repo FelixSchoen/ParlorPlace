@@ -40,6 +40,10 @@ public class GeneratedData {
 
         private List<User> werewolfLobbyGame1Users;
 
+        private WerewolfGame werewolfLobbyGame2;
+
+        private List<User> werewolfLobbyGame2Users;
+
         private WerewolfGame werewolfOngoingGame1;
 
         private List<User> werewolfOngoingGame1Users;

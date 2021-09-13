@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import {ChangeDetectorRef, Component} from '@angular/core';
 import {UserService} from "../../services/user.service";
 import {AbstractGameService} from "../../services/abstract-game.service";
 import {CommunicationService} from "../../services/communication.service";
@@ -37,9 +37,10 @@ export abstract class GameInterfaceComponent<G extends Game, P extends Player, V
     public audioService: AudioService,
     public loadJsonService: LoadJsonService,
     public activatedRoute: ActivatedRoute,
+    public ref: ChangeDetectorRef,
     public router: Router,
   ) {
-    super(userService, gameService, communicationService, notificationService, activatedRoute, router);
+    super(userService, gameService, communicationService, notificationService, activatedRoute, ref, router);
   }
 
   sortVotes(votes: V[]): V[][] {

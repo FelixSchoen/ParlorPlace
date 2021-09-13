@@ -101,6 +101,10 @@
 
   </mat-tab-group>
 
+  <div class="pp-center pt-3">
+    <button mat-button color="accent" (click)="goHome()">{{"general.action.goHome" | translate}}</button>
+  </div>
+
   <!-- Loading Indicator -->
   <div class="d-flex justify-content-center align-items-center h-100" *ngIf="loading">
     <app-loading-indicator [loading]="loading" [errorMessage]="errorMessage"></app-loading-indicator>

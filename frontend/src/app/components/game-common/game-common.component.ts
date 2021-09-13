@@ -1,4 +1,4 @@
-import {Directive, OnDestroy, OnInit} from '@angular/core';
+import {ChangeDetectorRef, Directive, OnDestroy, OnInit} from '@angular/core';
 import {environment} from "../../../environments/environment";
 import {Game, GameIdentifier} from "../../dto/game";
 import {CompatClient} from "@stomp/stompjs/esm6/compatibility/compat-client";
@@ -41,6 +41,7 @@ export abstract class GameCommonComponent<G extends Game, P extends Player> impl
     public communicationService: CommunicationService,
     public notificationService: NotificationService,
     public activatedRoute: ActivatedRoute,
+    public ref: ChangeDetectorRef,
     public router: Router,
   ) {
   }
@@ -48,7 +49,7 @@ export abstract class GameCommonComponent<G extends Game, P extends Player> impl
   ngOnInit(): void {
     this.initialize();
     this.initializeSocket();
-    this.refreshGame();
+    this.update();
   }
 
   ngOnDestroy(): void {
@@ -56,8 +57,37 @@ export abstract class GameCommonComponent<G extends Game, P extends Player> impl
     this.communicationService.disconnectSocket(this.secondaryClient);
   }
 
-  public isLobbyAdmin(player: P) {
-    return player.lobbyRole == "ROLE_ADMIN"
+  protected update(): void {
+    this.gameService.getActiveGame(this.gameIdentifier).subscribe(
+      {
+        next: (result: G) => {
+          // Redirect to game interface
+          if (this.game != undefined && this.game.gameState == GameState.LOBBY && result.gameState != GameState.LOBBY) {
+            const currentUrl = this.router.url
+            this.router.navigateByUrl("/", {skipLocationChange: true}).then(() => {
+              this.router.navigate([currentUrl]).then();
+            })
+            return;
+          }
+
+          // Load game
+          this.game = result
+          this.userService.getCurrentUser().subscribe(
+            {
+              next: (user: User) => {
+                this.currentPlayer = <P>[...this.game.players].filter(function (player) {
+                  return player.user.id == user.id;
+                })[0];
+                this.loadedGameCallback();
+                this.loading = false;
+                this.ref.markForCheck();
+              }
+            }
+          )
+        },
+        error: () => this.router.navigate([environment.general.PROFILE_URI]).then()
+      }
+    )
   }
 
   protected initialize(): void {
@@ -77,36 +107,6 @@ export abstract class GameCommonComponent<G extends Game, P extends Player> impl
       });
   }
 
-  protected refreshGame(): void {
-    this.gameService.getActiveGame(this.gameIdentifier).subscribe(
-      {
-        next: (result: G) => {
-          if (this.game != undefined && this.game.gameState == GameState.LOBBY && result.gameState != GameState.LOBBY) {
-            const currentUrl = this.router.url
-            this.router.navigateByUrl("/", {skipLocationChange: true}).then(() => {
-              this.router.navigate([currentUrl]).then();
-            })
-            return;
-          }
-
-          this.game = result
-          this.userService.getCurrentUser().subscribe(
-            {
-              next: (user: User) => {
-                this.currentPlayer = <P>[...this.game.players].filter(function (player) {
-                  return player.user.id == user.id;
-                })[0];
-                this.loadedGameCallback();
-                this.loading = false;
-              }
-            }
-          )
-        },
-        error: () => this.router.navigate([environment.general.PROFILE_URI]).then()
-      }
-    )
-  }
-
   // Callbacks
 
   protected abstract loadedGameCallback(): void;
@@ -115,7 +115,7 @@ export abstract class GameCommonComponent<G extends Game, P extends Player> impl
     let notification: ClientNotification = JSON.parse(payload.body);
 
     if (notification.notificationType == NotificationType.STALE_GAME_INFORMATION) {
-      this.refreshGame();
+      this.update();
     } else if (notification.notificationType == NotificationType.GAME_ENDED_INFORMATION) {
       if (this.game != undefined) {
         this.router.navigate([environment.general.LIBRARY_URI + this.game.id], {
@@ -131,5 +131,11 @@ export abstract class GameCommonComponent<G extends Game, P extends Player> impl
   }
 
   protected abstract subscribeSecondaryCallback(payload: any): any;
+
+  // Utility
+
+  public isLobbyAdmin(player: P) {
+    return player.lobbyRole == "ROLE_ADMIN"
+  }
 
 }
