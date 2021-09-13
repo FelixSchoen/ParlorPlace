@@ -64,7 +64,7 @@ public abstract class AbstractVoteService<
 
     private static final ResourceBundle resourceBundle = ResourceBundle.getBundle("values.werewolf-values");
 
-    private static final long VOTE_GRACE_PERIOD_DURATION = Integer.parseInt(resourceBundle.getString(WerewolfValueIdentifier.VOTE_GRACE_PERIOD_DURATION));
+    private static final long VOTE_GRACE_PERIOD_DURATION = Long.parseLong(resourceBundle.getString(WerewolfValueIdentifier.VOTE_GRACE_PERIOD_DURATION));
 
     public AbstractVoteService(CommunicationService communicationService, UserRepository userRepository, GRepo gameRepository, PRepo playerRepository, VRepo voteRepository, TaskExecutor taskExecutor) {
         super(communicationService, userRepository, gameRepository);
@@ -74,7 +74,7 @@ public abstract class AbstractVoteService<
         this.taskExecutor = taskExecutor;
     }
 
-    public CompletableFuture<V> requestVote(GameIdentifier gameIdentifier, VoteType voteType, VoteDrawStrategy voteDrawStrategy, Integer outcomeAmount, Map<Long, C> voteCollectionMap, D voteDescriptor, Integer round, Integer durationInSeconds) {
+    public CompletableFuture<V> requestVote(GameIdentifier gameIdentifier, VoteType voteType, VoteDrawStrategy voteDrawStrategy, Integer outcomeAmount, Map<Long, C> voteCollectionMap, D voteDescriptor, Integer round, Long duration) {
         log.info("Starting new Vote for Game: {}", gameIdentifier.getToken());
 
         G game = getActiveGame(gameIdentifier);
@@ -95,7 +95,7 @@ public abstract class AbstractVoteService<
             vote.setOutcomeAmount(outcomeAmount);
             vote.setVoteDescriptor(voteDescriptor);
             vote.setRound(round);
-            vote.setEndTime(Instant.now().plusSeconds(durationInSeconds));
+            vote.setEndTime(Instant.now().plusMillis(duration));
         } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
             throw new DataConflictException(Messages.exception(MessageIdentifier.VOTE_TYPE_MISMATCH), e);
         }
@@ -109,7 +109,7 @@ public abstract class AbstractVoteService<
 
         sendGameStaleNotification(game, vote);
 
-        VoteConcludeTask voteConcludeTask = new VoteConcludeTask(vote.getId(), (long) (durationInSeconds * 1000), true, game.getGameIdentifier());
+        VoteConcludeTask voteConcludeTask = new VoteConcludeTask(vote.getId(), duration, true, game.getGameIdentifier());
         taskExecutor.execute(voteConcludeTask);
 
         return completableFuture;

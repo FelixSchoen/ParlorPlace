@@ -31,6 +31,7 @@ import com.fschoen.parlorplace.backend.game.werewolf.utility.WerewolfValueIdenti
 import com.fschoen.parlorplace.backend.game.werewolf.utility.WerewolfVoiceLineClientNotification;
 import com.fschoen.parlorplace.backend.repository.UserRepository;
 import com.fschoen.parlorplace.backend.service.CommunicationService;
+import com.fschoen.parlorplace.backend.service.FakeService;
 import com.fschoen.parlorplace.backend.service.game.AbstractGameModerator;
 import com.fschoen.parlorplace.backend.utility.messaging.MessageIdentifier;
 import com.fschoen.parlorplace.backend.utility.messaging.Messages;
@@ -72,22 +73,24 @@ public class WerewolfGameModerator extends AbstractGameModerator<
         > {
 
     private final WerewolfPlayerWerewolfVoteService playerVoteService;
+    private final FakeService fakeService;
 
     private static final ResourceBundle resourceBundle = ResourceBundle.getBundle("values.werewolf-values");
 
-    private final int WAIT_TIME_SOCKETS_ESTABLISHED = Integer.parseInt(resourceBundle.getString(WerewolfValueIdentifier.WAIT_TIME_SOCKETS_ESTABLISHED));
-    private final int WAIT_TIME_INITIAL_ROLES = Integer.parseInt(resourceBundle.getString(WerewolfValueIdentifier.WAIT_TIME_INITIAL_ROLES));
-    private final int WAIT_TIME_BETWEEN_CONSECUTIVE_EVENTS = Integer.parseInt(resourceBundle.getString(WerewolfValueIdentifier.WAIT_TIME_BETWEEN_CONSECUTIVE_EVENTS));
-    private final int WAIT_TIME_SHORT_BUFFER = Integer.parseInt(resourceBundle.getString(WerewolfValueIdentifier.WAIT_TIME_SHORT_BUFFER));
-    private final int WAIT_TIME_NEW_INFORMATION = Integer.parseInt(resourceBundle.getString(WerewolfValueIdentifier.WAIT_TIME_NEW_INFORMATION));
+    private final long WAIT_TIME_SOCKETS_ESTABLISHED = Long.parseLong(resourceBundle.getString(WerewolfValueIdentifier.WAIT_TIME_SOCKETS_ESTABLISHED));
+    private final long WAIT_TIME_INITIAL_ROLES = Long.parseLong(resourceBundle.getString(WerewolfValueIdentifier.WAIT_TIME_INITIAL_ROLES));
+    private final long WAIT_TIME_BETWEEN_CONSECUTIVE_EVENTS = Long.parseLong(resourceBundle.getString(WerewolfValueIdentifier.WAIT_TIME_BETWEEN_CONSECUTIVE_EVENTS));
+    private final long WAIT_TIME_SHORT_BUFFER = Long.parseLong(resourceBundle.getString(WerewolfValueIdentifier.WAIT_TIME_SHORT_BUFFER));
+    private final long WAIT_TIME_NEW_INFORMATION = Long.parseLong(resourceBundle.getString(WerewolfValueIdentifier.WAIT_TIME_NEW_INFORMATION));
 
-    private final int VOTE_TIME_INDIVIDUAL_VOTE = Integer.parseInt(resourceBundle.getString(WerewolfValueIdentifier.VOTE_TIME_INDIVIDUAL_VOTE));
-    private final int VOTE_TIME_GROUP_VOTE = Integer.parseInt(resourceBundle.getString(WerewolfValueIdentifier.VOTE_TIME_GROUP_VOTE));
-    private final int VOTE_TIME_ALL_VOTE = Integer.parseInt(resourceBundle.getString(WerewolfValueIdentifier.VOTE_TIME_ALL_VOTE));
+    private final long VOTE_TIME_INDIVIDUAL_VOTE = Long.parseLong(resourceBundle.getString(WerewolfValueIdentifier.VOTE_TIME_INDIVIDUAL_VOTE));
+    private final long VOTE_TIME_GROUP_VOTE = Long.parseLong(resourceBundle.getString(WerewolfValueIdentifier.VOTE_TIME_GROUP_VOTE));
+    private final long VOTE_TIME_ALL_VOTE = Long.parseLong(resourceBundle.getString(WerewolfValueIdentifier.VOTE_TIME_ALL_VOTE));
 
     @Autowired
-    public WerewolfGameModerator(WerewolfPlayerWerewolfVoteService playerVoteService, CommunicationService communicationService, UserRepository userRepository, WerewolfGameRepository gameRepository, WerewolfPlayerRepository playerRepository, WerewolfLogEntryRepository logEntryRepository) {
+    public WerewolfGameModerator(WerewolfPlayerWerewolfVoteService playerVoteService, FakeService fakeService, CommunicationService communicationService, UserRepository userRepository, WerewolfGameRepository gameRepository, WerewolfPlayerRepository playerRepository, WerewolfLogEntryRepository logEntryRepository) {
         super(communicationService, userRepository, gameRepository, playerRepository, logEntryRepository);
+        this.fakeService = fakeService;
         this.playerVoteService = playerVoteService;
     }
 
@@ -109,6 +112,7 @@ public class WerewolfGameModerator extends AbstractGameModerator<
 
         try {
             // Check if selection of roles makes game end instantly
+
             checkGameEnded();
 
             while (true) {
@@ -325,8 +329,7 @@ public class WerewolfGameModerator extends AbstractGameModerator<
     private void processAllWitches() throws ExecutionException, InterruptedException {
         Set<WerewolfPlayer> witches = getAlivePlayersOfLastRoleType(WerewolfRoleType.WITCH);
         for (WerewolfPlayer witch : witches)
-            if (!((WitchWerewolfGameRole) getLastRole(witch)).hasHealed() || !((WitchWerewolfGameRole) getLastRole(witch)).hasKilled())
-                processWitch(witch);
+            processWitch(witch);
     }
 
     private void processWitch(WerewolfPlayer witch) throws ExecutionException, InterruptedException {
@@ -336,11 +339,12 @@ public class WerewolfGameModerator extends AbstractGameModerator<
 
         // --- Logic Start ---
 
-        Instant startTime = Instant.now();
-
         WitchWerewolfGameRole witchWerewolfGameRole = (WitchWerewolfGameRole) getLastRole(witch);
 
-        if (!witchWerewolfGameRole.hasHealed()) {
+        boolean hasHealed = witchWerewolfGameRole.hasHealed();
+        boolean hasKilled = witchWerewolfGameRole.hasKilled();
+
+        if (!hasHealed) {
             Set<WerewolfPlayer> validHealTargets = new HashSet<>();
             getVotesInRoundOfVoteDescriptor(getCurrentRound(), WerewolfVoteDescriptor.WEREWOLVES_KILL).forEach(vote -> validHealTargets.addAll(vote.getOutcome()));
 
@@ -372,7 +376,7 @@ public class WerewolfGameModerator extends AbstractGameModerator<
             }
         }
 
-        if (!witchWerewolfGameRole.hasKilled()) {
+        if (!hasKilled) {
             Set<WerewolfPlayer> validKillTargets = getAlivePlayers();
 
             CompletableFuture<WerewolfPlayerWerewolfVote> witchKillVoteFuture = this.playerVoteService.requestVote(
@@ -403,6 +407,12 @@ public class WerewolfGameModerator extends AbstractGameModerator<
                 saveAndSend(game, witchSet);
             }
         }
+
+        // Fake Actions
+        if (hasHealed)
+            this.fakeService.fakeTimeND(VOTE_TIME_INDIVIDUAL_VOTE/2, WAIT_TIME_BETWEEN_CONSECUTIVE_EVENTS, VOTE_TIME_INDIVIDUAL_VOTE);
+        if (hasKilled)
+            this.fakeService.fakeTimeND(VOTE_TIME_INDIVIDUAL_VOTE/2, WAIT_TIME_BETWEEN_CONSECUTIVE_EVENTS, VOTE_TIME_INDIVIDUAL_VOTE);
 
         // --- Logic End ---
 
