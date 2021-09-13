@@ -108,8 +108,6 @@ public abstract class Vote<
 
     public abstract void setOutcome(Set<T> tSet);
 
-    // TODO Not ideal, I would have preferred to have this as a field, but since enums cannot inherit I cannot specify a supertype using targetEntity=
-
     public abstract D getVoteIdentifier();
 
     public abstract void setVoteIdentifier(D d);

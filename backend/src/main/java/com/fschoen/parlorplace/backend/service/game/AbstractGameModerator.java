@@ -113,7 +113,7 @@ public abstract class AbstractGameModerator<
                 .add(finalRightNeighbour).build();
     }
 
-    protected void pause(int pauseTime) {
+    protected void pause(long pauseTime) {
         try {
             Thread.sleep(pauseTime);
         } catch (InterruptedException e) {
