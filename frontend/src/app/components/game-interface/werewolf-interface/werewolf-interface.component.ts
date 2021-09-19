@@ -44,6 +44,7 @@ export class WerewolfInterfaceComponent extends GameInterfaceComponent<WerewolfG
 
   public activeVotes: WerewolfVote<any, any>[];
   public concludedVotes: WerewolfVote<any, any>[];
+  public votableVotes: WerewolfVote<any, any>[];
 
   private previousLog: WerewolfLogEntry[] = [];
   // Defines for which type of log a badge should be shown under the log tab
@@ -103,8 +104,13 @@ export class WerewolfInterfaceComponent extends GameInterfaceComponent<WerewolfG
 
     this.activeVotes = this.sortVotes(this.game.votes)[0];
     this.concludedVotes = this.sortVotes(this.game.votes)[1];
+    this.votableVotes = this.activeVotes.filter(vote =>
+      _.findIndex([...vote.voters], (a) => {
+        return a.id == this.currentPlayer.id;
+      }) > -1
+    )
 
-    this.tabTitleService.setNotification(this.activeVotes.length);
+    this.tabTitleService.setNotification(this.votableVotes.length);
 
     let missing = this.game.log.filter(item => _.findIndex(this.previousLog, (a) => {
       return _.isEqual(a, item)
