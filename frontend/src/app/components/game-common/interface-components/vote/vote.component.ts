@@ -16,6 +16,7 @@ export abstract class VoteComponent<G extends Game, P extends Player, V extends 
   @Input() public players: Set<P>;
   @Input() public vote: V;
 
+  public isVoter: boolean;
   public countDown: Subscription;
   public voteMap: Map<number, C>;
   public votersData: [P, C][];
@@ -46,6 +47,10 @@ export abstract class VoteComponent<G extends Game, P extends Player, V extends 
   }
 
   update(): void {
+    this.isVoter = _.findIndex([...this.vote.voters], (a) => {
+      return a.id == this.currentPlayer.id;
+    }) > -1;
+
     this.voteMap = VoteUtil.toMap<C>(this.vote.voteCollectionMap);
     this.votersData = this.getData();
 
@@ -72,6 +77,7 @@ export abstract class VoteComponent<G extends Game, P extends Player, V extends 
     this.isSelected = isSelected;
     this.ref.markForCheck();
   }
+
   public selectOption(t: T) {
     let voteCollection = this.voteMap.get(this.currentPlayer.id);
     if (voteCollection == undefined) return;
