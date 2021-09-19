@@ -1,5 +1,6 @@
 package com.fschoen.parlorplace.backend.game.werewolf.service;
 
+import com.fschoen.parlorplace.backend.enumeration.PlayerState;
 import com.fschoen.parlorplace.backend.game.werewolf.entity.WerewolfGame;
 import com.fschoen.parlorplace.backend.game.werewolf.entity.WerewolfPlayer;
 import com.fschoen.parlorplace.backend.game.werewolf.entity.WerewolfPlayerVoteCollection;
@@ -16,6 +17,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.task.TaskExecutor;
 import org.springframework.stereotype.Service;
+
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -44,6 +48,13 @@ public class WerewolfPlayerWerewolfVoteService extends AbstractVoteService<
     @Override
     protected Class<WerewolfPlayerVoteCollection> getVoteCollectionClass() {
         return WerewolfPlayerVoteCollection.class;
+    }
+
+    @Override
+    protected Set<WerewolfPlayer> getGameStaleNotificationRecipients(WerewolfGame game, WerewolfPlayerWerewolfVote vote) {
+        Set<WerewolfPlayer> players = super.getGameStaleNotificationRecipients(game, vote);
+        players.addAll(game.getPlayers().stream().filter(player -> player.getPlayerState() == PlayerState.DECEASED).collect(Collectors.toSet()));
+        return players;
     }
 
 }

@@ -125,22 +125,22 @@ public abstract class AbstractVoteService<
 
         G game = this.getActiveGame(gameIdentifier);
         V vote = this.voteRepository.findOneById(voteId).orElseThrow(() -> new VoteException(Messages.exception(MessageIdentifier.VOTE_EXISTS_NOT)));
-        P player = game.getPlayers().stream().filter(p -> p.getUser().equals(principal)).findFirst().orElseThrow(() -> new DataConflictException(Messages.exception(MessageIdentifier.PLAYER_EXISTS_NOT)));
+        P voter = game.getPlayers().stream().filter(p -> p.getUser().equals(principal)).findFirst().orElseThrow(() -> new DataConflictException(Messages.exception(MessageIdentifier.PLAYER_EXISTS_NOT)));
 
-        validatePlayerIsVoter(voteId, player);
+        validatePlayerIsVoter(voteId, voter);
 
         // Check if vote proposal is valid
         V finalVote = vote;
-        C existingVoteCollection = vote.getVoteCollectionMap().get(player.getId());
+        C existingVoteCollection = vote.getVoteCollectionMap().get(voter.getId());
         if (existingVoteCollection == null
                 || voteCollectionProposal.getSelection().size() > existingVoteCollection.getAmountVotes()
-                || voteCollectionProposal.getSelection().stream().anyMatch(selection -> !finalVote.getVoteCollectionMap().get(player.getId()).getSubjects().contains(selection))
+                || voteCollectionProposal.getSelection().stream().anyMatch(selection -> !finalVote.getVoteCollectionMap().get(voter.getId()).getSubjects().contains(selection))
                 || voteCollectionProposal.getAllowAbstain() != existingVoteCollection.getAllowAbstain()
                 || !voteCollectionProposal.getAllowAbstain() && voteCollectionProposal.getAbstain() != null && voteCollectionProposal.getAbstain())
             throw new VoteException(Messages.exception(MessageIdentifier.VOTE_DATA_CONFLICT));
 
         // Transfer vote proposal to vote entity
-        C voteCollection = vote.getVoteCollectionMap().get(player.getId());
+        C voteCollection = vote.getVoteCollectionMap().get(voter.getId());
         voteCollection.setAbstain(voteCollectionProposal.getAbstain());
         voteCollection.getSelection().removeAll(voteCollection.getSelection());
         for (T element : voteCollectionProposal.getSelection()) {
@@ -237,12 +237,23 @@ public abstract class AbstractVoteService<
     protected void sendGameStaleNotification(G game, V vote) {
         sendGameStaleNotification(
                 game.getGameIdentifier(),
-                vote.getVoteCollectionMap().keySet().stream()
-                        .map(playerId -> game.getPlayers().stream()
-                                .filter(player -> player.getId().equals(playerId)).findFirst().orElseThrow(
-                                        () -> new VoteException(Messages.exception(MessageIdentifier.PLAYER_EXISTS_NOT))
-                                ))
-                        .collect(Collectors.toSet()));
+                getGameStaleNotificationRecipients(game, vote));
+    }
+
+    protected Set<P> getGameStaleNotificationRecipients(G game, V vote) {
+        Set<P> recipients = new HashSet<>();
+
+        if (vote.getVoteType() == VoteType.PUBLIC_PUBLIC_PUBLIC) {
+            recipients.addAll(game.getPlayers());
+        } else {
+            vote.getVoteCollectionMap().keySet().stream()
+                    .map(playerId -> game.getPlayers().stream()
+                            .filter(player -> player.getId().equals(playerId)).findFirst().orElseThrow(
+                                    () -> new VoteException(Messages.exception(MessageIdentifier.PLAYER_EXISTS_NOT))
+                            )).forEach(recipients::add);
+        }
+
+        return recipients;
     }
 
     public Map<Long, C> getSameChoiceCollectionMap(Set<P> voters, Set<T> subjects, int amountVotes, boolean allowAbstain) {

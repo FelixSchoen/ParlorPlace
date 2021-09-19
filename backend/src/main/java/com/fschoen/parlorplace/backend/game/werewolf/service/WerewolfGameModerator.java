@@ -163,7 +163,7 @@ public class WerewolfGameModerator extends AbstractGameModerator<
         game = this.getGame();
 
         game.setRound(game.getRound() + 1);
-        game.getLog().add(getLogEntryTemplate(getAllPlayersOfGame()).logType(WerewolfLogType.SLEEP).build());
+        game.getLog().add(getLogEntryTemplate(getAlivePlayers()).logType(WerewolfLogType.SLEEP).build());
 
         saveAndBroadcast(game);
         broadcastVoiceLineNotification(getVoiceLineNotification(WerewolfVoiceLineType.VILLAGE_SLEEP));
