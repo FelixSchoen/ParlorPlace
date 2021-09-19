@@ -1,6 +1,6 @@
 # Changelog
 
-- [v1.0a (2021-09-x)](#v1.0a)
+- [v1.0.1 (2021-09-19)](#v1.0.1)
 - [v1.0 (2021-09-08)](#v1.0)
 - [v1.0-alpha2 (2021-08-27)](#v1.0-alpha2)
 - [v1.0-alpha1 (2021-08-25)](#v1.0-alpha1)
@@ -11,8 +11,8 @@
 
 ---
 
-## v1.1 (2021-09-xx)
-<a name="v1.0a"></a>
+## v1.0.1 (2021-09-xx)
+<a name="v1.0.1"></a>
 
 ## Added
 
@@ -21,12 +21,14 @@
 
 ## Fixed
 
-- Wrong seat position assignmen upon quitting a lobby
+- Wrong seat position assignment upon quitting a lobby
 
 ## Changed
 
 - Migrated to GitHub from GitLab
 - Implemented performance improvements for frontend
+- Made public votes observable by all
+- Made all votes observable by all deceased players
 
 ---
 
