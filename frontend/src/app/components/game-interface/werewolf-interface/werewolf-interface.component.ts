@@ -110,7 +110,7 @@ export class WerewolfInterfaceComponent extends GameInterfaceComponent<WerewolfG
       }) > -1
     )
 
-    this.tabTitleService.setNotification(this.activeVotes.length);
+    this.tabTitleService.setNotification(this.votableVotes.length);
 
     let missing = this.game.log.filter(item => _.findIndex(this.previousLog, (a) => {
       return _.isEqual(a, item)

@@ -17,9 +17,9 @@ public abstract class VoteObfuscationService<V extends VoteDTO<?, ?, ?, ?, ?>, G
     @Override
     public void obfuscateFor(Collection<V> vs, User user, G g) {
         super.obfuscateFor(vs, user, g);
-        vs.removeIf(vote -> (
-                vote.getVoters().stream().noneMatch(voter -> voter.getUser().getId().equals(user.getId()))
-                        && g.getGameState() != GameState.CONCLUDED));
+        this.obfuscateForCallback(vs, user, g);
     }
+
+    protected abstract void obfuscateForCallback(Collection<V> vs, User user, G g);
 
 }

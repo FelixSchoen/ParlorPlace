@@ -54,13 +54,16 @@ export abstract class VoteComponent<G extends Game, P extends Player, V extends 
     this.voteMap = VoteUtil.toMap<C>(this.vote.voteCollectionMap);
     this.votersData = this.getData();
 
-    this.subjects = this.sortSelection(this.voteMap.get(this.currentPlayer.id)!.subjects);
-    this.selectedOptions = Array.from(this.voteMap.get(this.currentPlayer.id)!.selection);
+    if (this.voteMap.get(this.currentPlayer.id) != undefined) {
+      this.subjects = this.sortSelection(this.voteMap.get(this.currentPlayer.id)!.subjects);
+      this.selectedOptions = Array.from(this.voteMap.get(this.currentPlayer.id)!.selection);
+      let isSelected: boolean[] = [];
 
-    let isSelected: boolean[] = [];
+      for (let option of this.subjects) {
+        isSelected.push(this.includedInSelection(option))
+      }
 
-    for (let option of this.subjects) {
-      isSelected.push(this.includedInSelection(option))
+      this.isSelected = isSelected;
     }
 
     if (this.countDown != undefined)
@@ -74,7 +77,6 @@ export abstract class VoteComponent<G extends Game, P extends Player, V extends 
       });
     }
 
-    this.isSelected = isSelected;
     this.ref.markForCheck();
   }
 

@@ -20,7 +20,7 @@ public class WerewolfPlayerObfuscationService extends PlayerObfuscationService<W
     }
 
     @Override
-    public void obfuscateForInitial(WerewolfPlayerDTO werewolfPlayerDTO, User user, WerewolfGameDTO werewolfGameDTO) {
+    public void obfuscateForCallback(WerewolfPlayerDTO werewolfPlayerDTO, User user, WerewolfGameDTO werewolfGameDTO) {
         if (werewolfGameDTO != null && werewolfGameDTO.getGameState() == GameState.CONCLUDED
                 || werewolfPlayerDTO.getUser().getId().equals(user.getId())) {
             return;
