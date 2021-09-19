@@ -4,3 +4,5 @@
 .idea
 
 backend/src/main/resources/templates/Project.xml
+
+backend/config/application-production.properties

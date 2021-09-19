@@ -21,7 +21,7 @@ public abstract class PlayerObfuscationService<
 
     @Override
     public void obfuscateFor(P p, User user, U u) {
-        this.obfuscateForInitial(p, user, u);
+        this.obfuscateForCallback(p, user, u);
         this.userObfuscationService.obfuscate(p.getUser());
     }
 
@@ -33,6 +33,6 @@ public abstract class PlayerObfuscationService<
      * @param user The user to obfuscate the object for
      * @param u    Additional information about the object to obfuscate
      */
-    public abstract void obfuscateForInitial(P p, User user, U u);
+    protected abstract void obfuscateForCallback(P p, User user, U u);
 
 }

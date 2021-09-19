@@ -17,7 +17,10 @@ import {MatListModule} from "@angular/material/list";
 import {MatProgressBarModule} from "@angular/material/progress-bar";
 import {MatTabsModule} from "@angular/material/tabs";
 import {WerewolfLobbyComponent} from "../../components/game-lobby/werewolf-lobby/werewolf-lobby.component";
-import {RoleSelectionComponent} from "../../components/game-common/lobby-components/role-selection/role-selection.component";
+import {
+  DialogContentRoleDialog,
+  RoleSelectionComponent
+} from "../../components/game-common/common-components/role-selection/role-selection.component";
 import {ParticipantListComponent} from "../../components/game-common/lobby-components/participant-list/participant-list.component";
 import {GeneralModule} from "../general/general.module";
 import {WerewolfInterfaceComponent} from '../../components/game-interface/werewolf-interface/werewolf-interface.component';
@@ -36,6 +39,7 @@ import {MatSelectModule} from "@angular/material/select";
     GameComponent,
     WerewolfLobbyComponent,
     RoleSelectionComponent,
+    DialogContentRoleDialog,
     ParticipantListComponent,
     WerewolfInterfaceComponent,
     WerewolfPlayerListComponent,

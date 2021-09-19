@@ -64,7 +64,7 @@ public abstract class AbstractVoteService<
 
     private static final ResourceBundle resourceBundle = ResourceBundle.getBundle("values.werewolf-values");
 
-    private static final long VOTE_GRACE_PERIOD_DURATION = Integer.parseInt(resourceBundle.getString(WerewolfValueIdentifier.VOTE_GRACE_PERIOD_DURATION));
+    private static final long VOTE_GRACE_PERIOD_DURATION = Long.parseLong(resourceBundle.getString(WerewolfValueIdentifier.VOTE_GRACE_PERIOD_DURATION));
 
     public AbstractVoteService(CommunicationService communicationService, UserRepository userRepository, GRepo gameRepository, PRepo playerRepository, VRepo voteRepository, TaskExecutor taskExecutor) {
         super(communicationService, userRepository, gameRepository);
@@ -74,7 +74,7 @@ public abstract class AbstractVoteService<
         this.taskExecutor = taskExecutor;
     }
 
-    public CompletableFuture<V> requestVote(GameIdentifier gameIdentifier, VoteType voteType, VoteDrawStrategy voteDrawStrategy, Integer outcomeAmount, Map<Long, C> voteCollectionMap, D voteDescriptor, Integer round, Integer durationInSeconds) {
+    public CompletableFuture<V> requestVote(GameIdentifier gameIdentifier, VoteType voteType, VoteDrawStrategy voteDrawStrategy, Integer outcomeAmount, Map<Long, C> voteCollectionMap, D voteDescriptor, Integer round, Long duration) {
         log.info("Starting new Vote for Game: {}", gameIdentifier.getToken());
 
         G game = getActiveGame(gameIdentifier);
@@ -95,7 +95,7 @@ public abstract class AbstractVoteService<
             vote.setOutcomeAmount(outcomeAmount);
             vote.setVoteDescriptor(voteDescriptor);
             vote.setRound(round);
-            vote.setEndTime(Instant.now().plusSeconds(durationInSeconds));
+            vote.setEndTime(Instant.now().plusMillis(duration));
         } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
             throw new DataConflictException(Messages.exception(MessageIdentifier.VOTE_TYPE_MISMATCH), e);
         }
@@ -109,7 +109,7 @@ public abstract class AbstractVoteService<
 
         sendGameStaleNotification(game, vote);
 
-        VoteConcludeTask voteConcludeTask = new VoteConcludeTask(vote.getId(), (long) (durationInSeconds * 1000), true, game.getGameIdentifier());
+        VoteConcludeTask voteConcludeTask = new VoteConcludeTask(vote.getId(), duration, true, game.getGameIdentifier());
         taskExecutor.execute(voteConcludeTask);
 
         return completableFuture;
@@ -125,22 +125,22 @@ public abstract class AbstractVoteService<
 
         G game = this.getActiveGame(gameIdentifier);
         V vote = this.voteRepository.findOneById(voteId).orElseThrow(() -> new VoteException(Messages.exception(MessageIdentifier.VOTE_EXISTS_NOT)));
-        P player = game.getPlayers().stream().filter(p -> p.getUser().equals(principal)).findFirst().orElseThrow(() -> new DataConflictException(Messages.exception(MessageIdentifier.PLAYER_EXISTS_NOT)));
+        P voter = game.getPlayers().stream().filter(p -> p.getUser().equals(principal)).findFirst().orElseThrow(() -> new DataConflictException(Messages.exception(MessageIdentifier.PLAYER_EXISTS_NOT)));
 
-        validatePlayerIsVoter(voteId, player);
+        validatePlayerIsVoter(voteId, voter);
 
         // Check if vote proposal is valid
         V finalVote = vote;
-        C existingVoteCollection = vote.getVoteCollectionMap().get(player.getId());
+        C existingVoteCollection = vote.getVoteCollectionMap().get(voter.getId());
         if (existingVoteCollection == null
                 || voteCollectionProposal.getSelection().size() > existingVoteCollection.getAmountVotes()
-                || voteCollectionProposal.getSelection().stream().anyMatch(selection -> !finalVote.getVoteCollectionMap().get(player.getId()).getSubjects().contains(selection))
+                || voteCollectionProposal.getSelection().stream().anyMatch(selection -> !finalVote.getVoteCollectionMap().get(voter.getId()).getSubjects().contains(selection))
                 || voteCollectionProposal.getAllowAbstain() != existingVoteCollection.getAllowAbstain()
                 || !voteCollectionProposal.getAllowAbstain() && voteCollectionProposal.getAbstain() != null && voteCollectionProposal.getAbstain())
             throw new VoteException(Messages.exception(MessageIdentifier.VOTE_DATA_CONFLICT));
 
         // Transfer vote proposal to vote entity
-        C voteCollection = vote.getVoteCollectionMap().get(player.getId());
+        C voteCollection = vote.getVoteCollectionMap().get(voter.getId());
         voteCollection.setAbstain(voteCollectionProposal.getAbstain());
         voteCollection.getSelection().removeAll(voteCollection.getSelection());
         for (T element : voteCollectionProposal.getSelection()) {
@@ -237,12 +237,23 @@ public abstract class AbstractVoteService<
     protected void sendGameStaleNotification(G game, V vote) {
         sendGameStaleNotification(
                 game.getGameIdentifier(),
-                vote.getVoteCollectionMap().keySet().stream()
-                        .map(playerId -> game.getPlayers().stream()
-                                .filter(player -> player.getId().equals(playerId)).findFirst().orElseThrow(
-                                        () -> new VoteException(Messages.exception(MessageIdentifier.PLAYER_EXISTS_NOT))
-                                ))
-                        .collect(Collectors.toSet()));
+                getGameStaleNotificationRecipients(game, vote));
+    }
+
+    protected Set<P> getGameStaleNotificationRecipients(G game, V vote) {
+        Set<P> recipients = new HashSet<>();
+
+        if (vote.getVoteType() == VoteType.PUBLIC_PUBLIC_PUBLIC) {
+            recipients.addAll(game.getPlayers());
+        } else {
+            vote.getVoteCollectionMap().keySet().stream()
+                    .map(playerId -> game.getPlayers().stream()
+                            .filter(player -> player.getId().equals(playerId)).findFirst().orElseThrow(
+                                    () -> new VoteException(Messages.exception(MessageIdentifier.PLAYER_EXISTS_NOT))
+                            )).forEach(recipients::add);
+        }
+
+        return recipients;
     }
 
     public Map<Long, C> getSameChoiceCollectionMap(Set<P> voters, Set<T> subjects, int amountVotes, boolean allowAbstain) {

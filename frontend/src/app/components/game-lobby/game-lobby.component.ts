@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import {ChangeDetectorRef, Component} from '@angular/core';
 import {ActivatedRoute, Router} from "@angular/router";
 import {AbstractGameService} from "../../services/abstract-game.service";
 import {Game} from "../../dto/game";
@@ -23,17 +23,18 @@ export abstract class GameLobbyComponent<G extends Game, P extends Player> exten
     public communicationService: CommunicationService,
     public notificationService: NotificationService,
     public activatedRoute: ActivatedRoute,
+    public ref: ChangeDetectorRef,
     public router: Router,
   ) {
-    super(userService, gameService, communicationService, notificationService, activatedRoute, router);
+    super(userService, gameService, communicationService, notificationService, activatedRoute, ref, router);
   }
 
   protected abstract changeLobby(): void;
 
   public startGame(): void {
     this.gameService.startGame(this.gameIdentifier).subscribe({
-      error: error => this.notificationService.showError(error.error)
-    })
+      error: () => {}
+    });
   }
 
   public quitLobby(user: User | null): void {
@@ -58,6 +59,12 @@ export abstract class GameLobbyComponent<G extends Game, P extends Player> exten
   }
 
   protected subscribeSecondaryCallback(payload: any): any {
+  }
+
+  // Utility
+
+  goHome() {
+    this.router.navigate(["/profile"]).then();
   }
 
 }

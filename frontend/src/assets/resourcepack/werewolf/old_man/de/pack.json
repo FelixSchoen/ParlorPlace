@@ -557,6 +557,17 @@
               "codename_01",
               "file_02"
             ]
+          },
+          {
+            "path": [
+              "wake_04_01",
+              "wake_04_02"
+            ],
+            "order": [
+              "file_01",
+              "codename_01",
+              "file_02"
+            ]
           }
         ]
       },

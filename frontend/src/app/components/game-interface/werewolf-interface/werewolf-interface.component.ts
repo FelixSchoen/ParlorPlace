@@ -1,4 +1,4 @@
-import {Component, ViewChild} from '@angular/core';
+import {ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewChild} from '@angular/core';
 import {GameInterfaceComponent} from "../game-interface.component";
 import {
   WerewolfGame,
@@ -12,7 +12,7 @@ import {WerewolfGameService} from "../../../services/werewolf-game.service";
 import {CommunicationService} from "../../../services/communication.service";
 import {NotificationService} from "../../../services/notification.service";
 import {ActivatedRoute, Router} from "@angular/router";
-import {WerewolfRoleType} from "../../../enums/games/werewolf-role-type";
+import {WerewolfRoleType, WerewolfRoleTypeUtil} from "../../../enums/games/werewolf-role-type";
 import {LogEntryListComponent} from "../../game-common/interface-components/log-entry-list/log-entry-list.component";
 import {WerewolfResourcePack} from "../../../entities/resource-pack";
 import {LoadJsonService} from "../../../services/load-json.service";
@@ -27,7 +27,8 @@ import {TabTitleService} from "../../../services/tab-title.service";
 @Component({
   selector: 'app-werewolf-interface',
   templateUrl: './werewolf-interface.component.html',
-  styleUrls: ['./werewolf-interface.component.scss']
+  styleUrls: ['./werewolf-interface.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class WerewolfInterfaceComponent extends GameInterfaceComponent<WerewolfGame, WerewolfPlayer, WerewolfPlayerWerewolfVote, WerewolfResourcePack> {
 
@@ -43,6 +44,7 @@ export class WerewolfInterfaceComponent extends GameInterfaceComponent<WerewolfG
 
   public activeVotes: WerewolfVote<any, any>[];
   public concludedVotes: WerewolfVote<any, any>[];
+  public votableVotes: WerewolfVote<any, any>[];
 
   private previousLog: WerewolfLogEntry[] = [];
   // Defines for which type of log a badge should be shown under the log tab
@@ -53,6 +55,8 @@ export class WerewolfInterfaceComponent extends GameInterfaceComponent<WerewolfG
 
   public werewolfVoteIdentifier = WerewolfVoteIdentifier;
 
+  public werewolfRoleTypeArray: WerewolfRoleType[] = WerewolfRoleTypeUtil.getArray();
+
   constructor(
     public userService: UserService,
     public gameService: WerewolfGameService,
@@ -62,9 +66,10 @@ export class WerewolfInterfaceComponent extends GameInterfaceComponent<WerewolfG
     public audioService: AudioService,
     public loadJsonService: LoadJsonService,
     public activatedRoute: ActivatedRoute,
+    public ref: ChangeDetectorRef,
     public router: Router
   ) {
-    super(userService, gameService, communicationService, notificationService, audioService, loadJsonService, activatedRoute, router)
+    super(userService, gameService, communicationService, notificationService, audioService, loadJsonService, activatedRoute, ref, router)
     this.viewedRole = false;
   }
 
@@ -99,8 +104,13 @@ export class WerewolfInterfaceComponent extends GameInterfaceComponent<WerewolfG
 
     this.activeVotes = this.sortVotes(this.game.votes)[0];
     this.concludedVotes = this.sortVotes(this.game.votes)[1];
+    this.votableVotes = this.activeVotes.filter(vote =>
+      _.findIndex([...vote.voters], (a) => {
+        return a.id == this.currentPlayer.id;
+      }) > -1
+    )
 
-    this.tabTitleService.setNotification(this.activeVotes.length);
+    this.tabTitleService.setNotification(this.votableVotes.length);
 
     let missing = this.game.log.filter(item => _.findIndex(this.previousLog, (a) => {
       return _.isEqual(a, item)

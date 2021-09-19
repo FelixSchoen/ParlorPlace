@@ -55,7 +55,8 @@
       "victoryDescription": "Congratulations! You bested your enemies and won the game!",
       "defeat": "Defeat",
       "defeatDescription": "Sadly, you lost this round... Get 'em next time!",
-      "codeNameDescription": "This is your codename. Using it, you will be called during the game without having your real identity revealed. Keep it secret."
+      "codeNameDescription": "This is your codename. Using it, you will be called during the game without having your real identity revealed. Keep it secret.",
+      "roleInformation": "Role Information"
     }
   },
   "module": {

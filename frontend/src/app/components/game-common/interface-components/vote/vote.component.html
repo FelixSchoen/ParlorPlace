@@ -11,7 +11,7 @@
       <!-- Selection -->
       <div *ngIf="this.vote.voteState == voteState.ONGOING">
         <div class="row">
-          <div class="col-7">
+          <div *ngIf="this.isVoter" class="col-7">
             {{"general.vote.choose" | translate: {"amount": voteMap.get(currentPlayer.id)?.amountVotes} }}
           </div>
           <div class="col text-right">
@@ -23,24 +23,26 @@
             <mat-divider [inset]="true"></mat-divider>
           </div>
         </div>
-        <div class="row mt-2">
-          <div class="col">
-            <mat-chip-list>
-              <mat-chip *ngFor="let subject of this.subjects, let i = index"
-                        [selected]="this.isSelected[i]" (click)="selectOption(subject)">
-                {{subjectToStringRepresentation(subject)}}
-              </mat-chip>
-              <mat-chip *ngIf="this.voteMap.get(currentPlayer.id)?.allowAbstain" color="accent"
-                        [selected]="voteMap.get(currentPlayer.id)?.abstain" (click)="selectAbstain()">
-                <mat-icon>shortcut</mat-icon>
-                {{"general.vote.abstain" | translate}}
-              </mat-chip>
-            </mat-chip-list>
+        <div *ngIf="this.isVoter">
+          <div class="row mt-2">
+            <div class="col">
+              <mat-chip-list>
+                <mat-chip *ngFor="let subject of this.subjects, let i = index"
+                          [selected]="this.isSelected[i]" (click)="selectOption(subject)">
+                  {{subjectToStringRepresentation(subject)}}
+                </mat-chip>
+                <mat-chip *ngIf="this.voteMap.get(currentPlayer.id)?.allowAbstain" color="accent"
+                          [selected]="voteMap.get(currentPlayer.id)?.abstain" (click)="selectAbstain()">
+                  <mat-icon>shortcut</mat-icon>
+                  {{"general.vote.abstain" | translate}}
+                </mat-chip>
+              </mat-chip-list>
+            </div>
           </div>
-        </div>
-        <div class="row mt-2">
-          <div class="col">
-            <mat-divider [inset]="true"></mat-divider>
+          <div class="row mt-2">
+            <div class="col">
+              <mat-divider [inset]="true"></mat-divider>
+            </div>
           </div>
         </div>
       </div>

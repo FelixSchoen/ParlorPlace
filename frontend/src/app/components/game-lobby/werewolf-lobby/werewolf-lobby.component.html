@@ -59,6 +59,7 @@
                                 [mayEdit]="isLobbyAdmin"
                                 [getArray]="werewolfRoleTypeArray"
                                 [translationPrefix]="'werewolf.role.'"
+                                [iconRepresentation]="this.werewolfRoleTypeUtil.toIconRepresentation"
                                 [internalRepresentation]="this.werewolfRoleTypeUtil.toInternalRepresentation"
                                 (roleChanged)="changeRoles($event)"></app-role-selection>
 
@@ -99,6 +100,10 @@
         </mat-tab>-->
 
   </mat-tab-group>
+
+  <div class="pp-center pt-3">
+    <button mat-button color="accent" (click)="goHome()">{{"general.action.goHome" | translate}}</button>
+  </div>
 
   <!-- Loading Indicator -->
   <div class="d-flex justify-content-center align-items-center h-100" *ngIf="loading">
