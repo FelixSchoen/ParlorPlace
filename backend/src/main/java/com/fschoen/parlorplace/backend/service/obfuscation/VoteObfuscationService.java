@@ -3,7 +3,6 @@ package com.fschoen.parlorplace.backend.service.obfuscation;
 import com.fschoen.parlorplace.backend.controller.dto.game.GameDTO;
 import com.fschoen.parlorplace.backend.controller.dto.game.VoteDTO;
 import com.fschoen.parlorplace.backend.entity.User;
-import com.fschoen.parlorplace.backend.enumeration.GameState;
 import com.fschoen.parlorplace.backend.repository.UserRepository;
 
 import java.util.Collection;
